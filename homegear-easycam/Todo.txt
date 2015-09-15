@@ -1,0 +1,4 @@
+Heartbeat
+Nutzung nur mit EASYCam-Firmware erlauben
+Rega-Verbindungsabbruch
+Update-Paket

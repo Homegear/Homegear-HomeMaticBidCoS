@@ -1,0 +1,788 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<homegearDevice xmlns="https://homegear.eu/xmlNamespaces/HomegearDevice" version="1">
+  <supportedDevices xmlns="https://homegear.eu/xmlNamespaces/DeviceType">
+    <device id="EASYCam">
+      <description>name="EASYCam</description>
+      <typeNumber>0x0001</typeNumber>
+    </device>
+  </supportedDevices>
+  <properties xmlns="https://homegear.eu/xmlNamespaces/DeviceType">
+    <visible>true</visible>
+    <deletable>true</deletable>
+  </properties>
+  <functions xmlns="https://homegear.eu/xmlNamespaces/DeviceType">
+    <function xmlns="https://homegear.eu/xmlNamespaces/FunctionGroupType" channel="0" type="MAINTENANCE">
+      <properties>
+        <internal>true</internal>
+      </properties>
+      <configParameters>EasyCamConfig</configParameters>
+      <variables>maint_ch_values</variables>
+    </function>
+    <function xmlns="https://homegear.eu/xmlNamespaces/FunctionGroupType" channel="1" type="EasyCam">
+      <variables>CameraVariables</variables>
+    </function>
+  </functions>
+  <packets>
+    <packet id="START_CRUISE">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzStartCruise</function2>
+      <httpPayload>
+        <element>
+          <key>mapName</key>
+          <parameterId>CRUISE_MAP</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="STOP_CRUISE">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzStopCruise</function2>
+      <httpPayload>
+        <element>
+          <key>mapName</key>
+          <parameterId>CRUISE_MAP</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="MOVE_UP">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveUp</function2>
+    </packet>
+    <packet id="MOVE_DOWN">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveDown</function2>
+    </packet>
+    <packet id="MOVE_LEFT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveLeft</function2>
+    </packet>
+    <packet id="MOVE_RIGHT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveRight</function2>
+    </packet>
+    <packet id="MOVE_TOP_LEFT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveTopLeft</function2>
+    </packet>
+    <packet id="MOVE_TOP_RIGHT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveTopRight</function2>
+    </packet>
+    <packet id="MOVE_BOTTOM_LEFT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveBottomLeft</function2>
+    </packet>
+    <packet id="MOVE_BOTTOM_RIGHT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzMoveBottomRight</function2>
+    </packet>
+    <packet id="STOP_MOVE">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzStopRun</function2>
+    </packet>
+    <packet id="RESET_POSITION">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzReset</function2>
+    </packet>
+    <packet id="GET_SPEED">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>getPTZSpeed</function2>
+    </packet>
+    <packet id="SET_SPEED">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>setPTZSpeed</function2>
+      <httpPayload>
+        <element>
+          <key>speed</key>
+          <parameterId>SPEED</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="GET_PTZ_PRESET_POINTS">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>getPTZPresetPointList</function2>
+    </packet>
+    <packet id="ADD_PRESET_POINT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzAddPresetPoint</function2>
+      <httpPayload>
+        <element>
+          <key>name</key>
+          <parameterId>ADD_PRESET_POINT</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="REMOVE_PRESET_POINT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzDeletePresetPoint</function2>
+      <httpPayload>
+        <element>
+          <key>name</key>
+          <parameterId>REMOVE_PRESET_POINT</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="GOTO_PRESET_POINT">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzGotoPresetPoint</function2>
+      <httpPayload>
+        <element>
+          <key>name</key>
+          <parameterId>GOTO_PRESET_POINT</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="GET_CRUISE_MAPS">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzGetCruiseMapList</function2>
+    </packet>
+    <packet id="GET_CRUISE_MAP_INFO">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzGetCruiseMapInfo</function2>
+      <httpPayload>
+        <element>
+          <key>name</key>
+          <parameterId>CRUISE_MAP</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="REMOVE_CRUISE_MAP">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzDelCruiseMap</function2>
+      <httpPayload>
+        <element>
+          <key>name</key>
+          <parameterId>CRUISE_MAP</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+    <packet id="ADD_CRUISE_MAP">
+      <direction>fromCentral</direction>
+      <function1>/cgi-bin/CGIProxy.fcgi</function1>
+      <function2>ptzSetCruiseMap</function2>
+      <httpPayload>
+        <element>
+          <key>null</key>
+          <parameterId>ADD_CRUISE_MAP</parameterId>
+        </element>
+      </httpPayload>
+    </packet>
+  </packets>
+  <parameterGroups xmlns="https://homegear.eu/xmlNamespaces/DeviceType">
+    <configParameters id="EasyCamConfig">
+      <parameter id="IP_ADDRESS">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString>
+          <operationType>config</operationType>
+        </physicalString>
+      </parameter>
+      <parameter id="PORT">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+        </properties>
+        <logicalInteger>
+          <minimumValue>1</minimumValue>
+          <maximumValue>65535</maximumValue>
+          <defaultValue>88</defaultValue>
+        </logicalInteger>
+        <physicalInteger>
+          <operationType>config</operationType>
+        </physicalInteger>
+      </parameter>
+      <parameter id="USE_SSL">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+        </properties>
+        <logicalBoolean>
+          <defaultValue>false</defaultValue>
+        </logicalBoolean>
+        <physicalBoolean>
+          <operationType>config</operationType>
+        </physicalBoolean>
+      </parameter>
+      <parameter id="CA_FILE">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString>
+          <operationType>config</operationType>
+        </physicalString>
+      </parameter>
+      <parameter id="VERIFY_CERTIFICATE">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+        </properties>
+        <logicalBoolean>
+          <defaultValue>false</defaultValue>
+        </logicalBoolean>
+        <physicalBoolean>
+          <operationType>config</operationType>
+        </physicalBoolean>
+      </parameter>
+      <parameter id="USER">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString>
+          <operationType>config</operationType>
+        </physicalString>
+      </parameter>
+      <parameter id="PASSWORD">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString>
+          <operationType>config</operationType>
+        </physicalString>
+      </parameter>
+    </configParameters>
+    <variables id="maint_ch_values">
+      <parameter id="UNREACH">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+          <service>true</service>
+        </properties>
+        <logicalBoolean />
+        <physicalBoolean>
+          <operationType>internal</operationType>
+        </physicalBoolean>
+      </parameter>
+      <parameter id="STICKY_UNREACH">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+          <service>true</service>
+          <sticky>true</sticky>
+        </properties>
+        <logicalBoolean />
+        <physicalBoolean>
+          <operationType>internal</operationType>
+        </physicalBoolean>
+      </parameter>
+      <parameter id="CONFIG_PENDING">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+          <service>true</service>
+        </properties>
+        <logicalBoolean />
+        <physicalBoolean>
+          <operationType>internal</operationType>
+        </physicalBoolean>
+      </parameter>
+    </variables>
+    <variables id="CameraVariables">
+      <parameter id="STREAM_URL">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+          <control>EASYCAM.STREAM</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString />
+      </parameter>
+      <parameter id="SNAPSHOT_URL">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+          <control>EASYCAM.SNAPSHOT</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString />
+      </parameter>
+      <parameter id="MOTION">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+        </properties>
+        <logicalAction />
+      </parameter>
+      <parameter id="START_CRUISE">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.START_CRUISE</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean groupId="START_CRUISE">
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="START_CRUISE">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="STOP_CRUISE">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.STOP_CRUISE</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="STOP_CRUISE">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_UP">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_UP</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_UP">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_DOWN">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_DOWN</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_DOWN">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_LEFT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_LEFT</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_LEFT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_RIGHT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_RIGHT</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_RIGHT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_TOP_LEFT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_TOP_LEFT</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_TOP_LEFT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_TOP_RIGHT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_TOP_RIGHT</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_TOP_RIGHT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_BOTTOM_LEFT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_BOTTOM_LEFT</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_BOTTOM_LEFT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="MOVE_BOTTOM_RIGHT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.MOVE_BOTTOM_RIGHT</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="MOVE_BOTTOM_RIGHT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="STOP_MOVE">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.STOP_MOVE</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="STOP_MOVE">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="RESET_POSITION">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.RESET_POSITION</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean>
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="RESET_POSITION">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="SPEED">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.SPEED</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalEnumeration>
+          <value>
+          	<id>Very fast</id>
+          	<index>0</index>
+          </value>
+          <value>
+          	<id>Fast</id>
+          	<index>1</index>
+          </value>
+          <value>
+          	<id>Normal</id>
+          	<index>2</index>
+          </value>
+          <value>
+          	<id>Slow</id>
+          	<index>3</index>
+          </value>
+          <value>
+          	<id>Very slow</id>
+          	<index>4</index>
+          </value>
+        </logicalEnumeration>
+        <physicalInteger groupId="SPEED">
+          <operationType>command</operationType>
+        </physicalInteger>
+        <packets>
+          <packet id="GET_SPEED">
+            <type>get</type>
+          </packet>
+          <packet id="SET_SPEED">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="PTZ_PRESET_POINTS">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="PTZ_PRESET_POINTS">
+          <operationType>command</operationType>
+        </physicalString>
+        <packets>
+          <packet id="GET_PTZ_PRESET_POINTS">
+            <type>get</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="ADD_PRESET_POINT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="ADD_PRESET_POINT">
+          <operationType>command</operationType>
+        </physicalString>
+        <packets>
+          <packet id="ADD_PRESET_POINT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="REMOVE_PRESET_POINT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="REMOVE_PRESET_POINT">
+          <operationType>command</operationType>
+        </physicalString>
+        <packets>
+          <packet id="REMOVE_PRESET_POINT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="GOTO_PRESET_POINT">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="GOTO_PRESET_POINT">
+          <operationType>command</operationType>
+        </physicalString>
+        <packets>
+          <packet id="GOTO_PRESET_POINT">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="CRUISE_MAPS">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+          <control>EASYCAM.CRUISE_MAPS</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="CRUISE_MAPS">
+          <operationType>command</operationType>
+        </physicalString>
+        <packets>
+          <packet id="GET_CRUISE_MAPS">
+            <type>get</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="CRUISE_MAP">
+        <properties>
+          <readable>true</readable>
+          <writeable>true</writeable>
+          <control>EASYCAM.CURRENT_CRUISE_MAP</control>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="CRUISE_MAP">
+          <operationType>command</operationType>
+        </physicalString>
+      </parameter>
+      <parameter id="CRUISE_MAP_INFO">
+        <properties>
+          <readable>true</readable>
+          <writeable>false</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="CRUISE_MAP_INFO">
+          <operationType>command</operationType>
+        </physicalString>
+        <packets>
+          <packet id="GET_CRUISE_MAP_INFO">
+            <type>get</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="REMOVE_CRUISE_MAP">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <casts>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalAction />
+        <physicalBoolean groupId="REMOVE_CRUISE_MAP">
+          <operationType>command</operationType>
+        </physicalBoolean>
+        <packets>
+          <packet id="REMOVE_CRUISE_MAP">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+      <parameter id="ADD_CRUISE_MAP">
+        <properties>
+          <readable>false</readable>
+          <writeable>true</writeable>
+          <casts>
+          	<stringReplace>
+          	  <search>;</search>
+          	  <replace>&amp;</replace>
+          	</stringReplace>
+            <rpcBinary />
+          </casts>
+        </properties>
+        <logicalString />
+        <physicalString groupId="ADD_CRUISE_MAP">
+          <operationType>command</operationType>
+        </physicalString>
+        <packets>
+          <packet id="ADD_CRUISE_MAP">
+            <type>set</type>
+          </packet>
+        </packets>
+      </parameter>
+    </variables>
+  </parameterGroups>
+</homegearDevice>

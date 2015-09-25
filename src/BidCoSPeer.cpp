@@ -124,6 +124,7 @@ void BidCoSPeer::initializeLinkConfig(int32_t channel, int32_t remoteAddress, in
 		BaseLib::Systems::RPCConfigurationParameter parameter;
 		for(Parameters::iterator j = parameterGroup->parameters.begin(); j != parameterGroup->parameters.end(); ++j)
 		{
+			if(!j->second) continue;
 			if(!j->second->id.empty() && linkConfig->find(j->second->id) == linkConfig->end())
 			{
 				parameter = BaseLib::Systems::RPCConfigurationParameter();
@@ -2054,7 +2055,7 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
 		for(std::vector<std::shared_ptr<Parameter::Packet>>::iterator j = parameter->eventPackets.begin(); j != parameter->eventPackets.end(); ++j)
 		{
 			if((*j)->id != frameID) continue;
-			if(!(*j)->delayedAutoReset.first.empty()) continue;
+			if((*j)->delayedAutoReset.first.empty()) continue;
 			if(!_variablesToReset.empty())
 			{
 				_variablesToResetMutex.lock();

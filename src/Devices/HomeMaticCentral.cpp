@@ -2243,7 +2243,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 				queue->peer = createPeer(packet->senderAddress(), packet->payload()->at(0), deviceType, serialNumber, 0, 0, packet, false);
 				if(!queue->peer)
 				{
-					GD::out.printWarning("Warning: Device type not supported. Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
+					GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType.type(), 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload()->at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 					return;
 				}
 				peer = queue->peer;
@@ -2563,7 +2563,7 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 							//Don't add team if address is peer's, because then the team already exists
 							if(peerAddress != peer->getAddress())
 							{
-								GD::out.printInfo("Info: Adding peer 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " to team with address 0x" + BaseLib::HelperFunctions::getHexString(peerAddress) + ".");
+								GD::out.printInfo("Info: Adding peer 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " to group with address 0x" + BaseLib::HelperFunctions::getHexString(peerAddress) + ".");
 								addPeerToTeam(peer, localChannel, peerAddress, remoteChannel);
 							}
 						}
@@ -2582,6 +2582,12 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 								sendRequestConfig(peer->getAddress(), localChannel, k->first, newPeer->address, newPeer->channel);
 							}
 						}
+					}
+					else if(i == 1 && rpcFunction->hasGroup)
+					{
+						//Peer (smoke detector) has team but no peer. Add peer to it's own team:
+						GD::out.printInfo("Info: Peer has no group set. Resetting group to default.");
+						setTeam(-1, peer->getID(), -1, 0, -1, true, true);
 					}
 				}
 			}
@@ -3081,7 +3087,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 						}
 						if(i->second->hasGroup)
 						{
-							GD::out.printInfo("Info: Creating team for channel " + std::to_string(i->first) + ".");
+							GD::out.printInfo("Info: Creating group for channel " + std::to_string(i->first) + ".");
 							resetTeam(queue->peer, i->first);
 							//Check if a peer exists with this devices team and if yes add it to the team.
 							//As the serial number of the team was unknown up to this point, this couldn't
@@ -3102,7 +3108,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 								_peersMutex.unlock();
 								for(std::vector<std::shared_ptr<BidCoSPeer>>::iterator j = peers.begin(); j != peers.end(); ++j)
 								{
-									GD::out.printInfo("Info: Adding device 0x" + BaseLib::HelperFunctions::getHexString((*j)->getAddress()) + " to team " + queue->peer->getTeamRemoteSerialNumber() + ".");
+									GD::out.printInfo("Info: Adding device 0x" + BaseLib::HelperFunctions::getHexString((*j)->getAddress()) + " to group " + queue->peer->getTeamRemoteSerialNumber() + ".");
 									addPeerToTeam(*j, (*j)->getTeamChannel(), (*j)->getTeamRemoteChannel(), queue->peer->getTeamRemoteSerialNumber());
 								}
 							}
@@ -3428,10 +3434,11 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 			//putParamset pushes the packets on pendingQueues, but does not send immediately
 			sender->putParamset(clientID, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
 
-			if(!receiverFunction->linkParameters->linkScenarios.empty())
+			Scenarios::iterator scenarioIterator = receiverFunction->linkParameters->scenarios.find("default");
+			if(scenarioIterator != receiverFunction->linkParameters->scenarios.end())
 			{
 				paramset.reset(new Variable(VariableType::tStruct));
-				for(ScenarioEntries::iterator i = receiverFunction->linkParameters->linkScenarios.begin()->second->scenarioEntries.begin(); i != receiverFunction->linkParameters->linkScenarios.begin()->second->scenarioEntries.end(); ++i)
+				for(ScenarioEntries::iterator i = scenarioIterator->second->scenarioEntries.begin(); i != scenarioIterator->second->scenarioEntries.end(); ++i)
 				{
 					PParameter parameter = senderFunction->linkParameters->getParameter(i->first);
 					if(parameter)
@@ -3523,10 +3530,11 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 			//putParamset pushes the packets on pendingQueues, but does not send immediately
 			receiver->putParamset(clientID, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);
 
-			if(!senderFunction->linkParameters->linkScenarios.empty())
+			Scenarios::iterator scenarioIterator = senderFunction->linkParameters->scenarios.find("default");
+			if(scenarioIterator != senderFunction->linkParameters->scenarios.end())
 			{
 				paramset.reset(new Variable(VariableType::tStruct));
-				for(ScenarioEntries::iterator i = senderFunction->linkParameters->linkScenarios.begin()->second->scenarioEntries.begin(); i != senderFunction->linkParameters->linkScenarios.begin()->second->scenarioEntries.end(); ++i)
+				for(ScenarioEntries::iterator i = scenarioIterator->second->scenarioEntries.begin(); i != scenarioIterator->second->scenarioEntries.end(); ++i)
 				{
 					PParameter parameter = receiverFunction->linkParameters->getParameter(i->first);
 					if(parameter)
@@ -3857,7 +3865,7 @@ PVariable HomeMaticCentral::setTeam(int32_t clientID, std::string serialNumber, 
 		if(!teamSerialNumber.empty())
 		{
 			std::shared_ptr<BidCoSPeer> team(getPeer(teamSerialNumber));
-			if(!team) return Variable::createError(-2, "Team does not exist.");
+			if(!team) return Variable::createError(-2, "Group does not exist.");
 			teamID = team->getID();
 		}
 		return setTeam(peer->getID(), channel, teamID, teamChannel, force, burst);
@@ -3881,13 +3889,9 @@ PVariable HomeMaticCentral::setTeam(int32_t clientID, uint64_t peerID, int32_t c
 {
 	try
 	{
-		if(channel < 0) channel = 0;
 		if(teamChannel < 0) teamChannel = 0;
 		std::shared_ptr<BidCoSPeer> peer(getPeer(peerID));
 		if(!peer) return Variable::createError(-2, "Unknown device.");
-		Functions::iterator functionIteratorPeer = peer->getRpcDevice()->functions.find(channel);
-		if(functionIteratorPeer == peer->getRpcDevice()->functions.end()) return Variable::createError(-2, "Unknown channel.");
-		if(!functionIteratorPeer->second->hasGroup) return Variable::createError(-6, "Channel does not support teams.");
 		int32_t oldTeamAddress = peer->getTeamRemoteAddress();
 		int32_t oldTeamChannel = peer->getTeamRemoteChannel();
 		if(oldTeamChannel < 0) oldTeamChannel = 0;
@@ -3908,25 +3912,33 @@ PVariable HomeMaticCentral::setTeam(int32_t clientID, uint64_t peerID, int32_t c
 					break;
 				}
 			}
-			if(newChannel < 0) return Variable::createError(-6, "There are no team channels for this device.");
+			if(newChannel < 0) return Variable::createError(-6, "There are no group channels for this device.");
+			if(channel < 0) channel = newChannel;
 			resetTeam(peer, newChannel);
 		}
 		else //Set new team
 		{
+			if(channel < 0) channel = 0;
+
+			Functions::iterator functionIteratorPeer = peer->getRpcDevice()->functions.find(channel);
+			if(functionIteratorPeer == peer->getRpcDevice()->functions.end()) return Variable::createError(-2, "Unknown channel.");
+			if(!functionIteratorPeer->second->hasGroup) return Variable::createError(-6, "Channel does not support groups.");
+
 			//Don't create team if not existent!
 			std::shared_ptr<BidCoSPeer> team = getPeer(teamID);
-			if(!team) return Variable::createError(-2, "Team does not exist.");
+			if(!team) return Variable::createError(-2, "Group does not exist.");
 			if(!force && !peer->getTeamRemoteSerialNumber().empty() && peer->getTeamRemoteSerialNumber() == team->getSerialNumber() && peer->getTeamChannel() == channel && peer->getTeamRemoteChannel() == teamChannel)
 			{
 				//Peer already is member of this team
 				return PVariable(new Variable(VariableType::tVoid));
 			}
 			Functions::iterator functionIteratorTeam = team->getRpcDevice()->functions.find(teamChannel);
-			if(functionIteratorTeam == team->getRpcDevice()->functions.end()) return Variable::createError(-2, "Unknown team channel.");
-			if(functionIteratorTeam->second->groupId != functionIteratorPeer->second->groupId) return Variable::createError(-6, "Peer channel is not compatible to team channel.");
+			if(functionIteratorTeam == team->getRpcDevice()->functions.end()) return Variable::createError(-2, "Unknown group channel.");
+			if(functionIteratorTeam->second->groupId != functionIteratorPeer->second->groupId) return Variable::createError(-6, "Peer channel is not compatible to group channel.");
 
 			addPeerToTeam(peer, channel, teamChannel, team->getSerialNumber());
 		}
+
 		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(peer->getPhysicalInterface(), BidCoSQueueType::CONFIG));
 		queue->noSending = true;
 

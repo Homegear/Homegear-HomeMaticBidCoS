@@ -90,6 +90,7 @@ enum class DeviceType : uint32_t
 	HMLCSW4DR =		0x0061,
 	HMLCSW2DR =		0x0062,
 	ATENT =			0x0064,
+	BrcH =			0x0065,
 	HMLCSW4WM =		0x0066,
 	HMLCDIM1PWMCV =	0x0067,
 	HMLCDIM1TPBUFM = 0x0068,
@@ -124,7 +125,22 @@ enum class DeviceType : uint32_t
 	HMCCRTDNBOM = 	0x00BD,
 	HMMODRE8 =		0x00BE,
 	HMPB2FM =		0x00BF,
-	HMRC8 =			0x00DA
+	HmRc43 =		0x00D4,
+	HmRcSec43 =		0x00D5,
+	HmRcKey43 =		0x00D6,
+	HMRC8 =			0x00DA,
+	HmRc2PbuFm = 	0x00E0,
+	HmRcDisHXEu = 	0x00E1,
+	HmEsPmsw1Dr =	0x00EA,
+	HmLcSw1PlCtR1 =	0x00EB,
+	HmLcSw1PlCtR2 =	0x00EC,
+	HmLcSw1PlCtR3 =	0x00ED,
+	HmLcSw1PlCtR4 =	0x00EE,
+	HmLcSw1PlCtR5 =	0x00EF,
+	HmLcSw1Dr =		0x00F0,
+	HMLCDIM1TFMLF =	0x00F5,
+	HmEsPmsw1Sm =	0x00F6,
+	HmRc43D =		0x00F8
 };
 }
 #endif /* BIDCOSDEVICETYPES_H_ */

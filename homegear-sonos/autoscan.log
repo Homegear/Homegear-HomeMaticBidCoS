@@ -1,3 +1,0 @@
-autoscan: warning: missing AC_PROG_MAKE_SET wanted by: 
-	makeDebug.sh:4
-	makeDebug.sh:4

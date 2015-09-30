@@ -1,0 +1,1756 @@
+<homegearDevice version="7">
+	<supportedDevices>
+		<device id="HM-LC-Sw1PBU-FM">
+			<description>radio-controlled switch actuator 1-channel (flush-mount)</description>
+			<typeNumber>0x69</typeNumber>
+			<minFirmwareVersion>0x24</minFirmwareVersion>
+		</device>
+		<device id="263 131">
+			<description>radio-controlled switch actuator 1-channel (flush-mount) Schueco</description>
+			<typeNumber>0x8C</typeNumber>
+			<minFirmwareVersion>0x24</minFirmwareVersion>
+		</device>
+	</supportedDevices>
+	<properties>
+		<encryption>true</encryption>
+	</properties>
+	<functions>
+		<function channel="0" type="MAINTENANCE" channelCount="1">
+			<properties>
+				<internal>true</internal>
+			</properties>
+			<configParameters>switch_dev_master-0</configParameters>
+			<variables>maint_ch_values-0</variables>
+		</function>
+		<function channel="1" type="SWITCH" channelCount="1">
+			<properties>
+				<dynamicChannelCount>23:1.0</dynamicChannelCount>
+				<linkReceiverFunctionTypes>
+					<type>SWITCH</type>
+					<type>WCS_TIPTRONIC_SENSOR</type>
+					<type>WEATHER_CS</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>switch_ch_master-1</configParameters>
+			<variables>switch_ch_values-1</variables>
+			<linkParameters>switch_ch_link-1</linkParameters>
+		</function>
+	</functions>
+	<packets>
+		<packet id="ACK_STATUS">
+			<direction>toCentral</direction>
+			<type>0x2</type>
+			<subtype>0x1</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_POWERON">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channel>-2</channel>
+			<binaryPayload>
+				<element>
+					<index>10.0</index>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<parameterId>STATE</parameterId>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<parameterId>STATE_FLAGS</parameterId>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<parameterId>INHIBIT</parameterId>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<parameterId>BOOT</parameterId>
+					<constValueInteger>1</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="LEVEL_GET">
+			<direction>fromCentral</direction>
+			<type>0x1</type>
+			<channelIndex>9</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>10.0</index>
+					<constValueInteger>14</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="LEVEL_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x2</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>2.0</size>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>2.0</size>
+					<parameterId>ON_TIME</parameterId>
+					<omitIf>0</omitIf>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_LOCK">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.0</index>
+					<size>0.1</size>
+					<parameterId>INHIBIT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="TOGGLE_INSTALL_TEST">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x2</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>TOGGLE_FLAG</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>2.0</size>
+					<constValueInteger>0</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+	</packets>
+	<parameterGroups>
+		<configParameters id="switch_ch_master-1">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="TRANSMIT_TRY_MAX">
+				<properties>internal</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POWERUP_ACTION">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>POWERUP_OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>POWERUP_ON</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="POWERUP_ACTION">
+					<index>86.0</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_MINDELAY">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.500000</minimumValue>
+					<maximumValue>15.500000</maximumValue>
+					<defaultValue>2.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="STATUSINFO_MINDELAY">
+					<index>87.0</index>
+					<size>0.5</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_RANDOM">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>7.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="STATUSINFO_RANDOM">
+					<index>87.5</index>
+					<size>0.3</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="switch_dev_master-0">
+			<parameter id="INTERNAL_KEYS_VISIBLE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="INTERNAL_KEYS_VISIBLE">
+					<index>2.7</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOCAL_RESET_DISABLE">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+					<index>24.0</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ROAMING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ROAMING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<variables id="maint_ch_values-0">
+			<parameter id="UNREACH">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STICKY_UNREACH">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="STICKY_UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CONFIG_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="CONFIG_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DUTYCYCLE">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DUTYCYCLE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_DEVICE">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_DEVICE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_PEER">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_PEER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="AES_KEY">
+				<properties>
+					<writeable>false</writeable>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>127</maximumValue>
+				</logicalInteger>
+				<physicalInteger groupId="AES_KEY">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DEVICE_IN_BOOTLOADER">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DEVICE_IN_BOOTLOADER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="UPDATE_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UPDATE_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="POLLING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="POLLING_INTERVAL">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_SPOOFED">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>UNSET</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CENTRAL_ADDRESS_SPOOFED</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="CENTRAL_ADDRESS_SPOOFED">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BOOT">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="BOOT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="switch_ch_values-1">
+			<parameter id="STATE">
+				<properties>
+					<control>SWITCH.STATE</control>
+					<casts>
+						<booleanInteger>
+							<trueValue>200</trueValue>
+						</booleanInteger>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+						<autoReset>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="LEVEL_SET">
+						<type>set</type>
+						<autoReset>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ON_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ON_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="INHIBIT">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="INHIBIT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LOCK">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WORKING">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<readable>false</readable>
+					<internal>true</internal>
+					<casts>
+						<toggle>
+							<parameter>STATE</parameter>
+						</toggle>
+					</casts>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="TOGGLE_FLAG">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="TOGGLE_INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<linkParameters id="switch_ch_link-1">
+			<parameter id="UI_HINT">
+				<properties>set</properties>
+				<logicalString>
+					<defaultValue/>
+				</logicalString>
+				<physicalString groupId="UI_HINT">
+					<operationType>store</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="SHORT_CT_OFFDELAY">
+				<properties>store</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_OFFDELAY">
+					<index>2.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_ONDELAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_ONDELAY">
+					<index>2.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_OFF">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_OFF">
+					<index>3.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_ON">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_ON">
+					<index>3.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_COND_VALUE_LO">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>50</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="SHORT_COND_VALUE_LO">
+					<index>4.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_COND_VALUE_HI">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>100</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="SHORT_COND_VALUE_HI">
+					<index>5.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ONDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_ONDELAY_TIME">
+					<index>6.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ON_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>108000.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_ON_TIME">
+					<index>7.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_OFFDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_OFFDELAY_TIME">
+					<index>8.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_OFF_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>108000.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_OFF_TIME">
+					<index>9.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ON_TIME_MODE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>ABSOLUTE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>MINIMAL</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_ON_TIME_MODE">
+					<index>10.7</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_OFF_TIME_MODE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>ABSOLUTE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>MINIMAL</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_OFF_TIME_MODE">
+					<index>10.6</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ACTION_TYPE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>INACTIVE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>JUMP_TO_TARGET</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>TOGGLE_TO_COUNTER</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>TOGGLE_INV_TO_COUNTER</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_ACTION_TYPE">
+					<index>10.0</index>
+					<size>0.2</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_OFF">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_OFF">
+					<index>11.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_ON">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_ON">
+					<index>11.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_OFFDELAY">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_OFFDELAY">
+					<index>12.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_ONDELAY">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_ONDELAY">
+					<index>12.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_CT_OFFDELAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_CT_OFFDELAY">
+					<index>130.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_CT_ONDELAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_CT_ONDELAY">
+					<index>130.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_CT_OFF">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_CT_OFF">
+					<index>131.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_CT_ON">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_CT_ON">
+					<index>131.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_COND_VALUE_LO">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>50</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="LONG_COND_VALUE_LO">
+					<index>132.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_COND_VALUE_HI">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>100</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="LONG_COND_VALUE_HI">
+					<index>133.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_ONDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LONG_ONDELAY_TIME">
+					<index>134.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_ON_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>108000.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="LONG_ON_TIME">
+					<index>135.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_OFFDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LONG_OFFDELAY_TIME">
+					<index>136.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_OFF_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>108000.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="LONG_OFF_TIME">
+					<index>137.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_ON_TIME_MODE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>ABSOLUTE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>MINIMAL</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_ON_TIME_MODE">
+					<index>138.7</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_OFF_TIME_MODE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>ABSOLUTE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>MINIMAL</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_OFF_TIME_MODE">
+					<index>138.6</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_MULTIEXECUTE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_MULTIEXECUTE">
+					<index>138.5</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_ACTION_TYPE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>INACTIVE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>JUMP_TO_TARGET</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>TOGGLE_TO_COUNTER</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>TOGGLE_INV_TO_COUNTER</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_ACTION_TYPE">
+					<index>138.0</index>
+					<size>0.2</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_JT_OFF">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_JT_OFF">
+					<index>139.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_JT_ON">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_JT_ON">
+					<index>139.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_JT_OFFDELAY">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_JT_OFFDELAY">
+					<index>140.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_JT_ONDELAY">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ONDELAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>OFFDELAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_JT_ONDELAY">
+					<index>140.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<scenario id="A">
+				<parameter id="LONG_JT_OFF">ONDELAY</parameter>
+				<parameter id="LONG_JT_OFFDELAY">ON</parameter>
+				<parameter id="LONG_JT_ON">ON</parameter>
+				<parameter id="LONG_JT_ONDELAY">ON</parameter>
+				<parameter id="SHORT_JT_OFF">ONDELAY</parameter>
+				<parameter id="SHORT_JT_OFFDELAY">ON</parameter>
+				<parameter id="SHORT_JT_ON">ON</parameter>
+				<parameter id="SHORT_JT_ONDELAY">ON</parameter>
+			</scenario>
+			<scenario id="AB">
+				<parameter id="LONG_JT_OFF">ONDELAY</parameter>
+				<parameter id="LONG_JT_ON">OFFDELAY</parameter>
+				<parameter id="LONG_JT_ONDELAY">ON</parameter>
+				<parameter id="SHORT_JT_OFF">ONDELAY</parameter>
+				<parameter id="SHORT_JT_ON">OFFDELAY</parameter>
+				<parameter id="SHORT_JT_ONDELAY">ON</parameter>
+			</scenario>
+			<scenario id="B">
+				<parameter id="LONG_JT_ON">OFFDELAY</parameter>
+				<parameter id="SHORT_JT_ON">OFFDELAY</parameter>
+			</scenario>
+			<scenario id="default">
+				<parameter id="LCD_LEVEL_INTERP">1</parameter>
+				<parameter id="LCD_SYMBOL">2</parameter>
+			</scenario>
+		</linkParameters>
+	</parameterGroups>
+</homegearDevice>
+

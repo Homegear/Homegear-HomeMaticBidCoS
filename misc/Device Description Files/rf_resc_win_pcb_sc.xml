@@ -1,0 +1,2967 @@
+<homegearDevice version="153">
+	<supportedDevices>
+		<device id="263_149_/_263_150">
+			<description>WCS-TipTronic-Modul Schueco</description>
+			<typeNumber>0x9B</typeNumber>
+		</device>
+	</supportedDevices>
+	<properties>
+		<encryption>true</encryption>
+		<timeout>88200</timeout>
+	</properties>
+	<functions>
+		<function channel="0" type="MAINTENANCE" channelCount="1">
+			<properties>
+				<internal>true</internal>
+			</properties>
+			<configParameters>tiptronic_dev_master-0</configParameters>
+			<variables>maint_ch_values-0</variables>
+		</function>
+		<function channel="1" type="ACTOR_WINDOW" channelCount="1">
+			<properties>
+				<linkReceiverFunctionTypes>
+					<type>SWITCH</type>
+					<type>WEATHER_CS</type>
+					<type>WINMATIC</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>actor_window_ch_master-1</configParameters>
+			<variables>actor_ch_values-1</variables>
+			<linkParameters>actor_window_ch_link-1</linkParameters>
+		</function>
+		<function channel="2" type="SENSOR_WINDOW" channelCount="1">
+			<properties>
+				<linkSenderFunctionTypes>
+					<type>WCS_TIPTRONIC_SENSOR</type>
+					<type>WINDOW_SWITCH_RECEIVER</type>
+					<type>WINDOW_SWITCH_RECEIVER_V2</type>
+				</linkSenderFunctionTypes>
+			</properties>
+			<configParameters>sensor_window_ch_master-2</configParameters>
+			<variables>sensor_window_ch_values-2</variables>
+			<linkParameters>sensor_window_ch_link-2</linkParameters>
+		</function>
+		<function channel="3" type="ACTOR_SECURITY" channelCount="1">
+			<properties>
+				<linkReceiverFunctionTypes>
+					<type>SWITCH</type>
+					<type>WEATHER_CS</type>
+					<type>WINMATIC</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>actor_security_ch_master-3</configParameters>
+			<variables>actor_security_ch_values-3</variables>
+			<linkParameters>actor_security_ch_link-3</linkParameters>
+		</function>
+	</functions>
+	<packets>
+		<packet id="ACK_STATUS">
+			<direction>toCentral</direction>
+			<type>0x2</type>
+			<subtype>0x1</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channel>-2</channel>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.2</size>
+					<parameterId>LEVEL_STATE</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="DO_WIN_RELEASE">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
+		</packet>
+		<packet id="ENTER_BOOTLOADER">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0xCA</subtype>
+			<subtypeIndex>9</subtypeIndex>
+		</packet>
+		<packet id="EVENT">
+			<direction>toCentral</direction>
+			<type>0x41</type>
+			<channel>-2</channel>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LEVEL</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="HANDLE_LOCK">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x81</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>HANDLE_LOCK_STATE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.2</size>
+					<parameterId>LEVEL_STATE</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>0.2</size>
+					<parameterId>HANDLE_LED_STATE</parameterId>
+				</element>
+				<element>
+					<index>14.2</index>
+					<size>0.4</size>
+					<parameterId>TIPTRONIC_STATE</parameterId>
+				</element>
+				<element>
+					<index>14.6</index>
+					<size>0.1</size>
+					<parameterId>ERR_WINDOW_NOT_FOUND</parameterId>
+				</element>
+				<element>
+					<index>14.7</index>
+					<size>0.1</size>
+					<parameterId>ERR_DETECT_EIA485_SERVICE</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_WRONG_VOLTAGE_POLARITY</parameterId>
+				</element>
+				<element>
+					<index>15.1</index>
+					<size>0.2</size>
+					<parameterId>ERR_TTCU_OVERVOLT_UNDERVOLT_OR_INTERNAL</parameterId>
+				</element>
+				<element>
+					<index>15.3</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_LOCK_ROLLERS_SHORTED</parameterId>
+				</element>
+				<element>
+					<index>15.4</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_TURN_TILT_ACT_SHORTED</parameterId>
+				</element>
+				<element>
+					<index>15.5</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_TURN_TILT_ACT_BLOCKED</parameterId>
+				</element>
+				<element>
+					<index>15.6</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_TURN_TILT_ACT_OVERCURRENT</parameterId>
+				</element>
+				<element>
+					<index>15.7</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_TURN_TILT_ACT_ASYNCHRON</parameterId>
+				</element>
+				<element>
+					<index>16.0</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_TURN_TILT_ACT_CONTACT_PROBLEM</parameterId>
+				</element>
+				<element>
+					<index>16.1</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_TURN_TILT_ACT_NO_SPEED_SIGNAL</parameterId>
+				</element>
+				<element>
+					<index>16.2</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_MAGNET_ERROR</parameterId>
+				</element>
+				<element>
+					<index>16.3</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_TURN_TILT_ACT_ALLOY_MOSFET</parameterId>
+				</element>
+				<element>
+					<index>16.4</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_SENSOR_STRIP_SHORTED</parameterId>
+				</element>
+				<element>
+					<index>16.5</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_SENSOR_STRIP_DISCONNECTED</parameterId>
+				</element>
+				<element>
+					<index>16.6</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_POWER_ONTIME_EXCEEDED</parameterId>
+				</element>
+				<element>
+					<index>16.7</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTCU_STOP_AFTER_10_CLOSING_TRIES</parameterId>
+				</element>
+				<element>
+					<index>17.0</index>
+					<size>0.1</size>
+					<parameterId>RELEASE_TURN_STATE</parameterId>
+				</element>
+				<element>
+					<index>17.1</index>
+					<size>0.1</size>
+					<parameterId>HANDLE_LOCK_STATE</parameterId>
+				</element>
+				<element>
+					<index>17.2</index>
+					<size>0.1</size>
+					<parameterId>SECURE_STATE</parameterId>
+				</element>
+				<element>
+					<index>17.3</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTM_INTERNAL</parameterId>
+				</element>
+				<element>
+					<index>17.4</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTM_OVERVOLT</parameterId>
+				</element>
+				<element>
+					<index>17.5</index>
+					<size>0.1</size>
+					<parameterId>ERR_TTM_UNDERVOLT</parameterId>
+				</element>
+				<element>
+					<index>17.6</index>
+					<size>0.2</size>
+					<parameterId>ERR_FREE_TO_USE_1_2</parameterId>
+				</element>
+				<element>
+					<index>18.0</index>
+					<size>0.4</size>
+					<parameterId>WINDOW_TYPE</parameterId>
+				</element>
+				<element>
+					<index>19.0</index>
+					<parameterId>WINTER_MODE_TIME</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL_CH2">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channel>2</channel>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.2</size>
+					<parameterId>LEVEL_STATE</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+				<element>
+					<index>14.2</index>
+					<size>0.4</size>
+					<parameterId>TIPTRONIC_STATE</parameterId>
+				</element>
+				<element>
+					<index>18.0</index>
+					<size>0.4</size>
+					<parameterId>WINDOW_TYPE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL_CH3">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channel>3</channel>
+			<binaryPayload>
+				<element>
+					<index>17.2</index>
+					<size>0.1</size>
+					<parameterId>SECURE_STATE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INSTALL_TEST">
+			<direction>fromCentral</direction>
+			<type>0x1</type>
+			<channelIndex>9</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>10.0</index>
+					<constValueInteger>14</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="LEVEL_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x2</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>2.0</size>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>2.0</size>
+					<parameterId>ON_TIME</parameterId>
+					<omitIf>0</omitIf>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SECURE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x2</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>SECURE_STATE</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>2.0</size>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>2.0</size>
+					<parameterId>ON_TIME</parameterId>
+					<omitIf>0</omitIf>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_HANDLE_LED_MODE">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x83</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>HANDLE_LED_STATE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_LEV_LUEFT">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x2</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<constValueInteger>200</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_LOCK">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.0</index>
+					<size>0.1</size>
+					<parameterId>INHIBIT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_RELEASE_TURN">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x85</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>RELEASE_TURN_STATE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_SHEV_POS">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x84</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>SHEV_POS_STATE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_WINTER_MODE">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x82</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>WINTER_MODE_TIME</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="STATUS_GET">
+			<direction>fromCentral</direction>
+			<type>0x1</type>
+			<channelIndex>9</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>10.0</index>
+					<constValueInteger>14</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="STOP">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x3</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+		</packet>
+	</packets>
+	<parameterGroups>
+		<configParameters id="actor_security_ch_master-3">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+		</configParameters>
+		<configParameters id="actor_window_ch_master-1">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="TRANSMIT_TRY_MAX">
+				<properties>internal</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_MINDELAY">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.500000</minimumValue>
+					<maximumValue>15.500000</maximumValue>
+					<defaultValue>4.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="STATUSINFO_MINDELAY">
+					<index>87.0</index>
+					<size>0.5</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_RANDOM">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>7.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="STATUSINFO_RANDOM">
+					<index>87.5</index>
+					<size>0.3</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="sensor_window_ch_master-2">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="TRANSMIT_TRY_MAX">
+				<properties>internal</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="EVENT_DELAYTIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime>
+							<factors>
+								<factor>1.000000</factor>
+							</factors>
+							<factors>
+								<factor>60.000000</factor>
+							</factors>
+							<valueSize>0.700000</valueSize>
+						</decimalConfigTime>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>1.000000</minimumValue>
+					<maximumValue>7620.000000</maximumValue>
+					<defaultValue>2.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="EVENT_DELAYTIME">
+					<index>33.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="tiptronic_dev_master-0">
+			<parameter id="CYCLIC_INFO_MSG">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="CYCLIC_INFO_MSG">
+					<index>9.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CYCLIC_INFO_MSG_DIS">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="CYCLIC_INFO_MSG_DIS">
+					<index>17.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOCAL_RESET_DISABLE">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+					<index>24.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RS485_IDLE_TIME">
+				<properties>
+					<unit>s</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>10</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="RS485_IDLE_TIME">
+					<index>29.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ROAMING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ROAMING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<variables id="actor_ch_values-1">
+			<parameter id="LEVEL">
+				<properties>
+					<readable>false</readable>
+					<control>WIN_SC.LEVEL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>255</physical>
+								<logical>-1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+					<specialValues>
+						<specialValue id="LOCKED">-0.005000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_SET">
+						<type>set</type>
+						<autoReset>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="EVENT">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ON_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ON_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STOP">
+				<properties>
+					<readable>false</readable>
+					<control>WIN_SC.STOP</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="STOP">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STOP">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="HANDLE_LOCK">
+				<properties>
+					<control>WIN_SC.HANDLE_LOCK</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="HANDLE_LOCK_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="HANDLE_LOCK">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WIN_RELEASE_ACT">
+				<properties>
+					<readable>false</readable>
+					<control>WIN_SC.RELEASE</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="WIN_RELEASE_ACT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="DO_WIN_RELEASE">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WINTER_MODE">
+				<properties>
+					<control>WIN_SC.WINTER_MODE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>65535.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="WINTER_MODE_TIME">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="SET_WINTER_MODE">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="HANDLE_LED_MODE">
+				<properties>
+					<control>WIN_SC.HANDLE_LED_MODE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>2</defaultValue>
+					<value>
+						<id>OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>DIMMED_ON</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>FULL_ON</id>
+						<index>2</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="HANDLE_LED_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="SET_HANDLE_LED_MODE">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="RELEASE_TURN">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="RELEASE_TURN_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="SET_RELEASE_TURN">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="SHEV_POS">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>ZULUFT_DEACTIVATED</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ZULUFT_UNBLOCKED</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ZULUFT_BLOCKED</id>
+						<index>2</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHEV_POS_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_SHEV_POS">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="DIRECTION">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NONE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>UP</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>DOWN</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>UNDEFINED</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LEVEL_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WORKING">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INHIBIT">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="INHIBIT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LOCK">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<readable>false</readable>
+					<internal>true</internal>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="INSTALL_TEST">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NO_ERROR</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>DEVICE_ERROR</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="ERROR">
+					<size>0.3</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_WINDOW_NOT_FOUND">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_WINDOW_NOT_FOUND">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_DETECT_EIA485_SERVICE">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_DETECT_EIA485_SERVICE">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTM_INTERNAL">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTM_INTERNAL">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTM_OVERVOLT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NO_ERROR</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>OVERVOLT</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="ERR_TTM_OVERVOLT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="STICKY_ERR_TTM_OVERVOLT">
+				<properties>
+					<internal>true</internal>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>WAS_OVERVOLT</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>OVERVOLT</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="ERR_TTM_OVERVOLT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTM_UNDERVOLT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NO_ERROR</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>UNDERVOLT</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="ERR_TTM_UNDERVOLT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="STICKY_ERR_TTM_UNDERVOLT">
+				<properties>
+					<internal>true</internal>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>WAS_UNDERVOLT</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>UNDERVOLT</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="ERR_TTM_UNDERVOLT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="FREE_TO_USE">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_FREE_TO_USE_1_2">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_WRONG_VOLTAGE_POLARITY">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_WRONG_VOLTAGE_POLARITY">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_INTERNAL_TEST">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+					<casts>
+						<booleanInteger>
+							<threshold>3</threshold>
+						</booleanInteger>
+					</casts>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_OVERVOLT_UNDERVOLT_OR_INTERNAL">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_LOCK_ROLLERS_SHORTED">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_LOCK_ROLLERS_SHORTED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_TURN_TILT_ACT_SHORTED">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_TURN_TILT_ACT_SHORTED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_TURN_TILT_ACT_BLOCKED">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_TURN_TILT_ACT_BLOCKED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_TURN_TILT_ACT_OVERCURRENT">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_TURN_TILT_ACT_OVERCURRENT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_TURN_TILT_ACT_ASYNCHRON">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_TURN_TILT_ACT_ASYNCHRON">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_TURN_TILT_ACT_CONTACT_PROBLEM">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_TURN_TILT_ACT_CONTACT_PROBLEM">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_TURN_TILT_ACT_NO_SPEED_SIGNAL">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_TURN_TILT_ACT_NO_SPEED_SIGNAL">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_MAGNET_ERROR">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_MAGNET_ERROR">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_TURN_TILT_ACT_ALLOY_MOSFET">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_TURN_TILT_ACT_ALLOY_MOSFET">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_SENSOR_STRIP_SHORTED">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_SENSOR_STRIP_SHORTED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_SENSOR_STRIP_DISCONNECTED">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_SENSOR_STRIP_DISCONNECTED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_POWER_ONTIME_EXCEEDED">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_POWER_ONTIME_EXCEEDED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_TTCU_STOP_AFTER_10_CLOSING_TRIES">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="ERR_TTCU_STOP_AFTER_10_CLOSING_TRIES">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERR_WIN_STAY_IN_INITIAL_OPERATION">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<service>true</service>
+					<control>NONE</control>
+					<casts>
+						<booleanInteger>
+							<threshold>15</threshold>
+						</booleanInteger>
+					</casts>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="TIPTRONIC_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="actor_security_ch_values-3">
+			<parameter id="SECURE_STATE">
+				<properties>
+					<control>WIN_SC_SECURE.STATE</control>
+					<casts>
+						<booleanInteger>
+							<trueValue>200</trueValue>
+						</booleanInteger>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="SECURE_STATE">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL_CH3</responseId>
+						<autoReset>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="SECURE_SET">
+						<type>set</type>
+						<autoReset>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL_CH3">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ON_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ON_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<readable>false</readable>
+					<internal>true</internal>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="INSTALL_TEST">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INHIBIT">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="INHIBIT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LOCK">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="maint_ch_values-0">
+			<parameter id="UNREACH">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STICKY_UNREACH">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="STICKY_UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CONFIG_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="CONFIG_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="AES_KEY">
+				<properties>
+					<writeable>false</writeable>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>127</maximumValue>
+				</logicalInteger>
+				<physicalInteger groupId="AES_KEY">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DUTYCYCLE">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DUTYCYCLE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_DEVICE">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_DEVICE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_PEER">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_PEER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENTER_BOOTLOADER">
+				<properties>
+					<readable>false</readable>
+					<internal>true</internal>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="ENTER_BOOTLOADER">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="ENTER_BOOTLOADER">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="DEVICE_IN_BOOTLOADER">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DEVICE_IN_BOOTLOADER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="UPDATE_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UPDATE_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="POLLING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="POLLING_INTERVAL">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_SPOOFED">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>UNSET</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CENTRAL_ADDRESS_SPOOFED</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="CENTRAL_ADDRESS_SPOOFED">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+		</variables>
+		<variables id="sensor_window_ch_values-2">
+			<parameter id="LEVEL">
+				<properties>
+					<writeable>false</writeable>
+					<control>WIN_SC_SENSOR.LEVEL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>255</physical>
+								<logical>0</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL_CH2</responseId>
+					</packet>
+					<packet id="EVENT">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_LEVEL_CH2">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WIN_RELEASE">
+				<properties>
+					<writeable>false</writeable>
+					<control>WIN_SC_SENSOR.RELEASE</control>
+					<casts>
+						<booleanInteger/>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LEVEL_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL_CH2</responseId>
+					</packet>
+					<packet id="INFO_LEVEL_CH2">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="TIPTRONIC_STATE">
+				<properties>
+					<writeable>false</writeable>
+					<control>WIN_SC_SENSOR.TIPTRONIC_STATE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>12</defaultValue>
+					<value>
+						<id>TT_LOCKED</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>TT_UNLOCKS_IN_TILT_POSITION</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>TT_IS_UNLOCKED_IN_TILT_POSITION_VENT_FRAME_IS_DUE</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>TT_OPENS_IN_TILT_POSITION</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>TT_IS_IN_TILT_POSITION_PARTITIAL_OPEND</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>TT_IS_IN_TILT_POSITION_FULL_OPEND</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>TT_CLOSES_FROM_TILT_POSITION</id>
+						<index>6</index>
+					</value>
+					<value>
+						<id>TT_LOCKS_FROM_TILT_POSITION</id>
+						<index>7</index>
+					</value>
+					<value>
+						<id>TT_UNLOCKS_IN_TURN_POSITION</id>
+						<index>8</index>
+					</value>
+					<value>
+						<id>TT_IS_UNLOCKED_IN_TURN_POSITION_VENT_FRAME_IS_DUE</id>
+						<index>9</index>
+					</value>
+					<value>
+						<id>TT_COULT_BE_OPEND_MANUAL_IN_TURN_POSITION</id>
+						<index>10</index>
+					</value>
+					<value>
+						<id>TT_VENT_FRAME_IS_DUE_WINDOW_LOCKS_FROM_TURN_POSITION</id>
+						<index>11</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_UNKNOWN_STATE1</id>
+						<index>12</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_UNKNOWN_STATE2</id>
+						<index>13</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_WINDOW_IN_SHEV_POSITION</id>
+						<index>14</index>
+					</value>
+					<value>
+						<id>TT_INITIAL_OPERATION</id>
+						<index>15</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="TIPTRONIC_STATE">
+					<size>0.4</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL_CH2</responseId>
+					</packet>
+					<packet id="INFO_LEVEL_CH2">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WINDOW_TYPE">
+				<properties>
+					<writeable>false</writeable>
+					<control>WIN_SC_SENSOR.WINDOW_TYPE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>TIPTRONIC_UNKNOWN_WINDOW_TYPE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_TURN_AND_TILT</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_TURN_AND_TILT_TURN_LOCKED</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_TOPLIGHT</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_TURN</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_SHEV_TURN</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>TIPTRONIC_SHEV_TILT</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="WINDOW_TYPE">
+					<size>0.4</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL_CH2</responseId>
+					</packet>
+					<packet id="INFO_LEVEL_CH2">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WORKING">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="STATUS_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL_CH2</responseId>
+					</packet>
+					<packet id="INFO_LEVEL_CH2">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<linkParameters id="actor_security_ch_link-3">
+			<parameter id="UI_HINT">
+				<properties>event</properties>
+				<logicalString>
+					<defaultValue/>
+				</logicalString>
+				<physicalString groupId="UI_HINT">
+					<operationType>store</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="SHORT_JT_OFF">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>5</physical>
+								<logical>2</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>2</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>2</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_OFF">
+					<index>11.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_ON">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>5</physical>
+								<logical>2</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>2</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>OFF</id>
+						<index>2</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_ON">
+					<index>11.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ON_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>108000.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_ON_TIME">
+					<index>7.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</linkParameters>
+		<linkParameters id="actor_window_ch_link-1">
+			<parameter id="UI_HINT">
+				<properties>config</properties>
+				<logicalString>
+					<defaultValue/>
+				</logicalString>
+				<physicalString groupId="UI_HINT">
+					<operationType>store</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="SHORT_CT_RAMPOFF">
+				<properties>store</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_RAMPOFF">
+					<index>1.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_RAMPON">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_RAMPON">
+					<index>1.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_OFFDELAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_OFFDELAY">
+					<index>2.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_ONDELAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_ONDELAY">
+					<index>2.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_OFF">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_OFF">
+					<index>3.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_CT_ON">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>X GE COND_VALUE_LO</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>X GE COND_VALUE_HI</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_HI</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COND_VALUE_LO LE X LT COND_VALUE_HI</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>X LT COND_VALUE_LO OR X GE COND_VALUE_HI</id>
+						<index>5</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CT_ON">
+					<index>3.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_COND_VALUE_LO">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>50</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="SHORT_COND_VALUE_LO">
+					<index>4.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_COND_VALUE_HI">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>100</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="SHORT_COND_VALUE_HI">
+					<index>5.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ON_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>108000.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_ON_TIME">
+					<index>7.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_OFF_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>65535.000000</maximumValue>
+					<defaultValue>111600.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">111600.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_OFF_TIME">
+					<index>9.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ONDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_ONDELAY_TIME">
+					<index>6.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_OFFDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_OFFDELAY_TIME">
+					<index>8.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ON_TIME_MODE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>ABSOLUTE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>MINIMAL</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_ON_TIME_MODE">
+					<index>10.7</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_OFF_TIME_MODE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>ABSOLUTE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>MINIMAL</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_OFF_TIME_MODE">
+					<index>10.6</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_MULTIEXECUTE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_MULTIEXECUTE">
+					<index>10.5</index>
+					<size>0.1</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ACTION_TYPE">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>INACTIVE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>JUMP_TO_TARGET</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>TOGGLE_TO_COUNTER</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>TOGGLE_INV_TO_COUNTER</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_ACTION_TYPE">
+					<index>10.0</index>
+					<size>0.2</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_OFF">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>6</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>RAMPON(ONDELAY)</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>RAMPON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ON(ABORT_RAMP)</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>RAMPOFF(OFFDELAY)</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>RAMPOFF</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>OFF(ABORT_RAMP)</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_OFF">
+					<index>11.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_ON">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>6</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>RAMPON(ONDELAY)</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>RAMPON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ON(ABORT_RAMP)</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>RAMPOFF(OFFDELAY)</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>RAMPOFF</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>OFF(ABORT_RAMP)</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_ON">
+					<index>11.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_OFFDELAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>6</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>RAMPON(ONDELAY)</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>RAMPON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ON(ABORT_RAMP)</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>RAMPOFF(OFFDELAY)</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>RAMPOFF</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>OFF(ABORT_RAMP)</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_OFFDELAY">
+					<index>12.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_ONDELAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>6</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>RAMPON(ONDELAY)</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>RAMPON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ON(ABORT_RAMP)</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>RAMPOFF(OFFDELAY)</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>RAMPOFF</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>OFF(ABORT_RAMP)</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_ONDELAY">
+					<index>12.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_RAMPOFF">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>6</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>RAMPON(ONDELAY)</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>RAMPON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ON(ABORT_RAMP)</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>RAMPOFF(OFFDELAY)</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>RAMPOFF</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>OFF(ABORT_RAMP)</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_RAMPOFF">
+					<index>13.4</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_JT_RAMPON">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>6</defaultValue>
+					<value>
+						<id>NO_JUMP_IGNORE_COMMAND</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>RAMPON(ONDELAY)</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>RAMPON</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ON(ABORT_RAMP)</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>RAMPOFF(OFFDELAY)</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>RAMPOFF</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>OFF(ABORT_RAMP)</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_JT_RAMPON">
+					<index>13.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ON_LEVEL">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>255</physical>
+								<logical>-1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.010000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+					<specialValues>
+						<specialValue id="LOCKED">-0.005000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_ON_LEVEL">
+					<index>17.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<scenario id="default">
+				<parameter id="LCD_LEVEL_INTERP">5</parameter>
+				<parameter id="LCD_SYMBOL">3</parameter>
+			</scenario>
+		</linkParameters>
+		<linkParameters id="sensor_window_ch_link-2">
+			<parameter id="UI_HINT">
+				<properties>config</properties>
+				<logicalString>
+					<defaultValue/>
+				</logicalString>
+				<physicalString groupId="UI_HINT">
+					<operationType>store</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="PEER_NEEDS_BURST">
+				<properties>store</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="PEER_NEEDS_BURST">
+					<index>1.0</index>
+					<size>0.1</size>
+					<list>4</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="EXPECT_AES">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+					<setToValueOnPairing>false</setToValueOnPairing>
+				</logicalBoolean>
+				<physicalInteger groupId="EXPECT_AES">
+					<index>1.7</index>
+					<size>0.1</size>
+					<list>4</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</linkParameters>
+	</parameterGroups>
+</homegearDevice>
+

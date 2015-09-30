@@ -1,0 +1,3723 @@
+<homegearDevice version="7">
+	<supportedDevices>
+		<device id="HM-Sys-sRP-Pl">
+			<description>selective repeater</description>
+			<typeNumber>0x76</typeNumber>
+			<minFirmwareVersion>0x10</minFirmwareVersion>
+		</device>
+	</supportedDevices>
+	<properties>
+		<encryption>true</encryption>
+	</properties>
+	<functions>
+		<function channel="0" type="MAINTENANCE" channelCount="1">
+			<properties>
+				<internal>true</internal>
+			</properties>
+			<configParameters>repeater_dev_master-0</configParameters>
+			<variables>maint_ch_values-0</variables>
+		</function>
+		<function channel="1" type="REPEATER" channelCount="1">
+			<properties/>
+			<configParameters>repeater_ch_master-1</configParameters>
+			<variables>repeater_ch_values-1</variables>
+		</function>
+	</functions>
+	<packets>
+		<packet id="ACK_STATUS">
+			<direction>toCentral</direction>
+			<type>0x2</type>
+			<subtype>0x1</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.4</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_LOCK">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.0</index>
+					<size>0.1</size>
+					<parameterId>INHIBIT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+	</packets>
+	<parameterGroups>
+		<configParameters id="repeater_ch_master-1">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="ADDRESS_SENDER1_HIGH_BYTE">
+				<properties>internal</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER1_HIGH_BYTE">
+					<index>1.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER1_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER1_MID_BYTE">
+					<index>2.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER1_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER1_LOW_BYTE">
+					<index>3.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER1_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER1_HIGH_BYTE">
+					<index>4.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER1_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER1_MID_BYTE">
+					<index>5.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER1_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER1_LOW_BYTE">
+					<index>6.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR1">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR1">
+					<index>7.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER2_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER2_HIGH_BYTE">
+					<index>8.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER2_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER2_MID_BYTE">
+					<index>9.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER2_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER2_LOW_BYTE">
+					<index>10.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER2_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER2_HIGH_BYTE">
+					<index>11.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER2_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER2_MID_BYTE">
+					<index>12.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER2_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER2_LOW_BYTE">
+					<index>13.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR2">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR2">
+					<index>14.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER3_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER3_HIGH_BYTE">
+					<index>15.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER3_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER3_MID_BYTE">
+					<index>16.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER3_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER3_LOW_BYTE">
+					<index>17.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER3_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER3_HIGH_BYTE">
+					<index>18.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER3_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER3_MID_BYTE">
+					<index>19.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER3_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER3_LOW_BYTE">
+					<index>20.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR3">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR3">
+					<index>21.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER4_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER4_HIGH_BYTE">
+					<index>22.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER4_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER4_MID_BYTE">
+					<index>23.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER4_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER4_LOW_BYTE">
+					<index>24.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER4_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER4_HIGH_BYTE">
+					<index>25.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER4_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER4_MID_BYTE">
+					<index>26.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER4_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER4_LOW_BYTE">
+					<index>27.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR4">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR4">
+					<index>28.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER5_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER5_HIGH_BYTE">
+					<index>29.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER5_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER5_MID_BYTE">
+					<index>30.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER5_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER5_LOW_BYTE">
+					<index>31.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER5_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER5_HIGH_BYTE">
+					<index>32.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER5_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER5_MID_BYTE">
+					<index>33.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER5_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER5_LOW_BYTE">
+					<index>34.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR5">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR5">
+					<index>35.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER6_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER6_HIGH_BYTE">
+					<index>36.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER6_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER6_MID_BYTE">
+					<index>37.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER6_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER6_LOW_BYTE">
+					<index>38.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER6_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER6_HIGH_BYTE">
+					<index>39.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER6_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER6_MID_BYTE">
+					<index>40.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER6_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER6_LOW_BYTE">
+					<index>41.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR6">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR6">
+					<index>42.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER7_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER7_HIGH_BYTE">
+					<index>43.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER7_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER7_MID_BYTE">
+					<index>44.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER7_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER7_LOW_BYTE">
+					<index>45.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER7_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER7_HIGH_BYTE">
+					<index>46.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER7_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER7_MID_BYTE">
+					<index>47.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER7_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER7_LOW_BYTE">
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR7">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR7">
+					<index>49.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER8_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER8_HIGH_BYTE">
+					<index>50.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER8_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER8_MID_BYTE">
+					<index>51.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER8_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER8_LOW_BYTE">
+					<index>52.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER8_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER8_HIGH_BYTE">
+					<index>53.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER8_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER8_MID_BYTE">
+					<index>54.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER8_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER8_LOW_BYTE">
+					<index>55.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR8">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR8">
+					<index>56.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER9_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER9_HIGH_BYTE">
+					<index>57.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER9_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER9_MID_BYTE">
+					<index>58.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER9_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER9_LOW_BYTE">
+					<index>59.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER9_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER9_HIGH_BYTE">
+					<index>60.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER9_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER9_MID_BYTE">
+					<index>61.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER9_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER9_LOW_BYTE">
+					<index>62.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR9">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR9">
+					<index>63.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER10_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER10_HIGH_BYTE">
+					<index>64.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER10_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER10_MID_BYTE">
+					<index>65.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER10_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER10_LOW_BYTE">
+					<index>66.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER10_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER10_HIGH_BYTE">
+					<index>67.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER10_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER10_MID_BYTE">
+					<index>68.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER10_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER10_LOW_BYTE">
+					<index>69.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR10">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR10">
+					<index>70.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER11_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER11_HIGH_BYTE">
+					<index>71.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER11_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER11_MID_BYTE">
+					<index>72.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER11_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER11_LOW_BYTE">
+					<index>73.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER11_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER11_HIGH_BYTE">
+					<index>74.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER11_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER11_MID_BYTE">
+					<index>75.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER11_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER11_LOW_BYTE">
+					<index>76.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR11">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR11">
+					<index>77.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER12_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER12_HIGH_BYTE">
+					<index>78.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER12_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER12_MID_BYTE">
+					<index>79.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER12_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER12_LOW_BYTE">
+					<index>80.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER12_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER12_HIGH_BYTE">
+					<index>81.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER12_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER12_MID_BYTE">
+					<index>82.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER12_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER12_LOW_BYTE">
+					<index>83.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR12">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR12">
+					<index>84.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER13_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER13_HIGH_BYTE">
+					<index>85.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER13_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER13_MID_BYTE">
+					<index>86.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER13_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER13_LOW_BYTE">
+					<index>87.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER13_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER13_HIGH_BYTE">
+					<index>88.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER13_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER13_MID_BYTE">
+					<index>89.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER13_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER13_LOW_BYTE">
+					<index>90.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR13">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR13">
+					<index>91.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER14_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER14_HIGH_BYTE">
+					<index>92.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER14_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER14_MID_BYTE">
+					<index>93.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER14_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER14_LOW_BYTE">
+					<index>94.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER14_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER14_HIGH_BYTE">
+					<index>95.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER14_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER14_MID_BYTE">
+					<index>96.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER14_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER14_LOW_BYTE">
+					<index>97.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR14">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR14">
+					<index>98.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER15_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER15_HIGH_BYTE">
+					<index>99.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER15_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER15_MID_BYTE">
+					<index>100.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER15_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER15_LOW_BYTE">
+					<index>101.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER15_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER15_HIGH_BYTE">
+					<index>102.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER15_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER15_MID_BYTE">
+					<index>103.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER15_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER15_LOW_BYTE">
+					<index>104.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR15">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR15">
+					<index>105.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER16_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER16_HIGH_BYTE">
+					<index>106.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER16_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER16_MID_BYTE">
+					<index>107.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER16_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER16_LOW_BYTE">
+					<index>108.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER16_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER16_HIGH_BYTE">
+					<index>109.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER16_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER16_MID_BYTE">
+					<index>110.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER16_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER16_LOW_BYTE">
+					<index>111.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR16">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR16">
+					<index>112.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER17_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER17_HIGH_BYTE">
+					<index>113.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER17_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER17_MID_BYTE">
+					<index>114.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER17_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER17_LOW_BYTE">
+					<index>115.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER17_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER17_HIGH_BYTE">
+					<index>116.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER17_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER17_MID_BYTE">
+					<index>117.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER17_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER17_LOW_BYTE">
+					<index>118.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR17">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR17">
+					<index>119.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER18_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER18_HIGH_BYTE">
+					<index>120.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER18_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER18_MID_BYTE">
+					<index>121.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER18_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER18_LOW_BYTE">
+					<index>122.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER18_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER18_HIGH_BYTE">
+					<index>123.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER18_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER18_MID_BYTE">
+					<index>124.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER18_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER18_LOW_BYTE">
+					<index>125.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR18">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR18">
+					<index>126.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER19_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER19_HIGH_BYTE">
+					<index>127.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER19_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER19_MID_BYTE">
+					<index>128.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER19_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER19_LOW_BYTE">
+					<index>129.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER19_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER19_HIGH_BYTE">
+					<index>130.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER19_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER19_MID_BYTE">
+					<index>131.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER19_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER19_LOW_BYTE">
+					<index>132.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR19">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR19">
+					<index>133.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER20_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER20_HIGH_BYTE">
+					<index>134.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER20_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER20_MID_BYTE">
+					<index>135.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER20_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER20_LOW_BYTE">
+					<index>136.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER20_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER20_HIGH_BYTE">
+					<index>137.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER20_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER20_MID_BYTE">
+					<index>138.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER20_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER20_LOW_BYTE">
+					<index>139.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR20">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR20">
+					<index>140.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER21_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER21_HIGH_BYTE">
+					<index>141.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER21_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER21_MID_BYTE">
+					<index>142.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER21_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER21_LOW_BYTE">
+					<index>143.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER21_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER21_HIGH_BYTE">
+					<index>144.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER21_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER21_MID_BYTE">
+					<index>145.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER21_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER21_LOW_BYTE">
+					<index>146.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR21">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR21">
+					<index>147.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER22_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER22_HIGH_BYTE">
+					<index>148.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER22_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER22_MID_BYTE">
+					<index>149.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER22_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER22_LOW_BYTE">
+					<index>150.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER22_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER22_HIGH_BYTE">
+					<index>151.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER22_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER22_MID_BYTE">
+					<index>152.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER22_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER22_LOW_BYTE">
+					<index>153.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR22">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR22">
+					<index>154.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER23_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER23_HIGH_BYTE">
+					<index>155.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER23_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER23_MID_BYTE">
+					<index>156.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER23_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER23_LOW_BYTE">
+					<index>157.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER23_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER23_HIGH_BYTE">
+					<index>158.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER23_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER23_MID_BYTE">
+					<index>159.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER23_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER23_LOW_BYTE">
+					<index>160.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR23">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR23">
+					<index>161.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER24_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER24_HIGH_BYTE">
+					<index>162.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER24_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER24_MID_BYTE">
+					<index>163.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER24_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER24_LOW_BYTE">
+					<index>164.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER24_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER24_HIGH_BYTE">
+					<index>165.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER24_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER24_MID_BYTE">
+					<index>166.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER24_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER24_LOW_BYTE">
+					<index>167.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR24">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR24">
+					<index>168.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER25_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER25_HIGH_BYTE">
+					<index>169.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER25_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER25_MID_BYTE">
+					<index>170.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER25_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER25_LOW_BYTE">
+					<index>171.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER25_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER25_HIGH_BYTE">
+					<index>172.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER25_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER25_MID_BYTE">
+					<index>173.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER25_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER25_LOW_BYTE">
+					<index>174.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR25">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR25">
+					<index>175.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER26_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER26_HIGH_BYTE">
+					<index>176.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER26_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER26_MID_BYTE">
+					<index>177.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER26_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER26_LOW_BYTE">
+					<index>178.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER26_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER26_HIGH_BYTE">
+					<index>179.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER26_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER26_MID_BYTE">
+					<index>180.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER26_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER26_LOW_BYTE">
+					<index>181.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR26">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR26">
+					<index>182.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER27_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER27_HIGH_BYTE">
+					<index>183.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER27_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER27_MID_BYTE">
+					<index>184.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER27_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER27_LOW_BYTE">
+					<index>185.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER27_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER27_HIGH_BYTE">
+					<index>186.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER27_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER27_MID_BYTE">
+					<index>187.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER27_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER27_LOW_BYTE">
+					<index>188.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR27">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR27">
+					<index>189.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER28_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER28_HIGH_BYTE">
+					<index>190.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER28_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER28_MID_BYTE">
+					<index>191.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER28_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER28_LOW_BYTE">
+					<index>192.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER28_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER28_HIGH_BYTE">
+					<index>193.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER28_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER28_MID_BYTE">
+					<index>194.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER28_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER28_LOW_BYTE">
+					<index>195.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR28">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR28">
+					<index>196.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER29_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER29_HIGH_BYTE">
+					<index>197.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER29_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER29_MID_BYTE">
+					<index>198.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER29_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER29_LOW_BYTE">
+					<index>199.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER29_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER29_HIGH_BYTE">
+					<index>200.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER29_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER29_MID_BYTE">
+					<index>201.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER29_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER29_LOW_BYTE">
+					<index>202.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR29">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR29">
+					<index>203.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER30_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER30_HIGH_BYTE">
+					<index>204.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER30_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER30_MID_BYTE">
+					<index>205.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER30_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER30_LOW_BYTE">
+					<index>206.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER30_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER30_HIGH_BYTE">
+					<index>207.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER30_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER30_MID_BYTE">
+					<index>208.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER30_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER30_LOW_BYTE">
+					<index>209.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR30">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR30">
+					<index>210.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER31_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER31_HIGH_BYTE">
+					<index>211.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER31_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER31_MID_BYTE">
+					<index>212.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER31_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER31_LOW_BYTE">
+					<index>213.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER31_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER31_HIGH_BYTE">
+					<index>214.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER31_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER31_MID_BYTE">
+					<index>215.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER31_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER31_LOW_BYTE">
+					<index>216.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR31">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR31">
+					<index>217.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER32_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER32_HIGH_BYTE">
+					<index>218.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER32_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER32_MID_BYTE">
+					<index>219.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER32_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER32_LOW_BYTE">
+					<index>220.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER32_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER32_HIGH_BYTE">
+					<index>221.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER32_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER32_MID_BYTE">
+					<index>222.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER32_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER32_LOW_BYTE">
+					<index>223.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR32">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR32">
+					<index>224.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER33_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER33_HIGH_BYTE">
+					<index>225.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER33_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER33_MID_BYTE">
+					<index>226.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER33_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER33_LOW_BYTE">
+					<index>227.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER33_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER33_HIGH_BYTE">
+					<index>228.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER33_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER33_MID_BYTE">
+					<index>229.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER33_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER33_LOW_BYTE">
+					<index>230.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR33">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR33">
+					<index>231.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER34_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER34_HIGH_BYTE">
+					<index>232.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER34_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER34_MID_BYTE">
+					<index>233.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER34_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER34_LOW_BYTE">
+					<index>234.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER34_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER34_HIGH_BYTE">
+					<index>235.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER34_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER34_MID_BYTE">
+					<index>236.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER34_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER34_LOW_BYTE">
+					<index>237.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR34">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR34">
+					<index>238.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER35_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER35_HIGH_BYTE">
+					<index>239.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER35_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER35_MID_BYTE">
+					<index>240.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER35_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER35_LOW_BYTE">
+					<index>241.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER35_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER35_HIGH_BYTE">
+					<index>242.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER35_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER35_MID_BYTE">
+					<index>243.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER35_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER35_LOW_BYTE">
+					<index>244.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR35">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR35">
+					<index>245.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER36_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER36_HIGH_BYTE">
+					<index>246.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER36_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER36_MID_BYTE">
+					<index>247.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_SENDER36_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_SENDER36_LOW_BYTE">
+					<index>248.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER36_HIGH_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER36_HIGH_BYTE">
+					<index>249.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER36_MID_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER36_MID_BYTE">
+					<index>250.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADDRESS_RECEIVER36_LOW_BYTE">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ADDRESS_RECEIVER36_LOW_BYTE">
+					<index>251.0</index>
+					<size>1.0</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BROADCAST_BEHAVIOR36">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BROADCAST_BEHAVIOR36">
+					<index>252.0</index>
+					<size>0.1</size>
+					<list>2</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="repeater_dev_master-0">
+			<parameter id="COMPATIBILITY_MODE">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="COMPATIBILITY_MODE">
+					<index>23.0</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ROAMING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ROAMING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<variables id="maint_ch_values-0">
+			<parameter id="UNREACH">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STICKY_UNREACH">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="STICKY_UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CONFIG_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="CONFIG_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DUTYCYCLE">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DUTYCYCLE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="AES_KEY">
+				<properties>
+					<writeable>false</writeable>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>127</maximumValue>
+				</logicalInteger>
+				<physicalInteger groupId="AES_KEY">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_DEVICE">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_DEVICE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_PEER">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_PEER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DEVICE_IN_BOOTLOADER">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DEVICE_IN_BOOTLOADER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="UPDATE_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UPDATE_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="POLLING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="POLLING_INTERVAL">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_SPOOFED">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>UNSET</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CENTRAL_ADDRESS_SPOOFED</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="CENTRAL_ADDRESS_SPOOFED">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+		</variables>
+		<variables id="repeater_ch_values-1"/>
+	</parameterGroups>
+</homegearDevice>
+

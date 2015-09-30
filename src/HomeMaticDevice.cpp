@@ -331,6 +331,22 @@ bool HomeMaticDevice::isSwitch(BaseLib::Systems::LogicalDeviceType type)
 		return true;
 	case DeviceType::HMMODRE8:
 		return true;
+	case DeviceType::HmEsPmsw1Dr:
+		return true;
+	case DeviceType::HmEsPmsw1Sm:
+		return true;
+	case DeviceType::HmLcSw1Dr:
+		return true;
+	case DeviceType::HmLcSw1PlCtR1:
+		return true;
+	case DeviceType::HmLcSw1PlCtR2:
+		return true;
+	case DeviceType::HmLcSw1PlCtR3:
+		return true;
+	case DeviceType::HmLcSw1PlCtR4:
+		return true;
+	case DeviceType::HmLcSw1PlCtR5:
+		return true;
 	default:
 		return false;
 	}
@@ -372,6 +388,8 @@ bool HomeMaticDevice::isDimmer(BaseLib::Systems::LogicalDeviceType type)
 	case DeviceType::HMLCDIM2LSM644:
 		return true;
 	case DeviceType::HMLCDIM2TSM644:
+		return true;
+	case DeviceType::HMLCDIM1TFMLF:
 		return true;
 	default:
 		return false;

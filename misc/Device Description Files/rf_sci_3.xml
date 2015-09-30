@@ -1,0 +1,453 @@
+<homegearDevice version="9">
+	<supportedDevices>
+		<device id="HM-SCI-3-FM">
+			<description>HM Shutter Contact Interface</description>
+			<typeNumber>0x5F</typeNumber>
+			<minFirmwareVersion>0x1</minFirmwareVersion>
+		</device>
+	</supportedDevices>
+	<properties>
+		<receiveMode>config</receiveMode>
+		<receiveMode>wakeUp</receiveMode>
+		<encryption>true</encryption>
+		<timeout>88200</timeout>
+		<hasBattery>true</hasBattery>
+	</properties>
+	<functions>
+		<function channel="0" type="MAINTENANCE" channelCount="1">
+			<properties>
+				<internal>true</internal>
+			</properties>
+			<configParameters>remote_dev_master-0</configParameters>
+			<variables>maint_ch_values-0</variables>
+		</function>
+		<function channel="1" type="SHUTTER_CONTACT" channelCount="1">
+			<properties>
+				<encryptionEnabledByDefault>true</encryptionEnabledByDefault>
+				<dynamicChannelCount>23:0.3</dynamicChannelCount>
+				<linkSenderFunctionTypes>
+					<type>KEYMATIC</type>
+					<type>REMOTECONTROL_RECEIVER</type>
+					<type>SWITCH</type>
+					<type>WINDOW_SWITCH_RECEIVER</type>
+					<type>WINMATIC</type>
+				</linkSenderFunctionTypes>
+			</properties>
+			<configParameters>sc_ch_master-1</configParameters>
+			<variables>sc_ch_values-1</variables>
+			<linkParameters>sc_ch_link-1</linkParameters>
+		</function>
+	</functions>
+	<packets>
+		<packet id="ACK_STATUS">
+			<direction>toCentral</direction>
+			<type>0x2</type>
+			<subtype>0x1</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="EVENT">
+			<direction>toCentral</direction>
+			<type>0x41</type>
+			<channelIndex>9:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>9.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+	</packets>
+	<parameterGroups>
+		<configParameters id="remote_dev_master-0">
+			<parameter id="CYCLIC_INFO_MSG">
+				<properties>0.1</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+					<setToValueOnPairing>true</setToValueOnPairing>
+				</logicalBoolean>
+				<physicalInteger groupId="CYCLIC_INFO_MSG">
+					<index>9.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TRANSMIT_DEV_TRY_MAX">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="TRANSMIT_DEV_TRY_MAX">
+					<index>20.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ROAMING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ROAMING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="sc_ch_master-1">
+			<parameter id="MSG_FOR_POS_A">
+				<properties>store</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>NO_MSG</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CLOSED</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>OPEN</id>
+						<index>2</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="MSG_FOR_POS_A">
+					<index>32.6</index>
+					<size>0.2</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="MSG_FOR_POS_B">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>2</defaultValue>
+					<value>
+						<id>NO_MSG</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CLOSED</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>OPEN</id>
+						<index>2</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="MSG_FOR_POS_B">
+					<index>32.4</index>
+					<size>0.2</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="EVENT_DELAYTIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime>
+							<factors>
+								<factor>1.000000</factor>
+							</factors>
+							<factors>
+								<factor>60.000000</factor>
+							</factors>
+							<valueSize>0.700000</valueSize>
+						</decimalConfigTime>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>7620.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="EVENT_DELAYTIME">
+					<index>33.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TRANSMIT_TRY_MAX">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<variables id="maint_ch_values-0">
+			<parameter id="UNREACH">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STICKY_UNREACH">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="STICKY_UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CONFIG_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="CONFIG_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="AES_KEY">
+				<properties>
+					<writeable>false</writeable>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>127</maximumValue>
+				</logicalInteger>
+				<physicalInteger groupId="AES_KEY">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_DEVICE">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_DEVICE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_PEER">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_PEER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_SPOOFED">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>UNSET</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CENTRAL_ADDRESS_SPOOFED</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="CENTRAL_ADDRESS_SPOOFED">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+		</variables>
+		<variables id="sc_ch_values-1">
+			<parameter id="STATE">
+				<properties>
+					<writeable>false</writeable>
+					<control>DOOR_SENSOR.STATE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="STATE">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="EVENT">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="EVENT">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="INSTALL_TEST_VALUE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="EVENT">
+						<type>event</type>
+					</packet>
+					<packet id="BROADCAST_EVEN">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<linkParameters id="sc_ch_link-1">
+			<parameter id="PEER_NEEDS_BURST">
+				<properties>event</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="PEER_NEEDS_BURST">
+					<index>1.0</index>
+					<size>0.1</size>
+					<list>4</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="EXPECT_AES">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+					<setToValueOnPairing>false</setToValueOnPairing>
+				</logicalBoolean>
+				<physicalInteger groupId="EXPECT_AES">
+					<index>1.7</index>
+					<size>0.1</size>
+					<list>4</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<scenario id="default">
+				<parameter id="LONG_ACTION_TYPE">0</parameter>
+				<parameter id="SHORT_ACTION_TYPE">1</parameter>
+				<parameter id="SHORT_COND_VALUE_HI">180</parameter>
+				<parameter id="SHORT_COND_VALUE_LO">50</parameter>
+				<parameter id="SHORT_CT_OFF">0</parameter>
+				<parameter id="SHORT_CT_OFFDELAY">0</parameter>
+				<parameter id="SHORT_CT_ON">2</parameter>
+				<parameter id="SHORT_CT_ONDELAY">2</parameter>
+				<parameter id="SHORT_CT_RAMPOFF">0</parameter>
+				<parameter id="SHORT_CT_RAMPON">2</parameter>
+				<parameter id="SHORT_JT_OFF">1</parameter>
+				<parameter id="SHORT_JT_OFFDELAY">2</parameter>
+				<parameter id="SHORT_JT_ON">4</parameter>
+				<parameter id="SHORT_JT_ONDELAY">4</parameter>
+				<parameter id="SHORT_JT_RAMPOFF">2</parameter>
+				<parameter id="SHORT_JT_RAMPON">4</parameter>
+			</scenario>
+		</linkParameters>
+	</parameterGroups>
+</homegearDevice>
+

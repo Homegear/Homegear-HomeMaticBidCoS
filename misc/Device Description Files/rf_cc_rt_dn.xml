@@ -1,0 +1,6182 @@
+<homegearDevice version="27">
+	<supportedDevices>
+		<device id="HM-CC-RT-DN">
+			<description>ClimateControl-RadiatorThermostat</description>
+			<typeNumber>0x95</typeNumber>
+		</device>
+	</supportedDevices>
+	<properties>
+		<receiveMode>wakeOnRadio</receiveMode>
+		<receiveMode>config</receiveMode>
+		<receiveMode>wakeUp</receiveMode>
+		<encryption>true</encryption>
+		<timeout>600</timeout>
+		<hasBattery>true</hasBattery>
+	</properties>
+	<functions>
+		<function channel="0" type="MAINTENANCE" channelCount="1">
+			<properties>
+				<internal>true</internal>
+			</properties>
+			<configParameters>cc_rt_dev_master-0</configParameters>
+			<variables>maint_ch_values-0</variables>
+		</function>
+		<function channel="1" type="WEATHER_RECEIVER" channelCount="1">
+			<properties>
+				<linkReceiverFunctionTypes>
+					<type>WEATHER_T</type>
+					<type>WEATHER_TH</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>config-1</configParameters>
+			<variables>cc_rt_ch_weather_values-1</variables>
+			<linkParameters>cc_rt_ch_cs_link-1</linkParameters>
+		</function>
+		<function channel="2" type="CLIMATECONTROL_RECEIVER" channelCount="1">
+			<properties>
+				<linkReceiverFunctionTypes>
+					<type>THERMALCONTROL_TC</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>config-2</configParameters>
+			<variables>cc_rt_tc_values-2</variables>
+			<linkParameters>cc_rt_ch_tc_link-2</linkParameters>
+		</function>
+		<function channel="3" type="WINDOW_SWITCH_RECEIVER" channelCount="1">
+			<properties>
+				<linkReceiverFunctionTypes>
+					<type>WCS_TIPTRONIC_SENSOR</type>
+					<type>WINDOW_SWITCH_RECEIVER</type>
+					<type>WINDOW_SWITCH_RECEIVER_V2</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>cc_rt_ch_wsr_master-3</configParameters>
+			<variables>cc_rt_ch_wsr_values-3</variables>
+			<linkParameters>cc_rt_ch_wsr_link-3</linkParameters>
+		</function>
+		<function channel="4" type="CLIMATECONTROL_RT_TRANSCEIVER" channelCount="1">
+			<properties>
+				<linkSenderFunctionTypes>
+					<type>CLIMATECONTROL_RT</type>
+				</linkSenderFunctionTypes>
+			</properties>
+			<configParameters>config-4</configParameters>
+			<variables>cc_rt_ch_rt_values-4</variables>
+			<linkParameters>cc_rt_ch_rt_link-4</linkParameters>
+		</function>
+		<function channel="5" type="CLIMATECONTROL_RT_RECEIVER" channelCount="1">
+			<properties>
+				<linkReceiverFunctionTypes>
+					<type>CLIMATECONTROL_RT</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>cc_rt_ch_rt_receiver_master-5</configParameters>
+			<variables>cc_rt_ch_rt_values-5</variables>
+			<linkParameters>cc_rt_ch_rt_receiver_link-5</linkParameters>
+		</function>
+		<function channel="6" type="REMOTECONTROL_RECEIVER" channelCount="1">
+			<properties>
+				<linkReceiverFunctionTypes>
+					<type>REMOTECONTROL_RECEIVER</type>
+				</linkReceiverFunctionTypes>
+			</properties>
+			<configParameters>cc_rt_ch_rc_master-6</configParameters>
+			<variables>cc_rt_ch_rc_values-6</variables>
+			<linkParameters>cc_rt_ch_sw_link-6</linkParameters>
+		</function>
+	</functions>
+	<packets>
+		<packet id="ACK_STATUS">
+			<direction>toCentral</direction>
+			<type>0x2</type>
+			<subtype>0x1</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>0.6</size>
+					<parameterId>SET_TEMPERATURE</parameterId>
+				</element>
+				<element>
+					<index>12.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>FAULT_REPORTING</parameterId>
+				</element>
+				<element>
+					<index>14.6</index>
+					<size>0.2</size>
+					<parameterId>CONTROL_MODE</parameterId>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>0.6</size>
+					<parameterId>BOOST_STATE</parameterId>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_START_TIME</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.5</size>
+					<parameterId>PARTY_START_DAY</parameterId>
+				</element>
+				<element>
+					<index>20.4</index>
+					<size>0.4</size>
+					<parameterId>PARTY_START_MONTH</parameterId>
+				</element>
+				<element>
+					<index>16.0</index>
+					<size>0.7</size>
+					<parameterId>PARTY_START_YEAR</parameterId>
+				</element>
+				<element>
+					<index>17.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_STOP_TIME</parameterId>
+				</element>
+				<element>
+					<index>18.0</index>
+					<size>0.5</size>
+					<parameterId>PARTY_STOP_DAY</parameterId>
+				</element>
+				<element>
+					<index>20.0</index>
+					<size>0.4</size>
+					<parameterId>PARTY_STOP_MONTH</parameterId>
+				</element>
+				<element>
+					<index>19.0</index>
+					<size>0.7</size>
+					<parameterId>PARTY_STOP_YEAR</parameterId>
+				</element>
+				<element>
+					<index>21.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_TEMPERATURE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="AUTO_MODE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
+		</packet>
+		<packet id="BOOST_MODE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x83</subtype>
+			<subtypeIndex>9</subtypeIndex>
+		</packet>
+		<packet id="COMFORT_MODE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x84</subtype>
+			<subtypeIndex>9</subtypeIndex>
+		</packet>
+		<packet id="ENTER_BOOTLOADER">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0xCA</subtype>
+			<subtypeIndex>9</subtypeIndex>
+		</packet>
+		<packet id="INFO_LEVEL">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0xA</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channel>4</channel>
+			<binaryPayload>
+				<element>
+					<index>10.2</index>
+					<size>0.6</size>
+					<parameterId>SET_TEMPERATURE</parameterId>
+				</element>
+				<element>
+					<index>10.0</index>
+					<size>1.2</size>
+					<parameterId>ACTUAL_TEMPERATURE</parameterId>
+				</element>
+				<element>
+					<index>12.5</index>
+					<size>0.3</size>
+					<parameterId>FAULT_REPORTING</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>0.5</size>
+					<parameterId>BATTERY_STATE</parameterId>
+				</element>
+				<element>
+					<index>13.0</index>
+					<size>0.7</size>
+					<parameterId>VALVE_STATE</parameterId>
+				</element>
+				<element>
+					<index>14.6</index>
+					<size>0.2</size>
+					<parameterId>CONTROL_MODE</parameterId>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>0.6</size>
+					<parameterId>BOOST_STATE</parameterId>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_START_TIME</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.5</size>
+					<parameterId>PARTY_START_DAY</parameterId>
+				</element>
+				<element>
+					<index>20.4</index>
+					<size>0.4</size>
+					<parameterId>PARTY_START_MONTH</parameterId>
+				</element>
+				<element>
+					<index>16.0</index>
+					<size>0.7</size>
+					<parameterId>PARTY_START_YEAR</parameterId>
+				</element>
+				<element>
+					<index>17.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_STOP_TIME</parameterId>
+				</element>
+				<element>
+					<index>18.0</index>
+					<size>0.5</size>
+					<parameterId>PARTY_STOP_DAY</parameterId>
+				</element>
+				<element>
+					<index>20.0</index>
+					<size>0.4</size>
+					<parameterId>PARTY_STOP_MONTH</parameterId>
+				</element>
+				<element>
+					<index>19.0</index>
+					<size>0.7</size>
+					<parameterId>PARTY_STOP_YEAR</parameterId>
+				</element>
+				<element>
+					<index>21.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_TEMPERATURE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="LOWERING_MODE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x85</subtype>
+			<subtypeIndex>9</subtypeIndex>
+		</packet>
+		<packet id="MANU_MODE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x81</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>0.6</size>
+					<parameterId>MANU_TEMPERATURE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="PARTY_MODE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x82</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_TEMPERATURE</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_START_TIME</parameterId>
+				</element>
+				<element>
+					<index>13.0</index>
+					<size>0.5</size>
+					<parameterId>PARTY_START_DAY</parameterId>
+				</element>
+				<element>
+					<index>18.4</index>
+					<size>0.4</size>
+					<parameterId>PARTY_START_MONTH</parameterId>
+				</element>
+				<element>
+					<index>14.0</index>
+					<size>0.7</size>
+					<parameterId>PARTY_START_YEAR</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.6</size>
+					<parameterId>PARTY_STOP_TIME</parameterId>
+				</element>
+				<element>
+					<index>16.0</index>
+					<size>0.5</size>
+					<parameterId>PARTY_STOP_DAY</parameterId>
+				</element>
+				<element>
+					<index>18.0</index>
+					<size>0.4</size>
+					<parameterId>PARTY_STOP_MONTH</parameterId>
+				</element>
+				<element>
+					<index>17.0</index>
+					<size>0.7</size>
+					<parameterId>PARTY_STOP_YEAR</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="PARTY_MODE_SUBMIT_FRAME">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x82</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>8.0</size>
+					<parameterId>PARTY_MODE_SUBMIT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_LOCK">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.0</index>
+					<size>0.1</size>
+					<parameterId>INHIBIT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_TEMPERATURE_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x86</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>0.6</size>
+					<parameterId>SET_TEMPERATURE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="WINDOW_STATE_SET">
+			<direction>fromCentral</direction>
+			<type>0x41</type>
+			<subtype>0x1</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<binaryPayload>
+				<element>
+					<index>10.0</index>
+					<constValueInteger>1</constValueInteger>
+				</element>
+				<element>
+					<index>11.0</index>
+					<parameterId>WINDOW_STATE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+	</packets>
+	<parameterGroups>
+		<configParameters id="cc_rt_ch_rc_master-6">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+		</configParameters>
+		<configParameters id="cc_rt_ch_rt_receiver_master-5">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+		</configParameters>
+		<configParameters id="cc_rt_ch_wsr_master-3">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+		</configParameters>
+		<configParameters id="cc_rt_dev_master-0">
+			<parameter id="WAKE_ON_RADIO">
+				<properties>internal</properties>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+					<setToValueOnPairing>true</setToValueOnPairing>
+				</logicalBoolean>
+				<physicalInteger groupId="BURST_RX">
+					<index>1.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BUTTON_LOCK">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BUTTON_LOCK">
+					<index>15.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="GLOBAL_BUTTON_LOCK">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="GLOBAL_BUTTON_LOCK">
+					<index>25.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="MODUS_BUTTON_LOCK">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="MODUS_BUTTON_LOCK">
+					<index>26.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BACKLIGHT_ON_TIME">
+				<properties>
+					<unit>s</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>10</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="BACKLIGHT_ON_TIME">
+					<index>14.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BUTTON_RESPONSE_WITHOUT_BACKLIGHT">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BUTTON_RESPONSE_WITHOUT_BACKLIGHT">
+					<index>9.4</index>
+					<size>0.1</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CYCLIC_INFO_MSG">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="CYCLIC_INFO_MSG">
+					<index>9.0</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CYCLIC_INFO_MSG_DIS">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>254</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="CYCLIC_INFO_MSG_DIS">
+					<index>17.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOCAL_RESET_DISABLE">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+					<index>24.0</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOW_BAT_LIMIT">
+				<properties>
+					<unit>V</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>2.000000</minimumValue>
+					<maximumValue>2.500000</maximumValue>
+					<defaultValue>2.100000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LOW_BAT_LIMIT">
+					<index>18.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_COMFORT">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>15.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_COMFORT">
+					<index>1.0</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_LOWERING">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>25.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_LOWERING">
+					<index>2.0</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MINIMUM">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>4.500000</minimumValue>
+					<maximumValue>14.500000</maximumValue>
+					<defaultValue>4.500000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MINIMUM">
+					<index>3.0</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MAXIMUM">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>15.000000</minimumValue>
+					<maximumValue>30.500000</maximumValue>
+					<defaultValue>30.500000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MAXIMUM">
+					<index>4.0</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATUREFALL_MODUS">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>DEAKTIV</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>AUTOMODE</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>AUTO + MANUMODE</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>AUTO + PARTYMODE</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>AKTIV</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="TEMPERATUREFALL_MODUS">
+					<index>19.5</index>
+					<size>0.3</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATUREFALL_VALUE">
+				<properties>
+					<unit>K</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.500000</minimumValue>
+					<maximumValue>2.500000</maximumValue>
+					<defaultValue>1.400000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATUREFALL_VALUE">
+					<index>19.0</index>
+					<size>0.5</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATUREFALL_WINDOW_OPEN">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>12.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATUREFALL_WINDOW_OPEN">
+					<index>5.0</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>60</maximumValue>
+					<defaultValue>15</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD">
+					<index>6.0</index>
+					<size>0.4</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DECALCIFICATION_WEEKDAY">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>SATURDAY</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>SUNDAY</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>MONDAY</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>TUESDAY</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>WEDNESDAY</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>THURSDAY</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>FRIDAY</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="DECALCIFICATION_WEEKDAY">
+					<index>7.0</index>
+					<size>0.3</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DECALCIFICATION_TIME">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>30.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>1410</maximumValue>
+					<defaultValue>660</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="DECALCIFICATION_TIME">
+					<index>8.0</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_OFFSET">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>7</defaultValue>
+					<value>
+						<id>-3.5K</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>-3.0K</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>-2.5K</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>-2.0K</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>-1.5K</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>-1.0K</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>-0.5K</id>
+						<index>6</index>
+					</value>
+					<value>
+						<id>0.0K</id>
+						<index>7</index>
+					</value>
+					<value>
+						<id>0.5K</id>
+						<index>8</index>
+					</value>
+					<value>
+						<id>1.0K</id>
+						<index>9</index>
+					</value>
+					<value>
+						<id>1.5K</id>
+						<index>10</index>
+					</value>
+					<value>
+						<id>2.0K</id>
+						<index>11</index>
+					</value>
+					<value>
+						<id>2.5K</id>
+						<index>12</index>
+					</value>
+					<value>
+						<id>3.0K</id>
+						<index>13</index>
+					</value>
+					<value>
+						<id>3.5K</id>
+						<index>14</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="TEMPERATURE_OFFSET">
+					<index>9.0</index>
+					<size>0.4</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BOOST_TIME_PERIOD">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>0 min</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>5 min</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>10 min</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>15 min</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>20 min</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>25 min</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>30 min</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="BOOST_TIME_PERIOD">
+					<index>10.5</index>
+					<size>0.3</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BOOST_POSITION">
+				<properties>
+					<unit>%</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>100</maximumValue>
+					<defaultValue>80</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="BOOST_POSITION">
+					<index>10.0</index>
+					<size>0.5</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="BOOST_AFTER_WINDOW_OPEN">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BOOST_AFTER_WINDOW_OPEN">
+					<index>14.5</index>
+					<size>0.1</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHOW_WEEKDAY">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="SHOW_WEEKDAY">
+					<index>14.7</index>
+					<size>0.1</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="MIN_MAX_VALUE_NOT_RELEVANT_FOR_MANU_MODE">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="MIN_MAX_VALUE_NOT_RELEVANT_FOR_MANU_MODE">
+					<index>14.6</index>
+					<size>0.1</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="VALVE_OFFSET">
+				<properties>
+					<unit>%</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>100</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="VALVE_OFFSET">
+					<index>11.0</index>
+					<size>0.7</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="VALVE_ERROR_RUN_POSITION">
+				<properties>
+					<unit>%</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>100</maximumValue>
+					<defaultValue>15</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="VALVE_ERROR_RUN_POSITION">
+					<index>13.0</index>
+					<size>0.7</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="VALVE_MAXIMUM_POSITION">
+				<properties>
+					<unit>%</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>100</maximumValue>
+					<defaultValue>100</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="VALVE_MAXIMUM_POSITION">
+					<index>12.0</index>
+					<size>0.7</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DISPLAY_INFORMATION">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>TIME</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>DATE</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="DISPLAY_INFORMATION">
+					<index>14.3</index>
+					<size>0.2</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DAYLIGHT_SAVING_TIME">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="DAYLIGHT_SAVING_TIME">
+					<index>14.0</index>
+					<size>0.1</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ADAPTIVE_REGULATION">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>2</defaultValue>
+					<value>
+						<id>OFF with default values</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>OFF with determined values</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>2</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="ADAPTIVE_REGULATION">
+					<index>14.1</index>
+					<size>0.2</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="MANU_MODE_PRIORITIZATION">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_RT_TC_SC_SELF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_BY_ALL</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_RT_TC_CCU_SELF</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_CCU</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_SELF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="MANU_MODE_PRIORITIZATION">
+					<index>18.3</index>
+					<size>0.3</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="PARTY_MODE_PRIORITIZATION">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_RT_TC_SC_SELF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_BY_ALL</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_RT_TC_CCU_SELF</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_CCU</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>SET_TEMPERATURE_CHANGE_ONLY_BY_SELF</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="PARTY_MODE_PRIORITIZATION">
+					<index>18.0</index>
+					<size>0.3</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="I_VALUE_INTERN">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>20</maximumValue>
+					<defaultValue>15</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="I_VALUE_INTERN">
+					<index>202.0</index>
+					<size>1.0</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="P_VALUE_INTERN">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>25</minimumValue>
+					<maximumValue>35</maximumValue>
+					<defaultValue>30</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="P_VALUE_INTERN">
+					<index>203.0</index>
+					<size>1.0</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="P_START_VALUE_INTERN">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>45</maximumValue>
+					<defaultValue>30</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="P_START_VALUE_INTERN">
+					<index>204.0</index>
+					<size>1.0</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="I_VALUE_EXTERN">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>20</maximumValue>
+					<defaultValue>15</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="I_VALUE_EXTERN">
+					<index>205.0</index>
+					<size>1.0</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="P_VALUE_EXTERN">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>25</minimumValue>
+					<maximumValue>35</maximumValue>
+					<defaultValue>30</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="P_VALUE_EXTERN">
+					<index>206.0</index>
+					<size>1.0</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="P_START_VALUE_EXTERN">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>45</maximumValue>
+					<defaultValue>30</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="P_START_VALUE_EXTERN">
+					<index>207.0</index>
+					<size>1.0</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_1">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_1">
+					<index>20.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_1">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_1">
+					<index>20.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_2">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1320</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_2">
+					<index>22.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_2">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_2">
+					<index>22.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_3">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_3">
+					<index>24.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_3">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_3">
+					<index>24.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_4">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_4">
+					<index>26.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_4">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_4">
+					<index>26.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_5">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_5">
+					<index>28.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_5">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_5">
+					<index>28.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_6">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_6">
+					<index>30.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_6">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_6">
+					<index>30.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_7">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_7">
+					<index>32.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_7">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_7">
+					<index>32.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_8">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_8">
+					<index>34.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_8">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_8">
+					<index>34.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_9">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_9">
+					<index>36.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_9">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_9">
+					<index>36.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_10">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_10">
+					<index>38.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_10">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_10">
+					<index>38.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_11">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_11">
+					<index>40.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_11">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_11">
+					<index>40.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_12">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_12">
+					<index>42.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_12">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_12">
+					<index>42.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SATURDAY_13">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SATURDAY_13">
+					<index>44.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SATURDAY_13">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SATURDAY_13">
+					<index>44.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_1">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_1">
+					<index>46.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_1">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_1">
+					<index>46.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_2">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1320</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_2">
+					<index>48.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_2">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_2">
+					<index>48.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_3">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_3">
+					<index>50.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_3">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_3">
+					<index>50.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_4">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_4">
+					<index>52.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_4">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_4">
+					<index>52.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_5">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_5">
+					<index>54.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_5">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_5">
+					<index>54.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_6">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_6">
+					<index>56.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_6">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_6">
+					<index>56.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_7">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_7">
+					<index>58.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_7">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_7">
+					<index>58.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_8">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_8">
+					<index>60.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_8">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_8">
+					<index>60.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_9">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_9">
+					<index>62.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_9">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_9">
+					<index>62.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_10">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_10">
+					<index>64.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_10">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_10">
+					<index>64.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_11">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_11">
+					<index>66.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_11">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_11">
+					<index>66.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_12">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_12">
+					<index>68.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_12">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_12">
+					<index>68.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_SUNDAY_13">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_SUNDAY_13">
+					<index>70.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_SUNDAY_13">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_SUNDAY_13">
+					<index>70.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_1">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_1">
+					<index>72.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_1">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_1">
+					<index>72.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_2">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>540</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_2">
+					<index>74.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_2">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_2">
+					<index>74.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_3">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1020</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_3">
+					<index>76.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_3">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_3">
+					<index>76.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_4">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1320</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_4">
+					<index>78.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_4">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_4">
+					<index>78.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_5">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_5">
+					<index>80.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_5">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_5">
+					<index>80.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_6">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_6">
+					<index>82.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_6">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_6">
+					<index>82.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_7">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_7">
+					<index>84.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_7">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_7">
+					<index>84.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_8">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_8">
+					<index>86.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_8">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_8">
+					<index>86.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_9">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_9">
+					<index>88.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_9">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_9">
+					<index>88.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_10">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_10">
+					<index>90.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_10">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_10">
+					<index>90.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_11">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_11">
+					<index>92.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_11">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_11">
+					<index>92.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_12">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_12">
+					<index>94.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_12">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_12">
+					<index>94.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_MONDAY_13">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_MONDAY_13">
+					<index>96.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_MONDAY_13">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_MONDAY_13">
+					<index>96.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_1">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_1">
+					<index>98.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_1">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_1">
+					<index>98.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_2">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>540</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_2">
+					<index>100.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_2">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_2">
+					<index>100.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_3">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1020</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_3">
+					<index>102.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_3">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_3">
+					<index>102.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_4">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1320</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_4">
+					<index>104.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_4">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_4">
+					<index>104.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_5">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_5">
+					<index>106.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_5">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_5">
+					<index>106.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_6">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_6">
+					<index>108.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_6">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_6">
+					<index>108.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_7">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_7">
+					<index>110.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_7">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_7">
+					<index>110.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_8">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_8">
+					<index>112.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_8">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_8">
+					<index>112.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_9">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_9">
+					<index>114.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_9">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_9">
+					<index>114.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_10">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_10">
+					<index>116.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_10">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_10">
+					<index>116.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_11">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_11">
+					<index>118.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_11">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_11">
+					<index>118.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_12">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_12">
+					<index>120.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_12">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_12">
+					<index>120.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_TUESDAY_13">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_TUESDAY_13">
+					<index>122.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_TUESDAY_13">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_TUESDAY_13">
+					<index>122.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_1">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_1">
+					<index>124.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_1">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_1">
+					<index>124.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_2">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>540</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_2">
+					<index>126.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_2">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_2">
+					<index>126.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_3">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1020</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_3">
+					<index>128.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_3">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_3">
+					<index>128.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_4">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1320</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_4">
+					<index>130.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_4">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_4">
+					<index>130.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_5">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_5">
+					<index>132.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_5">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_5">
+					<index>132.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_6">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_6">
+					<index>134.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_6">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_6">
+					<index>134.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_7">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_7">
+					<index>136.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_7">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_7">
+					<index>136.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_8">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_8">
+					<index>138.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_8">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_8">
+					<index>138.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_9">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_9">
+					<index>140.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_9">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_9">
+					<index>140.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_10">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_10">
+					<index>142.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_10">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_10">
+					<index>142.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_11">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_11">
+					<index>144.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_11">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_11">
+					<index>144.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_12">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_12">
+					<index>146.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_12">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_12">
+					<index>146.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_WEDNESDAY_13">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_WEDNESDAY_13">
+					<index>148.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_WEDNESDAY_13">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_13">
+					<index>148.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_1">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_1">
+					<index>150.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_1">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_1">
+					<index>150.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_2">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>540</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_2">
+					<index>152.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_2">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_2">
+					<index>152.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_3">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1020</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_3">
+					<index>154.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_3">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_3">
+					<index>154.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_4">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1320</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_4">
+					<index>156.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_4">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_4">
+					<index>156.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_5">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_5">
+					<index>158.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_5">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_5">
+					<index>158.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_6">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_6">
+					<index>160.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_6">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_6">
+					<index>160.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_7">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_7">
+					<index>162.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_7">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_7">
+					<index>162.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_8">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_8">
+					<index>164.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_8">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_8">
+					<index>164.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_9">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_9">
+					<index>166.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_9">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_9">
+					<index>166.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_10">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_10">
+					<index>168.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_10">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_10">
+					<index>168.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_11">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_11">
+					<index>170.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_11">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_11">
+					<index>170.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_12">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_12">
+					<index>172.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_12">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_12">
+					<index>172.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_THURSDAY_13">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_THURSDAY_13">
+					<index>174.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_THURSDAY_13">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_THURSDAY_13">
+					<index>174.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_1">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_1">
+					<index>176.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_1">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_1">
+					<index>176.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_2">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>540</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_2">
+					<index>178.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_2">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_2">
+					<index>178.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_3">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1020</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_3">
+					<index>180.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_3">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_3">
+					<index>180.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_4">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1320</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_4">
+					<index>182.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_4">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>21.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_4">
+					<index>182.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_5">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_5">
+					<index>184.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_5">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_5">
+					<index>184.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_6">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_6">
+					<index>186.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_6">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_6">
+					<index>186.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_7">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_7">
+					<index>188.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_7">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_7">
+					<index>188.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_8">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_8">
+					<index>190.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_8">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_8">
+					<index>190.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_9">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_9">
+					<index>192.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_9">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_9">
+					<index>192.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_10">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_10">
+					<index>194.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_10">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_10">
+					<index>194.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_11">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_11">
+					<index>196.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_11">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_11">
+					<index>196.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_12">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_12">
+					<index>198.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_12">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_12">
+					<index>198.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ENDTIME_FRIDAY_13">
+				<properties>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>5.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>5</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>1440</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="ENDTIME_FRIDAY_13">
+					<index>200.0</index>
+					<size>2.0</size>
+					<mask>511</mask>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATURE_FRIDAY_13">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>17.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATURE_FRIDAY_13">
+					<index>200.1</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ROAMING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ROAMING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="config-1"/>
+		<configParameters id="config-2"/>
+		<configParameters id="config-4"/>
+		<variables id="cc_rt_ch_rc_values-6"/>
+		<variables id="cc_rt_ch_rt_values-4">
+			<parameter id="CONTROL_MODE">
+				<properties>
+					<writeable>false</writeable>
+					<control>HEATING_CONTROL.CONTROL_MODE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>AUTO-MODE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>MANU-MODE</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>PARTY-MODE</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>BOOST-MODE</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="CONTROL_MODE">
+					<size>0.2</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="FAULT_REPORTING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NO_FAULT</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>VALVE_TIGHT</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>ADJUSTING_RANGE_TOO_LARGE</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ADJUSTING_RANGE_TOO_SMALL</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>COMMUNICATION_ERROR</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id/>
+						<index>5</index>
+					</value>
+					<value>
+						<id>LOWBAT</id>
+						<index>6</index>
+					</value>
+					<value>
+						<id>VALVE_ERROR_POSITION</id>
+						<index>7</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="FAULT_REPORTING">
+					<size>0.3</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="BATTERY_STATE">
+				<properties>
+					<writeable>false</writeable>
+					<control>NONE</control>
+					<unit>V</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+							<offset>-1.500000</offset>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>1.500000</minimumValue>
+					<maximumValue>4.600000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="BATTERY_STATE">
+					<size>0.5</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="VALVE_STATE">
+				<properties>
+					<writeable>false</writeable>
+					<control>NONE</control>
+					<unit>%</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>99</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="VALVE_STATE">
+					<size>0.7</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="BOOST_STATE">
+				<properties>
+					<writeable>false</writeable>
+					<control>NONE</control>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>30</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="BOOST_STATE">
+					<size>0.6</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ACTUAL_TEMPERATURE">
+				<properties>
+					<writeable>false</writeable>
+					<signed>true</signed>
+					<control>HEATING_CONTROL.TEMPERATURE</control>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>-10.000000</minimumValue>
+					<maximumValue>56.000000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ACTUAL_TEMPERATURE">
+					<size>1.2</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="SET_TEMPERATURE">
+				<properties>
+					<control>HEATING_CONTROL.SETPOINT</control>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>4.500000</minimumValue>
+					<maximumValue>30.500000</maximumValue>
+					<defaultValue>20.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="SET_TEMPERATURE">
+					<size>0.6</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_TEMPERATURE_SET">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="AUTO_MODE">
+				<properties>
+					<readable>false</readable>
+					<control>HEATING_CONTROL.AUTO</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="CONTROL_MODE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="AUTO_MODE_SET">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="MANU_MODE">
+				<properties>
+					<readable>false</readable>
+					<control>HEATING_CONTROL.MANU</control>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>4.500000</minimumValue>
+					<maximumValue>30.500000</maximumValue>
+					<defaultValue>20.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="MANU_TEMPERATURE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="MANU_MODE_SET">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="BOOST_MODE">
+				<properties>
+					<readable>false</readable>
+					<control>HEATING_CONTROL.BOOST</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="CONTROL_MODE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="BOOST_MODE_SET">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="COMFORT_MODE">
+				<properties>
+					<readable>false</readable>
+					<control>HEATING_CONTROL.COMFORT</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="CONTROL_MODE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="COMFORT_MODE_SET">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LOWERING_MODE">
+				<properties>
+					<readable>false</readable>
+					<control>HEATING_CONTROL.LOWERING</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="CONTROL_MODE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LOWERING_MODE_SET">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_MODE_SUBMIT">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<casts>
+						<ccrtdnParty/>
+					</casts>
+				</properties>
+				<logicalString>
+					<defaultValue/>
+				</logicalString>
+				<physicalString groupId="PARTY_MODE_SUBMIT">
+					<operationType>command</operationType>
+				</physicalString>
+				<packets>
+					<packet id="PARTY_MODE_SUBMIT_FRAME">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_TEMPERATURE">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_TEMP</control>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>20.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="PARTY_TEMPERATURE">
+					<size>0.6</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="PARTY_MODE_SET">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_START_TIME">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_START_TIME</control>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>30.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>1410</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_START_TIME">
+					<size>0.6</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_START_DAY">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_START_DAY</control>
+					<unit>day</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>31</maximumValue>
+					<defaultValue>1</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_START_DAY">
+					<size>0.5</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_START_MONTH">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_START_MONTH</control>
+					<unit>month</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>12</maximumValue>
+					<defaultValue>1</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_START_MONTH">
+					<size>0.4</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_START_YEAR">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_START_YEAR</control>
+					<unit>year</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>99</maximumValue>
+					<defaultValue>12</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_START_YEAR">
+					<size>0.7</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_STOP_TIME">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_STOP_TIME</control>
+					<unit>minutes</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>division</operation>
+							<factor>30.000000</factor>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>1410</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_STOP_TIME">
+					<size>0.6</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_STOP_DAY">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_STOP_DAY</control>
+					<unit>day</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>31</maximumValue>
+					<defaultValue>1</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_STOP_DAY">
+					<size>0.5</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_STOP_MONTH">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_STOP_MONTH</control>
+					<unit>month</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>12</maximumValue>
+					<defaultValue>1</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_STOP_MONTH">
+					<size>0.4</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="PARTY_STOP_YEAR">
+				<properties>
+					<control>HEATING_CONTROL.PARTY_STOP_YEAR</control>
+					<unit>year</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>99</maximumValue>
+					<defaultValue>12</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="PARTY_STOP_YEAR">
+					<size>0.7</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="cc_rt_ch_rt_values-5"/>
+		<variables id="cc_rt_ch_weather_values-1"/>
+		<variables id="cc_rt_ch_wsr_values-3">
+			<parameter id="WINDOW_STATE">
+				<properties>
+					<control>SWITCH.STATE</control>
+					<casts>
+						<booleanInteger>
+							<trueValue>200</trueValue>
+						</booleanInteger>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="WINDOW_STATE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="WINDOW_STATE_SET">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="cc_rt_tc_values-2"/>
+		<variables id="maint_ch_values-0">
+			<parameter id="UNREACH">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STICKY_UNREACH">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="STICKY_UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CONFIG_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="CONFIG_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="AES_KEY">
+				<properties>
+					<writeable>false</writeable>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>127</maximumValue>
+				</logicalInteger>
+				<physicalInteger groupId="AES_KEY">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_DEVICE">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_DEVICE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_PEER">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_PEER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="INHIBIT">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="INHIBIT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LOCK">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="DEVICE_IN_BOOTLOADER">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DEVICE_IN_BOOTLOADER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="UPDATE_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UPDATE_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="POLLING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>360</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="POLLING_INTERVAL">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_SPOOFED">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>UNSET</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CENTRAL_ADDRESS_SPOOFED</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="CENTRAL_ADDRESS_SPOOFED">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+		</variables>
+		<linkParameters id="cc_rt_ch_cs_link-1"/>
+		<linkParameters id="cc_rt_ch_rt_link-4"/>
+		<linkParameters id="cc_rt_ch_rt_receiver_link-5">
+			<scenario id="default">
+				<parameter id="PEER_NEEDS_BURST">true</parameter>
+			</scenario>
+		</linkParameters>
+		<linkParameters id="cc_rt_ch_sw_link-6">
+			<parameter id="SHORT_CONTROL_RC">
+				<properties>internal</properties>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>NO CHANGE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>SET TEMPERATUR SHORT</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>AUTOMODE + AUTOTEMPERATURE</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>AUTOMODE + TEMPERATURE SHORT</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>MANUMODE + TEMPERATURE SHORT</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>BOOSTMODE</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>TOGGELN</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="SHORT_CONTROL_RC">
+					<index>46.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_TEMPERATUR_RC">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>20.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="SHORT_TEMPERATUR_RC">
+					<index>45.0</index>
+					<size>0.6</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_CONTROL_RC">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NO CHANGE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>SET TEMPERATUR LONG</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>AUTOMODE + AUTOTEMPERATURE</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>AUTOMODE + TEMPERATURE LONG</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>MANUMODE + TEMPERATURE LONG</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>BOOSTMODE</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>TOGGELN</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LONG_CONTROL_RC">
+					<index>174.0</index>
+					<size>0.4</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_TEMPERATUR_RC">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>20.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LONG_TEMPERATUR_RC">
+					<index>173.0</index>
+					<size>0.6</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<scenario id="default">
+				<parameter id="PEER_NEEDS_BURST">true</parameter>
+			</scenario>
+		</linkParameters>
+		<linkParameters id="cc_rt_ch_tc_link-2"/>
+		<linkParameters id="cc_rt_ch_wsr_link-3">
+			<parameter id="SHORT_COND_VALUE_LO">
+				<properties>config</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+					<defaultValue>50</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="SHORT_COND_VALUE_LO">
+					<index>4.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TEMPERATUR_WINDOW_OPEN_VALUE">
+				<properties>
+					<unit>°C</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>5.000000</minimumValue>
+					<maximumValue>30.000000</maximumValue>
+					<defaultValue>12.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="TEMPERATUR_WINDOW_OPEN_VALUE">
+					<index>5.0</index>
+					<size>0.6</size>
+					<list>7</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<scenario id="default">
+				<parameter id="PEER_NEEDS_BURST">true</parameter>
+			</scenario>
+		</linkParameters>
+	</parameterGroups>
+</homegearDevice>
+

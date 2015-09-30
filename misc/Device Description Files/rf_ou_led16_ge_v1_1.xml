@@ -1,0 +1,564 @@
+<homegearDevice version="11">
+	<supportedDevices>
+		<device id="HM-OU-LED16">
+			<description>HM output unit LED16</description>
+			<typeNumber>0x6D</typeNumber>
+			<minFirmwareVersion>0x11</minFirmwareVersion>
+		</device>
+	</supportedDevices>
+	<properties>
+		<encryption>true</encryption>
+	</properties>
+	<functions>
+		<function channel="0" type="MAINTENANCE" channelCount="1">
+			<properties>
+				<internal>true</internal>
+			</properties>
+			<configParameters>remote_dev_master-0</configParameters>
+			<variables>maint_ch_values-0</variables>
+		</function>
+		<function channel="1" type="KEY" channelCount="1">
+			<properties>
+				<dynamicChannelCount>23:1.0</dynamicChannelCount>
+				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
+			</properties>
+			<configParameters>remote_ch_master-1</configParameters>
+			<variables>remote_ch_values-1</variables>
+		</function>
+	</functions>
+	<packets>
+		<packet id="ACK_STATUS">
+			<direction>toCentral</direction>
+			<type>0x2</type>
+			<subtype>0x1</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LED_STATUS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="GET_ONE_CHANNEL">
+			<direction>fromCentral</direction>
+			<type>0x1</type>
+			<channelIndex>9</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>10.0</index>
+					<constValueInteger>14</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LED_STATUS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="KEY_EVENT_SHORT">
+			<direction>toCentral</direction>
+			<type>0x40</type>
+			<channelIndex>9:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.6</index>
+					<size>0.1</size>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<index>10.0</index>
+					<parameterId>COUNTER</parameterId>
+				</element>
+				<element>
+					<index>10.0</index>
+					<parameterId>TEST_COUNTER</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="KEY_SIM_SHORT">
+			<direction>toCentral</direction>
+			<type>0x40</type>
+			<channelIndex>9:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.6</index>
+					<size>0.1</size>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<index>9.7</index>
+					<size>0.1</size>
+					<constValueInteger>0</constValueInteger>
+				</element>
+				<element>
+					<index>10.0</index>
+					<parameterId>SIM_COUNTER</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_ALL_CHANNELS">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x81</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>4.0</size>
+					<parameterId>LED_STATUS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_LED_SLEEP_MODE">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x82</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LED_SLEEP_MODE</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="SET_ONE_CHANNEL">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LED_STATUS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="TOGGLE_INSTALL_TEST">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>LED_STATUS</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+	</packets>
+	<parameterGroups>
+		<configParameters id="remote_ch_master-1">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalBoolean groupId="AES">
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+		</configParameters>
+		<configParameters id="remote_dev_master-0">
+			<parameter id="DISPLAY_ENERGYOPTIONS">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>255.000000</maximumValue>
+					<defaultValue>255.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="DISPLAY_ENERGYOPTIONS">
+					<index>8.0</index>
+					<size>0.8</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DISPLAY_BRIGHTNESS">
+				<properties>config</properties>
+				<logicalEnumeration>
+					<defaultValue>15</defaultValue>
+					<value>
+						<id>0</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>1</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>2</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>3</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>4</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>5</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>6</id>
+						<index>6</index>
+					</value>
+					<value>
+						<id>7</id>
+						<index>7</index>
+					</value>
+					<value>
+						<id>8</id>
+						<index>8</index>
+					</value>
+					<value>
+						<id>9</id>
+						<index>9</index>
+					</value>
+					<value>
+						<id>10</id>
+						<index>10</index>
+					</value>
+					<value>
+						<id>11</id>
+						<index>11</index>
+					</value>
+					<value>
+						<id>12</id>
+						<index>12</index>
+					</value>
+					<value>
+						<id>13</id>
+						<index>13</index>
+					</value>
+					<value>
+						<id>14</id>
+						<index>14</index>
+					</value>
+					<value>
+						<id>15</id>
+						<index>15</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="DISPLAY_BRIGHTNESS">
+					<index>4.0</index>
+					<size>0.4</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOCAL_RESET_DISABLE">
+				<properties>config</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+					<index>24.0</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ROAMING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ROAMING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<variables id="maint_ch_values-0">
+			<parameter id="UNREACH">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STICKY_UNREACH">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="STICKY_UNREACH">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CONFIG_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="CONFIG_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_DEVICE">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_DEVICE">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RSSI_PEER">
+				<properties>
+					<writeable>false</writeable>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="RSSI_PEER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LED_STATUS">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="LED_STATUS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_ALL_CHANNELS">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="AES_KEY">
+				<properties>
+					<writeable>false</writeable>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>127</maximumValue>
+				</logicalInteger>
+				<physicalInteger groupId="AES_KEY">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DEVICE_IN_BOOTLOADER">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DEVICE_IN_BOOTLOADER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="UPDATE_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UPDATE_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="POLLING">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="POLLING_INTERVAL">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_SPOOFED">
+				<properties>
+					<service>true</service>
+					<sticky>true</sticky>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>UNSET</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>CENTRAL_ADDRESS_SPOOFED</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="CENTRAL_ADDRESS_SPOOFED">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+		</variables>
+		<variables id="remote_ch_values-1">
+			<parameter id="PRESS_SHORT">
+				<properties>
+					<control>BTN_SHORT_ONLY.SHORT</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="COUNTER">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="KEY_SIM_SHORT">
+						<type>set</type>
+					</packet>
+					<packet id="KEY_EVENT_SHORT">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LED_STATUS">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<value>
+						<id>OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>RED</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>GREEN</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>ORANGE</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LED_STATUS">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="GET_ONE_CHANNEL">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="SET_ONE_CHANNEL">
+						<type>set</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ALL_LEDS">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<casts>
+						<stringUnsignedInteger/>
+					</casts>
+				</properties>
+				<logicalString/>
+				<physicalInteger groupId="LED_STATUS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_ALL_CHANNELS">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LED_SLEEP_MODE">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalEnumeration>
+					<value>
+						<id>OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>ON</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="LED_SLEEP_MODE">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LED_SLEEP_MODE">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<toggle>
+							<parameter>LED_STATUS</parameter>
+							<on>3</on>
+						</toggle>
+					</casts>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="LED_STATUS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="TOGGLE_INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+	</parameterGroups>
+</homegearDevice>
+

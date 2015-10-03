@@ -320,7 +320,8 @@ BidCoSPeer.lo: BidCoSPeer.cpp /usr/include/stdc-predef.h BidCoSPeer.h \
  /usr/include/homegear-base/Output/Output.h \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
- /usr/include/homegear-base/Variable.h BidCoSDeviceTypes.h delegate.hpp \
+ /usr/include/homegear-base/Variable.h \
+ /usr/include/homegear-base/IQueue.h BidCoSDeviceTypes.h delegate.hpp \
  delegate_list.hpp delegate_template.hpp BidCoSPacket.h \
  PhysicalInterfaces/IBidCoSInterface.h \
  /usr/include/homegear-base/BaseLib.h /usr/include/c++/4.8/queue \
@@ -1113,6 +1114,8 @@ BidCoSPeer.h:
 /usr/include/homegear-base/Encoding/HTTP.h:
 
 /usr/include/homegear-base/Variable.h:
+
+/usr/include/homegear-base/IQueue.h:
 
 BidCoSDeviceTypes.h:
 

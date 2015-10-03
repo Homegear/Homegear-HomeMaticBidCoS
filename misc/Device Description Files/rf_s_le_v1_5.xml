@@ -180,7 +180,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="INTERNAL_KEYS_VISIBLE">
+				<physicalInteger groupId="">
 					<index>2.7</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -194,7 +194,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -278,7 +278,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="POLLING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -292,7 +292,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>60</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="POLLING_INTERVAL">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -415,7 +415,7 @@
 		</variables>
 		<linkParameters id="switch_ch_link_le_v1_5-1">
 			<parameter id="UI_HINT">
-				<properties>set</properties>
+				<properties/>
 				<logicalString>
 					<defaultValue/>
 				</logicalString>
@@ -424,7 +424,7 @@
 				</physicalString>
 			</parameter>
 			<parameter id="SHORT_ON_TIME_MODE">
-				<properties>store</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -436,7 +436,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -444,7 +444,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -456,7 +456,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>1.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -464,7 +464,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -492,7 +492,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_COND_TYPE">
+				<physicalInteger groupId="">
 					<index>1.3</index>
 					<size>0.3</size>
 					<list>3</list>
@@ -500,7 +500,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -520,7 +520,7 @@
 						<index>3</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.2</size>
 					<list>3</list>
@@ -577,7 +577,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>2.0</size>
 					<mask>49280</mask>
@@ -635,7 +635,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_ON">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>2.0</size>
 					<mask>12352</mask>
@@ -693,7 +693,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>2.0</size>
 					<mask>3104</mask>
@@ -751,7 +751,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_OFF">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>2.0</size>
 					<mask>784</mask>
@@ -760,13 +760,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_RANGE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>50</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_RANGE_LO">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -774,13 +774,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_RANGE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_RANGE_HI">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -799,7 +799,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ONDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>6.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -821,7 +821,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_TIME">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -840,7 +840,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>8.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -862,7 +862,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFF_TIME">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -870,7 +870,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -882,7 +882,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>129.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -890,7 +890,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -902,7 +902,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>129.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -910,7 +910,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -938,7 +938,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_COND_TYPE">
+				<physicalInteger groupId="">
 					<index>129.3</index>
 					<size>0.3</size>
 					<list>3</list>
@@ -946,7 +946,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -966,7 +966,7 @@
 						<index>3</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>129.0</index>
 					<size>0.2</size>
 					<list>3</list>
@@ -1023,7 +1023,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>2.0</size>
 					<mask>49280</mask>
@@ -1081,7 +1081,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_ON">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>2.0</size>
 					<mask>12352</mask>
@@ -1139,7 +1139,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>2.0</size>
 					<mask>3104</mask>
@@ -1197,7 +1197,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_OFF">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>2.0</size>
 					<mask>784</mask>
@@ -1206,7 +1206,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_MULTIEXECUTE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -1218,7 +1218,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_MULTIEXECUTE">
+				<physicalInteger groupId="">
 					<index>131.0</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -1226,13 +1226,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_RANGE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>50</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_RANGE_LO">
+				<physicalInteger groupId="">
 					<index>132.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1240,13 +1240,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_RANGE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_RANGE_HI">
+				<physicalInteger groupId="">
 					<index>133.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1265,7 +1265,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ONDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>134.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1287,7 +1287,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_TIME">
+				<physicalInteger groupId="">
 					<index>135.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1306,7 +1306,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>136.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1328,7 +1328,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFF_TIME">
+				<physicalInteger groupId="">
 					<index>137.0</index>
 					<size>1.0</size>
 					<list>3</list>

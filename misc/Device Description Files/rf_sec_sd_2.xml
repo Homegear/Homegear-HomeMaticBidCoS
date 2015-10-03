@@ -86,13 +86,13 @@
 	<parameterGroups>
 		<configParameters id="HM-Sec-SD-2_dev_master-0">
 			<parameter id="DEV_RPT_CNT_MAX">
-				<properties>0.1</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>1</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="DEV_RPT_CNT_MAX">
+				<physicalInteger groupId="">
 					<index>31.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -106,7 +106,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -201,7 +201,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="POLLING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -215,7 +215,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="POLLING_INTERVAL">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>

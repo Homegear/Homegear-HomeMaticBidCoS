@@ -549,11 +549,11 @@
 		</configParameters>
 		<configParameters id="cc_rt_dev_master-0">
 			<parameter id="WAKE_ON_RADIO">
-				<properties>internal</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BURST_RX">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -561,11 +561,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BUTTON_LOCK">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BUTTON_LOCK">
+				<physicalInteger groupId="">
 					<index>15.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -573,11 +573,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="GLOBAL_BUTTON_LOCK">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="GLOBAL_BUTTON_LOCK">
+				<physicalInteger groupId="">
 					<index>25.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -585,11 +585,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="MODUS_BUTTON_LOCK">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="MODUS_BUTTON_LOCK">
+				<physicalInteger groupId="">
 					<index>26.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -605,7 +605,7 @@
 					<maximumValue>255</maximumValue>
 					<defaultValue>10</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="BACKLIGHT_ON_TIME">
+				<physicalInteger groupId="">
 					<index>14.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -613,11 +613,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BUTTON_RESPONSE_WITHOUT_BACKLIGHT">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BUTTON_RESPONSE_WITHOUT_BACKLIGHT">
+				<physicalInteger groupId="">
 					<index>9.4</index>
 					<size>0.1</size>
 					<list>7</list>
@@ -625,11 +625,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="CYCLIC_INFO_MSG">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="CYCLIC_INFO_MSG">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -637,13 +637,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="CYCLIC_INFO_MSG_DIS">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>254</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="CYCLIC_INFO_MSG_DIS">
+				<physicalInteger groupId="">
 					<index>17.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -651,11 +651,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LOCAL_RESET_DISABLE">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -676,7 +676,7 @@
 					<maximumValue>2.500000</maximumValue>
 					<defaultValue>2.100000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LOW_BAT_LIMIT">
+				<physicalInteger groupId="">
 					<index>18.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -697,7 +697,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_COMFORT">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -718,7 +718,7 @@
 					<maximumValue>25.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_LOWERING">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -739,7 +739,7 @@
 					<maximumValue>14.500000</maximumValue>
 					<defaultValue>4.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MINIMUM">
+				<physicalInteger groupId="">
 					<index>3.0</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -760,7 +760,7 @@
 					<maximumValue>30.500000</maximumValue>
 					<defaultValue>30.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MAXIMUM">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -768,7 +768,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="TEMPERATUREFALL_MODUS">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>4</defaultValue>
 					<value>
@@ -792,7 +792,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="TEMPERATUREFALL_MODUS">
+				<physicalInteger groupId="">
 					<index>19.5</index>
 					<size>0.3</size>
 					<list>7</list>
@@ -813,7 +813,7 @@
 					<maximumValue>2.500000</maximumValue>
 					<defaultValue>1.400000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUREFALL_VALUE">
+				<physicalInteger groupId="">
 					<index>19.0</index>
 					<size>0.5</size>
 					<list>7</list>
@@ -834,7 +834,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>12.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUREFALL_WINDOW_OPEN">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -856,7 +856,7 @@
 					<maximumValue>60</maximumValue>
 					<defaultValue>15</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TEMPERATUREFALL_WINDOW_OPEN_TIME_PERIOD">
+				<physicalInteger groupId="">
 					<index>6.0</index>
 					<size>0.4</size>
 					<list>7</list>
@@ -864,7 +864,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="DECALCIFICATION_WEEKDAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -896,7 +896,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DECALCIFICATION_WEEKDAY">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>0.3</size>
 					<list>7</list>
@@ -918,7 +918,7 @@
 					<maximumValue>1410</maximumValue>
 					<defaultValue>660</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="DECALCIFICATION_TIME">
+				<physicalInteger groupId="">
 					<index>8.0</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -926,7 +926,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="TEMPERATURE_OFFSET">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>7</defaultValue>
 					<value>
@@ -990,7 +990,7 @@
 						<index>14</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="TEMPERATURE_OFFSET">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>0.4</size>
 					<list>7</list>
@@ -998,7 +998,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BOOST_TIME_PERIOD">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -1030,7 +1030,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="BOOST_TIME_PERIOD">
+				<physicalInteger groupId="">
 					<index>10.5</index>
 					<size>0.3</size>
 					<list>7</list>
@@ -1052,7 +1052,7 @@
 					<maximumValue>100</maximumValue>
 					<defaultValue>80</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="BOOST_POSITION">
+				<physicalInteger groupId="">
 					<index>10.0</index>
 					<size>0.5</size>
 					<list>7</list>
@@ -1060,11 +1060,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BOOST_AFTER_WINDOW_OPEN">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BOOST_AFTER_WINDOW_OPEN">
+				<physicalInteger groupId="">
 					<index>14.5</index>
 					<size>0.1</size>
 					<list>7</list>
@@ -1072,11 +1072,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="MIN_MAX_VALUE_NOT_RELEVANT_FOR_MANU_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="MIN_MAX_VALUE_NOT_RELEVANT_FOR_MANU_MODE">
+				<physicalInteger groupId="">
 					<index>14.6</index>
 					<size>0.1</size>
 					<list>7</list>
@@ -1092,7 +1092,7 @@
 					<maximumValue>100</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="VALVE_OFFSET">
+				<physicalInteger groupId="">
 					<index>11.0</index>
 					<size>0.7</size>
 					<list>7</list>
@@ -1108,7 +1108,7 @@
 					<maximumValue>100</maximumValue>
 					<defaultValue>15</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="VALVE_ERROR_RUN_POSITION">
+				<physicalInteger groupId="">
 					<index>13.0</index>
 					<size>0.7</size>
 					<list>7</list>
@@ -1124,7 +1124,7 @@
 					<maximumValue>100</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="VALVE_MAXIMUM_POSITION">
+				<physicalInteger groupId="">
 					<index>12.0</index>
 					<size>0.7</size>
 					<list>7</list>
@@ -1132,11 +1132,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="DAYLIGHT_SAVING_TIME">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="DAYLIGHT_SAVING_TIME">
+				<physicalInteger groupId="">
 					<index>14.0</index>
 					<size>0.1</size>
 					<list>7</list>
@@ -1144,7 +1144,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="ADAPTIVE_REGULATION">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>2</defaultValue>
 					<value>
@@ -1160,7 +1160,7 @@
 						<index>2</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="ADAPTIVE_REGULATION">
+				<physicalInteger groupId="">
 					<index>14.1</index>
 					<size>0.2</size>
 					<list>7</list>
@@ -1168,7 +1168,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="MANU_MODE_PRIORITIZATION">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -1192,7 +1192,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="MANU_MODE_PRIORITIZATION">
+				<physicalInteger groupId="">
 					<index>18.3</index>
 					<size>0.3</size>
 					<list>7</list>
@@ -1200,7 +1200,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="PARTY_MODE_PRIORITIZATION">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -1224,7 +1224,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="PARTY_MODE_PRIORITIZATION">
+				<physicalInteger groupId="">
 					<index>18.0</index>
 					<size>0.3</size>
 					<list>7</list>
@@ -1246,7 +1246,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_1">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1268,7 +1268,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_1">
+				<physicalInteger groupId="">
 					<index>20.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1290,7 +1290,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1320</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_2">
+				<physicalInteger groupId="">
 					<index>22.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1312,7 +1312,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_2">
+				<physicalInteger groupId="">
 					<index>22.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1334,7 +1334,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_3">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1356,7 +1356,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_3">
+				<physicalInteger groupId="">
 					<index>24.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1378,7 +1378,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_4">
+				<physicalInteger groupId="">
 					<index>26.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1400,7 +1400,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_4">
+				<physicalInteger groupId="">
 					<index>26.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1422,7 +1422,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_5">
+				<physicalInteger groupId="">
 					<index>28.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1444,7 +1444,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_5">
+				<physicalInteger groupId="">
 					<index>28.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1466,7 +1466,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_6">
+				<physicalInteger groupId="">
 					<index>30.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1488,7 +1488,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_6">
+				<physicalInteger groupId="">
 					<index>30.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1510,7 +1510,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_7">
+				<physicalInteger groupId="">
 					<index>32.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1532,7 +1532,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_7">
+				<physicalInteger groupId="">
 					<index>32.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1554,7 +1554,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_8">
+				<physicalInteger groupId="">
 					<index>34.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1576,7 +1576,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_8">
+				<physicalInteger groupId="">
 					<index>34.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1598,7 +1598,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_9">
+				<physicalInteger groupId="">
 					<index>36.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1620,7 +1620,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_9">
+				<physicalInteger groupId="">
 					<index>36.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1642,7 +1642,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_10">
+				<physicalInteger groupId="">
 					<index>38.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1664,7 +1664,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_10">
+				<physicalInteger groupId="">
 					<index>38.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1686,7 +1686,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_11">
+				<physicalInteger groupId="">
 					<index>40.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1708,7 +1708,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_11">
+				<physicalInteger groupId="">
 					<index>40.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1730,7 +1730,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_12">
+				<physicalInteger groupId="">
 					<index>42.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1752,7 +1752,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_12">
+				<physicalInteger groupId="">
 					<index>42.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1774,7 +1774,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SATURDAY_13">
+				<physicalInteger groupId="">
 					<index>44.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1796,7 +1796,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SATURDAY_13">
+				<physicalInteger groupId="">
 					<index>44.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1818,7 +1818,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_1">
+				<physicalInteger groupId="">
 					<index>46.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1840,7 +1840,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_1">
+				<physicalInteger groupId="">
 					<index>46.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1862,7 +1862,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1320</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_2">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1884,7 +1884,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_2">
+				<physicalInteger groupId="">
 					<index>48.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1906,7 +1906,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_3">
+				<physicalInteger groupId="">
 					<index>50.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1928,7 +1928,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_3">
+				<physicalInteger groupId="">
 					<index>50.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1950,7 +1950,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_4">
+				<physicalInteger groupId="">
 					<index>52.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -1972,7 +1972,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_4">
+				<physicalInteger groupId="">
 					<index>52.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -1994,7 +1994,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_5">
+				<physicalInteger groupId="">
 					<index>54.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2016,7 +2016,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_5">
+				<physicalInteger groupId="">
 					<index>54.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2038,7 +2038,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_6">
+				<physicalInteger groupId="">
 					<index>56.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2060,7 +2060,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_6">
+				<physicalInteger groupId="">
 					<index>56.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2082,7 +2082,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_7">
+				<physicalInteger groupId="">
 					<index>58.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2104,7 +2104,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_7">
+				<physicalInteger groupId="">
 					<index>58.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2126,7 +2126,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_8">
+				<physicalInteger groupId="">
 					<index>60.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2148,7 +2148,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_8">
+				<physicalInteger groupId="">
 					<index>60.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2170,7 +2170,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_9">
+				<physicalInteger groupId="">
 					<index>62.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2192,7 +2192,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_9">
+				<physicalInteger groupId="">
 					<index>62.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2214,7 +2214,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_10">
+				<physicalInteger groupId="">
 					<index>64.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2236,7 +2236,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_10">
+				<physicalInteger groupId="">
 					<index>64.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2258,7 +2258,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_11">
+				<physicalInteger groupId="">
 					<index>66.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2280,7 +2280,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_11">
+				<physicalInteger groupId="">
 					<index>66.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2302,7 +2302,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_12">
+				<physicalInteger groupId="">
 					<index>68.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2324,7 +2324,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_12">
+				<physicalInteger groupId="">
 					<index>68.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2346,7 +2346,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_SUNDAY_13">
+				<physicalInteger groupId="">
 					<index>70.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2368,7 +2368,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_SUNDAY_13">
+				<physicalInteger groupId="">
 					<index>70.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2390,7 +2390,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_1">
+				<physicalInteger groupId="">
 					<index>72.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2412,7 +2412,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_1">
+				<physicalInteger groupId="">
 					<index>72.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2434,7 +2434,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>540</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_2">
+				<physicalInteger groupId="">
 					<index>74.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2456,7 +2456,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_2">
+				<physicalInteger groupId="">
 					<index>74.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2478,7 +2478,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1020</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_3">
+				<physicalInteger groupId="">
 					<index>76.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2500,7 +2500,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_3">
+				<physicalInteger groupId="">
 					<index>76.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2522,7 +2522,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1320</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_4">
+				<physicalInteger groupId="">
 					<index>78.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2544,7 +2544,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_4">
+				<physicalInteger groupId="">
 					<index>78.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2566,7 +2566,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_5">
+				<physicalInteger groupId="">
 					<index>80.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2588,7 +2588,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_5">
+				<physicalInteger groupId="">
 					<index>80.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2610,7 +2610,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_6">
+				<physicalInteger groupId="">
 					<index>82.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2632,7 +2632,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_6">
+				<physicalInteger groupId="">
 					<index>82.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2654,7 +2654,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_7">
+				<physicalInteger groupId="">
 					<index>84.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2676,7 +2676,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_7">
+				<physicalInteger groupId="">
 					<index>84.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2698,7 +2698,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_8">
+				<physicalInteger groupId="">
 					<index>86.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2720,7 +2720,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_8">
+				<physicalInteger groupId="">
 					<index>86.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2742,7 +2742,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_9">
+				<physicalInteger groupId="">
 					<index>88.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2764,7 +2764,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_9">
+				<physicalInteger groupId="">
 					<index>88.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2786,7 +2786,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_10">
+				<physicalInteger groupId="">
 					<index>90.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2808,7 +2808,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_10">
+				<physicalInteger groupId="">
 					<index>90.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2830,7 +2830,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_11">
+				<physicalInteger groupId="">
 					<index>92.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2852,7 +2852,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_11">
+				<physicalInteger groupId="">
 					<index>92.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2874,7 +2874,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_12">
+				<physicalInteger groupId="">
 					<index>94.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2896,7 +2896,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_12">
+				<physicalInteger groupId="">
 					<index>94.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2918,7 +2918,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_MONDAY_13">
+				<physicalInteger groupId="">
 					<index>96.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2940,7 +2940,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_MONDAY_13">
+				<physicalInteger groupId="">
 					<index>96.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -2962,7 +2962,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_1">
+				<physicalInteger groupId="">
 					<index>98.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -2984,7 +2984,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_1">
+				<physicalInteger groupId="">
 					<index>98.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3006,7 +3006,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>540</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_2">
+				<physicalInteger groupId="">
 					<index>100.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3028,7 +3028,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_2">
+				<physicalInteger groupId="">
 					<index>100.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3050,7 +3050,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1020</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_3">
+				<physicalInteger groupId="">
 					<index>102.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3072,7 +3072,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_3">
+				<physicalInteger groupId="">
 					<index>102.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3094,7 +3094,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1320</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_4">
+				<physicalInteger groupId="">
 					<index>104.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3116,7 +3116,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_4">
+				<physicalInteger groupId="">
 					<index>104.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3138,7 +3138,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_5">
+				<physicalInteger groupId="">
 					<index>106.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3160,7 +3160,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_5">
+				<physicalInteger groupId="">
 					<index>106.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3182,7 +3182,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_6">
+				<physicalInteger groupId="">
 					<index>108.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3204,7 +3204,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_6">
+				<physicalInteger groupId="">
 					<index>108.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3226,7 +3226,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_7">
+				<physicalInteger groupId="">
 					<index>110.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3248,7 +3248,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_7">
+				<physicalInteger groupId="">
 					<index>110.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3270,7 +3270,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_8">
+				<physicalInteger groupId="">
 					<index>112.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3292,7 +3292,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_8">
+				<physicalInteger groupId="">
 					<index>112.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3314,7 +3314,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_9">
+				<physicalInteger groupId="">
 					<index>114.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3336,7 +3336,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_9">
+				<physicalInteger groupId="">
 					<index>114.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3358,7 +3358,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_10">
+				<physicalInteger groupId="">
 					<index>116.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3380,7 +3380,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_10">
+				<physicalInteger groupId="">
 					<index>116.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3402,7 +3402,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_11">
+				<physicalInteger groupId="">
 					<index>118.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3424,7 +3424,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_11">
+				<physicalInteger groupId="">
 					<index>118.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3446,7 +3446,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_12">
+				<physicalInteger groupId="">
 					<index>120.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3468,7 +3468,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_12">
+				<physicalInteger groupId="">
 					<index>120.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3490,7 +3490,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_TUESDAY_13">
+				<physicalInteger groupId="">
 					<index>122.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3512,7 +3512,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_TUESDAY_13">
+				<physicalInteger groupId="">
 					<index>122.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3534,7 +3534,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_1">
+				<physicalInteger groupId="">
 					<index>124.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3556,7 +3556,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_1">
+				<physicalInteger groupId="">
 					<index>124.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3578,7 +3578,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>540</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_2">
+				<physicalInteger groupId="">
 					<index>126.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3600,7 +3600,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_2">
+				<physicalInteger groupId="">
 					<index>126.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3622,7 +3622,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1020</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_3">
+				<physicalInteger groupId="">
 					<index>128.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3644,7 +3644,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_3">
+				<physicalInteger groupId="">
 					<index>128.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3666,7 +3666,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1320</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_4">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3688,7 +3688,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_4">
+				<physicalInteger groupId="">
 					<index>130.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3710,7 +3710,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_5">
+				<physicalInteger groupId="">
 					<index>132.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3732,7 +3732,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_5">
+				<physicalInteger groupId="">
 					<index>132.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3754,7 +3754,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_6">
+				<physicalInteger groupId="">
 					<index>134.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3776,7 +3776,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_6">
+				<physicalInteger groupId="">
 					<index>134.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3798,7 +3798,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_7">
+				<physicalInteger groupId="">
 					<index>136.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3820,7 +3820,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_7">
+				<physicalInteger groupId="">
 					<index>136.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3842,7 +3842,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_8">
+				<physicalInteger groupId="">
 					<index>138.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3864,7 +3864,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_8">
+				<physicalInteger groupId="">
 					<index>138.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3886,7 +3886,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_9">
+				<physicalInteger groupId="">
 					<index>140.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3908,7 +3908,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_9">
+				<physicalInteger groupId="">
 					<index>140.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3930,7 +3930,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_10">
+				<physicalInteger groupId="">
 					<index>142.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3952,7 +3952,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_10">
+				<physicalInteger groupId="">
 					<index>142.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -3974,7 +3974,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_11">
+				<physicalInteger groupId="">
 					<index>144.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -3996,7 +3996,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_11">
+				<physicalInteger groupId="">
 					<index>144.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4018,7 +4018,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_12">
+				<physicalInteger groupId="">
 					<index>146.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4040,7 +4040,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_12">
+				<physicalInteger groupId="">
 					<index>146.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4062,7 +4062,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_WEDNESDAY_13">
+				<physicalInteger groupId="">
 					<index>148.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4084,7 +4084,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_WEDNESDAY_13">
+				<physicalInteger groupId="">
 					<index>148.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4106,7 +4106,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_1">
+				<physicalInteger groupId="">
 					<index>150.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4128,7 +4128,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_1">
+				<physicalInteger groupId="">
 					<index>150.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4150,7 +4150,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>540</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_2">
+				<physicalInteger groupId="">
 					<index>152.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4172,7 +4172,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_2">
+				<physicalInteger groupId="">
 					<index>152.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4194,7 +4194,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1020</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_3">
+				<physicalInteger groupId="">
 					<index>154.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4216,7 +4216,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_3">
+				<physicalInteger groupId="">
 					<index>154.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4238,7 +4238,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1320</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_4">
+				<physicalInteger groupId="">
 					<index>156.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4260,7 +4260,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_4">
+				<physicalInteger groupId="">
 					<index>156.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4282,7 +4282,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_5">
+				<physicalInteger groupId="">
 					<index>158.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4304,7 +4304,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_5">
+				<physicalInteger groupId="">
 					<index>158.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4326,7 +4326,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_6">
+				<physicalInteger groupId="">
 					<index>160.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4348,7 +4348,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_6">
+				<physicalInteger groupId="">
 					<index>160.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4370,7 +4370,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_7">
+				<physicalInteger groupId="">
 					<index>162.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4392,7 +4392,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_7">
+				<physicalInteger groupId="">
 					<index>162.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4414,7 +4414,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_8">
+				<physicalInteger groupId="">
 					<index>164.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4436,7 +4436,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_8">
+				<physicalInteger groupId="">
 					<index>164.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4458,7 +4458,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_9">
+				<physicalInteger groupId="">
 					<index>166.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4480,7 +4480,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_9">
+				<physicalInteger groupId="">
 					<index>166.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4502,7 +4502,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_10">
+				<physicalInteger groupId="">
 					<index>168.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4524,7 +4524,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_10">
+				<physicalInteger groupId="">
 					<index>168.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4546,7 +4546,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_11">
+				<physicalInteger groupId="">
 					<index>170.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4568,7 +4568,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_11">
+				<physicalInteger groupId="">
 					<index>170.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4590,7 +4590,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_12">
+				<physicalInteger groupId="">
 					<index>172.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4612,7 +4612,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_12">
+				<physicalInteger groupId="">
 					<index>172.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4634,7 +4634,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_THURSDAY_13">
+				<physicalInteger groupId="">
 					<index>174.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4656,7 +4656,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_THURSDAY_13">
+				<physicalInteger groupId="">
 					<index>174.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4678,7 +4678,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_1">
+				<physicalInteger groupId="">
 					<index>176.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4700,7 +4700,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_1">
+				<physicalInteger groupId="">
 					<index>176.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4722,7 +4722,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>540</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_2">
+				<physicalInteger groupId="">
 					<index>178.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4744,7 +4744,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_2">
+				<physicalInteger groupId="">
 					<index>178.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4766,7 +4766,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1020</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_3">
+				<physicalInteger groupId="">
 					<index>180.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4788,7 +4788,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_3">
+				<physicalInteger groupId="">
 					<index>180.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4810,7 +4810,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1320</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_4">
+				<physicalInteger groupId="">
 					<index>182.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4832,7 +4832,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_4">
+				<physicalInteger groupId="">
 					<index>182.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4854,7 +4854,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_5">
+				<physicalInteger groupId="">
 					<index>184.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4876,7 +4876,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_5">
+				<physicalInteger groupId="">
 					<index>184.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4898,7 +4898,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_6">
+				<physicalInteger groupId="">
 					<index>186.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4920,7 +4920,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_6">
+				<physicalInteger groupId="">
 					<index>186.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4942,7 +4942,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_7">
+				<physicalInteger groupId="">
 					<index>188.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -4964,7 +4964,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_7">
+				<physicalInteger groupId="">
 					<index>188.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -4986,7 +4986,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_8">
+				<physicalInteger groupId="">
 					<index>190.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -5008,7 +5008,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_8">
+				<physicalInteger groupId="">
 					<index>190.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -5030,7 +5030,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_9">
+				<physicalInteger groupId="">
 					<index>192.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -5052,7 +5052,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_9">
+				<physicalInteger groupId="">
 					<index>192.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -5074,7 +5074,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_10">
+				<physicalInteger groupId="">
 					<index>194.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -5096,7 +5096,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_10">
+				<physicalInteger groupId="">
 					<index>194.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -5118,7 +5118,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_11">
+				<physicalInteger groupId="">
 					<index>196.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -5140,7 +5140,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_11">
+				<physicalInteger groupId="">
 					<index>196.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -5162,7 +5162,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_12">
+				<physicalInteger groupId="">
 					<index>198.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -5184,7 +5184,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_12">
+				<physicalInteger groupId="">
 					<index>198.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -5206,7 +5206,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1440</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ENDTIME_FRIDAY_13">
+				<physicalInteger groupId="">
 					<index>200.0</index>
 					<size>2.0</size>
 					<mask>511</mask>
@@ -5228,7 +5228,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATURE_FRIDAY_13">
+				<physicalInteger groupId="">
 					<index>200.1</index>
 					<size>0.6</size>
 					<list>7</list>
@@ -5242,7 +5242,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -5988,7 +5988,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="POLLING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -6002,7 +6002,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="POLLING_INTERVAL">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -6037,7 +6037,7 @@
 		</linkParameters>
 		<linkParameters id="cc_rt_ch_sw_link-6">
 			<parameter id="SHORT_CONTROL_RC">
-				<properties>internal</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6069,7 +6069,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CONTROL_RC">
+				<physicalInteger groupId="">
 					<index>46.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6090,7 +6090,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_TEMPERATUR_RC">
+				<physicalInteger groupId="">
 					<index>45.0</index>
 					<size>0.6</size>
 					<list>3</list>
@@ -6098,7 +6098,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CONTROL_RC">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -6130,7 +6130,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CONTROL_RC">
+				<physicalInteger groupId="">
 					<index>174.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6151,7 +6151,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_TEMPERATUR_RC">
+				<physicalInteger groupId="">
 					<index>173.0</index>
 					<size>0.6</size>
 					<list>3</list>
@@ -6165,13 +6165,13 @@
 		<linkParameters id="cc_rt_ch_tc_link-2"/>
 		<linkParameters id="cc_rt_ch_wsr_link-3">
 			<parameter id="SHORT_COND_VALUE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>50</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_VALUE_LO">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6192,7 +6192,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>12.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WINDOW_OPEN_VALUE">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>0.6</size>
 					<list>7</list>

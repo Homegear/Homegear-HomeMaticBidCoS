@@ -149,9 +149,9 @@
 	<parameterGroups>
 		<configParameters id="remote4dis_ch_master-1">
 			<parameter id="TEXT1">
-				<properties>10.0</properties>
+				<properties/>
 				<logicalString/>
-				<physicalString groupId="TEXT1">
+				<physicalString groupId="">
 					<index>54.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -159,9 +159,9 @@
 				</physicalString>
 			</parameter>
 			<parameter id="TEXT2">
-				<properties>configString</properties>
+				<properties/>
 				<logicalString/>
-				<physicalString groupId="TEXT2">
+				<physicalString groupId="">
 					<index>70.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -182,11 +182,11 @@
 		</configParameters>
 		<configParameters id="remote_dev_master-0">
 			<parameter id="LOCAL_RESET_DISABLE">
-				<properties>internal</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -202,7 +202,7 @@
 					<maximumValue>120</maximumValue>
 					<defaultValue>5</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="STANDBY_TIME">
+				<physicalInteger groupId="">
 					<index>14.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -210,7 +210,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LANGUAGE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -222,7 +222,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LANGUAGE">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -230,13 +230,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="WAKEUP_DEFAULT_CHANNEL">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>20</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="WAKEUP_DEFAULT_CHANNEL">
+				<physicalInteger groupId="">
 					<index>32.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -244,11 +244,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="WAKEUP_BEHAVIOUR">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="WAKEUP_BEHAVIOUR">
+				<physicalInteger groupId="">
 					<index>33.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -262,7 +262,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -503,11 +503,11 @@
 		</variables>
 		<linkParameters id="remote4dis_ch_link-1">
 			<parameter id="PEER_NEEDS_BURST">
-				<properties>event</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="PEER_NEEDS_BURST">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -515,12 +515,12 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="EXPECT_AES">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="EXPECT_AES">
+				<physicalInteger groupId="">
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

@@ -31,6 +31,7 @@
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 #include "PhysicalInterfaces/COC.h"
 #include "PhysicalInterfaces/CUL.h"
+#include "PhysicalInterfaces/CulAes.h"
 #include "PhysicalInterfaces/CUNO.h"
 #include "PhysicalInterfaces/TICC1100.h"
 #include "PhysicalInterfaces/TICC1101.h"
@@ -121,6 +122,7 @@ std::shared_ptr<BaseLib::Systems::IPhysicalInterface> BidCoS::createPhysicalDevi
 		std::shared_ptr<IBidCoSInterface> device;
 		if(!settings) return device;
 		if(settings->type == "cul") device.reset(new CUL(settings));
+		else if(settings->type == "culaes") device.reset(new CulAes(settings));
 		else if(settings->type == "coc") device.reset(new COC(settings));
 		else if(settings->type == "cuno") device.reset(new CUNO(settings));
 #ifdef SPIINTERFACES

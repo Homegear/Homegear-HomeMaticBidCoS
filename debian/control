@@ -1,0 +1,14 @@
+Source: homegear-homematicbidcos
+Maintainer: Sathya Laufer <sathya@laufers.net>
+Section: misc
+Priority: optional
+Standards-Version: 3.9.6
+Build-Depends: debhelper (>= 8), libhomegear-base (= <BASELIBVER>), libgcrypt20-dev, libgpg-error-dev (>= 1.10), libgnutls28-dev
+Homepage: https://homegear.eu
+
+Package: homegear-homematicbidcos
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libhomegear-base (= <BASELIBVER>), homegear (= <BASELIBVER>), libgcrypt20, libgnutlsxx28, libgpg-error0 (>= 1.10)
+Description: HomeMatic BidCoS module for Homegear
+ Homegear is a program to interface your home automation software 
+ with your smart home devices.

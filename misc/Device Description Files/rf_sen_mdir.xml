@@ -117,7 +117,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -137,7 +137,7 @@
 					<maximumValue>7.500000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="EVENT_FILTER_PERIOD">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -145,13 +145,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="EVENT_FILTER_NUMBER">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>15</maximumValue>
 					<defaultValue>1</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="EVENT_FILTER_NUMBER">
+				<physicalInteger groupId="">
 					<index>1.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -159,11 +159,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="CAPTURE_WITHIN_INTERVAL">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="CAPTURE_WITHIN_INTERVAL">
+				<physicalInteger groupId="">
 					<index>2.3</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -171,13 +171,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="MIN_INTERVAL">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>4</maximumValue>
 					<defaultValue>4</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="MIN_INTERVAL">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>0.3</size>
 					<list>1</list>
@@ -185,13 +185,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BRIGHTNESS_FILTER">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>7</maximumValue>
 					<defaultValue>7</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="BRIGHTNESS_FILTER">
+				<physicalInteger groupId="">
 					<index>2.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -223,7 +223,7 @@
 					<maximumValue>1.275000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LED_ONTIME">
+				<physicalInteger groupId="">
 					<index>34.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -309,7 +309,7 @@
 					<internal>true</internal>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="ENTER_BOOTLOADER">
+				<physicalInteger groupId="">
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -452,11 +452,11 @@
 		</variables>
 		<linkParameters id="md_ch_link-1">
 			<parameter id="PEER_NEEDS_BURST">
-				<properties>event</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="PEER_NEEDS_BURST">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>

@@ -157,6 +157,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         void saveVariablesToReset();
         void savePendingQueues();
         bool aesEnabled();
+        bool aesEnabled(int32_t channel);
         void checkAESKey(bool onlyPushing = false);
         void deletePairedVirtualDevice(int32_t address);
         void deletePairedVirtualDevices();

@@ -132,10 +132,11 @@ am_mod_homematicbidcos_la_OBJECTS = BidCoSMessages.lo BidCoSMessage.lo \
 	PhysicalInterfaces/HM-CFG-LAN.lo \
 	PhysicalInterfaces/RTLSDR-LAN.lo \
 	PhysicalInterfaces/IBidCoSInterface.lo \
-	PhysicalInterfaces/CUL.lo PhysicalInterfaces/TICC1101.lo \
-	PhysicalInterfaces/TICC1100.lo PhysicalInterfaces/HM-LGW.lo \
-	PhysicalInterfaces/COC.lo BidCoSPacket.lo \
-	BidCoSQueueManager.lo BidCoSQueue.lo
+	PhysicalInterfaces/CUL.lo PhysicalInterfaces/CulAes.lo \
+	PhysicalInterfaces/TICC1101.lo PhysicalInterfaces/TICC1100.lo \
+	PhysicalInterfaces/AesHandshake.lo \
+	PhysicalInterfaces/HM-LGW.lo PhysicalInterfaces/COC.lo \
+	BidCoSPacket.lo BidCoSQueueManager.lo BidCoSQueue.lo
 mod_homematicbidcos_la_OBJECTS = $(am_mod_homematicbidcos_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
@@ -358,16 +359,19 @@ mod_homematicbidcos_la_SOURCES = HomeMaticDevice.h BidCoSPeer.h \
 	delegate.hpp GD.cpp BidCoSQueue.h BidCoSPacket.h \
 	HomeMaticDevice.cpp BidCoSQueueManager.h delegate_template.hpp \
 	PendingBidCoSQueues.h Factory.h delegate_list.hpp \
-	PhysicalInterfaces PhysicalInterfaces/HM-LGW.h \
-	PhysicalInterfaces/CUL.h PhysicalInterfaces/HM-CFG-LAN.h \
-	PhysicalInterfaces/CUNO.cpp PhysicalInterfaces/HM-CFG-LAN.cpp \
+	PhysicalInterfaces/AesHandshake.h PhysicalInterfaces/HM-LGW.h \
+	PhysicalInterfaces/CUL.h PhysicalInterfaces/CulAes.h \
+	PhysicalInterfaces/HM-CFG-LAN.h PhysicalInterfaces/CUNO.cpp \
+	PhysicalInterfaces/HM-CFG-LAN.cpp \
 	PhysicalInterfaces/RTLSDR-LAN.h \
 	PhysicalInterfaces/RTLSDR-LAN.cpp PhysicalInterfaces/CUNO.h \
 	PhysicalInterfaces/IBidCoSInterface.h \
 	PhysicalInterfaces/IBidCoSInterface.cpp \
-	PhysicalInterfaces/CUL.cpp PhysicalInterfaces/TICC1101.cpp \
-	PhysicalInterfaces/TICC1100.h PhysicalInterfaces/TICC1101.h \
-	PhysicalInterfaces/COC.h PhysicalInterfaces/TICC1100.cpp \
+	PhysicalInterfaces/CUL.cpp PhysicalInterfaces/CulAes.cpp \
+	PhysicalInterfaces/TICC1101.cpp PhysicalInterfaces/TICC1100.h \
+	PhysicalInterfaces/TICC1101.h PhysicalInterfaces/COC.h \
+	PhysicalInterfaces/TICC1100.cpp \
+	PhysicalInterfaces/AesHandshake.cpp \
 	PhysicalInterfaces/HM-LGW.cpp PhysicalInterfaces/COC.cpp \
 	BidCoSPacket.cpp BidCoSPacketManager.h BidCoSDeviceTypes.h \
 	BidCoS.h BidCoSQueueManager.cpp BidCoSMessage.h \
@@ -475,9 +479,14 @@ PhysicalInterfaces/IBidCoSInterface.lo:  \
 	PhysicalInterfaces/$(DEPDIR)/$(am__dirstamp)
 PhysicalInterfaces/CUL.lo: PhysicalInterfaces/$(am__dirstamp) \
 	PhysicalInterfaces/$(DEPDIR)/$(am__dirstamp)
+PhysicalInterfaces/CulAes.lo: PhysicalInterfaces/$(am__dirstamp) \
+	PhysicalInterfaces/$(DEPDIR)/$(am__dirstamp)
 PhysicalInterfaces/TICC1101.lo: PhysicalInterfaces/$(am__dirstamp) \
 	PhysicalInterfaces/$(DEPDIR)/$(am__dirstamp)
 PhysicalInterfaces/TICC1100.lo: PhysicalInterfaces/$(am__dirstamp) \
+	PhysicalInterfaces/$(DEPDIR)/$(am__dirstamp)
+PhysicalInterfaces/AesHandshake.lo:  \
+	PhysicalInterfaces/$(am__dirstamp) \
 	PhysicalInterfaces/$(DEPDIR)/$(am__dirstamp)
 PhysicalInterfaces/HM-LGW.lo: PhysicalInterfaces/$(am__dirstamp) \
 	PhysicalInterfaces/$(DEPDIR)/$(am__dirstamp)
@@ -514,9 +523,11 @@ include Devices/$(DEPDIR)/HM-CC-VD.Plo
 include Devices/$(DEPDIR)/HM-LC-SwX-FM.Plo
 include Devices/$(DEPDIR)/HM-SD.Plo
 include Devices/$(DEPDIR)/HomeMaticCentral.Plo
+include PhysicalInterfaces/$(DEPDIR)/AesHandshake.Plo
 include PhysicalInterfaces/$(DEPDIR)/COC.Plo
 include PhysicalInterfaces/$(DEPDIR)/CUL.Plo
 include PhysicalInterfaces/$(DEPDIR)/CUNO.Plo
+include PhysicalInterfaces/$(DEPDIR)/CulAes.Plo
 include PhysicalInterfaces/$(DEPDIR)/HM-CFG-LAN.Plo
 include PhysicalInterfaces/$(DEPDIR)/HM-LGW.Plo
 include PhysicalInterfaces/$(DEPDIR)/IBidCoSInterface.Plo

@@ -321,7 +321,8 @@ Devices/HM-CC-VD.lo: Devices/HM-CC-VD.cpp /usr/include/stdc-predef.h \
  /usr/include/homegear-base/Output/Output.h \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
- /usr/include/homegear-base/Variable.h Devices/../BidCoSQueue.h \
+ /usr/include/homegear-base/Variable.h \
+ /usr/include/homegear-base/IQueue.h Devices/../BidCoSQueue.h \
  Devices/../delegate.hpp Devices/../delegate_list.hpp \
  Devices/../delegate_template.hpp Devices/../BidCoSPacket.h \
  Devices/../PhysicalInterfaces/IBidCoSInterface.h \
@@ -1117,6 +1118,8 @@ Devices/../HomeMaticDevice.h:
 /usr/include/homegear-base/Encoding/HTTP.h:
 
 /usr/include/homegear-base/Variable.h:
+
+/usr/include/homegear-base/IQueue.h:
 
 Devices/../BidCoSQueue.h:
 

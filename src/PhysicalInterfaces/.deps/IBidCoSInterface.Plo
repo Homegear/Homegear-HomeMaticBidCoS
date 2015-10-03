@@ -322,7 +322,8 @@ PhysicalInterfaces/IBidCoSInterface.lo: \
  /usr/include/homegear-base/Output/Output.h \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
- /usr/include/homegear-base/Variable.h PhysicalInterfaces/../GD.h \
+ /usr/include/homegear-base/Variable.h \
+ /usr/include/homegear-base/IQueue.h PhysicalInterfaces/../GD.h \
  PhysicalInterfaces/../PhysicalInterfaces/IBidCoSInterface.h \
  PhysicalInterfaces/../BidCoS.h /usr/include/homegear-base/BaseLib.h
 
@@ -1109,6 +1110,8 @@ PhysicalInterfaces/IBidCoSInterface.h:
 /usr/include/homegear-base/Encoding/HTTP.h:
 
 /usr/include/homegear-base/Variable.h:
+
+/usr/include/homegear-base/IQueue.h:
 
 PhysicalInterfaces/../GD.h:
 

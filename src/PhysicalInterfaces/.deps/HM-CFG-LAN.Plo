@@ -323,6 +323,7 @@ PhysicalInterfaces/HM-CFG-LAN.lo: PhysicalInterfaces/HM-CFG-LAN.cpp \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
  /usr/include/homegear-base/Variable.h \
+ /usr/include/homegear-base/IQueue.h \
  PhysicalInterfaces/IBidCoSInterface.h \
  /usr/include/homegear-base/BaseLib.h PhysicalInterfaces/../GD.h \
  PhysicalInterfaces/../PhysicalInterfaces/IBidCoSInterface.h \
@@ -1113,6 +1114,8 @@ PhysicalInterfaces/../BidCoSPacket.h:
 /usr/include/homegear-base/Encoding/HTTP.h:
 
 /usr/include/homegear-base/Variable.h:
+
+/usr/include/homegear-base/IQueue.h:
 
 PhysicalInterfaces/IBidCoSInterface.h:
 

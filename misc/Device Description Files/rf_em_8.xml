@@ -231,13 +231,13 @@
 	<parameterGroups>
 		<configParameters id="remoteModEM8_ch_master-1">
 			<parameter id="TRANSMIT_TRY_MAX">
-				<properties>10.0</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -259,7 +259,7 @@
 					<maximumValue>1.800000</maximumValue>
 					<defaultValue>0.400000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_PRESS_TIME">
+				<physicalInteger groupId="">
 					<index>4.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -381,13 +381,13 @@
 		</configParameters>
 		<configParameters id="remote_dev_master-0">
 			<parameter id="TRANSMIT_DEV_TRY_MAX">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_DEV_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -421,7 +421,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DEVICE_LED_MODE">
+				<physicalInteger groupId="">
 					<index>5.6</index>
 					<size>0.2</size>
 					<list>0</list>
@@ -442,7 +442,7 @@
 					<maximumValue>12.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LOW_BAT_LIMIT">
+				<physicalInteger groupId="">
 					<index>18.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -450,13 +450,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="TRANSMIT_DEV_TRY_MAX">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_DEV_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -464,11 +464,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LOCAL_RESET_DISABLE">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -482,7 +482,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -710,11 +710,11 @@
 		</variables>
 		<linkParameters id="remoteModEM8_ch_link-1">
 			<parameter id="PEER_NEEDS_BURST">
-				<properties>event</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="PEER_NEEDS_BURST">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -722,12 +722,12 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="EXPECT_AES">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="EXPECT_AES">
+				<physicalInteger groupId="">
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

@@ -81,10 +81,11 @@ subdir = .
 DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(srcdir)/config.h.in cfg/compile cfg/config.guess \
-	cfg/config.sub cfg/install-sh cfg/missing cfg/ltmain.sh \
-	$(top_srcdir)/cfg/compile $(top_srcdir)/cfg/config.guess \
-	$(top_srcdir)/cfg/config.sub $(top_srcdir)/cfg/install-sh \
-	$(top_srcdir)/cfg/ltmain.sh $(top_srcdir)/cfg/missing
+	cfg/config.sub cfg/depcomp cfg/install-sh cfg/missing \
+	cfg/ltmain.sh $(top_srcdir)/cfg/compile \
+	$(top_srcdir)/cfg/config.guess $(top_srcdir)/cfg/config.sub \
+	$(top_srcdir)/cfg/install-sh $(top_srcdir)/cfg/ltmain.sh \
+	$(top_srcdir)/cfg/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \

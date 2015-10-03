@@ -1507,7 +1507,37 @@ bool BidCoSPeer::aesEnabled()
 	{
 		for(std::unordered_map<uint32_t, std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>>::const_iterator i = configCentral.begin(); i != configCentral.end(); ++i)
 		{
-			if(i->second.find("AES_ACTIVE") != i->second.end() && !i->second.at("AES_ACTIVE").data.empty() && (bool)i->second.at("AES_ACTIVE").data.at(0))
+			std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>::const_iterator parameterIterator = i->second.find("AES_ACTIVE");
+			if(parameterIterator != i->second.end() && !parameterIterator->second.data.empty() && (bool)parameterIterator->second.data.at(0))
+			{
+				return true;
+			}
+		}
+	}
+	catch(const std::exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+    return false;
+}
+
+bool BidCoSPeer::aesEnabled(int32_t channel)
+{
+	try
+	{
+		std::unordered_map<uint32_t, std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>>::const_iterator channelIterator = configCentral.find(channel);
+		if(channelIterator != configCentral.end())
+		{
+			std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>::const_iterator parameterIterator = channelIterator->second.find("AES_ACTIVE");
+			if(parameterIterator != channelIterator->second.end() && !parameterIterator->second.data.empty() && (bool)parameterIterator->second.data.at(0))
 			{
 				return true;
 			}
@@ -2356,6 +2386,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 		if(!packet) return;
 		if(!_centralFeatures || _disposing) return;
 		if(packet->senderAddress() != _address && (!hasTeam() || packet->senderAddress() != _team.address || packet->destinationAddress() == getCentral()->physicalAddress())) return;
+		if(packet->destinationAddress() != getCentral()->physicalAddress() && aesEnabled()) return;
 		if(!_rpcDevice) return;
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		if(!central) return;
@@ -2384,6 +2415,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 			{
 				for(std::list<uint32_t>::const_iterator j = a->paramsetChannels.begin(); j != a->paramsetChannels.end(); ++j)
 				{
+					if(packet->messageType() == 0x02 && aesEnabled(*j) && !packet->validAesAck()) continue;
 					if(std::find(i->second.channels.begin(), i->second.channels.end(), *j) == i->second.channels.end()) continue;
 					if(pendingBidCoSQueues->exists(BidCoSQueueType::PEER, i->first, *j)) continue; //Don't set queued values
 					if(!valueKeys[*j] || !rpcValues[*j])
@@ -2453,6 +2485,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 			{
 				for(std::list<uint32_t>::const_iterator j = a->paramsetChannels.begin(); j != a->paramsetChannels.end(); ++j)
 				{
+					if(packet->messageType() == 0x02 && aesEnabled(*j) && !packet->validAesAck()) continue;
 					if(std::find(i->second.channels.begin(), i->second.channels.end(), *j) == i->second.channels.end()) continue;
 					handleDominoEvent(_rpcDevice->functions.at(*j)->getParameterGroup(a->parameterSetType)->parameters.at(i->first), a->frameID, *j);
 				}
@@ -3316,7 +3349,7 @@ PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string v
 		else if(rpcParameter->physical->operationType != IPhysical::OperationType::Enum::command) return Variable::createError(-6, "Parameter is not settable.");
 		//_resendCounter[valueKey] = 0;
 		PToggle toggleCast;
-		if(rpcParameter->casts.empty()) toggleCast = std::dynamic_pointer_cast<Toggle>(rpcParameter->casts.at(0));
+		if(!rpcParameter->casts.empty()) toggleCast = std::dynamic_pointer_cast<Toggle>(rpcParameter->casts.at(0));
 		if(toggleCast)
 		{
 			//Handle toggle parameter

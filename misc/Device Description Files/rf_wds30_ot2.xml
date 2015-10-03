@@ -106,11 +106,11 @@
 		<configParameters id="wds30ot2_ch_master-5"/>
 		<configParameters id="wds30ot2_dev_master-0">
 			<parameter id="WAKE_ON_RADIO">
-				<properties>0.1</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BURST_RX">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -118,7 +118,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="PARAM_SELECT">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>3</defaultValue>
 					<value>
@@ -142,7 +142,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="PARAM_SELECT">
+				<physicalInteger groupId="">
 					<index>27.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -150,13 +150,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="CYCLIC_INFO_MSG_DIS">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="CYCLIC_INFO_MSG_DIS">
+				<physicalInteger groupId="">
 					<index>17.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -164,11 +164,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LOCAL_RESET_DISABLE">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -182,7 +182,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>

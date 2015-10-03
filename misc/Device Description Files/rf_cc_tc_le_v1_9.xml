@@ -139,7 +139,7 @@
 	<parameterGroups>
 		<configParameters id="cc_tc_ch_master_le_v1_9-2">
 			<parameter id="DISPLAY_TEMPERATUR_INFORMATION">
-				<properties>11.0</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -151,7 +151,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DISPLAY_TEMPERATUR_INFORMATION">
+				<physicalInteger groupId="">
 					<index>1.1</index>
 					<size>0.1</size>
 					<list>5</list>
@@ -159,7 +159,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="DISPLAY_TEMPERATUR_UNIT">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -171,7 +171,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DISPLAY_TEMPERATUR_UNIT">
+				<physicalInteger groupId="">
 					<index>1.2</index>
 					<size>0.1</size>
 					<list>5</list>
@@ -179,7 +179,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="MODE_TEMPERATUR_REGULATOR">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -199,7 +199,7 @@
 						<index>3</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="MODE_TEMPERATUR_REGULATOR">
+				<physicalInteger groupId="">
 					<index>1.3</index>
 					<size>0.2</size>
 					<list>5</list>
@@ -207,7 +207,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="MODE_TEMPERATUR_VALVE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -223,7 +223,7 @@
 						<index>2</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="MODE_TEMPERATUR_VALVE">
+				<physicalInteger groupId="">
 					<index>2.6</index>
 					<size>0.2</size>
 					<list>5</list>
@@ -231,7 +231,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="DISPLAY_TEMPERATUR_HUMIDITY_CHANGE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -243,7 +243,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DISPLAY_TEMPERATUR_HUMIDITY_CHANGE">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>5</list>
@@ -264,7 +264,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_COMFORT_VALUE">
+				<physicalInteger groupId="">
 					<index>3.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -285,7 +285,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_LOWERING_VALUE">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -312,7 +312,7 @@
 					<maximumValue>3672.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="PARTY_END_TIME">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -333,7 +333,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_PARTY_VALUE">
+				<physicalInteger groupId="">
 					<index>6.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -341,7 +341,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="DECALCIFICATION_DAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -373,7 +373,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DECALCIFICATION_DAY">
+				<physicalInteger groupId="">
 					<index>1.5</index>
 					<size>0.3</size>
 					<list>5</list>
@@ -389,7 +389,7 @@
 					<maximumValue>23</maximumValue>
 					<defaultValue>11</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="DECALCIFICATION_HOUR">
+				<physicalInteger groupId="">
 					<index>8.3</index>
 					<size>0.5</size>
 					<list>5</list>
@@ -410,7 +410,7 @@
 					<maximumValue>50</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="DECALCIFICATION_MINUTE">
+				<physicalInteger groupId="">
 					<index>8.0</index>
 					<size>0.3</size>
 					<list>5</list>
@@ -431,7 +431,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_1">
+				<physicalInteger groupId="">
 					<index>11.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -452,7 +452,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_1">
+				<physicalInteger groupId="">
 					<index>12.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -473,7 +473,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1380</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_2">
+				<physicalInteger groupId="">
 					<index>13.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -494,7 +494,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_2">
+				<physicalInteger groupId="">
 					<index>14.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -515,7 +515,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_3">
+				<physicalInteger groupId="">
 					<index>15.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -536,7 +536,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_3">
+				<physicalInteger groupId="">
 					<index>16.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -557,7 +557,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_4">
+				<physicalInteger groupId="">
 					<index>17.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -578,7 +578,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_4">
+				<physicalInteger groupId="">
 					<index>18.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -599,7 +599,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_5">
+				<physicalInteger groupId="">
 					<index>19.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -620,7 +620,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_5">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -641,7 +641,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_6">
+				<physicalInteger groupId="">
 					<index>21.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -662,7 +662,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_6">
+				<physicalInteger groupId="">
 					<index>22.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -683,7 +683,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_7">
+				<physicalInteger groupId="">
 					<index>23.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -704,7 +704,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_7">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -725,7 +725,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_8">
+				<physicalInteger groupId="">
 					<index>25.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -746,7 +746,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_8">
+				<physicalInteger groupId="">
 					<index>26.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -767,7 +767,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_9">
+				<physicalInteger groupId="">
 					<index>27.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -788,7 +788,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_9">
+				<physicalInteger groupId="">
 					<index>28.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -809,7 +809,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_10">
+				<physicalInteger groupId="">
 					<index>29.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -830,7 +830,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_10">
+				<physicalInteger groupId="">
 					<index>30.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -851,7 +851,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_11">
+				<physicalInteger groupId="">
 					<index>31.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -872,7 +872,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_11">
+				<physicalInteger groupId="">
 					<index>32.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -893,7 +893,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_12">
+				<physicalInteger groupId="">
 					<index>33.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -914,7 +914,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_12">
+				<physicalInteger groupId="">
 					<index>34.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -935,7 +935,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_13">
+				<physicalInteger groupId="">
 					<index>35.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -956,7 +956,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_13">
+				<physicalInteger groupId="">
 					<index>36.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -977,7 +977,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_14">
+				<physicalInteger groupId="">
 					<index>37.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -998,7 +998,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_14">
+				<physicalInteger groupId="">
 					<index>38.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1019,7 +1019,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_15">
+				<physicalInteger groupId="">
 					<index>39.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1040,7 +1040,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_15">
+				<physicalInteger groupId="">
 					<index>40.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1061,7 +1061,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_16">
+				<physicalInteger groupId="">
 					<index>41.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1082,7 +1082,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_16">
+				<physicalInteger groupId="">
 					<index>42.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1103,7 +1103,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_17">
+				<physicalInteger groupId="">
 					<index>43.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1124,7 +1124,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_17">
+				<physicalInteger groupId="">
 					<index>44.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1145,7 +1145,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_18">
+				<physicalInteger groupId="">
 					<index>45.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1166,7 +1166,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_18">
+				<physicalInteger groupId="">
 					<index>46.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1187,7 +1187,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_19">
+				<physicalInteger groupId="">
 					<index>47.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1208,7 +1208,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_19">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1229,7 +1229,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_20">
+				<physicalInteger groupId="">
 					<index>49.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1250,7 +1250,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_20">
+				<physicalInteger groupId="">
 					<index>50.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1271,7 +1271,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_21">
+				<physicalInteger groupId="">
 					<index>51.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1292,7 +1292,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_21">
+				<physicalInteger groupId="">
 					<index>52.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1313,7 +1313,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_22">
+				<physicalInteger groupId="">
 					<index>53.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1334,7 +1334,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_22">
+				<physicalInteger groupId="">
 					<index>54.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1355,7 +1355,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_23">
+				<physicalInteger groupId="">
 					<index>55.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1376,7 +1376,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_23">
+				<physicalInteger groupId="">
 					<index>56.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1397,7 +1397,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SATURDAY_24">
+				<physicalInteger groupId="">
 					<index>57.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1418,7 +1418,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SATURDAY_24">
+				<physicalInteger groupId="">
 					<index>58.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1439,7 +1439,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_1">
+				<physicalInteger groupId="">
 					<index>59.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1460,7 +1460,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_1">
+				<physicalInteger groupId="">
 					<index>60.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1481,7 +1481,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1380</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_2">
+				<physicalInteger groupId="">
 					<index>61.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1502,7 +1502,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_2">
+				<physicalInteger groupId="">
 					<index>62.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1523,7 +1523,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_3">
+				<physicalInteger groupId="">
 					<index>63.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1544,7 +1544,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_3">
+				<physicalInteger groupId="">
 					<index>64.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1565,7 +1565,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_4">
+				<physicalInteger groupId="">
 					<index>65.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1586,7 +1586,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_4">
+				<physicalInteger groupId="">
 					<index>66.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1607,7 +1607,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_5">
+				<physicalInteger groupId="">
 					<index>67.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1628,7 +1628,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_5">
+				<physicalInteger groupId="">
 					<index>68.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1649,7 +1649,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_6">
+				<physicalInteger groupId="">
 					<index>69.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1670,7 +1670,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_6">
+				<physicalInteger groupId="">
 					<index>70.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1691,7 +1691,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_7">
+				<physicalInteger groupId="">
 					<index>71.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1712,7 +1712,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_7">
+				<physicalInteger groupId="">
 					<index>72.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1733,7 +1733,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_8">
+				<physicalInteger groupId="">
 					<index>73.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1754,7 +1754,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_8">
+				<physicalInteger groupId="">
 					<index>74.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1775,7 +1775,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_9">
+				<physicalInteger groupId="">
 					<index>75.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1796,7 +1796,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_9">
+				<physicalInteger groupId="">
 					<index>76.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1817,7 +1817,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_10">
+				<physicalInteger groupId="">
 					<index>77.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1838,7 +1838,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_10">
+				<physicalInteger groupId="">
 					<index>78.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1859,7 +1859,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_11">
+				<physicalInteger groupId="">
 					<index>79.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1880,7 +1880,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_11">
+				<physicalInteger groupId="">
 					<index>80.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1901,7 +1901,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_12">
+				<physicalInteger groupId="">
 					<index>81.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1922,7 +1922,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_12">
+				<physicalInteger groupId="">
 					<index>82.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1943,7 +1943,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_13">
+				<physicalInteger groupId="">
 					<index>83.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -1964,7 +1964,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_13">
+				<physicalInteger groupId="">
 					<index>84.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -1985,7 +1985,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_14">
+				<physicalInteger groupId="">
 					<index>85.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2006,7 +2006,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_14">
+				<physicalInteger groupId="">
 					<index>86.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2027,7 +2027,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_15">
+				<physicalInteger groupId="">
 					<index>87.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2048,7 +2048,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_15">
+				<physicalInteger groupId="">
 					<index>88.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2069,7 +2069,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_16">
+				<physicalInteger groupId="">
 					<index>89.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2090,7 +2090,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_16">
+				<physicalInteger groupId="">
 					<index>90.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2111,7 +2111,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_17">
+				<physicalInteger groupId="">
 					<index>91.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2132,7 +2132,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_17">
+				<physicalInteger groupId="">
 					<index>92.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2153,7 +2153,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_18">
+				<physicalInteger groupId="">
 					<index>93.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2174,7 +2174,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_18">
+				<physicalInteger groupId="">
 					<index>94.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2195,7 +2195,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_19">
+				<physicalInteger groupId="">
 					<index>95.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2216,7 +2216,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_19">
+				<physicalInteger groupId="">
 					<index>96.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2237,7 +2237,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_20">
+				<physicalInteger groupId="">
 					<index>97.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2258,7 +2258,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_20">
+				<physicalInteger groupId="">
 					<index>98.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2279,7 +2279,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_21">
+				<physicalInteger groupId="">
 					<index>99.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2300,7 +2300,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_21">
+				<physicalInteger groupId="">
 					<index>100.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2321,7 +2321,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_22">
+				<physicalInteger groupId="">
 					<index>101.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2342,7 +2342,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_22">
+				<physicalInteger groupId="">
 					<index>102.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2363,7 +2363,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_23">
+				<physicalInteger groupId="">
 					<index>103.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2384,7 +2384,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_23">
+				<physicalInteger groupId="">
 					<index>104.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2405,7 +2405,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_SUNDAY_24">
+				<physicalInteger groupId="">
 					<index>105.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2426,7 +2426,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_SUNDAY_24">
+				<physicalInteger groupId="">
 					<index>106.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2447,7 +2447,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_1">
+				<physicalInteger groupId="">
 					<index>107.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2468,7 +2468,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_1">
+				<physicalInteger groupId="">
 					<index>108.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2489,7 +2489,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1380</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_2">
+				<physicalInteger groupId="">
 					<index>109.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2510,7 +2510,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_2">
+				<physicalInteger groupId="">
 					<index>110.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2531,7 +2531,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_3">
+				<physicalInteger groupId="">
 					<index>111.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2552,7 +2552,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_3">
+				<physicalInteger groupId="">
 					<index>112.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2573,7 +2573,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_4">
+				<physicalInteger groupId="">
 					<index>113.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2594,7 +2594,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_4">
+				<physicalInteger groupId="">
 					<index>114.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2615,7 +2615,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_5">
+				<physicalInteger groupId="">
 					<index>115.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2636,7 +2636,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_5">
+				<physicalInteger groupId="">
 					<index>116.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2657,7 +2657,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_6">
+				<physicalInteger groupId="">
 					<index>117.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2678,7 +2678,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_6">
+				<physicalInteger groupId="">
 					<index>118.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2699,7 +2699,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_7">
+				<physicalInteger groupId="">
 					<index>119.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2720,7 +2720,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_7">
+				<physicalInteger groupId="">
 					<index>120.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2741,7 +2741,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_8">
+				<physicalInteger groupId="">
 					<index>121.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2762,7 +2762,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_8">
+				<physicalInteger groupId="">
 					<index>122.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2783,7 +2783,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_9">
+				<physicalInteger groupId="">
 					<index>123.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2804,7 +2804,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_9">
+				<physicalInteger groupId="">
 					<index>124.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2825,7 +2825,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_10">
+				<physicalInteger groupId="">
 					<index>125.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2846,7 +2846,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_10">
+				<physicalInteger groupId="">
 					<index>126.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2867,7 +2867,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_11">
+				<physicalInteger groupId="">
 					<index>127.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2888,7 +2888,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_11">
+				<physicalInteger groupId="">
 					<index>128.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2909,7 +2909,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_12">
+				<physicalInteger groupId="">
 					<index>129.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2930,7 +2930,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_12">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2951,7 +2951,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_13">
+				<physicalInteger groupId="">
 					<index>131.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -2972,7 +2972,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_13">
+				<physicalInteger groupId="">
 					<index>132.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -2993,7 +2993,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_14">
+				<physicalInteger groupId="">
 					<index>133.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3014,7 +3014,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_14">
+				<physicalInteger groupId="">
 					<index>134.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3035,7 +3035,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_15">
+				<physicalInteger groupId="">
 					<index>135.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3056,7 +3056,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_15">
+				<physicalInteger groupId="">
 					<index>136.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3077,7 +3077,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_16">
+				<physicalInteger groupId="">
 					<index>137.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3098,7 +3098,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_16">
+				<physicalInteger groupId="">
 					<index>138.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3119,7 +3119,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_17">
+				<physicalInteger groupId="">
 					<index>139.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3140,7 +3140,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_17">
+				<physicalInteger groupId="">
 					<index>140.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3161,7 +3161,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_18">
+				<physicalInteger groupId="">
 					<index>141.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3182,7 +3182,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_18">
+				<physicalInteger groupId="">
 					<index>142.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3203,7 +3203,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_19">
+				<physicalInteger groupId="">
 					<index>143.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3224,7 +3224,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_19">
+				<physicalInteger groupId="">
 					<index>144.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3245,7 +3245,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_20">
+				<physicalInteger groupId="">
 					<index>145.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3266,7 +3266,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_20">
+				<physicalInteger groupId="">
 					<index>146.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3287,7 +3287,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_21">
+				<physicalInteger groupId="">
 					<index>147.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3308,7 +3308,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_21">
+				<physicalInteger groupId="">
 					<index>148.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3329,7 +3329,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_22">
+				<physicalInteger groupId="">
 					<index>149.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3350,7 +3350,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_22">
+				<physicalInteger groupId="">
 					<index>150.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3371,7 +3371,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_23">
+				<physicalInteger groupId="">
 					<index>151.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3392,7 +3392,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_23">
+				<physicalInteger groupId="">
 					<index>152.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3413,7 +3413,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_MONDAY_24">
+				<physicalInteger groupId="">
 					<index>153.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3434,7 +3434,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_MONDAY_24">
+				<physicalInteger groupId="">
 					<index>154.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3455,7 +3455,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_1">
+				<physicalInteger groupId="">
 					<index>155.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3476,7 +3476,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_1">
+				<physicalInteger groupId="">
 					<index>156.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3497,7 +3497,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1380</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_2">
+				<physicalInteger groupId="">
 					<index>157.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3518,7 +3518,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_2">
+				<physicalInteger groupId="">
 					<index>158.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3539,7 +3539,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_3">
+				<physicalInteger groupId="">
 					<index>159.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3560,7 +3560,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_3">
+				<physicalInteger groupId="">
 					<index>160.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3581,7 +3581,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_4">
+				<physicalInteger groupId="">
 					<index>161.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3602,7 +3602,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_4">
+				<physicalInteger groupId="">
 					<index>162.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3623,7 +3623,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_5">
+				<physicalInteger groupId="">
 					<index>163.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3644,7 +3644,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_5">
+				<physicalInteger groupId="">
 					<index>164.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3665,7 +3665,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_6">
+				<physicalInteger groupId="">
 					<index>165.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3686,7 +3686,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_6">
+				<physicalInteger groupId="">
 					<index>166.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3707,7 +3707,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_7">
+				<physicalInteger groupId="">
 					<index>167.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3728,7 +3728,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_7">
+				<physicalInteger groupId="">
 					<index>168.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3749,7 +3749,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_8">
+				<physicalInteger groupId="">
 					<index>169.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3770,7 +3770,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_8">
+				<physicalInteger groupId="">
 					<index>170.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3791,7 +3791,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_9">
+				<physicalInteger groupId="">
 					<index>171.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3812,7 +3812,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_9">
+				<physicalInteger groupId="">
 					<index>172.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3833,7 +3833,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_10">
+				<physicalInteger groupId="">
 					<index>173.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3854,7 +3854,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_10">
+				<physicalInteger groupId="">
 					<index>174.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3875,7 +3875,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_11">
+				<physicalInteger groupId="">
 					<index>175.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3896,7 +3896,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_11">
+				<physicalInteger groupId="">
 					<index>176.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3917,7 +3917,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_12">
+				<physicalInteger groupId="">
 					<index>177.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3938,7 +3938,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_12">
+				<physicalInteger groupId="">
 					<index>178.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -3959,7 +3959,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_13">
+				<physicalInteger groupId="">
 					<index>179.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -3980,7 +3980,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_13">
+				<physicalInteger groupId="">
 					<index>180.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4001,7 +4001,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_14">
+				<physicalInteger groupId="">
 					<index>181.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4022,7 +4022,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_14">
+				<physicalInteger groupId="">
 					<index>182.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4043,7 +4043,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_15">
+				<physicalInteger groupId="">
 					<index>183.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4064,7 +4064,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_15">
+				<physicalInteger groupId="">
 					<index>184.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4085,7 +4085,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_16">
+				<physicalInteger groupId="">
 					<index>185.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4106,7 +4106,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_16">
+				<physicalInteger groupId="">
 					<index>186.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4127,7 +4127,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_17">
+				<physicalInteger groupId="">
 					<index>187.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4148,7 +4148,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_17">
+				<physicalInteger groupId="">
 					<index>188.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4169,7 +4169,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_18">
+				<physicalInteger groupId="">
 					<index>189.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4190,7 +4190,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_18">
+				<physicalInteger groupId="">
 					<index>190.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4211,7 +4211,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_19">
+				<physicalInteger groupId="">
 					<index>191.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4232,7 +4232,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_19">
+				<physicalInteger groupId="">
 					<index>192.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4253,7 +4253,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_20">
+				<physicalInteger groupId="">
 					<index>193.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4274,7 +4274,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_20">
+				<physicalInteger groupId="">
 					<index>194.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4295,7 +4295,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_21">
+				<physicalInteger groupId="">
 					<index>195.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4316,7 +4316,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_21">
+				<physicalInteger groupId="">
 					<index>196.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4337,7 +4337,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_22">
+				<physicalInteger groupId="">
 					<index>197.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4358,7 +4358,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_22">
+				<physicalInteger groupId="">
 					<index>198.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4379,7 +4379,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_23">
+				<physicalInteger groupId="">
 					<index>199.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4400,7 +4400,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_23">
+				<physicalInteger groupId="">
 					<index>200.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4421,7 +4421,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_TUESDAY_24">
+				<physicalInteger groupId="">
 					<index>201.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4442,7 +4442,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_TUESDAY_24">
+				<physicalInteger groupId="">
 					<index>202.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4463,7 +4463,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_1">
+				<physicalInteger groupId="">
 					<index>203.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4484,7 +4484,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_1">
+				<physicalInteger groupId="">
 					<index>204.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4505,7 +4505,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1380</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_2">
+				<physicalInteger groupId="">
 					<index>205.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4526,7 +4526,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_2">
+				<physicalInteger groupId="">
 					<index>206.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4547,7 +4547,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_3">
+				<physicalInteger groupId="">
 					<index>207.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4568,7 +4568,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_3">
+				<physicalInteger groupId="">
 					<index>208.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4589,7 +4589,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_4">
+				<physicalInteger groupId="">
 					<index>209.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4610,7 +4610,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_4">
+				<physicalInteger groupId="">
 					<index>210.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4631,7 +4631,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_5">
+				<physicalInteger groupId="">
 					<index>211.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4652,7 +4652,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_5">
+				<physicalInteger groupId="">
 					<index>212.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4673,7 +4673,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_6">
+				<physicalInteger groupId="">
 					<index>213.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4694,7 +4694,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_6">
+				<physicalInteger groupId="">
 					<index>214.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4715,7 +4715,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_7">
+				<physicalInteger groupId="">
 					<index>215.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4736,7 +4736,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_7">
+				<physicalInteger groupId="">
 					<index>216.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4757,7 +4757,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_8">
+				<physicalInteger groupId="">
 					<index>217.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4778,7 +4778,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_8">
+				<physicalInteger groupId="">
 					<index>218.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4799,7 +4799,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_9">
+				<physicalInteger groupId="">
 					<index>219.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4820,7 +4820,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_9">
+				<physicalInteger groupId="">
 					<index>220.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4841,7 +4841,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_10">
+				<physicalInteger groupId="">
 					<index>221.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4862,7 +4862,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_10">
+				<physicalInteger groupId="">
 					<index>222.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4883,7 +4883,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_11">
+				<physicalInteger groupId="">
 					<index>223.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4904,7 +4904,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_11">
+				<physicalInteger groupId="">
 					<index>224.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4925,7 +4925,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_12">
+				<physicalInteger groupId="">
 					<index>225.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4946,7 +4946,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_12">
+				<physicalInteger groupId="">
 					<index>226.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -4967,7 +4967,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_13">
+				<physicalInteger groupId="">
 					<index>227.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -4988,7 +4988,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_13">
+				<physicalInteger groupId="">
 					<index>228.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5009,7 +5009,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_14">
+				<physicalInteger groupId="">
 					<index>229.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5030,7 +5030,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_14">
+				<physicalInteger groupId="">
 					<index>230.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5051,7 +5051,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_15">
+				<physicalInteger groupId="">
 					<index>231.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5072,7 +5072,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_15">
+				<physicalInteger groupId="">
 					<index>232.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5093,7 +5093,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_16">
+				<physicalInteger groupId="">
 					<index>233.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5114,7 +5114,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_16">
+				<physicalInteger groupId="">
 					<index>234.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5135,7 +5135,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_17">
+				<physicalInteger groupId="">
 					<index>235.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5156,7 +5156,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_17">
+				<physicalInteger groupId="">
 					<index>236.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5177,7 +5177,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_18">
+				<physicalInteger groupId="">
 					<index>237.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5198,7 +5198,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_18">
+				<physicalInteger groupId="">
 					<index>238.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5219,7 +5219,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_19">
+				<physicalInteger groupId="">
 					<index>239.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5240,7 +5240,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_19">
+				<physicalInteger groupId="">
 					<index>240.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5261,7 +5261,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_20">
+				<physicalInteger groupId="">
 					<index>241.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5282,7 +5282,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_20">
+				<physicalInteger groupId="">
 					<index>242.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5303,7 +5303,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_21">
+				<physicalInteger groupId="">
 					<index>243.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5324,7 +5324,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_21">
+				<physicalInteger groupId="">
 					<index>244.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5345,7 +5345,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_22">
+				<physicalInteger groupId="">
 					<index>245.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5366,7 +5366,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_22">
+				<physicalInteger groupId="">
 					<index>246.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5387,7 +5387,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_23">
+				<physicalInteger groupId="">
 					<index>247.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5408,7 +5408,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_23">
+				<physicalInteger groupId="">
 					<index>248.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5429,7 +5429,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_WEDNESDAY_24">
+				<physicalInteger groupId="">
 					<index>249.0</index>
 					<size>1.0</size>
 					<list>5</list>
@@ -5450,7 +5450,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WEDNESDAY_24">
+				<physicalInteger groupId="">
 					<index>250.0</index>
 					<size>0.6</size>
 					<list>5</list>
@@ -5471,7 +5471,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_1">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5492,7 +5492,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_1">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5513,7 +5513,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1380</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_2">
+				<physicalInteger groupId="">
 					<index>3.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5534,7 +5534,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_2">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5555,7 +5555,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_3">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5576,7 +5576,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_3">
+				<physicalInteger groupId="">
 					<index>6.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5597,7 +5597,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_4">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5618,7 +5618,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_4">
+				<physicalInteger groupId="">
 					<index>8.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5639,7 +5639,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_5">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5660,7 +5660,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_5">
+				<physicalInteger groupId="">
 					<index>10.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5681,7 +5681,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_6">
+				<physicalInteger groupId="">
 					<index>11.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5702,7 +5702,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_6">
+				<physicalInteger groupId="">
 					<index>12.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5723,7 +5723,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_7">
+				<physicalInteger groupId="">
 					<index>13.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5744,7 +5744,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_7">
+				<physicalInteger groupId="">
 					<index>14.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5765,7 +5765,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_8">
+				<physicalInteger groupId="">
 					<index>15.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5786,7 +5786,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_8">
+				<physicalInteger groupId="">
 					<index>16.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5807,7 +5807,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_9">
+				<physicalInteger groupId="">
 					<index>17.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5828,7 +5828,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_9">
+				<physicalInteger groupId="">
 					<index>18.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5849,7 +5849,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_10">
+				<physicalInteger groupId="">
 					<index>19.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5870,7 +5870,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_10">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5891,7 +5891,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_11">
+				<physicalInteger groupId="">
 					<index>21.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5912,7 +5912,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_11">
+				<physicalInteger groupId="">
 					<index>22.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5933,7 +5933,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_12">
+				<physicalInteger groupId="">
 					<index>23.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5954,7 +5954,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_12">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -5975,7 +5975,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_13">
+				<physicalInteger groupId="">
 					<index>25.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -5996,7 +5996,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_13">
+				<physicalInteger groupId="">
 					<index>26.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6017,7 +6017,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_14">
+				<physicalInteger groupId="">
 					<index>27.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6038,7 +6038,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_14">
+				<physicalInteger groupId="">
 					<index>28.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6059,7 +6059,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_15">
+				<physicalInteger groupId="">
 					<index>29.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6080,7 +6080,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_15">
+				<physicalInteger groupId="">
 					<index>30.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6101,7 +6101,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_16">
+				<physicalInteger groupId="">
 					<index>31.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6122,7 +6122,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_16">
+				<physicalInteger groupId="">
 					<index>32.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6143,7 +6143,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_17">
+				<physicalInteger groupId="">
 					<index>33.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6164,7 +6164,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_17">
+				<physicalInteger groupId="">
 					<index>34.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6185,7 +6185,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_18">
+				<physicalInteger groupId="">
 					<index>35.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6206,7 +6206,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_18">
+				<physicalInteger groupId="">
 					<index>36.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6227,7 +6227,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_19">
+				<physicalInteger groupId="">
 					<index>37.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6248,7 +6248,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_19">
+				<physicalInteger groupId="">
 					<index>38.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6269,7 +6269,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_20">
+				<physicalInteger groupId="">
 					<index>39.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6290,7 +6290,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_20">
+				<physicalInteger groupId="">
 					<index>40.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6311,7 +6311,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_21">
+				<physicalInteger groupId="">
 					<index>41.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6332,7 +6332,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_21">
+				<physicalInteger groupId="">
 					<index>42.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6353,7 +6353,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_22">
+				<physicalInteger groupId="">
 					<index>43.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6374,7 +6374,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_22">
+				<physicalInteger groupId="">
 					<index>44.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6395,7 +6395,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_23">
+				<physicalInteger groupId="">
 					<index>45.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6416,7 +6416,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_23">
+				<physicalInteger groupId="">
 					<index>46.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6437,7 +6437,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_THURSDAY_24">
+				<physicalInteger groupId="">
 					<index>47.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6458,7 +6458,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_THURSDAY_24">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6479,7 +6479,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_1">
+				<physicalInteger groupId="">
 					<index>49.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6500,7 +6500,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_1">
+				<physicalInteger groupId="">
 					<index>50.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6521,7 +6521,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>1380</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_2">
+				<physicalInteger groupId="">
 					<index>51.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6542,7 +6542,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>21.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_2">
+				<physicalInteger groupId="">
 					<index>52.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6563,7 +6563,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_3">
+				<physicalInteger groupId="">
 					<index>53.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6584,7 +6584,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>17.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_3">
+				<physicalInteger groupId="">
 					<index>54.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6605,7 +6605,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_4">
+				<physicalInteger groupId="">
 					<index>55.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6626,7 +6626,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_4">
+				<physicalInteger groupId="">
 					<index>56.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6647,7 +6647,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_5">
+				<physicalInteger groupId="">
 					<index>57.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6668,7 +6668,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_5">
+				<physicalInteger groupId="">
 					<index>58.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6689,7 +6689,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_6">
+				<physicalInteger groupId="">
 					<index>59.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6710,7 +6710,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_6">
+				<physicalInteger groupId="">
 					<index>60.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6731,7 +6731,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_7">
+				<physicalInteger groupId="">
 					<index>61.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6752,7 +6752,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_7">
+				<physicalInteger groupId="">
 					<index>62.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6773,7 +6773,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_8">
+				<physicalInteger groupId="">
 					<index>63.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6794,7 +6794,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_8">
+				<physicalInteger groupId="">
 					<index>64.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6815,7 +6815,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_9">
+				<physicalInteger groupId="">
 					<index>65.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6836,7 +6836,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_9">
+				<physicalInteger groupId="">
 					<index>66.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6857,7 +6857,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_10">
+				<physicalInteger groupId="">
 					<index>67.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6878,7 +6878,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_10">
+				<physicalInteger groupId="">
 					<index>68.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6899,7 +6899,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_11">
+				<physicalInteger groupId="">
 					<index>69.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6920,7 +6920,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_11">
+				<physicalInteger groupId="">
 					<index>70.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6941,7 +6941,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_12">
+				<physicalInteger groupId="">
 					<index>71.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -6962,7 +6962,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_12">
+				<physicalInteger groupId="">
 					<index>72.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -6983,7 +6983,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_13">
+				<physicalInteger groupId="">
 					<index>73.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7004,7 +7004,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_13">
+				<physicalInteger groupId="">
 					<index>74.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7025,7 +7025,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_14">
+				<physicalInteger groupId="">
 					<index>75.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7046,7 +7046,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_14">
+				<physicalInteger groupId="">
 					<index>76.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7067,7 +7067,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_15">
+				<physicalInteger groupId="">
 					<index>77.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7088,7 +7088,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_15">
+				<physicalInteger groupId="">
 					<index>78.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7109,7 +7109,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_16">
+				<physicalInteger groupId="">
 					<index>79.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7130,7 +7130,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_16">
+				<physicalInteger groupId="">
 					<index>80.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7151,7 +7151,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_17">
+				<physicalInteger groupId="">
 					<index>81.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7172,7 +7172,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_17">
+				<physicalInteger groupId="">
 					<index>82.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7193,7 +7193,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_18">
+				<physicalInteger groupId="">
 					<index>83.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7214,7 +7214,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_18">
+				<physicalInteger groupId="">
 					<index>84.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7235,7 +7235,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_19">
+				<physicalInteger groupId="">
 					<index>85.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7256,7 +7256,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_19">
+				<physicalInteger groupId="">
 					<index>86.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7277,7 +7277,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_20">
+				<physicalInteger groupId="">
 					<index>87.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7298,7 +7298,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_20">
+				<physicalInteger groupId="">
 					<index>88.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7319,7 +7319,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_21">
+				<physicalInteger groupId="">
 					<index>89.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7340,7 +7340,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_21">
+				<physicalInteger groupId="">
 					<index>90.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7361,7 +7361,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_22">
+				<physicalInteger groupId="">
 					<index>91.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7382,7 +7382,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_22">
+				<physicalInteger groupId="">
 					<index>92.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7403,7 +7403,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_23">
+				<physicalInteger groupId="">
 					<index>93.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7424,7 +7424,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_23">
+				<physicalInteger groupId="">
 					<index>94.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7445,7 +7445,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TIMEOUT_FRIDAY_24">
+				<physicalInteger groupId="">
 					<index>95.0</index>
 					<size>1.0</size>
 					<list>6</list>
@@ -7466,7 +7466,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>20.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_FRIDAY_24">
+				<physicalInteger groupId="">
 					<index>96.0</index>
 					<size>0.6</size>
 					<list>6</list>
@@ -7478,11 +7478,11 @@
 		<configParameters id="cc_tc_ch_wsr_master-3"/>
 		<configParameters id="cc_tc_dev_master-0">
 			<parameter id="BUTTON_LOCK">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BUTTON_LOCK">
+				<physicalInteger groupId="">
 					<index>15.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -7516,7 +7516,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DISPLAY_BACKLIGHT_MODE">
+				<physicalInteger groupId="">
 					<index>5.6</index>
 					<size>0.2</size>
 					<list>0</list>
@@ -7524,7 +7524,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="DISPLAY_BACKLIGHT_TIME">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -7552,7 +7552,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DISPLAY_BACKLIGHT_TIME">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>0.6</size>
 					<list>0</list>
@@ -7566,7 +7566,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -7816,7 +7816,7 @@
 					<maximumValue>30.000000</maximumValue>
 					<defaultValue>12.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="TEMPERATUR_WINDOW_OPEN_VALUE">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>0.6</size>
 					<list>5</list>

@@ -205,7 +205,7 @@
 					<maximumValue>8.160000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="HOLD_TIME">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -213,13 +213,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="HOLD_PWM">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="HOLD_PWM">
+				<physicalInteger groupId="">
 					<index>21.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -227,7 +227,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SETUP_DIR">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -239,7 +239,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SETUP_DIR">
+				<physicalInteger groupId="">
 					<index>22.0</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -261,7 +261,7 @@
 					<maximumValue>3000</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SETUP_POSITION">
+				<physicalInteger groupId="">
 					<index>23.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -283,7 +283,7 @@
 					<maximumValue>3000</maximumValue>
 					<defaultValue>270</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ANGLE_OPEN">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -305,7 +305,7 @@
 					<maximumValue>3000</maximumValue>
 					<defaultValue>1170</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ANGLE_MAX">
+				<physicalInteger groupId="">
 					<index>25.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -327,7 +327,7 @@
 					<maximumValue>3000</maximumValue>
 					<defaultValue>1080</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="ANGLE_LOCKED">
+				<physicalInteger groupId="">
 					<index>26.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -335,11 +335,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LED_FLASH_UNLOCKED">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LED_FLASH_UNLOCKED">
+				<physicalInteger groupId="">
 					<index>31.3</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -347,11 +347,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LED_FLASH_LOCKED">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LED_FLASH_LOCKED">
+				<physicalInteger groupId="">
 					<index>31.6</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -361,11 +361,11 @@
 		</configParameters>
 		<configParameters id="keymatic_dev_master-0">
 			<parameter id="SIGNAL">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="SIGNAL">
+				<physicalInteger groupId="">
 					<index>3.4</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -373,7 +373,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SIGNAL_TONE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -393,7 +393,7 @@
 						<index>3</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SIGNAL_TONE">
+				<physicalInteger groupId="">
 					<index>3.6</index>
 					<size>0.2</size>
 					<list>0</list>
@@ -401,11 +401,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="KEYPRESS_SIGNAL">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="KEYPRESS_SIGNAL">
+				<physicalInteger groupId="">
 					<index>3.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -419,7 +419,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -461,7 +461,7 @@
 					<control>LOCK.OPEN</control>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="OPEN">
+				<physicalInteger groupId="">
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -750,7 +750,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="POLLING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -764,7 +764,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="POLLING_INTERVAL">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -792,7 +792,7 @@
 		</variables>
 		<linkParameters id="keymatic_ch_link-1">
 			<parameter id="UI_HINT">
-				<properties>internal</properties>
+				<properties/>
 				<logicalString>
 					<defaultValue/>
 				</logicalString>
@@ -801,7 +801,7 @@
 				</physicalString>
 			</parameter>
 			<parameter id="SHORT_CT_OFF">
-				<properties>store</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -829,7 +829,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_OFF">
+				<physicalInteger groupId="">
 					<index>3.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -837,7 +837,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -865,7 +865,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_ON">
+				<physicalInteger groupId="">
 					<index>3.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -873,13 +873,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_VALUE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_VALUE_LO">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -887,13 +887,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_VALUE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_VALUE_HI">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -915,7 +915,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_TIME">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -968,7 +968,7 @@
 						<index>7</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_OFF">
+				<physicalInteger groupId="">
 					<index>11.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1021,7 +1021,7 @@
 						<index>7</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_ON">
+				<physicalInteger groupId="">
 					<index>11.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1029,7 +1029,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1057,7 +1057,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_OFF">
+				<physicalInteger groupId="">
 					<index>131.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1065,7 +1065,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1093,7 +1093,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_ON">
+				<physicalInteger groupId="">
 					<index>131.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1101,13 +1101,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_VALUE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_VALUE_LO">
+				<physicalInteger groupId="">
 					<index>132.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1115,13 +1115,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_VALUE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_VALUE_HI">
+				<physicalInteger groupId="">
 					<index>133.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1143,7 +1143,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_TIME">
+				<physicalInteger groupId="">
 					<index>135.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1196,7 +1196,7 @@
 						<index>7</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_OFF">
+				<physicalInteger groupId="">
 					<index>139.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1249,7 +1249,7 @@
 						<index>7</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_ON">
+				<physicalInteger groupId="">
 					<index>139.0</index>
 					<size>0.4</size>
 					<list>3</list>

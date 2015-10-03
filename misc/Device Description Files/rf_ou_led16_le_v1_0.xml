@@ -175,7 +175,7 @@
 					<maximumValue>255.000000</maximumValue>
 					<defaultValue>255.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="DISPLAY_ENERGYOPTIONS">
+				<physicalInteger groupId="">
 					<index>8.0</index>
 					<size>0.8</size>
 					<list>0</list>
@@ -183,7 +183,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="DISPLAY_BRIGHTNESS">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>15</defaultValue>
 					<value>
@@ -251,7 +251,7 @@
 						<index>15</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="DISPLAY_BRIGHTNESS">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>0.4</size>
 					<list>0</list>
@@ -265,7 +265,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -354,7 +354,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="POLLING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -368,7 +368,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>60</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="POLLING_INTERVAL">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>

@@ -308,13 +308,13 @@
 				</physicalBoolean>
 			</parameter>
 			<parameter id="TRANSMIT_TRY_MAX">
-				<properties>internal</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>6</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -322,7 +322,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="POWERUP_ACTION">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -334,7 +334,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="POWERUP_ACTION">
+				<physicalInteger groupId="">
 					<index>86.0</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -358,7 +358,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="STATUSINFO_MINDELAY">
+				<physicalInteger groupId="">
 					<index>87.0</index>
 					<size>0.5</size>
 					<list>1</list>
@@ -379,7 +379,7 @@
 					<maximumValue>7.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="STATUSINFO_RANDOM">
+				<physicalInteger groupId="">
 					<index>87.5</index>
 					<size>0.3</size>
 					<list>1</list>
@@ -387,7 +387,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LOGIC_COMBINATION">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -459,7 +459,7 @@
 						<index>16</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LOGIC_COMBINATION">
+				<physicalInteger groupId="">
 					<index>89.0</index>
 					<size>0.5</size>
 					<list>1</list>
@@ -475,7 +475,7 @@
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="INTERNAL_KEYS_VISIBLE">
+				<physicalInteger groupId="">
 					<index>2.7</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -494,7 +494,7 @@
 						<specialValue id="PERMANENT">255</specialValue>
 					</specialValues>
 				</logicalInteger>
-				<physicalInteger groupId="CONF_BUTTON_TIME">
+				<physicalInteger groupId="">
 					<index>21.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -502,11 +502,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LOCAL_RESET_DISABLE">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -522,7 +522,7 @@
 					<maximumValue>5</maximumValue>
 					<defaultValue>1</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SPEED_MULTIPLIER">
+				<physicalInteger groupId="">
 					<index>30.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -536,7 +536,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -554,13 +554,13 @@
 				</physicalBoolean>
 			</parameter>
 			<parameter id="TRANSMIT_TRY_MAX">
-				<properties>internal</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>6</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -568,7 +568,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="POWERUP_ACTION">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -580,7 +580,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="POWERUP_ACTION">
+				<physicalInteger groupId="">
 					<index>86.0</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -604,7 +604,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="STATUSINFO_MINDELAY">
+				<physicalInteger groupId="">
 					<index>87.0</index>
 					<size>0.5</size>
 					<list>1</list>
@@ -625,7 +625,7 @@
 					<maximumValue>7.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="STATUSINFO_RANDOM">
+				<physicalInteger groupId="">
 					<index>87.5</index>
 					<size>0.3</size>
 					<list>1</list>
@@ -633,7 +633,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LOGIC_COMBINATION">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -705,7 +705,7 @@
 						<index>16</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LOGIC_COMBINATION">
+				<physicalInteger groupId="">
 					<index>89.0</index>
 					<size>0.5</size>
 					<list>1</list>
@@ -766,7 +766,7 @@
 					<control>DIMMER.OLD_LEVEL</control>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="OLD_LEVEL">
+				<physicalInteger groupId="">
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -867,7 +867,7 @@
 					<control>NONE</control>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="RAMP_STOP">
+				<physicalInteger groupId="">
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -1127,7 +1127,7 @@
 					<control>DIMMER.OLD_LEVEL</control>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="OLD_LEVEL">
+				<physicalInteger groupId="">
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -1228,7 +1228,7 @@
 					<control>NONE</control>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="RAMP_STOP">
+				<physicalInteger groupId="">
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -1534,7 +1534,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="POLLING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -1548,7 +1548,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>60</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="POLLING_INTERVAL">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -1576,7 +1576,7 @@
 		</variables>
 		<linkParameters id="dimmer_ch_link-1">
 			<parameter id="UI_HINT">
-				<properties>internal</properties>
+				<properties/>
 				<logicalString>
 					<defaultValue/>
 				</logicalString>
@@ -1585,7 +1585,7 @@
 				</physicalString>
 			</parameter>
 			<parameter id="SHORT_CT_RAMPOFF">
-				<properties>store</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1613,7 +1613,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>1.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1621,7 +1621,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1649,7 +1649,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_RAMPON">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1657,7 +1657,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1685,7 +1685,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>2.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1693,7 +1693,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1721,7 +1721,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1729,7 +1729,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1757,7 +1757,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_OFF">
+				<physicalInteger groupId="">
 					<index>3.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1765,7 +1765,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1793,7 +1793,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_ON">
+				<physicalInteger groupId="">
 					<index>3.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1801,13 +1801,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_VALUE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>50</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_VALUE_LO">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1815,13 +1815,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_VALUE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_VALUE_HI">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1840,7 +1840,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ONDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>6.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1862,7 +1862,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_TIME">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1881,7 +1881,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>8.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1903,7 +1903,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFF_TIME">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -1911,7 +1911,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1923,7 +1923,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>10.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -1931,7 +1931,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1943,7 +1943,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>10.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -1951,7 +1951,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -1991,7 +1991,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>10.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -1999,7 +1999,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2031,7 +2031,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_OFF">
+				<physicalInteger groupId="">
 					<index>11.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2039,7 +2039,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2071,7 +2071,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_ON">
+				<physicalInteger groupId="">
 					<index>11.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2079,7 +2079,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2111,7 +2111,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>12.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2119,7 +2119,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2151,7 +2151,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>12.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2159,7 +2159,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2191,7 +2191,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>13.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2199,7 +2199,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2231,7 +2231,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>13.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2239,7 +2239,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ONDELAY_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2251,7 +2251,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ONDELAY_MODE">
+				<physicalInteger groupId="">
 					<index>14.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -2259,7 +2259,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ON_LEVEL_PRIO">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2271,7 +2271,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ON_LEVEL_PRIO">
+				<physicalInteger groupId="">
 					<index>14.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -2279,7 +2279,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_OFFDELAY_BLINK">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2291,7 +2291,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_OFFDELAY_BLINK">
+				<physicalInteger groupId="">
 					<index>14.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -2312,7 +2312,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFF_LEVEL">
+				<physicalInteger groupId="">
 					<index>15.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2333,7 +2333,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.100000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>16.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2357,7 +2357,7 @@
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_LEVEL">
+				<physicalInteger groupId="">
 					<index>17.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2378,7 +2378,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_RAMP_START_STEP">
+				<physicalInteger groupId="">
 					<index>18.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2397,7 +2397,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_RAMPON_TIME">
+				<physicalInteger groupId="">
 					<index>19.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2416,7 +2416,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_RAMPOFF_TIME">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2437,7 +2437,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_DIM_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>21.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2458,7 +2458,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_DIM_MAX_LEVEL">
+				<physicalInteger groupId="">
 					<index>22.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2479,7 +2479,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_DIM_STEP">
+				<physicalInteger groupId="">
 					<index>23.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2500,7 +2500,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_STEP">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2522,7 +2522,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_NEWTIME">
+				<physicalInteger groupId="">
 					<index>25.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2544,7 +2544,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_OLDTIME">
+				<physicalInteger groupId="">
 					<index>26.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -2552,7 +2552,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2564,7 +2564,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>38.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -2572,7 +2572,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2584,7 +2584,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>38.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -2592,7 +2592,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2632,7 +2632,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>38.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2640,7 +2640,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2672,7 +2672,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_OFF">
+				<physicalInteger groupId="">
 					<index>39.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2680,7 +2680,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2712,7 +2712,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_ON">
+				<physicalInteger groupId="">
 					<index>39.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2720,7 +2720,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2752,7 +2752,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>40.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2760,7 +2760,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2792,7 +2792,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>40.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2800,7 +2800,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2832,7 +2832,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>41.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2840,7 +2840,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -2872,7 +2872,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>41.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2880,7 +2880,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2908,7 +2908,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>129.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2916,7 +2916,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2944,7 +2944,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_RAMPON">
+				<physicalInteger groupId="">
 					<index>129.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2952,7 +2952,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -2980,7 +2980,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>130.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -2988,7 +2988,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3016,7 +3016,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3024,7 +3024,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3052,7 +3052,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_OFF">
+				<physicalInteger groupId="">
 					<index>131.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3060,7 +3060,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3088,7 +3088,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_ON">
+				<physicalInteger groupId="">
 					<index>131.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3096,13 +3096,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_VALUE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>50</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_VALUE_LO">
+				<physicalInteger groupId="">
 					<index>132.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3110,13 +3110,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_VALUE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_VALUE_HI">
+				<physicalInteger groupId="">
 					<index>133.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3135,7 +3135,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ONDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>134.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3157,7 +3157,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_TIME">
+				<physicalInteger groupId="">
 					<index>135.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3176,7 +3176,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>136.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3198,7 +3198,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFF_TIME">
+				<physicalInteger groupId="">
 					<index>137.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3206,7 +3206,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3218,7 +3218,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>138.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3226,7 +3226,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3238,7 +3238,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>138.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3246,7 +3246,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_MULTIEXECUTE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3258,7 +3258,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_MULTIEXECUTE">
+				<physicalInteger groupId="">
 					<index>138.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3266,7 +3266,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3306,7 +3306,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>138.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3314,7 +3314,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -3346,7 +3346,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_OFF">
+				<physicalInteger groupId="">
 					<index>139.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3354,7 +3354,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -3386,7 +3386,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_ON">
+				<physicalInteger groupId="">
 					<index>139.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3394,7 +3394,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -3426,7 +3426,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>140.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3434,7 +3434,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -3466,7 +3466,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>140.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3474,7 +3474,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -3506,7 +3506,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>141.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3514,7 +3514,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -3546,7 +3546,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>141.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3554,7 +3554,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ONDELAY_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3566,7 +3566,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ONDELAY_MODE">
+				<physicalInteger groupId="">
 					<index>142.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3574,7 +3574,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ON_LEVEL_PRIO">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3586,7 +3586,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ON_LEVEL_PRIO">
+				<physicalInteger groupId="">
 					<index>142.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3594,7 +3594,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_OFFDELAY_BLINK">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -3606,7 +3606,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_OFFDELAY_BLINK">
+				<physicalInteger groupId="">
 					<index>142.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3627,7 +3627,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFF_LEVEL">
+				<physicalInteger groupId="">
 					<index>143.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3648,7 +3648,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.100000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>144.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3672,7 +3672,7 @@
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_LEVEL">
+				<physicalInteger groupId="">
 					<index>145.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3693,7 +3693,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_RAMP_START_STEP">
+				<physicalInteger groupId="">
 					<index>146.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3712,7 +3712,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_RAMPON_TIME">
+				<physicalInteger groupId="">
 					<index>147.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3731,7 +3731,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_RAMPOFF_TIME">
+				<physicalInteger groupId="">
 					<index>148.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3752,7 +3752,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_DIM_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>149.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3773,7 +3773,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_DIM_MAX_LEVEL">
+				<physicalInteger groupId="">
 					<index>150.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3794,7 +3794,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_DIM_STEP">
+				<physicalInteger groupId="">
 					<index>151.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3815,7 +3815,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_STEP">
+				<physicalInteger groupId="">
 					<index>152.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3837,7 +3837,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_NEWTIME">
+				<physicalInteger groupId="">
 					<index>153.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3859,7 +3859,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_OLDTIME">
+				<physicalInteger groupId="">
 					<index>154.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -3867,7 +3867,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3879,7 +3879,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>166.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3887,7 +3887,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3899,7 +3899,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>166.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3907,7 +3907,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_MULTIEXECUTE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3919,7 +3919,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_MULTIEXECUTE">
+				<physicalInteger groupId="">
 					<index>166.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -3927,7 +3927,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -3967,7 +3967,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>166.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -3975,7 +3975,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4007,7 +4007,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_OFF">
+				<physicalInteger groupId="">
 					<index>167.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4015,7 +4015,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4047,7 +4047,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_ON">
+				<physicalInteger groupId="">
 					<index>167.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4055,7 +4055,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4087,7 +4087,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>168.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4095,7 +4095,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4127,7 +4127,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>168.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4135,7 +4135,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4167,7 +4167,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>169.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4175,7 +4175,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4207,7 +4207,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>169.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4221,7 +4221,7 @@
 		</linkParameters>
 		<linkParameters id="dimmer_ch_link-2">
 			<parameter id="UI_HINT">
-				<properties>config</properties>
+				<properties/>
 				<logicalString>
 					<defaultValue/>
 				</logicalString>
@@ -4230,7 +4230,7 @@
 				</physicalString>
 			</parameter>
 			<parameter id="SHORT_CT_RAMPOFF">
-				<properties>store</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4258,7 +4258,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>1.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4266,7 +4266,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4294,7 +4294,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_RAMPON">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4302,7 +4302,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4330,7 +4330,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>2.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4338,7 +4338,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4366,7 +4366,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4374,7 +4374,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4402,7 +4402,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_OFF">
+				<physicalInteger groupId="">
 					<index>3.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4410,7 +4410,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_CT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4438,7 +4438,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_CT_ON">
+				<physicalInteger groupId="">
 					<index>3.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4446,13 +4446,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_VALUE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>50</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_VALUE_LO">
+				<physicalInteger groupId="">
 					<index>4.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -4460,13 +4460,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_COND_VALUE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="SHORT_COND_VALUE_HI">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -4485,7 +4485,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ONDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>6.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -4507,7 +4507,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_TIME">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -4526,7 +4526,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>8.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -4548,7 +4548,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFF_TIME">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -4556,7 +4556,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4568,7 +4568,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>10.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -4576,7 +4576,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4588,7 +4588,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>10.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -4596,7 +4596,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4636,7 +4636,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>10.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4644,7 +4644,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4676,7 +4676,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_OFF">
+				<physicalInteger groupId="">
 					<index>11.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4684,7 +4684,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4716,7 +4716,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_ON">
+				<physicalInteger groupId="">
 					<index>11.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4724,7 +4724,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4756,7 +4756,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>12.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4764,7 +4764,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4796,7 +4796,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>12.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4804,7 +4804,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4836,7 +4836,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>13.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4844,7 +4844,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4876,7 +4876,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>13.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -4884,7 +4884,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ONDELAY_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4896,7 +4896,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ONDELAY_MODE">
+				<physicalInteger groupId="">
 					<index>14.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -4904,7 +4904,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ON_LEVEL_PRIO">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -4916,7 +4916,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ON_LEVEL_PRIO">
+				<physicalInteger groupId="">
 					<index>14.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -4924,7 +4924,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_OFFDELAY_BLINK">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -4936,7 +4936,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_OFFDELAY_BLINK">
+				<physicalInteger groupId="">
 					<index>14.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -4957,7 +4957,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFF_LEVEL">
+				<physicalInteger groupId="">
 					<index>15.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -4978,7 +4978,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.100000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>16.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5002,7 +5002,7 @@
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_ON_LEVEL">
+				<physicalInteger groupId="">
 					<index>17.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5023,7 +5023,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_RAMP_START_STEP">
+				<physicalInteger groupId="">
 					<index>18.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5042,7 +5042,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_RAMPON_TIME">
+				<physicalInteger groupId="">
 					<index>19.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5061,7 +5061,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_RAMPOFF_TIME">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5082,7 +5082,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_DIM_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>21.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5103,7 +5103,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_DIM_MAX_LEVEL">
+				<physicalInteger groupId="">
 					<index>22.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5124,7 +5124,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_DIM_STEP">
+				<physicalInteger groupId="">
 					<index>23.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5145,7 +5145,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_STEP">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5167,7 +5167,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_NEWTIME">
+				<physicalInteger groupId="">
 					<index>25.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5189,7 +5189,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="SHORT_OFFDELAY_OLDTIME">
+				<physicalInteger groupId="">
 					<index>26.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5197,7 +5197,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5209,7 +5209,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>38.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -5217,7 +5217,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5229,7 +5229,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>38.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -5237,7 +5237,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5277,7 +5277,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>38.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5285,7 +5285,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -5317,7 +5317,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_OFF">
+				<physicalInteger groupId="">
 					<index>39.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5325,7 +5325,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -5357,7 +5357,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_ON">
+				<physicalInteger groupId="">
 					<index>39.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5365,7 +5365,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -5397,7 +5397,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>40.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5405,7 +5405,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -5437,7 +5437,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>40.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5445,7 +5445,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -5477,7 +5477,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>41.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5485,7 +5485,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="SHORT_ELSE_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -5517,7 +5517,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="SHORT_ELSE_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>41.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5525,7 +5525,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5553,7 +5553,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>129.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5561,7 +5561,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5589,7 +5589,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_RAMPON">
+				<physicalInteger groupId="">
 					<index>129.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5597,7 +5597,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5625,7 +5625,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>130.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5633,7 +5633,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5661,7 +5661,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>130.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5669,7 +5669,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5697,7 +5697,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_OFF">
+				<physicalInteger groupId="">
 					<index>131.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5705,7 +5705,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_CT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5733,7 +5733,7 @@
 						<index>5</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_CT_ON">
+				<physicalInteger groupId="">
 					<index>131.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5741,13 +5741,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_VALUE_LO">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>50</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_VALUE_LO">
+				<physicalInteger groupId="">
 					<index>132.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5755,13 +5755,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_COND_VALUE_HI">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="LONG_COND_VALUE_HI">
+				<physicalInteger groupId="">
 					<index>133.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5780,7 +5780,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ONDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>134.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5802,7 +5802,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_TIME">
+				<physicalInteger groupId="">
 					<index>135.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5821,7 +5821,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_TIME">
+				<physicalInteger groupId="">
 					<index>136.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5843,7 +5843,7 @@
 						<specialValue id="NOT_USED">111600.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFF_TIME">
+				<physicalInteger groupId="">
 					<index>137.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -5851,7 +5851,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5863,7 +5863,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>138.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -5871,7 +5871,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5883,7 +5883,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>138.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -5891,7 +5891,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_MULTIEXECUTE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5903,7 +5903,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_MULTIEXECUTE">
+				<physicalInteger groupId="">
 					<index>138.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -5911,7 +5911,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -5951,7 +5951,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>138.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5959,7 +5959,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -5991,7 +5991,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_OFF">
+				<physicalInteger groupId="">
 					<index>139.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -5999,7 +5999,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6031,7 +6031,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_ON">
+				<physicalInteger groupId="">
 					<index>139.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6039,7 +6039,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6071,7 +6071,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>140.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6079,7 +6079,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6111,7 +6111,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>140.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6119,7 +6119,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6151,7 +6151,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>141.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6159,7 +6159,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6191,7 +6191,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>141.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6199,7 +6199,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ONDELAY_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -6211,7 +6211,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ONDELAY_MODE">
+				<physicalInteger groupId="">
 					<index>142.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -6219,7 +6219,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ON_LEVEL_PRIO">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -6231,7 +6231,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ON_LEVEL_PRIO">
+				<physicalInteger groupId="">
 					<index>142.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -6239,7 +6239,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_OFFDELAY_BLINK">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6251,7 +6251,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_OFFDELAY_BLINK">
+				<physicalInteger groupId="">
 					<index>142.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -6272,7 +6272,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFF_LEVEL">
+				<physicalInteger groupId="">
 					<index>143.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6293,7 +6293,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.100000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>144.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6317,7 +6317,7 @@
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_ON_LEVEL">
+				<physicalInteger groupId="">
 					<index>145.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6338,7 +6338,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_RAMP_START_STEP">
+				<physicalInteger groupId="">
 					<index>146.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6357,7 +6357,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_RAMPON_TIME">
+				<physicalInteger groupId="">
 					<index>147.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6376,7 +6376,7 @@
 					<maximumValue>111600.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_RAMPOFF_TIME">
+				<physicalInteger groupId="">
 					<index>148.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6397,7 +6397,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_DIM_MIN_LEVEL">
+				<physicalInteger groupId="">
 					<index>149.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6418,7 +6418,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_DIM_MAX_LEVEL">
+				<physicalInteger groupId="">
 					<index>150.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6439,7 +6439,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_DIM_STEP">
+				<physicalInteger groupId="">
 					<index>151.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6460,7 +6460,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.050000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_STEP">
+				<physicalInteger groupId="">
 					<index>152.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6482,7 +6482,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_NEWTIME">
+				<physicalInteger groupId="">
 					<index>153.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6504,7 +6504,7 @@
 					<maximumValue>25.600000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_OFFDELAY_OLDTIME">
+				<physicalInteger groupId="">
 					<index>154.0</index>
 					<size>1.0</size>
 					<list>3</list>
@@ -6512,7 +6512,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_ON_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -6524,7 +6524,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_ON_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>166.7</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -6532,7 +6532,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_OFF_TIME_MODE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -6544,7 +6544,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_OFF_TIME_MODE">
+				<physicalInteger groupId="">
 					<index>166.6</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -6552,7 +6552,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_MULTIEXECUTE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -6564,7 +6564,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_MULTIEXECUTE">
+				<physicalInteger groupId="">
 					<index>166.5</index>
 					<size>0.1</size>
 					<list>3</list>
@@ -6572,7 +6572,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_ACTION_TYPE">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>0</defaultValue>
 					<value>
@@ -6612,7 +6612,7 @@
 						<index>8</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_ACTION_TYPE">
+				<physicalInteger groupId="">
 					<index>166.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6620,7 +6620,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_OFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6652,7 +6652,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_OFF">
+				<physicalInteger groupId="">
 					<index>167.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6660,7 +6660,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_ON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6692,7 +6692,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_ON">
+				<physicalInteger groupId="">
 					<index>167.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6700,7 +6700,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_OFFDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6732,7 +6732,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_OFFDELAY">
+				<physicalInteger groupId="">
 					<index>168.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6740,7 +6740,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_ONDELAY">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6772,7 +6772,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_ONDELAY">
+				<physicalInteger groupId="">
 					<index>168.0</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6780,7 +6780,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_RAMPOFF">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6812,7 +6812,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_RAMPOFF">
+				<physicalInteger groupId="">
 					<index>169.4</index>
 					<size>0.4</size>
 					<list>3</list>
@@ -6820,7 +6820,7 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LONG_ELSE_JT_RAMPON">
-				<properties>config</properties>
+				<properties/>
 				<logicalEnumeration>
 					<defaultValue>1</defaultValue>
 					<value>
@@ -6852,7 +6852,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="LONG_ELSE_JT_RAMPON">
+				<physicalInteger groupId="">
 					<index>169.0</index>
 					<size>0.4</size>
 					<list>3</list>

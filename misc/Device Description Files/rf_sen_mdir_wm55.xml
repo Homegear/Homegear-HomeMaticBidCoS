@@ -222,13 +222,13 @@
 	<parameterGroups>
 		<configParameters id="detector_dev_master-0">
 			<parameter id="TRANSMIT_DEV_TRY_MAX">
-				<properties>10.0</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_DEV_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -236,11 +236,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="LOCAL_RESET_DISABLE">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LOCAL_RESET_DISABLE">
+				<physicalInteger groupId="">
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -248,11 +248,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="CYCLIC_INFO_MSG">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="CYCLIC_INFO_MSG">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -266,20 +266,20 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 		</configParameters>
 		<configParameters id="md_ch_master-3">
 			<parameter id="TRANSMIT_TRY_MAX">
-				<properties>store</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -300,7 +300,7 @@
 					<maximumValue>7.500000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="EVENT_FILTER_PERIOD">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -308,13 +308,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="EVENT_FILTER_NUMBER">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>15</maximumValue>
 					<defaultValue>1</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="EVENT_FILTER_NUMBER">
+				<physicalInteger groupId="">
 					<index>1.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -322,11 +322,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="CAPTURE_WITHIN_INTERVAL">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="CAPTURE_WITHIN_INTERVAL">
+				<physicalInteger groupId="">
 					<index>2.3</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -334,13 +334,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="MIN_INTERVAL">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>4</maximumValue>
 					<defaultValue>4</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="MIN_INTERVAL">
+				<physicalInteger groupId="">
 					<index>2.0</index>
 					<size>0.3</size>
 					<list>1</list>
@@ -348,13 +348,13 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BRIGHTNESS_FILTER">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>7</maximumValue>
 					<defaultValue>7</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="BRIGHTNESS_FILTER">
+				<physicalInteger groupId="">
 					<index>2.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -386,7 +386,7 @@
 					<maximumValue>1.275000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LED_ONTIME">
+				<physicalInteger groupId="">
 					<index>34.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -396,13 +396,13 @@
 		</configParameters>
 		<configParameters id="remote_ch_master-1">
 			<parameter id="TRANSMIT_TRY_MAX">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="TRANSMIT_TRY_MAX">
+				<physicalInteger groupId="">
 					<index>48.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -424,7 +424,7 @@
 					<maximumValue>1.800000</maximumValue>
 					<defaultValue>0.400000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_PRESS_TIME">
+				<physicalInteger groupId="">
 					<index>4.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -456,7 +456,7 @@
 					<maximumValue>1.275000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LED_ONTIME">
+				<physicalInteger groupId="">
 					<index>34.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -754,11 +754,11 @@
 		</variables>
 		<linkParameters id="md_ch_link-3">
 			<parameter id="PEER_NEEDS_BURST">
-				<properties>event</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="PEER_NEEDS_BURST">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -803,11 +803,11 @@
 		</linkParameters>
 		<linkParameters id="remote_ch_link-1">
 			<parameter id="PEER_NEEDS_BURST">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="PEER_NEEDS_BURST">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -815,12 +815,12 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="EXPECT_AES">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="EXPECT_AES">
+				<physicalInteger groupId="">
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

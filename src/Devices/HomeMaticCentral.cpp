@@ -1916,7 +1916,7 @@ void HomeMaticCentral::addHomegearFeaturesHMCCRTDN(std::shared_ptr<BidCoSPeer> p
 		if(!peer) return;
 		if(channel == -1) channel = 3;
 		if(peer->hasPeers(channel) && !peer->getPeer(channel, _address)) return;
-		GD::out.printInfo("Info: Adding Homegear features to HM-CC-RT-DN.");
+		GD::out.printInfo("Info: Adding Homegear features to HM-CC-RT-DN/HM-TC-IT-WM-W-EU.");
 		std::shared_ptr<BaseLib::Systems::BasicPeer> switchPeer;
 
 		switchPeer.reset(new BaseLib::Systems::BasicPeer());
@@ -2014,7 +2014,8 @@ void HomeMaticCentral::addHomegearFeatures(std::shared_ptr<BidCoSPeer> peer, int
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRSM ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRO) addHomegearFeaturesMotionDetector(peer, channel, pushPendingBidCoSQueues);
 		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCRTDN ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCRTDNBOM) addHomegearFeaturesHMCCRTDN(peer, channel, pushPendingBidCoSQueues);
+				peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCRTDNBOM ||
+				peer->getDeviceType().type() == (uint32_t)DeviceType::HmTcItWmWEu) addHomegearFeaturesHMCCRTDN(peer, channel, pushPendingBidCoSQueues);
 		else if(HomeMaticDevice::isDimmer(peer->getDeviceType()) || HomeMaticDevice::isSwitch(peer->getDeviceType())) addHomegearFeaturesSwitch(peer, channel, pushPendingBidCoSQueues);
 		else GD::out.printDebug("Debug: No homegear features to add.");
 	}
@@ -2240,49 +2241,43 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 
 		std::shared_ptr<BidCoSQueue> queue;
 		PHomegearDevice rpcDevice;
-		if(_pairing)
+		if(!peer && _pairing)
 		{
 			queue = _bidCoSQueueManager.createQueue(this, getPhysicalInterface(packet->senderAddress()), BidCoSQueueType::PAIRING, packet->senderAddress());
 
-			if(!peer)
+			//Do not save here
+			queue->peer = createPeer(packet->senderAddress(), packet->payload()->at(0), deviceType, serialNumber, 0, 0, packet, false);
+			if(!queue->peer)
 			{
-				//Do not save here
-				queue->peer = createPeer(packet->senderAddress(), packet->payload()->at(0), deviceType, serialNumber, 0, 0, packet, false);
-				if(!queue->peer)
-				{
-					GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType.type(), 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload()->at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
-					return;
-				}
-				peer = queue->peer;
-				rpcDevice = peer->getRpcDevice();
-				if(rpcDevice && ((rpcDevice->functions.find(0) != rpcDevice->functions.end() && rpcDevice->functions.at(0)->forceEncryption) || (rpcDevice->functions.find(1) != rpcDevice->functions.end() && rpcDevice->functions.at(1)->forceEncryption)))
-				{
-					//AES is mandatory try to find AES capable interface, if the default interface has no AES support.
-					if(!peer->getPhysicalInterface()->aesSupported())
-					{
-						for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
-						{
-							if(i->second->aesSupported())
-							{
-								GD::out.printInfo("Info: Setting default interface of new peer to " + i->second->getID() + ", because peer requires AES support.");
-								peer->setPhysicalInterfaceID(i->second->getID());
-								queue->setPhysicalInterface(i->second);
-								break;
-							}
-						}
-					}
-					if(!peer->getPhysicalInterface()->aesSupported()) GD::out.printError("Error: No physical interface supporting AES could be found. Can't pair peer of type with serial number \"" + serialNumber + "\". Trying anyway, but the pairing probably will fail.");
-				}
-				if(peer->getPhysicalInterface()->needsPeers()) peer->getPhysicalInterface()->addPeer(peer->getPeerInfo());
+				GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType.type(), 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload()->at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
+				return;
 			}
-			else if(!peer) return;
-			else rpcDevice = peer->getRpcDevice();
-
+			peer = queue->peer;
+			rpcDevice = peer->getRpcDevice();
 			if(!rpcDevice)
 			{
 				GD::out.printWarning("Warning: Device type not supported. Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 				return;
 			}
+			if((rpcDevice->functions.find(0) != rpcDevice->functions.end() && rpcDevice->functions.at(0)->forceEncryption) || (rpcDevice->functions.find(1) != rpcDevice->functions.end() && rpcDevice->functions.at(1)->forceEncryption))
+			{
+				//AES is mandatory try to find AES capable interface, if the default interface has no AES support.
+				if(!peer->getPhysicalInterface()->aesSupported())
+				{
+					for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
+					{
+						if(i->second->aesSupported())
+						{
+							GD::out.printInfo("Info: Setting default interface of new peer to " + i->second->getID() + ", because peer requires AES support.");
+							peer->setPhysicalInterfaceID(i->second->getID());
+							queue->setPhysicalInterface(i->second);
+							break;
+						}
+					}
+				}
+				if(!peer->getPhysicalInterface()->aesSupported()) GD::out.printError("Error: No physical interface supporting AES could be found. Can't pair peer of type with serial number \"" + serialNumber + "\". Trying anyway, but the pairing probably will fail.");
+			}
+			if(peer->getPhysicalInterface()->needsPeers()) peer->getPhysicalInterface()->addPeer(peer->getPeerInfo());
 
 			//CONFIG_START
 			payload.push_back(0);
@@ -3479,6 +3474,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 
 		if(receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDN &&
 			receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDNBOM &&
+			receiver->getDeviceType().type() != (uint32_t)DeviceType::HmTcItWmWEu &&
 			!HomeMaticDevice::isSwitch(receiver->getDeviceType()) &&
 			!HomeMaticDevice::isDimmer(receiver->getDeviceType()))
 		{
@@ -3703,6 +3699,7 @@ PVariable HomeMaticCentral::removeLink(int32_t clientID, uint64_t senderID, int3
 
 		if(receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDN &&
 			receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDNBOM &&
+			receiver->getDeviceType().type() != (uint32_t)DeviceType::HmTcItWmWEu &&
 			!HomeMaticDevice::isSwitch(receiver->getDeviceType()) &&
 			!HomeMaticDevice::isDimmer(receiver->getDeviceType()))
 		{

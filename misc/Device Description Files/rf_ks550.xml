@@ -101,12 +101,12 @@
 	<parameterGroups>
 		<configParameters id="ks550_ch_master-1">
 			<parameter id="SUNSHINE_THRESHOLD">
-				<properties>18.0</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 				</logicalInteger>
-				<physicalInteger groupId="SUNSHINE_THRESHOLD">
+				<physicalInteger groupId="">
 					<index>5.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -116,11 +116,11 @@
 		</configParameters>
 		<configParameters id="ks550_dev_master-0">
 			<parameter id="WAKE_ON_RADIO">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="LIVE_MODE_RX">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -134,7 +134,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -425,7 +425,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="POLLING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -439,7 +439,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="POLLING_INTERVAL">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -467,12 +467,12 @@
 		</variables>
 		<linkParameters id="ks550_ch_link-1">
 			<parameter id="STORM_UPPER_THRESHOLD">
-				<properties>internal</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 				</logicalInteger>
-				<physicalInteger groupId="STORM_UPPER_THRESHOLD">
+				<physicalInteger groupId="">
 					<index>6.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -480,12 +480,12 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="STORM_LOWER_THRESHOLD">
-				<properties>config</properties>
+				<properties/>
 				<logicalInteger>
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 				</logicalInteger>
-				<physicalInteger groupId="STORM_LOWER_THRESHOLD">
+				<physicalInteger groupId="">
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>1</list>

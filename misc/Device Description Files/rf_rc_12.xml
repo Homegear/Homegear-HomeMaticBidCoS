@@ -172,7 +172,7 @@
 					<maximumValue>1.800000</maximumValue>
 					<defaultValue>0.400000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="LONG_PRESS_TIME">
+				<physicalInteger groupId="">
 					<index>4.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -193,7 +193,7 @@
 					<maximumValue>1.500000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="DBL_PRESS_TIME">
+				<physicalInteger groupId="">
 					<index>9.0</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -227,7 +227,7 @@
 					<maximumValue>255.000000</maximumValue>
 					<defaultValue>5.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="BACKLIGHT_ON_TIME">
+				<physicalInteger groupId="">
 					<index>14.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -235,11 +235,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BACKLIGHT_AT_KEYSTROKE">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BACKLIGHT_AT_KEYSTROKE">
+				<physicalInteger groupId="">
 					<index>13.7</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -247,11 +247,11 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="BACKLIGHT_AT_MOTION">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BACKLIGHT_AT_MOTION">
+				<physicalInteger groupId="">
 					<index>13.6</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -265,7 +265,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -486,11 +486,11 @@
 		</variables>
 		<linkParameters id="remote_ch_link-1">
 			<parameter id="PEER_NEEDS_BURST">
-				<properties>event</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="PEER_NEEDS_BURST">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -498,12 +498,12 @@
 				</physicalInteger>
 			</parameter>
 			<parameter id="EXPECT_AES">
-				<properties>config</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="EXPECT_AES">
+				<physicalInteger groupId="">
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

@@ -321,7 +321,8 @@ BidCoSQueue.lo: BidCoSQueue.cpp /usr/include/stdc-predef.h BidCoSQueue.h \
  /usr/include/homegear-base/Output/Output.h \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
- /usr/include/homegear-base/Variable.h BidCoSPacket.h \
+ /usr/include/homegear-base/Variable.h \
+ /usr/include/homegear-base/IQueue.h BidCoSPacket.h \
  PhysicalInterfaces/IBidCoSInterface.h \
  /usr/include/homegear-base/BaseLib.h /usr/include/c++/4.8/queue \
  /usr/include/c++/4.8/bits/stl_queue.h BidCoSMessage.h HomeMaticDevice.h \
@@ -1117,6 +1118,8 @@ delegate_template.hpp:
 /usr/include/homegear-base/Encoding/HTTP.h:
 
 /usr/include/homegear-base/Variable.h:
+
+/usr/include/homegear-base/IQueue.h:
 
 BidCoSPacket.h:
 

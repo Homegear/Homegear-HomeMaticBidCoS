@@ -320,7 +320,8 @@ BidCoSPacket.lo: BidCoSPacket.cpp /usr/include/stdc-predef.h \
  /usr/include/homegear-base/Output/Output.h \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
- /usr/include/homegear-base/Variable.h GD.h \
+ /usr/include/homegear-base/Variable.h \
+ /usr/include/homegear-base/IQueue.h GD.h \
  PhysicalInterfaces/IBidCoSInterface.h \
  /usr/include/homegear-base/BaseLib.h BidCoS.h
 
@@ -1107,6 +1108,8 @@ BidCoSPacket.h:
 /usr/include/homegear-base/Encoding/HTTP.h:
 
 /usr/include/homegear-base/Variable.h:
+
+/usr/include/homegear-base/IQueue.h:
 
 GD.h:
 

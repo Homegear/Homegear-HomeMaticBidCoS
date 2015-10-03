@@ -169,7 +169,7 @@
 					<maximumValue>99</maximumValue>
 					<defaultValue>5</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="STANDBY_TIME">
+				<physicalInteger groupId="">
 					<index>14.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -183,16 +183,16 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 		</configParameters>
 		<configParameters id="remotestatus_ch_master-1">
 			<parameter id="TEXTLINE_1">
-				<properties>store</properties>
+				<properties/>
 				<logicalString/>
-				<physicalString groupId="TEXTLINE_1">
+				<physicalString groupId="">
 					<index>54.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -200,9 +200,9 @@
 				</physicalString>
 			</parameter>
 			<parameter id="TEXTLINE_2">
-				<properties>configString</properties>
+				<properties/>
 				<logicalString/>
-				<physicalString groupId="TEXTLINE_2">
+				<physicalString groupId="">
 					<index>70.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -212,9 +212,9 @@
 		</configParameters>
 		<configParameters id="remotestatus_ch_master-3">
 			<parameter id="TEXTLINE_1">
-				<properties>configString</properties>
+				<properties/>
 				<logicalString/>
-				<physicalString groupId="TEXTLINE_1">
+				<physicalString groupId="">
 					<index>54.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -222,9 +222,9 @@
 				</physicalString>
 			</parameter>
 			<parameter id="TEXTLINE_2">
-				<properties>configString</properties>
+				<properties/>
 				<logicalString/>
-				<physicalString groupId="TEXTLINE_2">
+				<physicalString groupId="">
 					<index>70.0</index>
 					<size>12.0</size>
 					<list>1</list>

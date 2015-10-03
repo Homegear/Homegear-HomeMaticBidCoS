@@ -321,7 +321,8 @@ GD.lo: GD.cpp /usr/include/stdc-predef.h GD.h \
  /usr/include/homegear-base/Output/Output.h \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
- /usr/include/homegear-base/Variable.h BidCoS.h \
+ /usr/include/homegear-base/Variable.h \
+ /usr/include/homegear-base/IQueue.h BidCoS.h \
  /usr/include/homegear-base/BaseLib.h
 
 /usr/include/stdc-predef.h:
@@ -1109,6 +1110,8 @@ PhysicalInterfaces/IBidCoSInterface.h:
 /usr/include/homegear-base/Encoding/HTTP.h:
 
 /usr/include/homegear-base/Variable.h:
+
+/usr/include/homegear-base/IQueue.h:
 
 BidCoS.h:
 

@@ -52,6 +52,8 @@ class BidCoSPacket : public BaseLib::Systems::Packet
         uint8_t messageType() { return _messageType; }
         uint8_t rssiDevice() { return _rssiDevice; }
         bool isUpdatePacket() { return _updatePacket; }
+        bool validAesAck() { return _validAesAck; }
+        void setValidAesAck(bool value) { _validAesAck = value; }
         virtual void setControlByte(uint8_t value) { _controlByte = value; }
         virtual std::string hexString();
         virtual std::vector<uint8_t> byteArray();
@@ -60,7 +62,7 @@ class BidCoSPacket : public BaseLib::Systems::Packet
         BidCoSPacket();
         BidCoSPacket(std::string& packet, int64_t timeReceived = 0);
         BidCoSPacket(std::vector<uint8_t>& packet, bool rssiByte, int64_t timeReceived = 0);
-        BidCoSPacket(uint8_t messageCounter, uint8_t controlByte, uint8_t messageType, int32_t senderAddress, int32_t destinationAddress, std::vector<uint8_t> payload, bool updatePacket = false);
+        BidCoSPacket(uint8_t messageCounter, uint8_t controlByte, uint8_t messageType, int32_t senderAddress, int32_t destinationAddress, std::vector<uint8_t>& payload, bool updatePacket = false);
         virtual ~BidCoSPacket();
         void import(std::string& packet, bool removeFirstCharacter = true);
         void import(std::vector<uint8_t>& packet, bool rssiByte);
@@ -74,6 +76,7 @@ class BidCoSPacket : public BaseLib::Systems::Packet
         uint8_t _messageType = 0;
         uint8_t _rssiDevice = 0;
         bool _updatePacket = false;
+        bool _validAesAck = false;
 
         uint8_t getByte(std::string);
         int32_t getInt(std::string);

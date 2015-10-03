@@ -53,11 +53,11 @@
 		<configParameters id="s550_ch_master-1"/>
 		<configParameters id="s550_dev_master-0">
 			<parameter id="WAKE_ON_RADIO">
-				<properties>true</properties>
+				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="BURST_RX">
+				<physicalInteger groupId="">
 					<index>1.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -71,7 +71,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="ROAMING">
+				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>

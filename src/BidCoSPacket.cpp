@@ -149,7 +149,7 @@ BidCoSPacket::BidCoSPacket(std::vector<uint8_t>& packet, bool rssiByte, int64_t 
 	import(packet, rssiByte);
 }
 
-BidCoSPacket::BidCoSPacket(uint8_t messageCounter, uint8_t controlByte, uint8_t messageType, int32_t senderAddress, int32_t destinationAddress, std::vector<uint8_t> payload, bool updatePacket)
+BidCoSPacket::BidCoSPacket(uint8_t messageCounter, uint8_t controlByte, uint8_t messageType, int32_t senderAddress, int32_t destinationAddress, std::vector<uint8_t>& payload, bool updatePacket)
 {
     _length = 9 + _payload.size();
     _messageCounter = messageCounter;

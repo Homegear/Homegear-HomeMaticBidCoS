@@ -8,6 +8,11 @@ override_dh_auto_install:
 	chmod 755 $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/devices/0
 	chmod 644 $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/devices/0/*
 
+	mkdir -p $(CURDIR)/debian/homegear-homematicbidcos/usr/share/homegear
+	cp -R $(CURDIR)/misc/Data\ Directory/* $(CURDIR)/debian/homegear-homematicbidcos/usr/share/homegear
+	chown -R root:root $(CURDIR)/debian/homegear-homematicbidcos/usr/share/homegear
+	chmod -R 550 $(CURDIR)/debian/homegear-homematicbidcos/usr/share/homegear
+
 override_dh_strip:
 	dh_strip --dbg-package=homegear-homematicbidcos
 

@@ -4,6 +4,10 @@ case $1 in
 	# Configure this package. If the package must prompt the user for
 	# information, do it here.
 	configure)
+		if test ! -e /tmp/HOMEGEAR_STATIC_INSTALLATION; then			
+			echo "Downloading current firmware updates..."
+			/usr/share/homegear/firmware/GetFirmwareUpdatesHomeMaticBidCoS.sh
+		fi
 		;;
 
 	# Back out of an attempt to upgrade this package FROM THIS VERSION

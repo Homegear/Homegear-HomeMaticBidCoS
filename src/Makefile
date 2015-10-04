@@ -325,10 +325,10 @@ htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
 install_sh = ${SHELL} /home/PREETZ/sathya/GitHub/Homegear/homegear-homematicbidcos/cfg/install-sh
-libdir = $(datadir)/homegear/modules
+libdir = $(localstatedir)/lib/homegear/modules
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
-localstatedir = ${prefix}/var
+localstatedir = /var
 mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
@@ -339,7 +339,7 @@ psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
 sharedstatedir = ${prefix}/com
 srcdir = .
-sysconfdir = ${prefix}/etc
+sysconfdir = /etc
 target_alias = 
 top_build_prefix = ../
 top_builddir = ..
@@ -778,6 +778,7 @@ uninstall-am: uninstall-libLTLIBRARIES
 	mostlyclean mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
 	uninstall-am uninstall-libLTLIBRARIES
+
 
 install-exec-hook:
 	rm -f $(DESTDIR)$(libdir)/mod_homematicbidcos.la

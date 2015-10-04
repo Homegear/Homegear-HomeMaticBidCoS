@@ -325,7 +325,7 @@ htmldir = @htmldir@
 includedir = @includedir@
 infodir = @infodir@
 install_sh = @install_sh@
-libdir = $(datadir)/homegear/modules
+libdir = $(localstatedir)/lib/homegear/modules
 libexecdir = @libexecdir@
 localedir = @localedir@
 localstatedir = @localstatedir@
@@ -778,6 +778,7 @@ uninstall-am: uninstall-libLTLIBRARIES
 	mostlyclean mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
 	uninstall-am uninstall-libLTLIBRARIES
+
 
 install-exec-hook:
 	rm -f $(DESTDIR)$(libdir)/mod_homematicbidcos.la

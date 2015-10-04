@@ -210,7 +210,8 @@ void CulAes::processQueueEntry(std::shared_ptr<BaseLib::IQueueEntry>& entry)
 		if(!queueEntry || !queueEntry->packet) return;
 		int64_t timeToSleep = 0;
 		int64_t time = BaseLib::HelperFunctions::getTime();
-		if(queueEntry->sendingTime > 0) timeToSleep = time - queueEntry->sendingTime;
+		if(queueEntry->sendingTime > 0) timeToSleep = queueEntry->sendingTime - time;
+		std::cerr << BaseLib::HelperFunctions::getTimeString(queueEntry->sendingTime) << " " << timeToSleep << std::endl;
 		if(timeToSleep > 0) std::this_thread::sleep_for(std::chrono::milliseconds(timeToSleep));
 		sendPacket(queueEntry->packet);
 	}
@@ -277,7 +278,7 @@ void CulAes::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 
 		writeToDevice("As" + packet->hexString() + "\n", true);
 		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
-		if(bidCoSPacket->messageType() != 0x03) _aesHandshake->setMFrame(bidCoSPacket);
+		_aesHandshake->setMFrame(bidCoSPacket);
 	}
 	catch(const std::exception& ex)
     {

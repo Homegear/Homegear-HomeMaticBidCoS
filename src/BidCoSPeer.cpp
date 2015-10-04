@@ -1908,7 +1908,7 @@ int32_t BidCoSPeer::getNewFirmwareVersion()
 {
 	try
 	{
-		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString((int32_t)BaseLib::Systems::DeviceFamilies::HomeMaticBidCoS, 4) + "." + BaseLib::HelperFunctions::getHexString(_deviceType.type(), 8);
+		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString(0, 4) + "." + BaseLib::HelperFunctions::getHexString(_deviceType.type(), 8);
 		std::string versionFile(_bl->settings.firmwarePath() + filenamePrefix + ".version");
 		if(!BaseLib::Io::fileExists(versionFile)) return 0;
 		std::string versionHex = BaseLib::Io::getFileContent(versionFile);

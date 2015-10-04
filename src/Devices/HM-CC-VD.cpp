@@ -370,7 +370,7 @@ void HM_CC_VD::handleConfigPeerAdd(int32_t messageCounter, std::shared_ptr<BidCo
 			_peersMutex.unlock();
 			return;
 		}
-		_peers[address]->setDeviceType(BaseLib::Systems::LogicalDeviceType(BaseLib::Systems::DeviceFamilies::HomeMaticBidCoS, (uint32_t)DeviceType::HMCCTC));
+		_peers[address]->setDeviceType(BaseLib::Systems::LogicalDeviceType(0, (uint32_t)DeviceType::HMCCTC));
 		_peersMutex.unlock();
 		getPeer(address)->save(true, true, false);
 	}

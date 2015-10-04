@@ -845,7 +845,7 @@ void HM_CC_TC::handleConfigPeerAdd(int32_t messageCounter, std::shared_ptr<BidCo
 		if(channel == 2 && _peers.size() < 20)
 		{
 			_peersMutex.lock();
-			_peers[address]->setDeviceType(BaseLib::Systems::LogicalDeviceType(BaseLib::Systems::DeviceFamilies::HomeMaticBidCoS, (uint32_t)DeviceType::HMCCVD));
+			_peers[address]->setDeviceType(BaseLib::Systems::LogicalDeviceType(0, (uint32_t)DeviceType::HMCCVD));
 			_peersMutex.unlock();
 			std::shared_ptr<BidCoSPeer> peer = getPeer(address);
 			peer->save(true, true, false);
@@ -910,7 +910,7 @@ void HM_CC_TC::handlePairingRequest(int32_t messageCounter, std::shared_ptr<BidC
 			sendNOK(messageCounter, packet->senderAddress());
 			return;
 		}
-		BaseLib::Systems::LogicalDeviceType deviceType(BaseLib::Systems::DeviceFamilies::HomeMaticBidCoS, (packet->payload()->at(1) << 8) + packet->payload()->at(2));
+		BaseLib::Systems::LogicalDeviceType deviceType(0, (packet->payload()->at(1) << 8) + packet->payload()->at(2));
 		std::shared_ptr<BidCoSPeer> peer = createPeer(packet->senderAddress(), (int32_t)packet->payload()->at(0), deviceType, std::string(), (int32_t)packet->payload()->at(15), 0, packet);
 		std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.createQueue(this, _physicalInterface, BidCoSQueueType::PAIRING, packet->senderAddress());
 		queue->peer = peer;

@@ -318,6 +318,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 // {{{ Response
 void AesHandshake::setMFrame(std::shared_ptr<BidCoSPacket> mFrame)
 {
+	if(mFrame->messageType() == 0x03) return;
 	_handshakeInfoMutex.lock();
 	try
 	{

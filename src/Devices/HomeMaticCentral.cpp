@@ -568,7 +568,7 @@ std::string HomeMaticCentral::handleCLICommand(std::string command)
 			if(peerExists(peerAddress) || peerExists(serialNumber)) stringStream << "This peer is already paired to this central." << std::endl;
 			else
 			{
-				std::shared_ptr<BidCoSPeer> peer = createPeer(peerAddress, firmwareVersion, BaseLib::Systems::LogicalDeviceType(BaseLib::Systems::DeviceFamilies::HomeMaticBidCoS, deviceType), serialNumber, 0, 0, packet, false);
+				std::shared_ptr<BidCoSPeer> peer = createPeer(peerAddress, firmwareVersion, BaseLib::Systems::LogicalDeviceType(0, deviceType), serialNumber, 0, 0, packet, false);
 				if(!peer || !peer->getRpcDevice()) return "Device type not supported.\n";
 				try
 				{
@@ -1197,7 +1197,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 		}
 		_updateMode = true;
 		_updateMutex.lock();
-		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString((int32_t)BaseLib::Systems::DeviceFamilies::HomeMaticBidCoS, 4) + "." + BaseLib::HelperFunctions::getHexString(peer->getDeviceType().type(), 8);
+		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString((int32_t)0, 4) + "." + BaseLib::HelperFunctions::getHexString(peer->getDeviceType().type(), 8);
 		std::string versionFile(_bl->settings.firmwarePath() + filenamePrefix + ".version");
 		if(!BaseLib::Io::fileExists(versionFile))
 		{
@@ -2226,7 +2226,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 		for(uint32_t i = 3; i < 13; i++)
 			serialNumber.push_back((char)packet->payload()->at(i));
 		uint32_t rawType = (packet->payload()->at(1) << 8) + packet->payload()->at(2);
-		BaseLib::Systems::LogicalDeviceType deviceType(BaseLib::Systems::DeviceFamilies::HomeMaticBidCoS, rawType);
+		BaseLib::Systems::LogicalDeviceType deviceType(0, rawType);
 
 		std::shared_ptr<BidCoSPeer> peer(getPeer(packet->senderAddress()));
 		if(peer && (peer->getSerialNumber() != serialNumber || peer->getDeviceType() != deviceType))

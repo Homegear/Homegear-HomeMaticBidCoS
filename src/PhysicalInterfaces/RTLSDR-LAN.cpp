@@ -27,9 +27,10 @@
  * files in the program, then also delete it here.
  */
 
+#include "RTLSDR-LAN.h"
+
 #ifdef BIDCOSRTLSDRLAN
 
-#include "RTLSDR-LAN.h"
 #include "../GD.h"
 
 namespace BidCoS

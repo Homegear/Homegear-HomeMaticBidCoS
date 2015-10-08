@@ -107,6 +107,9 @@
 /* Define to the version of this package. */
 #define PACKAGE_VERSION "0.6.0"
 
+/* Enables compilation of all SPI interfaces */
+#define SPIINTERFACES /**/
+
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 

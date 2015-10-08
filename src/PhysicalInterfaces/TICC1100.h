@@ -27,9 +27,12 @@
  * files in the program, then also delete it here.
  */
 
-#ifdef SPIINTERFACES
 #ifndef TICC1100_H_
 #define TICC1100_H_
+
+#include "../../config.h"
+
+#ifdef SPIINTERFACES
 
 #include "IBidCoSInterface.h"
 
@@ -169,7 +172,7 @@ public:
 			TEST0 =			0x2E,
 			//No 0x2F
 			PARTNUM =		0x30,
-			VERSION =		0x31,
+			CHIPVERSION =	0x31,
 			FREQTEST =		0x32,
 			LQI =			0x33,
 			RSSI =			0x34,

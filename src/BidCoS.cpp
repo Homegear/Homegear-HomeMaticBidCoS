@@ -37,7 +37,9 @@
 #include "PhysicalInterfaces/TICC1101.h"
 #include "PhysicalInterfaces/HM-CFG-LAN.h"
 #include "PhysicalInterfaces/HM-LGW.h"
+#ifdef BIDCOSRTLSDRLAN
 #include "PhysicalInterfaces/RTLSDR-LAN.h"
+#endif
 #include "Devices/HomeMaticCentral.h"
 #include "BidCoSDeviceTypes.h"
 #include "Devices/HM-CC-TC.h"

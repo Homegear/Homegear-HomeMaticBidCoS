@@ -27,10 +27,12 @@
  * files in the program, then also delete it here.
  */
 
-#ifdef BIDCOSRTLSDRLAN
-
 #ifndef RTLSDR_LAN_H
 #define RTLSDR_LAN_H
+
+#include "../../config.h"
+
+#ifdef BIDCOSRTLSDRLAN
 
 #include "../BidCoSPacket.h"
 #include "IBidCoSInterface.h"

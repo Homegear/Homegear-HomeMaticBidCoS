@@ -27,10 +27,11 @@
  * files in the program, then also delete it here.
  */
 
+#include "TICC1101.h"
+
 #ifdef SPIINTERFACES
 #ifdef BIDCOSTICC1101
 
-#include "TICC1101.h"
 #include "../BidCoSPacket.h"
 #include "../homegear-base/BaseLib.h"
 #include "../GD.h"

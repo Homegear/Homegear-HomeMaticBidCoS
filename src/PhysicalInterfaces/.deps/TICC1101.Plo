@@ -1,4 +1,9 @@
 PhysicalInterfaces/TICC1101.lo: PhysicalInterfaces/TICC1101.cpp \
- /usr/include/stdc-predef.h
+ /usr/include/stdc-predef.h PhysicalInterfaces/TICC1101.h \
+ PhysicalInterfaces/../../config.h
 
 /usr/include/stdc-predef.h:
+
+PhysicalInterfaces/TICC1101.h:
+
+PhysicalInterfaces/../../config.h:

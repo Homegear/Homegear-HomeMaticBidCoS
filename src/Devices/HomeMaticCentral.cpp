@@ -1015,9 +1015,7 @@ std::string HomeMaticCentral::handleCLICommand(std::string command)
 						<< std::setw(typeWidth1) << BaseLib::HelperFunctions::getHexString(i->second->getDeviceType().type(), 4) << bar;
 					if(i->second->getRpcDevice())
 					{
-						PSupportedDevice type = i->second->getRpcDevice()->getType(i->second->getDeviceType(), i->second->getFirmwareVersion());
-						std::string typeID;
-						if(type) typeID = type->id;
+						std::string typeID = i->second->getRpcTypeString();
 						if(typeID.size() > (unsigned)typeWidth2)
 						{
 							typeID.resize(typeWidth2 - 3);

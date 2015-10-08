@@ -59,7 +59,9 @@ case $host_os in
 	        ;;
 esac
 
-#AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug], [enable debugging, default: no]), [case "${enableval}" in yes) debug=true ;; no)  debug=false ;; *)   AC_MSG_ERROR([bad value ${enableval} for --enable-debug]) ;; esac], [debug=false])
-#AM_CONDITIONAL(DEBUG, test x"$debug" = x"true")
+AC_ARG_WITH([spi], [AS_HELP_STRING([--without-spi], [Compile without SPI support (disables all SPI interfaces)])], [with_spi=no], [])
+AS_IF([test "x$with_spi" != "xno"], [
+	AC_DEFINE(SPIINTERFACES, [], [Enables compilation of all SPI interfaces])
+	])
 
 AC_OUTPUT(Makefile src/Makefile)

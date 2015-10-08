@@ -211,7 +211,6 @@ void CulAes::processQueueEntry(std::shared_ptr<BaseLib::IQueueEntry>& entry)
 		int64_t timeToSleep = 0;
 		int64_t time = BaseLib::HelperFunctions::getTime();
 		if(queueEntry->sendingTime > 0) timeToSleep = queueEntry->sendingTime - time;
-		std::cerr << BaseLib::HelperFunctions::getTimeString(queueEntry->sendingTime) << " " << timeToSleep << std::endl;
 		if(timeToSleep > 0) std::this_thread::sleep_for(std::chrono::milliseconds(timeToSleep));
 		sendPacket(queueEntry->packet);
 	}

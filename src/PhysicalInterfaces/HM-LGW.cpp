@@ -750,7 +750,12 @@ void HM_LGW::removePeer(int32_t address)
 	try
 	{
 		_peersMutex.lock();
-		if(_peers.find(address) != _peers.end()) _peers.erase(address);
+		if(_peers.find(address) == _peers.end())
+		{
+			_peersMutex.unlock();
+			return;
+		}
+		_peers.erase(address);
 		if(_initComplete)
 		{
 			for(int32_t i = 0; i < 40; i++)
@@ -814,6 +819,11 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(!bidCoSPacket) return;
+		if(_updateMode && !bidCoSPacket->isUpdatePacket())
+		{
+			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ", because update mode is enabled.");
+			return;
+		}
 		if(bidCoSPacket->messageType() == 0x02 && packet->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
 		{
 			_out.printDebug("Debug: Ignoring ACK packet.", 6);

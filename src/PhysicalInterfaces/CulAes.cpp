@@ -721,6 +721,7 @@ void CulAes::listen()
 							{
 								if(packet->payload()->size() > 1)
 								{
+									//Packet type 0x4X has channel at index 0 all other types at index 1
 									if((packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
 									else if(peerIterator->second.aesChannels[packet->payload()->at(1) & 0x3F]) aesHandshake = true;
 								}
@@ -749,13 +750,13 @@ void CulAes::listen()
 					}
 					else
 					{
-						if(packet->controlByte() & 0x40)
+						/*if(packet->controlByte() & 0x40)
 						{
 							std::vector<uint8_t> payload(5);
 							payload.push_back(0);
 							std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), 0x80, 0x02, _myAddress, packet->senderAddress(), payload));
 							queuePacket(ackPacket);
-						}
+						}*/
 						raisePacketReceived(packet);
 					}
 				}

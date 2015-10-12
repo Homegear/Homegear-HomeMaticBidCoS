@@ -2006,7 +2006,9 @@ void HomeMaticCentral::addHomegearFeatures(std::shared_ptr<BidCoSPeer> peer, int
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRcKey43 ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRc2PbuFm ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRcDisHXEu ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::BrcH) addHomegearFeaturesRemote(peer, channel, pushPendingBidCoSQueues);
+				peer->getDeviceType().type() == (uint32_t)DeviceType::BrcH ||
+				peer->getDeviceType().type() == (uint32_t)DeviceType::HmPb2Wm55 ||
+				peer->getDeviceType().type() == (uint32_t)DeviceType::HmPb2Wm552) addHomegearFeaturesRemote(peer, channel, pushPendingBidCoSQueues);
 		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMSECMDIR ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSECMDIRSCHUECO ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRSM ||

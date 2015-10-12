@@ -1536,12 +1536,11 @@ void HomeMaticDevice::sendStealthyOK(int32_t messageCounter, int32_t destination
     }
 }
 
-void HomeMaticDevice::sendOK(int32_t messageCounter, int32_t destinationAddress)
+void HomeMaticDevice::sendOK(int32_t messageCounter, int32_t destinationAddress, std::vector<uint8_t> payload)
 {
 	try
 	{
-		std::vector<uint8_t> payload;
-		payload.push_back(0x00);
+		if(payload.empty()) payload.push_back(0x00);
 		std::shared_ptr<BidCoSPacket> ok(new BidCoSPacket(messageCounter, 0x80, 0x02, _address, destinationAddress, payload));
 		sendPacket(getPhysicalInterface(destinationAddress), ok);
 	}

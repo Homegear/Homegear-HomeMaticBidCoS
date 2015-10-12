@@ -125,7 +125,7 @@ class HomeMaticDevice : public BaseLib::Systems::LogicalDevice, public BidCoSQue
 
         virtual void sendPairingRequest();
         virtual void sendDirectedPairingRequest(int32_t messageCounter, int32_t controlByte, std::shared_ptr<BidCoSPacket> packet);
-        virtual void sendOK(int32_t messageCounter, int32_t destinationAddress);
+        virtual void sendOK(int32_t messageCounter, int32_t destinationAddress, std::vector<uint8_t> payload = std::vector<uint8_t>());
         virtual void sendStealthyOK(int32_t messageCounter, int32_t destinationAddress);
         virtual void sendOKWithPayload(int32_t messageCounter, int32_t destinationAddress, std::vector<uint8_t> payload, bool isWakeMeUpPacket);
         virtual void sendNOK(int32_t messageCounter, int32_t destinationAddress);

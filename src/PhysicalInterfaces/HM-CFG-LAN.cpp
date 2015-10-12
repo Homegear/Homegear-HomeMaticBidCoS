@@ -262,7 +262,12 @@ void HM_CFG_LAN::removePeer(int32_t address)
 	try
 	{
 		_peersMutex.lock();
-		if(_peers.find(address) != _peers.end()) _peers.erase(address);
+		if(_peers.find(address) == _peers.end())
+		{
+			_peersMutex.unlock();
+			return;
+		}
+		_peers.erase(address);
 		if(_initComplete)
 		{
 			std::string packetHex = std::string("-") + BaseLib::HelperFunctions::getHexString(address, 6) + "\r\n";

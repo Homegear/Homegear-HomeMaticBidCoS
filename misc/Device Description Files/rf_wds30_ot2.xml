@@ -16,13 +16,13 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>wds30ot2_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>wds30ot2_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="WEATHER" channelCount="4">
 			<properties/>
-			<configParameters>wds30ot2_ch_master-1</configParameters>
-			<variables>wds30ot2_ch_values-1</variables>
+			<configParameters>wds30ot2_ch_master--1</configParameters>
+			<variables>wds30ot2_ch_values--1</variables>
 		</function>
 		<function channel="5" type="WEATHER" channelCount="1">
 			<properties>
@@ -30,9 +30,9 @@
 					<type>WEATHER_T</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>wds30ot2_ch_master-5</configParameters>
-			<variables>wds30ot2_ch_values-5</variables>
-			<linkParameters>wds30ot2_ch_link-5</linkParameters>
+			<configParameters>wds30ot2_ch_master--5</configParameters>
+			<variables>wds30ot2_ch_values--5</variables>
+			<linkParameters>wds30ot2_ch_link--5</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -102,9 +102,9 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="wds30ot2_ch_master-1"/>
-		<configParameters id="wds30ot2_ch_master-5"/>
-		<configParameters id="wds30ot2_dev_master-0">
+		<configParameters id="wds30ot2_ch_master--1"/>
+		<configParameters id="wds30ot2_ch_master--5"/>
+		<configParameters id="wds30ot2_dev_master--0">
 			<parameter id="WAKE_ON_RADIO">
 				<properties/>
 				<logicalBoolean>
@@ -175,6 +175,50 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -187,7 +231,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -281,7 +325,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="wds30ot2_ch_values-1">
+		<variables id="wds30ot2_ch_values--1">
 			<parameter id="TEMPERATURE">
 				<properties>
 					<writeable>false</writeable>
@@ -342,7 +386,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="wds30ot2_ch_values-5">
+		<variables id="wds30ot2_ch_values--5">
 			<parameter id="TEMPERATURE">
 				<properties>
 					<writeable>false</writeable>
@@ -391,7 +435,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="wds30ot2_ch_link-5"/>
+		<linkParameters id="wds30ot2_ch_link--5"/>
 	</parameterGroups>
 </homegearDevice>
 

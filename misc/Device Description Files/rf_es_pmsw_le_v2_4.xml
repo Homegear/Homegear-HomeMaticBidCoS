@@ -15,8 +15,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>switch_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>switch_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="SWITCH" channelCount="1">
 			<properties>
@@ -26,14 +26,14 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>switch_ch_master-1</configParameters>
-			<variables>switch_ch_values-1</variables>
-			<linkParameters>switch_ch_link-1</linkParameters>
+			<configParameters>switch_ch_master--1</configParameters>
+			<variables>switch_ch_values--1</variables>
+			<linkParameters>switch_ch_link--1</linkParameters>
 		</function>
 		<function channel="2" type="POWERMETER" channelCount="1">
 			<properties/>
-			<configParameters>power_ch_master-2</configParameters>
-			<variables>power_ch_values-2</variables>
+			<configParameters>power_ch_master--2</configParameters>
+			<variables>power_ch_values--2</variables>
 		</function>
 		<function channel="3" type="CONDITION_POWER" channelCount="1">
 			<properties>
@@ -43,9 +43,9 @@
 					<type>WINMATIC</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>cond_power_ch_master-3</configParameters>
-			<variables>cond_power_ch_values-3</variables>
-			<linkParameters>cond_power_ch_link-3</linkParameters>
+			<configParameters>cond_power_ch_master--3</configParameters>
+			<variables>cond_power_ch_values--3</variables>
+			<linkParameters>cond_power_ch_link--3</linkParameters>
 		</function>
 		<function channel="4" type="CONDITION_CURRENT" channelCount="1">
 			<properties>
@@ -55,9 +55,9 @@
 					<type>WINMATIC</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>cond_current_ch_master-4</configParameters>
-			<variables>cond_current_ch_values-4</variables>
-			<linkParameters>cond_current_ch_link-4</linkParameters>
+			<configParameters>cond_current_ch_master--4</configParameters>
+			<variables>cond_current_ch_values--4</variables>
+			<linkParameters>cond_current_ch_link--4</linkParameters>
 		</function>
 		<function channel="5" type="CONDITION_VOLTAGE" channelCount="1">
 			<properties>
@@ -67,9 +67,9 @@
 					<type>WINMATIC</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>cond_voltage_ch_master-5</configParameters>
-			<variables>cond_voltage_ch_values-5</variables>
-			<linkParameters>cond_voltage_ch_link-5</linkParameters>
+			<configParameters>cond_voltage_ch_master--5</configParameters>
+			<variables>cond_voltage_ch_values--5</variables>
+			<linkParameters>cond_voltage_ch_link--5</linkParameters>
 		</function>
 		<function channel="6" type="CONDITION_FREQUENCY" channelCount="1">
 			<properties>
@@ -79,9 +79,9 @@
 					<type>WINMATIC</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>cond_frequency_ch_master-6</configParameters>
-			<variables>cond_frequency_ch_values-6</variables>
-			<linkParameters>cond_frequency_ch_link-6</linkParameters>
+			<configParameters>cond_frequency_ch_master--6</configParameters>
+			<variables>cond_frequency_ch_values--6</variables>
+			<linkParameters>cond_frequency_ch_link--6</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -293,17 +293,22 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="cond_current_ch_master-4">
+		<configParameters id="cond_current_ch_master--4">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="LED_ONTIME">
 				<properties>
@@ -449,17 +454,22 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="cond_frequency_ch_master-6">
+		<configParameters id="cond_frequency_ch_master--6">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="LED_ONTIME">
 				<properties>
@@ -615,17 +625,22 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="cond_power_ch_master-3">
+		<configParameters id="cond_power_ch_master--3">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="LED_ONTIME">
 				<properties>
@@ -781,17 +796,22 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="cond_voltage_ch_master-5">
+		<configParameters id="cond_voltage_ch_master--5">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="LED_ONTIME">
 				<properties>
@@ -947,17 +967,22 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="power_ch_master-2">
+		<configParameters id="power_ch_master--2">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="AVERAGING">
 				<properties>
@@ -1083,17 +1108,22 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="switch_ch_master-1">
+		<configParameters id="switch_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="TRANSMIT_TRY_MAX">
 				<properties/>
@@ -1155,7 +1185,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="switch_dev_master-0">
+		<configParameters id="switch_dev_master--0">
 			<parameter id="INTERNAL_KEYS_VISIBLE">
 				<properties>
 					<internal>true</internal>
@@ -1182,6 +1212,50 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -1194,7 +1268,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="cond_current_ch_values-4">
+		<variables id="cond_current_ch_values--4">
 			<parameter id="DECISION_VALUE">
 				<properties>
 					<writeable>false</writeable>
@@ -1215,7 +1289,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="cond_frequency_ch_values-6">
+		<variables id="cond_frequency_ch_values--6">
 			<parameter id="DECISION_VALUE">
 				<properties>
 					<writeable>false</writeable>
@@ -1236,7 +1310,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="cond_power_ch_values-3">
+		<variables id="cond_power_ch_values--3">
 			<parameter id="DECISION_VALUE">
 				<properties>
 					<writeable>false</writeable>
@@ -1257,7 +1331,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="cond_voltage_ch_values-5">
+		<variables id="cond_voltage_ch_values--5">
 			<parameter id="DECISION_VALUE">
 				<properties>
 					<writeable>false</writeable>
@@ -1278,7 +1352,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -1417,7 +1491,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="power_ch_values-2">
+		<variables id="power_ch_values--2">
 			<parameter id="BOOT">
 				<properties>
 					<writeable>false</writeable>
@@ -1604,7 +1678,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="switch_ch_values-1">
+		<variables id="switch_ch_values--1">
 			<parameter id="STATE">
 				<properties>
 					<control>SWITCH.STATE</control>
@@ -1732,7 +1806,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="cond_current_ch_link-4">
+		<linkParameters id="cond_current_ch_link--4">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>
@@ -1759,7 +1833,7 @@
 				</physicalInteger>
 			</parameter>
 		</linkParameters>
-		<linkParameters id="cond_frequency_ch_link-6">
+		<linkParameters id="cond_frequency_ch_link--6">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>
@@ -1786,7 +1860,7 @@
 				</physicalInteger>
 			</parameter>
 		</linkParameters>
-		<linkParameters id="cond_power_ch_link-3">
+		<linkParameters id="cond_power_ch_link--3">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>
@@ -1813,7 +1887,7 @@
 				</physicalInteger>
 			</parameter>
 		</linkParameters>
-		<linkParameters id="cond_voltage_ch_link-5">
+		<linkParameters id="cond_voltage_ch_link--5">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>
@@ -1840,7 +1914,7 @@
 				</physicalInteger>
 			</parameter>
 		</linkParameters>
-		<linkParameters id="switch_ch_link-1">
+		<linkParameters id="switch_ch_link--1">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>

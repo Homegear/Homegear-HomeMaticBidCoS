@@ -16,21 +16,21 @@
 				<internal>true</internal>
 				<forceEncryption>true</forceEncryption>
 			</properties>
-			<configParameters>remote_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>remote_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="KEY" channelCount="2">
 			<properties>
 				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
 			</properties>
-			<configParameters>remotestatus_ch_master-1</configParameters>
-			<variables>remotestatus_ch_values-1</variables>
+			<configParameters>remotestatus_ch_master--1</configParameters>
+			<variables>remotestatus_ch_values--1</variables>
 		</function>
 		<function channel="3" type="KEY" channelCount="8">
 			<properties>
 				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
 			</properties>
-			<configParameters>remotestatus_ch_master-3</configParameters>
+			<configParameters>remotestatus_ch_master--3</configParameters>
 		</function>
 	</functions>
 	<packets>
@@ -159,7 +159,7 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="remote_dev_master-0">
+		<configParameters id="remote_dev_master--0">
 			<parameter id="STANDBY_TIME">
 				<properties>
 					<unit>s</unit>
@@ -176,6 +176,50 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -188,7 +232,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="remotestatus_ch_master-1">
+		<configParameters id="remotestatus_ch_master--1">
 			<parameter id="TEXTLINE_1">
 				<properties/>
 				<logicalString/>
@@ -210,7 +254,7 @@
 				</physicalString>
 			</parameter>
 		</configParameters>
-		<configParameters id="remotestatus_ch_master-3">
+		<configParameters id="remotestatus_ch_master--3">
 			<parameter id="TEXTLINE_1">
 				<properties/>
 				<logicalString/>
@@ -232,7 +276,7 @@
 				</physicalString>
 			</parameter>
 		</configParameters>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -346,7 +390,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="remotestatus_ch_values-1">
+		<variables id="remotestatus_ch_values--1">
 			<parameter id="PRESS_SHORT">
 				<properties>
 					<control>BUTTON.SHORT</control>

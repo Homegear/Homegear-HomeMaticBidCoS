@@ -14,8 +14,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>alarmactuator_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>alarmactuator_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="ALARMACTUATOR" channelCount="1">
 			<properties>
@@ -26,9 +26,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>alarmactuator_ch_master-1</configParameters>
-			<variables>alarmactuator_ch_values-1</variables>
-			<linkParameters>alarmactuator_ch_link-1</linkParameters>
+			<configParameters>alarmactuator_ch_master--1</configParameters>
+			<variables>alarmactuator_ch_values--1</variables>
+			<linkParameters>alarmactuator_ch_link--1</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -218,17 +218,22 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="alarmactuator_ch_master-1">
+		<configParameters id="alarmactuator_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="TRANSMIT_TRY_MAX">
 				<properties/>
@@ -245,7 +250,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="alarmactuator_dev_master-0">
+		<configParameters id="alarmactuator_dev_master--0">
 			<parameter id="CYCLIC_INFO_MSG">
 				<properties/>
 				<logicalBoolean>
@@ -328,6 +333,50 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -340,7 +389,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="alarmactuator_ch_values-1">
+		<variables id="alarmactuator_ch_values--1">
 			<parameter id="STATE">
 				<properties>
 					<control>SWITCH.STATE</control>
@@ -574,7 +623,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -880,7 +929,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<linkParameters id="alarmactuator_ch_link-1">
+		<linkParameters id="alarmactuator_ch_link--1">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>

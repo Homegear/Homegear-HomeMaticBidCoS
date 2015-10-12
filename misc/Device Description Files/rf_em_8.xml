@@ -17,8 +17,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>remote_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>remote_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="KEY" channelCount="1">
 			<properties>
@@ -33,14 +33,14 @@
 					<type>WINMATIC</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>remoteModEM8_ch_master-1</configParameters>
-			<variables>remoteModEM8_ch_values-1</variables>
-			<linkParameters>remoteModEM8_ch_link-1</linkParameters>
+			<configParameters>remoteModEM8_ch_master--1</configParameters>
+			<variables>remoteModEM8_ch_values--1</variables>
+			<linkParameters>remoteModEM8_ch_link--1</linkParameters>
 			<alternativeFunction channel="1" type="KEY" channelCount="1">
 				<properties/>
-				<configParameters>remoteModEM8_ch_master_inactive-1</configParameters>
-				<variables>remoteModEM8_ch_values_inactive-1</variables>
-				<linkParameters>remoteModEM8_ch_link_inactive-1</linkParameters>
+				<configParameters>remoteModEM8_ch_master_inactive--1</configParameters>
+				<variables>remoteModEM8_ch_values_inactive--1</variables>
+				<linkParameters>remoteModEM8_ch_link_inactive--1</linkParameters>
 			</alternativeFunction>
 		</function>
 	</functions>
@@ -229,7 +229,7 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="remoteModEM8_ch_master-1">
+		<configParameters id="remoteModEM8_ch_master--1">
 			<parameter id="TRANSMIT_TRY_MAX">
 				<properties/>
 				<logicalInteger>
@@ -269,13 +269,18 @@
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="CHANNEL_FUNCTION">
 				<properties>
@@ -328,7 +333,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="remoteModEM8_ch_master_inactive-1">
+		<configParameters id="remoteModEM8_ch_master_inactive--1">
 			<parameter id="CHANNEL_FUNCTION">
 				<properties>
 					<casts>
@@ -379,7 +384,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="remote_dev_master-0">
+		<configParameters id="remote_dev_master--0">
 			<parameter id="TRANSMIT_DEV_TRY_MAX">
 				<properties/>
 				<logicalInteger>
@@ -475,6 +480,50 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -487,7 +536,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -601,7 +650,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="remoteModEM8_ch_values-1">
+		<variables id="remoteModEM8_ch_values--1">
 			<parameter id="PRESS_SHORT">
 				<properties>
 					<control>BUTTON.SHORT</control>
@@ -685,7 +734,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="remoteModEM8_ch_values_inactive-1">
+		<variables id="remoteModEM8_ch_values_inactive--1">
 			<parameter id="LOWBAT">
 				<properties>
 					<writeable>false</writeable>
@@ -708,7 +757,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="remoteModEM8_ch_link-1">
+		<linkParameters id="remoteModEM8_ch_link--1">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>
@@ -735,7 +784,7 @@
 				</physicalInteger>
 			</parameter>
 		</linkParameters>
-		<linkParameters id="remoteModEM8_ch_link_inactive-1"/>
+		<linkParameters id="remoteModEM8_ch_link_inactive--1"/>
 	</parameterGroups>
 </homegearDevice>
 

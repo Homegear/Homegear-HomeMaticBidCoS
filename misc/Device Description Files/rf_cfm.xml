@@ -14,8 +14,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>signal_chime_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>signal_chime_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="SIGNAL_LED" channelCount="1">
 			<properties>
@@ -25,9 +25,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>signal_led_ch_master-1</configParameters>
-			<variables>signal_led_ch_values-1</variables>
-			<linkParameters>signal_mled_ch_link-1</linkParameters>
+			<configParameters>signal_led_ch_master--1</configParameters>
+			<variables>signal_led_ch_values--1</variables>
+			<linkParameters>signal_mled_ch_link--1</linkParameters>
 		</function>
 		<function channel="2" type="SIGNAL_CHIME" channelCount="1">
 			<properties>
@@ -37,9 +37,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>signal_chime_ch_master-2</configParameters>
-			<variables>signal_chime_ch_values-2</variables>
-			<linkParameters>signal_mchime_ch_link-2</linkParameters>
+			<configParameters>signal_chime_ch_master--2</configParameters>
+			<variables>signal_chime_ch_values--2</variables>
+			<linkParameters>signal_mchime_ch_link--2</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -190,20 +190,25 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="signal_chime_ch_master-2">
+		<configParameters id="signal_chime_ch_master--2">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="signal_chime_dev_master-0">
+		<configParameters id="signal_chime_dev_master--0">
 			<parameter id="LOCAL_RESET_DISABLE">
 				<properties/>
 				<logicalBoolean>
@@ -214,6 +219,50 @@
 					<size>1.0</size>
 					<list>0</list>
 					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">
@@ -228,20 +277,25 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="signal_led_ch_master-1">
+		<configParameters id="signal_led_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -390,7 +444,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="signal_chime_ch_values-2">
+		<variables id="signal_chime_ch_values--2">
 			<parameter id="STATE">
 				<properties>
 					<control>SWITCH.STATE</control>
@@ -536,7 +590,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="signal_led_ch_values-1">
+		<variables id="signal_led_ch_values--1">
 			<parameter id="STATE">
 				<properties>
 					<control>SWITCH.STATE</control>
@@ -682,7 +736,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="signal_mchime_ch_link-2">
+		<linkParameters id="signal_mchime_ch_link--2">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -2105,7 +2159,7 @@
 				<parameter id="LCD_SYMBOL">2</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="signal_mled_ch_link-1">
+		<linkParameters id="signal_mled_ch_link--1">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>

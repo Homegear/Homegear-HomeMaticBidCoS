@@ -15,8 +15,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>maint_ch_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>maint_ch_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="KEY" channelCount="1">
 			<properties>
@@ -30,9 +30,9 @@
 					<type>WINMATIC</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>remote_ch_master-1</configParameters>
-			<variables>remote_ch_values-1</variables>
-			<linkParameters>remote_ch_link-1</linkParameters>
+			<configParameters>remote_ch_master--1</configParameters>
+			<variables>remote_ch_values--1</variables>
+			<linkParameters>remote_ch_link--1</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -145,7 +145,51 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="maint_ch_master-0">
+		<configParameters id="maint_ch_master--0">
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -158,7 +202,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="remote_ch_master-1">
+		<configParameters id="remote_ch_master--1">
 			<parameter id="LONG_PRESS_TIME">
 				<properties>
 					<unit>s</unit>
@@ -205,16 +249,21 @@
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -308,7 +357,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="remote_ch_values-1">
+		<variables id="remote_ch_values--1">
 			<parameter id="PRESS_SHORT">
 				<properties>
 					<control>BUTTON.SHORT</control>
@@ -428,7 +477,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="remote_ch_link-1">
+		<linkParameters id="remote_ch_link--1">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>

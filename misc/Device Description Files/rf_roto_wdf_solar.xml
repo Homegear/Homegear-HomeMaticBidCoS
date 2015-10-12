@@ -15,8 +15,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>blind_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>blind_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="WINDOW" channelCount="1">
 			<properties>
@@ -25,9 +25,9 @@
 					<type>WINMATIC</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>winmatic_ch_master-1</configParameters>
-			<variables>winmatic_ch_values-1</variables>
-			<linkParameters>winmatic_ch_link-1</linkParameters>
+			<configParameters>winmatic_ch_master--1</configParameters>
+			<variables>winmatic_ch_values--1</variables>
+			<linkParameters>winmatic_ch_link--1</linkParameters>
 		</function>
 		<function channel="2" type="BLIND" channelCount="2">
 			<properties>
@@ -36,9 +36,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>blind2_ch_master-2</configParameters>
-			<variables>blind_ch_values-2</variables>
-			<linkParameters>blind_ch_link-2</linkParameters>
+			<configParameters>blind2_ch_master--2</configParameters>
+			<variables>blind_ch_values--2</variables>
+			<linkParameters>blind_ch_link--2</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -197,17 +197,22 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="blind2_ch_master-2">
+		<configParameters id="blind2_ch_master--2">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="REFERENCE_RUNNING_TIME_TOP_BOTTOM">
 				<properties>
@@ -287,7 +292,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="blind_dev_master-0">
+		<configParameters id="blind_dev_master--0">
 			<parameter id="LOCAL_RESET_DISABLE">
 				<properties/>
 				<logicalBoolean>
@@ -298,6 +303,50 @@
 					<size>1.0</size>
 					<list>0</list>
 					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">
@@ -312,17 +361,22 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="winmatic_ch_master-1">
+		<configParameters id="winmatic_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="CHANGE_OVER_DELAY">
 				<properties>
@@ -445,7 +499,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="blind_ch_values-2">
+		<variables id="blind_ch_values--2">
 			<parameter id="LEVEL">
 				<properties>
 					<control>BLIND.LEVEL</control>
@@ -641,7 +695,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -880,7 +934,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="winmatic_ch_values-1">
+		<variables id="winmatic_ch_values--1">
 			<parameter id="LEVEL">
 				<properties>
 					<control>WINDOW.LEVEL</control>
@@ -1197,7 +1251,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="blind_ch_link-2">
+		<linkParameters id="blind_ch_link--2">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -3823,7 +3877,7 @@
 				<parameter id="PEER_NEEDS_BURST">true</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="winmatic_ch_link-1">
+		<linkParameters id="winmatic_ch_link--1">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>

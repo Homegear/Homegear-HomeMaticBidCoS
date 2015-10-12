@@ -29,8 +29,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>dimmer_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>dimmer_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="DIMMER" channelCount="1">
 			<properties>
@@ -40,9 +40,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_ch_master-1</configParameters>
-			<variables>dimmer_ch_values-1</variables>
-			<linkParameters>dimmer_ch_link-1</linkParameters>
+			<configParameters>dimmer_ch_master--1</configParameters>
+			<variables>dimmer_ch_values--1</variables>
+			<linkParameters>dimmer_ch_link--1</linkParameters>
 		</function>
 		<function channel="2" type="VIRTUAL_DIMMER" channelCount="2">
 			<properties>
@@ -52,9 +52,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_virt_ch_master-2</configParameters>
-			<variables>dimmer_ch_values-2</variables>
-			<linkParameters>dimmer_ch_link-2</linkParameters>
+			<configParameters>dimmer_virt_ch_master--2</configParameters>
+			<variables>dimmer_ch_values--2</variables>
+			<linkParameters>dimmer_ch_link--2</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -275,17 +275,22 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="dimmer_ch_master-1">
+		<configParameters id="dimmer_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="TRANSMIT_TRY_MAX">
 				<properties/>
@@ -475,7 +480,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="dimmer_dev_master-0">
+		<configParameters id="dimmer_dev_master--0">
 			<parameter id="INTERNAL_KEYS_VISIBLE">
 				<properties>
 					<internal>true</internal>
@@ -521,6 +526,50 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -533,17 +582,22 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="dimmer_virt_ch_master-2">
+		<configParameters id="dimmer_virt_ch_master--2">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 			<parameter id="TRANSMIT_TRY_MAX">
 				<properties/>
@@ -733,7 +787,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="dimmer_ch_values-1">
+		<variables id="dimmer_ch_values--1">
 			<parameter id="LEVEL">
 				<properties>
 					<control>DIMMER.LEVEL</control>
@@ -1088,7 +1142,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="dimmer_ch_values-2">
+		<variables id="dimmer_ch_values--2">
 			<parameter id="LEVEL">
 				<properties>
 					<control>DIMMER.LEVEL</control>
@@ -1443,7 +1497,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -1582,7 +1636,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<linkParameters id="dimmer_ch_link-1">
+		<linkParameters id="dimmer_ch_link--1">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -4227,7 +4281,7 @@
 				<parameter id="LCD_SYMBOL">1</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="dimmer_ch_link-2">
+		<linkParameters id="dimmer_ch_link--2">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>

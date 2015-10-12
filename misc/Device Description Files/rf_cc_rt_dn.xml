@@ -18,8 +18,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>cc_rt_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>cc_rt_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="WEATHER_RECEIVER" channelCount="1">
 			<properties>
@@ -28,9 +28,9 @@
 					<type>WEATHER_TH</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>config-1</configParameters>
-			<variables>cc_rt_ch_weather_values-1</variables>
-			<linkParameters>cc_rt_ch_cs_link-1</linkParameters>
+			<configParameters>config--1</configParameters>
+			<variables>cc_rt_ch_weather_values--1</variables>
+			<linkParameters>cc_rt_ch_cs_link--1</linkParameters>
 		</function>
 		<function channel="2" type="CLIMATECONTROL_RECEIVER" channelCount="1">
 			<properties>
@@ -38,9 +38,9 @@
 					<type>THERMALCONTROL_TC</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>config-2</configParameters>
-			<variables>cc_rt_tc_values-2</variables>
-			<linkParameters>cc_rt_ch_tc_link-2</linkParameters>
+			<configParameters>config--2</configParameters>
+			<variables>cc_rt_tc_values--2</variables>
+			<linkParameters>cc_rt_ch_tc_link--2</linkParameters>
 		</function>
 		<function channel="3" type="WINDOW_SWITCH_RECEIVER" channelCount="1">
 			<properties>
@@ -50,9 +50,9 @@
 					<type>WINDOW_SWITCH_RECEIVER_V2</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>cc_rt_ch_wsr_master-3</configParameters>
-			<variables>cc_rt_ch_wsr_values-3</variables>
-			<linkParameters>cc_rt_ch_wsr_link-3</linkParameters>
+			<configParameters>cc_rt_ch_wsr_master--3</configParameters>
+			<variables>cc_rt_ch_wsr_values--3</variables>
+			<linkParameters>cc_rt_ch_wsr_link--3</linkParameters>
 		</function>
 		<function channel="4" type="CLIMATECONTROL_RT_TRANSCEIVER" channelCount="1">
 			<properties>
@@ -60,9 +60,9 @@
 					<type>CLIMATECONTROL_RT</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>config-4</configParameters>
-			<variables>cc_rt_ch_rt_values-4</variables>
-			<linkParameters>cc_rt_ch_rt_link-4</linkParameters>
+			<configParameters>config--4</configParameters>
+			<variables>cc_rt_ch_rt_values--4</variables>
+			<linkParameters>cc_rt_ch_rt_link--4</linkParameters>
 		</function>
 		<function channel="5" type="CLIMATECONTROL_RT_RECEIVER" channelCount="1">
 			<properties>
@@ -70,9 +70,9 @@
 					<type>CLIMATECONTROL_RT</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>cc_rt_ch_rt_receiver_master-5</configParameters>
-			<variables>cc_rt_ch_rt_values-5</variables>
-			<linkParameters>cc_rt_ch_rt_receiver_link-5</linkParameters>
+			<configParameters>cc_rt_ch_rt_receiver_master--5</configParameters>
+			<variables>cc_rt_ch_rt_values--5</variables>
+			<linkParameters>cc_rt_ch_rt_receiver_link--5</linkParameters>
 		</function>
 		<function channel="6" type="REMOTECONTROL_RECEIVER" channelCount="1">
 			<properties>
@@ -80,9 +80,9 @@
 					<type>REMOTECONTROL_RECEIVER</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>cc_rt_ch_rc_master-6</configParameters>
-			<variables>cc_rt_ch_rc_values-6</variables>
-			<linkParameters>cc_rt_ch_sw_link-6</linkParameters>
+			<configParameters>cc_rt_ch_rc_master--6</configParameters>
+			<variables>cc_rt_ch_rc_values--6</variables>
+			<linkParameters>cc_rt_ch_sw_link--6</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -410,46 +410,61 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="cc_rt_ch_rc_master-6">
+		<configParameters id="cc_rt_ch_rc_master--6">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="cc_rt_ch_rt_receiver_master-5">
+		<configParameters id="cc_rt_ch_rt_receiver_master--5">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="cc_rt_ch_wsr_master-3">
+		<configParameters id="cc_rt_ch_wsr_master--3">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="cc_rt_dev_master-0">
+		<configParameters id="cc_rt_dev_master--0">
 			<parameter id="WAKE_ON_RADIO">
 				<properties/>
 				<logicalBoolean>
@@ -5254,6 +5269,50 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -5266,11 +5325,62 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="config-1"/>
-		<configParameters id="config-2"/>
-		<configParameters id="config-4"/>
-		<variables id="cc_rt_ch_rc_values-6"/>
-		<variables id="cc_rt_ch_rt_values-4">
+		<configParameters id="config--1">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="config--2">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="config--4">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<variables id="cc_rt_ch_rc_values--6"/>
+		<variables id="cc_rt_ch_rt_values--4">
 			<parameter id="CONTROL_MODE">
 				<properties>
 					<writeable>false</writeable>
@@ -5823,9 +5933,9 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="cc_rt_ch_rt_values-5"/>
-		<variables id="cc_rt_ch_weather_values-1"/>
-		<variables id="cc_rt_ch_wsr_values-3">
+		<variables id="cc_rt_ch_rt_values--5"/>
+		<variables id="cc_rt_ch_weather_values--1"/>
+		<variables id="cc_rt_ch_wsr_values--3">
 			<parameter id="WINDOW_STATE">
 				<properties>
 					<control>SWITCH.STATE</control>
@@ -5848,8 +5958,8 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="cc_rt_tc_values-2"/>
-		<variables id="maint_ch_values-0">
+		<variables id="cc_rt_tc_values--2"/>
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -6002,14 +6112,14 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<linkParameters id="cc_rt_ch_cs_link-1"/>
-		<linkParameters id="cc_rt_ch_rt_link-4"/>
-		<linkParameters id="cc_rt_ch_rt_receiver_link-5">
+		<linkParameters id="cc_rt_ch_cs_link--1"/>
+		<linkParameters id="cc_rt_ch_rt_link--4"/>
+		<linkParameters id="cc_rt_ch_rt_receiver_link--5">
 			<scenario id="default">
 				<parameter id="PEER_NEEDS_BURST">true</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="cc_rt_ch_sw_link-6">
+		<linkParameters id="cc_rt_ch_sw_link--6">
 			<parameter id="SHORT_CONTROL_RC">
 				<properties/>
 				<logicalEnumeration>
@@ -6136,8 +6246,8 @@
 				<parameter id="PEER_NEEDS_BURST">true</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="cc_rt_ch_tc_link-2"/>
-		<linkParameters id="cc_rt_ch_wsr_link-3">
+		<linkParameters id="cc_rt_ch_tc_link--2"/>
+		<linkParameters id="cc_rt_ch_wsr_link--3">
 			<parameter id="SHORT_COND_VALUE_LO">
 				<properties/>
 				<logicalInteger>

@@ -20,8 +20,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>s550_dev_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>s550_dev_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="WEATHER" channelCount="1">
 			<properties>
@@ -29,9 +29,9 @@
 					<type>WEATHER_T</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>s550_ch_master-1</configParameters>
-			<variables>s550_ch_values-1</variables>
-			<linkParameters>s550_ch_link-1</linkParameters>
+			<configParameters>s550_ch_master--1</configParameters>
+			<variables>s550_ch_values--1</variables>
+			<linkParameters>s550_ch_link--1</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -50,8 +50,8 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="s550_ch_master-1"/>
-		<configParameters id="s550_dev_master-0">
+		<configParameters id="s550_ch_master--1"/>
+		<configParameters id="s550_dev_master--0">
 			<parameter id="WAKE_ON_RADIO">
 				<properties/>
 				<logicalBoolean>
@@ -62,6 +62,50 @@
 					<size>1.0</size>
 					<list>0</list>
 					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">
@@ -76,7 +120,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="maint_ch_values-0">
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -157,7 +201,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="s550_ch_values-1">
+		<variables id="s550_ch_values--1">
 			<parameter id="TEMPERATURE">
 				<properties>
 					<writeable>false</writeable>
@@ -184,7 +228,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="s550_ch_link-1"/>
+		<linkParameters id="s550_ch_link--1"/>
 	</parameterGroups>
 </homegearDevice>
 

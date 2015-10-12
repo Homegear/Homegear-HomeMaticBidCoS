@@ -31,8 +31,8 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>maint_ch_master-0</configParameters>
-			<variables>maint_ch_values-0</variables>
+			<configParameters>maint_ch_master--0</configParameters>
+			<variables>maint_ch_values--0</variables>
 		</function>
 		<function channel="1" type="WS_TH" channelCount="8">
 			<properties>
@@ -42,9 +42,9 @@
 					<type>WEATHER_THP</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>ws550_ch_th_master-1</configParameters>
-			<variables>ws550_ch_th_values-1</variables>
-			<linkParameters>ws550_ch_ths_link-1</linkParameters>
+			<configParameters>ws550_ch_th_master--1</configParameters>
+			<variables>ws550_ch_th_values--1</variables>
+			<linkParameters>ws550_ch_ths_link--1</linkParameters>
 		</function>
 		<function channel="9" type="WS_CS" channelCount="1">
 			<properties>
@@ -52,9 +52,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>ws550_ch_cs_master-9</configParameters>
-			<variables>ws550_ch_cs_values-9</variables>
-			<linkParameters>ws550_ch_cs_link-9</linkParameters>
+			<configParameters>ws550_ch_cs_master--9</configParameters>
+			<variables>ws550_ch_cs_values--9</variables>
+			<linkParameters>ws550_ch_cs_link--9</linkParameters>
 		</function>
 		<function channel="10" type="WEATHER" channelCount="1">
 			<properties>
@@ -62,9 +62,9 @@
 					<type>WEATHER_THP</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>ws550_tx_ch_th_master-10</configParameters>
-			<variables>ws550_tx_ch_th_values-10</variables>
-			<linkParameters>ws550_tx_ch_th_link-10</linkParameters>
+			<configParameters>ws550_tx_ch_th_master--10</configParameters>
+			<variables>ws550_tx_ch_th_values--10</variables>
+			<linkParameters>ws550_tx_ch_th_link--10</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -92,7 +92,51 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="maint_ch_master-0">
+		<configParameters id="maint_ch_master--0">
+			<parameter id="PAIRED_TO_CENTRAL">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalBoolean/>
+				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
+					<index>2.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalBoolean>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_1">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
+					<index>10.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
+					<index>11.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+				<properties>
+					<visible>false</visible>
+				</properties>
+				<logicalInteger/>
+				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
+					<index>12.0</index>
+					<list>0</list>
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="ROAMING">
 				<properties>
 					<internal>true</internal>
@@ -105,10 +149,10 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="ws550_ch_cs_master-9"/>
-		<configParameters id="ws550_ch_th_master-1"/>
-		<configParameters id="ws550_tx_ch_th_master-10"/>
-		<variables id="maint_ch_values-0">
+		<configParameters id="ws550_ch_cs_master--9"/>
+		<configParameters id="ws550_ch_th_master--1"/>
+		<configParameters id="ws550_tx_ch_th_master--10"/>
+		<variables id="maint_ch_values--0">
 			<parameter id="UNREACH">
 				<properties>
 					<writeable>false</writeable>
@@ -214,9 +258,9 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="ws550_ch_cs_values-9"/>
-		<variables id="ws550_ch_th_values-1"/>
-		<variables id="ws550_tx_ch_th_values-10">
+		<variables id="ws550_ch_cs_values--9"/>
+		<variables id="ws550_ch_th_values--1"/>
+		<variables id="ws550_tx_ch_th_values--10">
 			<parameter id="TEMPERATURE">
 				<properties>
 					<writeable>false</writeable>
@@ -281,9 +325,9 @@
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="ws550_ch_cs_link-9"/>
-		<linkParameters id="ws550_ch_ths_link-1"/>
-		<linkParameters id="ws550_tx_ch_th_link-10"/>
+		<linkParameters id="ws550_ch_cs_link--9"/>
+		<linkParameters id="ws550_ch_ths_link--1"/>
+		<linkParameters id="ws550_tx_ch_th_link--10"/>
 	</parameterGroups>
 </homegearDevice>
 

@@ -1569,7 +1569,7 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 			GD::out.printDebug("Debug: AES key of peer " + std::to_string(_peerID) + " is current.");
 			return;
 		}
-		GD::out.printDebug("Info: Updating AES key of peer " + std::to_string(_peerID) + ".");
+		GD::out.printInfo("Info: Updating AES key of peer " + std::to_string(_peerID) + ".");
 		if(_aesKeyIndex > (signed)_physicalInterface->getCurrentRFKeyIndex())
 		{
 			GD::out.printError("Error: Can't update AES key of peer " + std::to_string(_peerID) + ". Peer's AES key index is larger than the key index defined in physicalinterfaces.conf.");

@@ -103,7 +103,7 @@ CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		settings->currentRFKeyIndex = 253;
 	}
 
-	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, rfKey, oldRfKey));
+	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, rfKey, oldRfKey, settings->currentRFKeyIndex));
 }
 
 CulAes::~CulAes()
@@ -273,6 +273,10 @@ void CulAes::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 		{
 			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ", because update mode is enabled.");
 			return;
+		}
+		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key
+		{
+			if(!_aesHandshake->generateKeyChangePacket(bidCoSPacket)) return;
 		}
 
 		writeToDevice("As" + packet->hexString() + "\n", true);
@@ -679,7 +683,7 @@ void CulAes::listen()
 							if(packet->messageType() == 0x03)
 							{
 								std::shared_ptr<BidCoSPacket> mFrame;
-								std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame);
+								std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame, peerIterator->second.keyIndex);
 								if(!aFrame)
 								{
 									if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
@@ -696,7 +700,7 @@ void CulAes::listen()
 							else if(packet->messageType() == 0x02 && packet->payload()->size() == 8 && packet->payload()->at(0) == 0x04)
 							{
 								std::shared_ptr<BidCoSPacket> mFrame;
-								std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame);
+								std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame, peerIterator->second.keyIndex);
 								if(!rFrame)
 								{
 									if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());

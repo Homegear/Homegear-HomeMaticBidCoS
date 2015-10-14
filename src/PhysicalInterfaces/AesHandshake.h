@@ -42,16 +42,17 @@ class BidCoSPacket;
 class AesHandshake
 {
 	public:
-		AesHandshake(BaseLib::Obj* baseLib, BaseLib::Output& out, int32_t address, std::vector<uint8_t> rfKey, std::vector<uint8_t> oldRfKey);
+		AesHandshake(BaseLib::Obj* baseLib, BaseLib::Output& out, int32_t address, std::vector<uint8_t> rfKey, std::vector<uint8_t> oldRfKey, uint32_t currentRfKeyIndex);
         virtual ~AesHandshake();
 
         void setMyAddress(int32_t address) { _myAddress = address; }
         void collectGarbage();
         void setMFrame(std::shared_ptr<BidCoSPacket> mFrame);
         std::shared_ptr<BidCoSPacket> getCFrame(std::shared_ptr<BidCoSPacket> mFrame);
-        std::shared_ptr<BidCoSPacket> getRFrame(std::shared_ptr<BidCoSPacket> cFrame, std::shared_ptr<BidCoSPacket>& mFrame);
-        std::shared_ptr<BidCoSPacket> getAFrame(std::shared_ptr<BidCoSPacket> rFrame, std::shared_ptr<BidCoSPacket>& mFrame);
+        std::shared_ptr<BidCoSPacket> getRFrame(std::shared_ptr<BidCoSPacket> cFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex);
+        std::shared_ptr<BidCoSPacket> getAFrame(std::shared_ptr<BidCoSPacket> rFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex);
         bool checkAFrame(std::shared_ptr<BidCoSPacket> aFrame);
+        bool generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChangeTemplate);
     private:
         class HandshakeInfo
 		{
@@ -69,11 +70,18 @@ class AesHandshake
         int32_t _myAddress = 0x1C6940;
         std::vector<uint8_t> _rfKey;
         std::vector<uint8_t> _oldRfKey;
+        uint32_t _currentRfKeyIndex = 0;
+        std::mutex _encryptMutex;
+        std::mutex _decryptMutex;
+        std::mutex _keyChangeMutex;
         gcry_cipher_hd_t _encryptHandle = nullptr;
+        gcry_cipher_hd_t _encryptHandleKeyChange = nullptr;
         gcry_cipher_hd_t _decryptHandle = nullptr;
         std::mutex _handshakeInfoMutex;
         std::map<int32_t, HandshakeInfo> _handshakeInfoRequest;
         std::map<int32_t, HandshakeInfo> _handshakeInfoResponse;
+
+        void getKey(std::vector<uint8_t>& key, uint32_t keyIndex);
 };
 
 }

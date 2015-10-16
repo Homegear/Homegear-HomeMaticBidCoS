@@ -2012,7 +2012,8 @@ void HomeMaticCentral::addHomegearFeatures(std::shared_ptr<BidCoSPeer> peer, int
 		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMSECMDIR ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSECMDIRSCHUECO ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRSM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRO) addHomegearFeaturesMotionDetector(peer, channel, pushPendingBidCoSQueues);
+				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRO ||
+				peer->getDeviceType().type() == (uint32_t)DeviceType::HmSenMdirWm55) addHomegearFeaturesMotionDetector(peer, channel, pushPendingBidCoSQueues);
 		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCRTDN ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCRTDNBOM ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HmTcItWmWEu) addHomegearFeaturesHMCCRTDN(peer, channel, pushPendingBidCoSQueues);

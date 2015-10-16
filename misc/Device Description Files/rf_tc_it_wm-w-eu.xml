@@ -571,7 +571,7 @@
 			</parameter>
 		</configParameters>
 		<configParameters id="tc_it_dev_master--0">
-			<parameter id="WAKE_ON_RADIO">
+			<parameter id="BURST_RX">
 				<properties/>
 				<logicalBoolean>
 					<defaultValue>true</defaultValue>

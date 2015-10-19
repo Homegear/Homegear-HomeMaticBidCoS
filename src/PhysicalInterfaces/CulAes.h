@@ -100,7 +100,7 @@ class CulAes : public IBidCoSInterface, public BaseLib::IQueue
         void writeToDevice(std::string, bool);
         std::string readFromDevice();
         void listen();
-        void processQueueEntry(std::shared_ptr<BaseLib::IQueueEntry>& entry);
+        void processQueueEntry(int32_t index, std::shared_ptr<BaseLib::IQueueEntry>& entry);
         void queuePacket(std::shared_ptr<BidCoSPacket> packet);
 };
 

@@ -35,7 +35,7 @@
 namespace BidCoS
 {
 
-CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings), BaseLib::IQueue(GD::bl, 45, SCHED_FIFO)
+CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings), BaseLib::IQueue(GD::bl)
 {
 	_bl = GD::bl;
 	_out.init(GD::bl);
@@ -201,7 +201,7 @@ void CulAes::removePeer(int32_t address)
     _peersMutex.unlock();
 }
 
-void CulAes::processQueueEntry(std::shared_ptr<BaseLib::IQueueEntry>& entry)
+void CulAes::processQueueEntry(int32_t index, std::shared_ptr<BaseLib::IQueueEntry>& entry)
 {
 	try
 	{
@@ -236,7 +236,7 @@ void CulAes::queuePacket(std::shared_ptr<BidCoSPacket> packet)
 		if(sendingTime <= 0) sendingTime = BaseLib::HelperFunctions::getTime();
 		sendingTime = sendingTime + _settings->responseDelay;
 		std::shared_ptr<BaseLib::IQueueEntry> entry(new QueueEntry(packet, sendingTime));
-		if(!enqueue(entry)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
+		if(!enqueue(0, entry)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
 	}
 	catch(const std::exception& ex)
     {
@@ -597,6 +597,7 @@ void CulAes::startListening()
 		_myAddress = GD::family->getCentral()->physicalAddress();
 		_aesHandshake->setMyAddress(_myAddress);
 
+		startQueue(0, 45, SCHED_FIFO);
 		openDevice();
 		if(_fileDescriptor->descriptor == -1) return;
 		_stopped = false;
@@ -639,6 +640,7 @@ void CulAes::stopListening()
 		}
 		_stopped = true;
 		IPhysicalInterface::stopListening();
+		stopQueue(0);
 	}
 	catch(const std::exception& ex)
     {

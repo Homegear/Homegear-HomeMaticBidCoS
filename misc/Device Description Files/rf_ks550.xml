@@ -115,7 +115,7 @@
 			</parameter>
 		</configParameters>
 		<configParameters id="ks550_dev_master--0">
-			<parameter id="WAKE_ON_RADIO">
+			<parameter id="LIVE_MODE_RX">
 				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>

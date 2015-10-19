@@ -70,7 +70,7 @@
 			</parameter>
 		</configParameters>
 		<configParameters id="wds40_th_dev_master--0">
-			<parameter id="WAKE_ON_RADIO">
+			<parameter id="BURST_RX">
 				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>

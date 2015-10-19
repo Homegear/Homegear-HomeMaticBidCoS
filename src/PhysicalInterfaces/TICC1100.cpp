@@ -50,7 +50,8 @@ TICC1100::TICC1100(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> 
 			settings->listenThreadPolicy = SCHED_FIFO;
 		}
 		if(settings->oscillatorFrequency < 0) settings->oscillatorFrequency = 26000000;
-		if(settings->txPowerSetting < 0) settings->txPowerSetting = 0xC0;
+		if(settings->txPowerSetting < 0) settings->txPowerSetting = (settings->highGainModeGpio > -1) ? 0x27 : 0xC0;
+		_out.printDebug("Debug: PATABLE will be set to 0x" + BaseLib::HelperFunctions::getHexString(settings->txPowerSetting, 2));
 		if(settings->interruptPin != 0 && settings->interruptPin != 2)
 		{
 			if(settings->interruptPin > 0) _out.printWarning("Warning: Setting for interruptPin for device CC1100 in physicalinterfaces.conf is invalid.");
@@ -349,10 +350,13 @@ void TICC1100::setup(int32_t userID, int32_t groupID)
 		setDevicePermission(userID, groupID);
 		_out.printDebug("Debug: CC1100: Exporting GPIO");
 		exportGPIO(1);
+		exportGPIO(2);
 		_out.printDebug("Debug: CC1100: Setting GPIO permissions");
 		setGPIOPermission(1, userID, groupID, true);
+		setGPIOPermission(2, userID, groupID, false);
 		_out.printDebug("Debug: CC1100: Setting GPIO direction");
 		setGPIODirection(1, GPIODirection::IN);
+		setGPIODirection(2, GPIODirection::OUT);
 		_out.printDebug("Debug: CC1100: Settings GPIO edge");
 		setGPIOEdge(1, GPIOEdge::BOTH);
 	}
@@ -844,6 +848,12 @@ void TICC1100::startListening()
 		stopListening();
 		openGPIO(1, true);
 		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1) throw(BaseLib::Exception("Couldn't listen to rf device, because the gpio pointer is not valid: " + _settings->device));
+		if(gpioDefined(2)) //Enable high gain mode
+		{
+			openGPIO(2, false);
+			if(!getGPIO(2)) setGPIO(2, true);
+			closeGPIO(2);
+		}
 		openDevice();
 		if(!_fileDescriptor || _fileDescriptor->descriptor == -1) return;
 		_stopped = false;

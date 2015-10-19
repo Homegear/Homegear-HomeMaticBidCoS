@@ -105,7 +105,7 @@
 		<configParameters id="wds30ot2_ch_master--1"/>
 		<configParameters id="wds30ot2_ch_master--5"/>
 		<configParameters id="wds30ot2_dev_master--0">
-			<parameter id="WAKE_ON_RADIO">
+			<parameter id="BURST_RX">
 				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>

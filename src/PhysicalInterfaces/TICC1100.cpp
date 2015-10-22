@@ -846,6 +846,10 @@ void TICC1100::startListening()
 	try
 	{
 		stopListening();
+		openDevice();
+		if(!_fileDescriptor || _fileDescriptor->descriptor == -1) return;
+
+		initChip();
 		openGPIO(1, true);
 		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1) throw(BaseLib::Exception("Couldn't listen to rf device, because the gpio pointer is not valid: " + _settings->device));
 		if(gpioDefined(2)) //Enable high gain mode
@@ -854,12 +858,8 @@ void TICC1100::startListening()
 			if(!getGPIO(2)) setGPIO(2, true);
 			closeGPIO(2);
 		}
-		openDevice();
-		if(!_fileDescriptor || _fileDescriptor->descriptor == -1) return;
+
 		_stopped = false;
-
-		initChip();
-
 		_firstPacket = true;
 		_stopCallbackThread = false;
 		_listenThread = std::thread(&TICC1100::mainThread, this);

@@ -50,7 +50,7 @@ TICC1100::TICC1100(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> 
 			settings->listenThreadPolicy = SCHED_FIFO;
 		}
 		if(settings->oscillatorFrequency < 0) settings->oscillatorFrequency = 26000000;
-		if(settings->txPowerSetting < 0) settings->txPowerSetting = (settings->highGainModeGpio > -1) ? 0x27 : 0xC0;
+		if(settings->txPowerSetting < 0) settings->txPowerSetting = (gpioDefined(2)) ? 0x27 : 0xC0;
 		_out.printDebug("Debug: PATABLE will be set to 0x" + BaseLib::HelperFunctions::getHexString(settings->txPowerSetting, 2));
 		if(settings->interruptPin != 0 && settings->interruptPin != 2)
 		{

@@ -142,6 +142,7 @@ class BidCoSQueue
         void push(std::shared_ptr<PendingBidCoSQueues>& pendingBidCoSQueues);
         void push(std::shared_ptr<BidCoSQueue> pendingBidCoSQueue, bool popImmediately, bool clearPendingQueues);
         BidCoSQueueEntry* front() { return &_queue.front(); }
+        BidCoSQueueEntry* second() { if(_queue.size() > 1) return &(*(_queue.begin() + 1)); else return nullptr; }
         void pop();
         void popWait(uint32_t waitingTime);
         bool isEmpty();

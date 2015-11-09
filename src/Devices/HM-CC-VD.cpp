@@ -28,7 +28,7 @@
  */
 
 #include "HM-CC-VD.h"
-#include "../homegear-base/BaseLib.h"
+#include "homegear-base/BaseLib.h"
 #include "../GD.h"
 
 namespace BidCoS

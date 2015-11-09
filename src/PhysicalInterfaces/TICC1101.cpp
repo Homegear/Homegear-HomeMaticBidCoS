@@ -33,7 +33,7 @@
 #ifdef BIDCOSTICC1101
 
 #include "../BidCoSPacket.h"
-#include "../homegear-base/BaseLib.h"
+#include "homegear-base/BaseLib.h"
 #include "../GD.h"
 
 namespace BidCoS

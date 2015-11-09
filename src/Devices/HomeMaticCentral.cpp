@@ -29,7 +29,7 @@
 
 #include "HomeMaticCentral.h"
 #include "../PendingBidCoSQueues.h"
-#include "../homegear-base/BaseLib.h"
+#include "homegear-base/BaseLib.h"
 #include "../GD.h"
 
 namespace BidCoS

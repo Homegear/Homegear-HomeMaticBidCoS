@@ -29,7 +29,7 @@
 
 #include "HM-LC-SwX-FM.h"
 #include "HomeMaticCentral.h"
-#include "../homegear-base/BaseLib.h"
+#include "homegear-base/BaseLib.h"
 #include "../GD.h"
 
 namespace BidCoS

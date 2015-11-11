@@ -96,7 +96,7 @@
 #define PACKAGE_NAME "homegar-homematicbidcos"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "homegar-homematicbidcos 0.6.0"
+#define PACKAGE_STRING "homegar-homematicbidcos 0.6.0-1032"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "homegar-homematicbidcos"
@@ -105,7 +105,7 @@
 #define PACKAGE_URL ""
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.6.0"
+#define PACKAGE_VERSION "0.6.0-1032"
 
 /* Enables compilation of all SPI interfaces */
 #define SPIINTERFACES /**/
@@ -114,7 +114,7 @@
 #define STDC_HEADERS 1
 
 /* Version number of package */
-#define VERSION "0.6.0"
+#define VERSION "0.6.0-1032"
 
 /* Define for Solaris 2.5.1 so the uint32_t typedef from <sys/synch.h>,
    <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the

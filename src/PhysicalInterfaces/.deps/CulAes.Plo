@@ -321,8 +321,7 @@ PhysicalInterfaces/CulAes.lo: PhysicalInterfaces/CulAes.cpp \
  /usr/include/homegear-base/Encoding/HTTP.h \
  /usr/include/homegear-base/Variable.h \
  /usr/include/homegear-base/IQueue.h PhysicalInterfaces/AesHandshake.h \
- PhysicalInterfaces/../BidCoSPacket.h \
- /usr/include/homegear-base/BaseLib.h PhysicalInterfaces/../GD.h \
+ PhysicalInterfaces/../BidCoSPacket.h PhysicalInterfaces/../GD.h \
  PhysicalInterfaces/../PhysicalInterfaces/IBidCoSInterface.h \
  PhysicalInterfaces/../BidCoS.h
 
@@ -1111,8 +1110,6 @@ PhysicalInterfaces/IBidCoSInterface.h:
 PhysicalInterfaces/AesHandshake.h:
 
 PhysicalInterfaces/../BidCoSPacket.h:
-
-/usr/include/homegear-base/BaseLib.h:
 
 PhysicalInterfaces/../GD.h:
 

@@ -340,8 +340,7 @@ PhysicalInterfaces/TICC1100.lo: PhysicalInterfaces/TICC1100.cpp \
  /usr/include/x86_64-linux-gnu/asm/posix_types.h \
  /usr/include/x86_64-linux-gnu/asm/posix_types_64.h \
  /usr/include/asm-generic/posix_types.h \
- PhysicalInterfaces/../BidCoSPacket.h \
- /usr/include/homegear-base/BaseLib.h PhysicalInterfaces/../GD.h \
+ PhysicalInterfaces/../BidCoSPacket.h PhysicalInterfaces/../GD.h \
  PhysicalInterfaces/../PhysicalInterfaces/IBidCoSInterface.h \
  PhysicalInterfaces/../BidCoS.h
 
@@ -1176,8 +1175,6 @@ PhysicalInterfaces/IBidCoSInterface.h:
 /usr/include/asm-generic/posix_types.h:
 
 PhysicalInterfaces/../BidCoSPacket.h:
-
-/usr/include/homegear-base/BaseLib.h:
 
 PhysicalInterfaces/../GD.h:
 

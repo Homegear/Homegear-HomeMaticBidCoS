@@ -320,8 +320,7 @@ BidCoSMessages.lo: BidCoSMessages.cpp /usr/include/stdc-predef.h \
  /usr/include/homegear-base/Variable.h \
  /usr/include/homegear-base/IQueue.h BidCoSPacket.h HomeMaticDevice.h \
  BidCoSQueue.h delegate.hpp delegate_list.hpp delegate_template.hpp \
- PhysicalInterfaces/IBidCoSInterface.h \
- /usr/include/homegear-base/BaseLib.h /usr/include/c++/4.8/queue \
+ PhysicalInterfaces/IBidCoSInterface.h /usr/include/c++/4.8/queue \
  /usr/include/c++/4.8/bits/stl_queue.h BidCoSPeer.h BidCoSDeviceTypes.h \
  BidCoSQueueManager.h BidCoSPacketManager.h GD.h BidCoS.h
 
@@ -1120,8 +1119,6 @@ delegate_list.hpp:
 delegate_template.hpp:
 
 PhysicalInterfaces/IBidCoSInterface.h:
-
-/usr/include/homegear-base/BaseLib.h:
 
 /usr/include/c++/4.8/queue:
 

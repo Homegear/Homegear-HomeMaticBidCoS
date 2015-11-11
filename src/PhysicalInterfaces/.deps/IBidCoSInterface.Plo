@@ -322,7 +322,7 @@ PhysicalInterfaces/IBidCoSInterface.lo: \
  /usr/include/homegear-base/Variable.h \
  /usr/include/homegear-base/IQueue.h PhysicalInterfaces/../GD.h \
  PhysicalInterfaces/../PhysicalInterfaces/IBidCoSInterface.h \
- PhysicalInterfaces/../BidCoS.h /usr/include/homegear-base/BaseLib.h
+ PhysicalInterfaces/../BidCoS.h
 
 /usr/include/stdc-predef.h:
 
@@ -1109,5 +1109,3 @@ PhysicalInterfaces/../GD.h:
 PhysicalInterfaces/../PhysicalInterfaces/IBidCoSInterface.h:
 
 PhysicalInterfaces/../BidCoS.h:
-
-/usr/include/homegear-base/BaseLib.h:

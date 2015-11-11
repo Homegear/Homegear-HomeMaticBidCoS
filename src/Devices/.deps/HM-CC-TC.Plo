@@ -321,12 +321,11 @@ Devices/HM-CC-TC.lo: Devices/HM-CC-TC.cpp /usr/include/stdc-predef.h \
  Devices/../delegate.hpp Devices/../delegate_list.hpp \
  Devices/../delegate_template.hpp Devices/../BidCoSPacket.h \
  Devices/../PhysicalInterfaces/IBidCoSInterface.h \
- /usr/include/homegear-base/BaseLib.h /usr/include/c++/4.8/queue \
- /usr/include/c++/4.8/bits/stl_queue.h Devices/../BidCoSPeer.h \
- Devices/../BidCoSDeviceTypes.h Devices/../BidCoSMessage.h \
- Devices/../HomeMaticDevice.h Devices/../BidCoSMessages.h \
- Devices/../BidCoSQueueManager.h Devices/../BidCoSPacketManager.h \
- Devices/../GD.h Devices/../BidCoS.h
+ /usr/include/c++/4.8/queue /usr/include/c++/4.8/bits/stl_queue.h \
+ Devices/../BidCoSPeer.h Devices/../BidCoSDeviceTypes.h \
+ Devices/../BidCoSMessage.h Devices/../HomeMaticDevice.h \
+ Devices/../BidCoSMessages.h Devices/../BidCoSQueueManager.h \
+ Devices/../BidCoSPacketManager.h Devices/../GD.h Devices/../BidCoS.h
 
 /usr/include/stdc-predef.h:
 
@@ -1121,8 +1120,6 @@ Devices/../delegate_template.hpp:
 Devices/../BidCoSPacket.h:
 
 Devices/../PhysicalInterfaces/IBidCoSInterface.h:
-
-/usr/include/homegear-base/BaseLib.h:
 
 /usr/include/c++/4.8/queue:
 

@@ -39,6 +39,7 @@ public:
 	virtual BaseLib::Systems::DeviceFamily* createDeviceFamily(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSink* eventHandler);
 };
 
+extern "C" std::string getVersion();
 extern "C" BaseLib::Systems::SystemFactory* getFactory();
 
 #endif

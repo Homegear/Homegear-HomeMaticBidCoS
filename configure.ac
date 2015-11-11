@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT(homegar-homematicbidcos, 0.6.0, sathya@laufers.net)
+AC_INIT(homegar-homematicbidcos, m4_esyscmd_s([./getVersion.sh]), sathya@laufers.net)
 AC_CONFIG_AUX_DIR(cfg)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([src/BidCoS.h])

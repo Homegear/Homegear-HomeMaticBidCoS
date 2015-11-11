@@ -319,8 +319,7 @@ BidCoS.lo: BidCoS.cpp /usr/include/stdc-predef.h BidCoS.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
  /usr/include/homegear-base/Variable.h \
  /usr/include/homegear-base/IQueue.h \
- PhysicalInterfaces/IBidCoSInterface.h \
- /usr/include/homegear-base/BaseLib.h PhysicalInterfaces/COC.h \
+ PhysicalInterfaces/IBidCoSInterface.h PhysicalInterfaces/COC.h \
  PhysicalInterfaces/IBidCoSInterface.h PhysicalInterfaces/CUL.h \
  PhysicalInterfaces/CulAes.h PhysicalInterfaces/AesHandshake.h \
  PhysicalInterfaces/CUNO.h PhysicalInterfaces/TICC1100.h \
@@ -1139,8 +1138,6 @@ BidCoS.h:
 /usr/include/homegear-base/IQueue.h:
 
 PhysicalInterfaces/IBidCoSInterface.h:
-
-/usr/include/homegear-base/BaseLib.h:
 
 PhysicalInterfaces/COC.h:
 

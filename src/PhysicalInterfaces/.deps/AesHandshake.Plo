@@ -319,8 +319,7 @@ PhysicalInterfaces/AesHandshake.lo: PhysicalInterfaces/AesHandshake.cpp \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
  /usr/include/homegear-base/Variable.h \
- /usr/include/homegear-base/IQueue.h PhysicalInterfaces/../BidCoSPacket.h \
- /usr/include/homegear-base/BaseLib.h
+ /usr/include/homegear-base/IQueue.h PhysicalInterfaces/../BidCoSPacket.h
 
 /usr/include/stdc-predef.h:
 
@@ -1103,5 +1102,3 @@ PhysicalInterfaces/AesHandshake.h:
 /usr/include/homegear-base/IQueue.h:
 
 PhysicalInterfaces/../BidCoSPacket.h:
-
-/usr/include/homegear-base/BaseLib.h:

@@ -357,8 +357,7 @@ BidCoS.lo: BidCoS.cpp /usr/include/stdc-predef.h BidCoS.h \
  Devices/../BidCoSPeer.h Devices/../BidCoSDeviceTypes.h \
  Devices/../BidCoSMessage.h Devices/../HomeMaticDevice.h \
  Devices/../BidCoSMessages.h Devices/../BidCoSQueueManager.h \
- Devices/../BidCoSPacketManager.h Devices/HM-LC-SwX-FM.h \
- BidCoSDeviceTypes.h Devices/HM-CC-TC.h Devices/HM-CC-VD.h \
+ Devices/../BidCoSPacketManager.h BidCoSDeviceTypes.h Devices/HM-CC-TC.h \
  Devices/HM-SD.h GD.h
 
 /usr/include/stdc-predef.h:
@@ -1257,13 +1256,9 @@ Devices/../BidCoSQueueManager.h:
 
 Devices/../BidCoSPacketManager.h:
 
-Devices/HM-LC-SwX-FM.h:
-
 BidCoSDeviceTypes.h:
 
 Devices/HM-CC-TC.h:
-
-Devices/HM-CC-VD.h:
 
 Devices/HM-SD.h:
 

@@ -125,8 +125,7 @@ mod_homematicbidcos_la_LIBADD =
 am__dirstamp = $(am__leading_dot)dirstamp
 am_mod_homematicbidcos_la_OBJECTS = BidCoSMessages.lo BidCoSMessage.lo \
 	Factory.lo BidCoSPacketManager.lo BidCoS.lo \
-	PendingBidCoSQueues.lo Devices/HM-CC-TC.lo Devices/HM-CC-VD.lo \
-	Devices/HM-LC-SwX-FM.lo Devices/HM-SD.lo \
+	PendingBidCoSQueues.lo Devices/HM-CC-TC.lo Devices/HM-SD.lo \
 	Devices/HomeMaticCentral.lo BidCoSPeer.lo GD.lo \
 	HomeMaticDevice.lo PhysicalInterfaces/CUNO.lo \
 	PhysicalInterfaces/HM-CFG-LAN.lo \
@@ -352,9 +351,7 @@ mod_homematicbidcos_la_SOURCES = HomeMaticDevice.h BidCoSPeer.h \
 	BidCoSMessages.cpp BidCoSMessage.cpp Factory.cpp GD.h \
 	BidCoSPacketManager.cpp BidCoSMessages.h BidCoS.cpp \
 	PendingBidCoSQueues.cpp Devices Devices/HM-CC-TC.cpp \
-	Devices/HM-CC-VD.h Devices/HM-SD.h Devices/HM-CC-VD.cpp \
-	Devices/HM-LC-SwX-FM.cpp Devices/HM-SD.cpp \
-	Devices/HM-LC-SwX-FM.h Devices/HomeMaticCentral.cpp \
+	Devices/HM-SD.h Devices/HM-SD.cpp Devices/HomeMaticCentral.cpp \
 	Devices/HM-CC-TC.h Devices/HomeMaticCentral.h BidCoSPeer.cpp \
 	delegate.hpp GD.cpp BidCoSQueue.h BidCoSPacket.h \
 	HomeMaticDevice.cpp BidCoSQueueManager.h delegate_template.hpp \
@@ -454,10 +451,6 @@ Devices/$(DEPDIR)/$(am__dirstamp):
 	@: > Devices/$(DEPDIR)/$(am__dirstamp)
 Devices/HM-CC-TC.lo: Devices/$(am__dirstamp) \
 	Devices/$(DEPDIR)/$(am__dirstamp)
-Devices/HM-CC-VD.lo: Devices/$(am__dirstamp) \
-	Devices/$(DEPDIR)/$(am__dirstamp)
-Devices/HM-LC-SwX-FM.lo: Devices/$(am__dirstamp) \
-	Devices/$(DEPDIR)/$(am__dirstamp)
 Devices/HM-SD.lo: Devices/$(am__dirstamp) \
 	Devices/$(DEPDIR)/$(am__dirstamp)
 Devices/HomeMaticCentral.lo: Devices/$(am__dirstamp) \
@@ -519,8 +512,6 @@ include ./$(DEPDIR)/GD.Plo
 include ./$(DEPDIR)/HomeMaticDevice.Plo
 include ./$(DEPDIR)/PendingBidCoSQueues.Plo
 include Devices/$(DEPDIR)/HM-CC-TC.Plo
-include Devices/$(DEPDIR)/HM-CC-VD.Plo
-include Devices/$(DEPDIR)/HM-LC-SwX-FM.Plo
 include Devices/$(DEPDIR)/HM-SD.Plo
 include Devices/$(DEPDIR)/HomeMaticCentral.Plo
 include PhysicalInterfaces/$(DEPDIR)/AesHandshake.Plo

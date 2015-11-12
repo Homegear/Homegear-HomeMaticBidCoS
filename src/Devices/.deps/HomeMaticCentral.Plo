@@ -329,8 +329,8 @@ Devices/HomeMaticCentral.lo: Devices/HomeMaticCentral.cpp \
  Devices/../BidCoSPeer.h Devices/../BidCoSDeviceTypes.h \
  Devices/../BidCoSMessage.h Devices/../HomeMaticDevice.h \
  Devices/../BidCoSMessages.h Devices/../BidCoSQueueManager.h \
- Devices/../BidCoSPacketManager.h Devices/HM-LC-SwX-FM.h \
- Devices/../PendingBidCoSQueues.h Devices/../GD.h Devices/../BidCoS.h
+ Devices/../BidCoSPacketManager.h Devices/../PendingBidCoSQueues.h \
+ Devices/../GD.h Devices/../BidCoS.h
 
 /usr/include/stdc-predef.h:
 
@@ -1153,8 +1153,6 @@ Devices/../BidCoSMessages.h:
 Devices/../BidCoSQueueManager.h:
 
 Devices/../BidCoSPacketManager.h:
-
-Devices/HM-LC-SwX-FM.h:
 
 Devices/../PendingBidCoSQueues.h:
 

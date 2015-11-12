@@ -328,7 +328,7 @@ HomeMaticDevice.lo: HomeMaticDevice.cpp /usr/include/stdc-predef.h \
  /usr/include/c++/4.8/bits/stl_queue.h BidCoSPeer.h BidCoSDeviceTypes.h \
  BidCoSMessage.h BidCoSMessages.h BidCoSQueueManager.h \
  BidCoSPacketManager.h Devices/HomeMaticCentral.h Devices/HM-CC-TC.h \
- Devices/../HomeMaticDevice.h Devices/HM-LC-SwX-FM.h GD.h BidCoS.h
+ Devices/../HomeMaticDevice.h GD.h BidCoS.h
 
 /usr/include/stdc-predef.h:
 
@@ -1151,8 +1151,6 @@ Devices/HomeMaticCentral.h:
 Devices/HM-CC-TC.h:
 
 Devices/../HomeMaticDevice.h:
-
-Devices/HM-LC-SwX-FM.h:
 
 GD.h:
 

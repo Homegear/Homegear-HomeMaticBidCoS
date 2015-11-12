@@ -31,7 +31,6 @@
 #define HOMEMATICCENTRAL_H_
 
 #include "HM-CC-TC.h"
-#include "HM-LC-SwX-FM.h"
 #include "../HomeMaticDevice.h"
 
 #include <memory>

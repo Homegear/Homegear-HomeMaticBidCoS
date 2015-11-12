@@ -43,7 +43,6 @@
 #include "Devices/HomeMaticCentral.h"
 #include "BidCoSDeviceTypes.h"
 #include "Devices/HM-CC-TC.h"
-#include "Devices/HM-CC-VD.h"
 #include "Devices/HM-SD.h"
 #include "homegear-base/BaseLib.h"
 #include "GD.h"
@@ -335,12 +334,6 @@ void BidCoS::load()
 			case DeviceType::HMCCTC:
 				device = std::shared_ptr<BaseLib::Systems::LogicalDevice>(new HM_CC_TC(deviceID, serialNumber, address, this));
 				break;
-			case DeviceType::HMLCSW1FM:
-				device = std::shared_ptr<BaseLib::Systems::LogicalDevice>(new HM_LC_SWX_FM(deviceID, serialNumber, address, this));
-				break;
-			case DeviceType::HMCCVD:
-				device = std::shared_ptr<BaseLib::Systems::LogicalDevice>(new HM_CC_VD(deviceID, serialNumber, address, this));
-				break;
 			case DeviceType::HMCENTRAL:
 				_central = std::shared_ptr<HomeMaticCentral>(new HomeMaticCentral(deviceID, serialNumber, address, this));
 				device = _central;
@@ -479,7 +472,6 @@ std::string BidCoS::handleCLICommand(std::string& command)
 				stringStream << "  FFFFFFFD:\tCentral device" << std::endl;
 				stringStream << "  FFFFFFFE:\tSpy device" << std::endl;
 				stringStream << "  39:\t\tHM-CC-TC" << std::endl;
-				stringStream << "  3A:\t\tHM-CC-VD" << std::endl;
 				return stringStream.str();
 			}
 
@@ -488,10 +480,6 @@ std::string BidCoS::handleCLICommand(std::string& command)
 			case (uint32_t)DeviceType::HMCCTC:
 				add(std::shared_ptr<BaseLib::Systems::LogicalDevice>(new HM_CC_TC(0, serialNumber, address, this)));
 				stringStream << "Created HM_CC_TC with address 0x" << std::hex << address << std::dec << " and serial number " << serialNumber << std::endl;
-				break;
-			case (uint32_t)DeviceType::HMCCVD:
-				add(std::shared_ptr<BaseLib::Systems::LogicalDevice>(new HM_CC_VD(0, serialNumber, address, this)));
-				stringStream << "Created HM_CC_VD with address 0x" << std::hex << address << std::dec << " and serial number " << serialNumber << std::endl;
 				break;
 			case (uint32_t)DeviceType::HMCENTRAL:
 				if(_central) stringStream << "Cannot create more than one HomeMatic BidCoS central device." << std::endl;

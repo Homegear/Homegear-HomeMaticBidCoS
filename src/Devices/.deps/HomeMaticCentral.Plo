@@ -314,6 +314,8 @@ Devices/HomeMaticCentral.lo: Devices/HomeMaticCentral.cpp \
  /usr/include/homegear-base/Threads/Threads.h \
  /usr/include/homegear-base/Exception.h \
  /usr/include/homegear-base/Output/Output.h \
+ /usr/include/homegear-base/Licensing/LicensingFactory.h \
+ /usr/include/homegear-base/Licensing/Licensing.h \
  /usr/include/homegear-base/SSDP/SSDP.h \
  /usr/include/homegear-base/Encoding/HTTP.h \
  /usr/include/homegear-base/Variable.h \
@@ -1103,6 +1105,10 @@ Devices/../HomeMaticDevice.h:
 /usr/include/homegear-base/Exception.h:
 
 /usr/include/homegear-base/Output/Output.h:
+
+/usr/include/homegear-base/Licensing/LicensingFactory.h:
+
+/usr/include/homegear-base/Licensing/Licensing.h:
 
 /usr/include/homegear-base/SSDP/SSDP.h:
 

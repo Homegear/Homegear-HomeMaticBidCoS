@@ -58,7 +58,7 @@ BidCoS::BidCoS(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSin
 	GD::out.setPrefix("Module HomeMatic BidCoS: ");
 	GD::out.printDebug("Debug: Loading module...");
 	_family = 0;
-	GD::rpcDevices.init(_bl);
+	GD::rpcDevices.init(_bl, this);
 }
 
 BidCoS::~BidCoS()

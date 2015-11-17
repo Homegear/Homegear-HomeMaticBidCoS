@@ -8,6 +8,7 @@
 *.pch
 # Compiled Dynamic libraries
 *.so
+*.so.1.0.0
 *.dylib
 *.dll
 # Fortran module files
@@ -51,3 +52,28 @@ local.properties
 autom4te.cache
 *.in~
 config.log
+homegear
+core
+vgcore.*
+
+#Autotools
+autoscan.*
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.*
+configure
+depcomp
+install-sh
+libtool
+ltmain.sh
+cfg/
+m4/
+missing
+stamp-h?
+.deps/
+.dirstamp
+.libs/
+*.l[ao]
+*~

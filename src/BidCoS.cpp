@@ -86,35 +86,6 @@ void BidCoS::dispose()
 
 std::shared_ptr<BaseLib::Systems::Central> BidCoS::getCentral() { return _central; }
 
-PVariable BidCoS::listBidcosInterfaces()
-{
-	try
-	{
-		if(!_central || !GD::defaultPhysicalInterface) return PVariable(new Variable(VariableType::tArray));
-		PVariable array(new Variable(BaseLib::VariableType::tArray));
-		PVariable interface(new Variable(BaseLib::VariableType::tStruct));
-		array->arrayValue->push_back(interface);
-		interface->structValue->insert(StructElement("ADDRESS", PVariable(new Variable(_central->getSerialNumber()))));
-		interface->structValue->insert(StructElement("DESCRIPTION", PVariable(new Variable(std::string("Homegear default BidCoS interface")))));
-		interface->structValue->insert(StructElement("CONNECTED", PVariable(new Variable(GD::defaultPhysicalInterface->isOpen()))));
-		interface->structValue->insert(StructElement("DEFAULT", PVariable(new Variable(true))));
-		return array;
-	}
-	catch(const std::exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
-	return Variable::createError(-32500, "Unknown application error.");
-}
-
 std::shared_ptr<BaseLib::Systems::IPhysicalInterface> BidCoS::createPhysicalDevice(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings)
 {
 	try
@@ -318,7 +289,7 @@ void BidCoS::load()
 	try
 	{
 		_devices.clear();
-		std::shared_ptr<BaseLib::Database::DataTable> rows = raiseGetDevices();
+		std::shared_ptr<BaseLib::Database::DataTable> rows = _bl->db->getDevices((uint32_t)_family);
 		bool spyDeviceExists = false;
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
 		{

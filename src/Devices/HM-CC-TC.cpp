@@ -203,7 +203,7 @@ void HM_CC_TC::loadVariables()
 	try
 	{
 		HomeMaticDevice::loadVariables();
-		std::shared_ptr<BaseLib::Database::DataTable> rows = raiseGetDeviceVariables();
+		std::shared_ptr<BaseLib::Database::DataTable> rows = _bl->db->getDeviceVariables(_deviceID);
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
 		{
 			_variableDatabaseIDs[row->second.at(2)->intValue] = row->second.at(0)->intValue;
@@ -352,12 +352,6 @@ void HM_CC_TC::dutyCycleThread(int64_t lastDutyCycleEvent)
 					_dutyCycleCounter += 1;
 				}
 				if(_stopDutyCycleThread) break;
-
-				if(_dutyCycleBroadcast)
-				{
-					if(_sendDutyCyclePacketThread.joinable()) _sendDutyCyclePacketThread.join();
-					_sendDutyCyclePacketThread = std::thread(&HM_CC_TC::sendDutyCycleBroadcast, this);
-				}
 
 				while(!_stopDutyCycleThread && _dutyCycleCounter < (signed)cycleLength - 40)
 				{

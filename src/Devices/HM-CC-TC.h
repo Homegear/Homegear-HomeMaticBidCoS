@@ -70,7 +70,6 @@ class HM_CC_TC : public HomeMaticDevice
         bool _stopDutyCycleThread = false;
         std::thread _dutyCycleThread;
         int32_t _dutyCycleCounter  = 0;
-        bool _dutyCycleBroadcast = false;
         std::thread _sendDutyCyclePacketThread;
         void reset();
 

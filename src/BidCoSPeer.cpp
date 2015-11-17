@@ -118,7 +118,7 @@ void BidCoSPeer::initializeLinkConfig(int32_t channel, int32_t remoteAddress, in
 		if(functionIterator == _rpcDevice->functions.end())	return;
 		PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(ParameterGroup::Type::link);
 		if(!parameterGroup || parameterGroup->parameters.empty()) return;
-		raiseCreateSavepointAsynchronous(savePointname);
+		_bl->db->createSavepointAsynchronous(savePointname);
 		//This line creates an empty link config. This is essential as the link config must exist, even if it is empty.
 		std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>* linkConfig = &linksCentral[channel][remoteAddress][remoteChannel];
 		BaseLib::Systems::RPCConfigurationParameter parameter;
@@ -148,7 +148,7 @@ void BidCoSPeer::initializeLinkConfig(int32_t channel, int32_t remoteAddress, in
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-    raiseReleaseSavepointAsynchronous(savePointname);
+    _bl->db->releaseSavepointAsynchronous(savePointname);
 }
 
 void BidCoSPeer::applyConfigFunction(int32_t channel, int32_t peerAddress, int32_t remoteChannel)
@@ -868,7 +868,7 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(channel)));
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(address)));
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(remoteChannel)));
-				raiseDeletePeerParameter(data);
+				_bl->db->deletePeerParameter(_peerID, data);
 				_databaseMutex.unlock();
 				savePeers();
 				return;
@@ -1365,7 +1365,7 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::LogicalDevice* device, std::sha
 {
 	try
 	{
-		if(!rows) rows = raiseGetPeerVariables();
+		if(!rows) rows = _bl->db->getPeerVariables(_peerID);
 		Peer::loadVariables(device, rows);
 		_databaseMutex.lock();
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)

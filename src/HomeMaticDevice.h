@@ -51,7 +51,7 @@
 namespace BidCoS
 {
 
-class HomeMaticDevice : public BaseLib::Systems::LogicalDevice, public BidCoSQueueManager::IBidCoSQueueManagerEventSink
+class HomeMaticDevice : public BaseLib::Systems::LogicalDevice
 {
     public:
         //In table variables
@@ -173,11 +173,6 @@ class HomeMaticDevice : public BaseLib::Systems::LogicalDevice, public BidCoSQue
         virtual void init();
         virtual void setUpBidCoSMessages();
         virtual void setUpConfig();
-
-        //BidCoSQueueManager event handling
-		virtual void onQueueCreateSavepoint(std::string name);
-		virtual void onQueueReleaseSavepoint(std::string name);
-		//End BidCoSQueueManager
 };
 
 }

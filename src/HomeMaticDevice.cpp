@@ -551,7 +551,7 @@ void HomeMaticDevice::loadPeers()
 {
 	try
 	{
-		std::shared_ptr<BaseLib::Database::DataTable> rows = raiseGetPeers();
+		std::shared_ptr<BaseLib::Database::DataTable> rows = _bl->db->getPeers(_deviceID);
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
 		{
 			int32_t peerID = row->second.at(0)->intValue;
@@ -638,7 +638,7 @@ void HomeMaticDevice::loadVariables()
 {
 	try
 	{
-		std::shared_ptr<BaseLib::Database::DataTable> rows = raiseGetDeviceVariables();
+		std::shared_ptr<BaseLib::Database::DataTable> rows = _bl->db->getDeviceVariables(_deviceID);
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
 		{
 			_variableDatabaseIDs[row->second.at(2)->intValue] = row->second.at(0)->intValue;
@@ -1887,17 +1887,5 @@ int32_t HomeMaticDevice::calculateCycleLength(uint8_t messageCounter)
 	int32_t result = (((_address << 8) | messageCounter) * 1103515245 + 12345) >> 16;
 	return (result & 0xFF) + 480;
 }
-
-//BidCoSQueueManager event handling
-void HomeMaticDevice::onQueueCreateSavepoint(std::string name)
-{
-	raiseCreateSavepointAsynchronous(name);
-}
-
-void HomeMaticDevice::onQueueReleaseSavepoint(std::string name)
-{
-	raiseReleaseSavepointAsynchronous(name);
-}
-//End BidCoSQueueManager event handling
 
 }

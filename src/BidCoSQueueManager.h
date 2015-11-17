@@ -55,18 +55,9 @@ public:
 	virtual ~BidCoSQueueData() {}
 };
 
-class BidCoSQueueManager : public BaseLib::IEvents
+class BidCoSQueueManager
 {
 public:
-	//Event handling
-	class IBidCoSQueueManagerEventSink : public BaseLib::IEventSinkBase
-	{
-	public:
-		virtual void onQueueCreateSavepoint(std::string name) = 0;
-		virtual void onQueueReleaseSavepoint(std::string name) = 0;
-	};
-	//End event handling
-
 	BidCoSQueueManager();
 	virtual ~BidCoSQueueManager();
 
@@ -86,10 +77,6 @@ protected:
 	std::mutex _queueMutex;
 
 	void worker();
-	//Event handling
-	virtual void raiseCreateSavepoint(std::string name);
-	virtual void raiseReleaseSavepoint(std::string name);
-	//End event handling
 };
 }
 #endif /* BIDCOSQUEUEMANAGER_H_ */

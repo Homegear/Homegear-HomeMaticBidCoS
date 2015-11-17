@@ -1,9 +1,0 @@
-PhysicalInterfaces/RTLSDR-LAN.lo: PhysicalInterfaces/RTLSDR-LAN.cpp \
- /usr/include/stdc-predef.h PhysicalInterfaces/RTLSDR-LAN.h \
- PhysicalInterfaces/../../config.h
-
-/usr/include/stdc-predef.h:
-
-PhysicalInterfaces/RTLSDR-LAN.h:
-
-PhysicalInterfaces/../../config.h:

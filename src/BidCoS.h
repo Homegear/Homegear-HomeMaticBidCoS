@@ -47,7 +47,6 @@ public:
 	virtual bool init();
 	virtual void dispose();
 
-	virtual PVariable listBidcosInterfaces();
 	virtual std::shared_ptr<BaseLib::Systems::IPhysicalInterface> createPhysicalDevice(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
 	virtual void load();
 	virtual std::shared_ptr<HomeMaticDevice> getDevice(int32_t address);
@@ -65,6 +64,6 @@ private:
 	void createSpyDevice();
 };
 
-} /* namespace HMWired */
+}
 
-#endif /* BIDCOS_H_ */
+#endif

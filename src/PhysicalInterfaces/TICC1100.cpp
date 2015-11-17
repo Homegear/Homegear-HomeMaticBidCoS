@@ -350,13 +350,13 @@ void TICC1100::setup(int32_t userID, int32_t groupID)
 		setDevicePermission(userID, groupID);
 		_out.printDebug("Debug: CC1100: Exporting GPIO");
 		exportGPIO(1);
-		exportGPIO(2);
+		if(gpioDefined(2)) exportGPIO(2);
 		_out.printDebug("Debug: CC1100: Setting GPIO permissions");
 		setGPIOPermission(1, userID, groupID, true);
-		setGPIOPermission(2, userID, groupID, false);
+		if(gpioDefined(2)) setGPIOPermission(2, userID, groupID, false);
 		_out.printDebug("Debug: CC1100: Setting GPIO direction");
 		setGPIODirection(1, GPIODirection::IN);
-		setGPIODirection(2, GPIODirection::OUT);
+		if(gpioDefined(2)) setGPIODirection(2, GPIODirection::OUT);
 		_out.printDebug("Debug: CC1100: Settings GPIO edge");
 		setGPIOEdge(1, GPIOEdge::BOTH);
 	}

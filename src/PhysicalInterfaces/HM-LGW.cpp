@@ -96,6 +96,7 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		_out.printCritical("Critical: Error initializing HM-LGW. Settings pointer is empty.");
 		return;
 	}
+
 	if(settings->lanKey.empty())
 	{
 		_out.printError("Error: No security key specified in physicalinterfaces.conf.");
@@ -844,7 +845,13 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 		{
 			std::vector<uint8_t> responsePacket;
 			std::vector<char> requestPacket;
-			std::vector<char> payload{ 1, 2, 0, 0 };
+			std::vector<char> payload;
+			payload.reserve(5 + packetBytes.size() - 1);
+			payload.push_back(1);
+			payload.push_back(2);
+			payload.push_back(0);
+			payload.push_back(0);
+			if(_settings->sendFix) payload.push_back(0);
 			payload.insert(payload.end(), packetBytes.begin() + 1, packetBytes.end());
 			buildPacket(requestPacket, payload);
 			_packetIndex++;

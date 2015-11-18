@@ -3,6 +3,11 @@
 override_dh_auto_install:
 	dh_auto_install
 
+	mkdir -p $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/families
+	cp -R $(CURDIR)/misc/Config\ Directory/* $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/families
+	chmod 755 $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/families
+	chmod 644 $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/families/*
+
 	mkdir -p $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/devices/0
 	cp $(CURDIR)/misc/Device\ Description\ Files/* $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/devices/0
 	chmod 755 $(CURDIR)/debian/homegear-homematicbidcos/etc/homegear/devices/0

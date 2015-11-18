@@ -55,7 +55,7 @@ TICC1101::TICC1101(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> 
 		if(settings->txPowerSetting < 0) settings->txPowerSetting = 0xC0;
 		if(settings->interruptPin != 0 && settings->interruptPin != 2)
 		{
-			if(settings->interruptPin > 0) _out.printWarning("Warning: Setting for interruptPin for device CC1100 in physicalinterfaces.conf is invalid.");
+			if(settings->interruptPin > 0) _out.printWarning("Warning: Setting for interruptPin for device CC1100 in homematicbidcos.conf is invalid.");
 			settings->interruptPin = 2;
 		}
 
@@ -198,7 +198,7 @@ void TICC1101::setConfig()
 			0x00, //28: RCCTRL0
 		};
 	}
-	else _out.printError("Error: Unknown value for \"oscillatorFrequency\" in physicalinterfaces.conf. Valid values are 26000000 and 27000000.");
+	else _out.printError("Error: Unknown value for \"oscillatorFrequency\" in homematicbidcos.conf. Valid values are 26000000 and 27000000.");
 }
 
 void TICC1101::enableUpdateMode()

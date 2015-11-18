@@ -35,12 +35,12 @@
 namespace BidCoS
 {
 
-HomeMaticDevice::HomeMaticDevice(IDeviceEventSink* eventHandler) : LogicalDevice(0, GD::bl, eventHandler)
+HomeMaticDevice::HomeMaticDevice(IDeviceEventSink* eventHandler) : LogicalDevice(BIDCOS_FAMILY_ID, GD::bl, eventHandler)
 {
 	_physicalInterface = GD::defaultPhysicalInterface;
 }
 
-HomeMaticDevice::HomeMaticDevice(uint32_t deviceID, std::string serialNumber, int32_t address, IDeviceEventSink* eventHandler) : LogicalDevice(0, GD::bl, deviceID, serialNumber, address, eventHandler)
+HomeMaticDevice::HomeMaticDevice(uint32_t deviceID, std::string serialNumber, int32_t address, IDeviceEventSink* eventHandler) : LogicalDevice(BIDCOS_FAMILY_ID, GD::bl, deviceID, serialNumber, address, eventHandler)
 {
 	_physicalInterface = GD::defaultPhysicalInterface;
 }
@@ -1405,7 +1405,7 @@ void HomeMaticDevice::handleConfigStart(int32_t messageCounter, std::shared_ptr<
 			std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.createQueue(this, getPhysicalInterface(packet->senderAddress()), BidCoSQueueType::PAIRINGCENTRAL, packet->senderAddress());
 			std::shared_ptr<BidCoSPeer> peer(new BidCoSPeer(_deviceID, isCentral(), this));
 			peer->setAddress(packet->senderAddress());
-			peer->setDeviceType(BaseLib::Systems::LogicalDeviceType(0, (uint32_t)DeviceType::HMRCV50));
+			peer->setDeviceType(BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, (uint32_t)DeviceType::HMRCV50));
 			peer->setMessageCounter(0); //Unknown at this point
 			queue->peer = peer;
 			queue->push(_messages->find(DIRECTIONIN, 0x01, std::vector<std::pair<uint32_t, int32_t>> { std::pair<uint32_t, int32_t>(0x01, 0x05) }));

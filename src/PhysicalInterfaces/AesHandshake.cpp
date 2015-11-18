@@ -627,7 +627,7 @@ bool AesHandshake::generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChan
 		std::vector<uint8_t> key;
 		if(_currentRfKeyIndex != index)
 		{
-			_out.printError("Error: No AES key is defined for the key index to set. You probably changed rfKey before the last key was sent to the device or you forgot to set oldRfKey. Please set oldRfKey in physicalinterfaces.conf to the current AES key of the peer or reset the peer and pair it again.");
+			_out.printError("Error: No AES key is defined for the key index to set. You probably changed rfKey before the last key was sent to the device or you forgot to set oldRfKey. Please set oldRfKey in homematicbidcos.conf to the current AES key of the peer or reset the peer and pair it again.");
 			return false;
 		}
 		if(_currentRfKeyIndex == 1) oldRfKey = std::vector<uint8_t> { 0xA4, 0xE3, 0x75, 0xC6, 0xB0, 0x9F, 0xD1, 0x85, 0xF2, 0x7C, 0x4E, 0x96, 0xFC, 0x27, 0x3A, 0xE4 };

@@ -27,14 +27,26 @@
  * files in the program, then also delete it here.
  */
 
-#include "GD.h"
+#ifndef INTERFACES_H_
+#define INTERFACES_H_
+
+#include "homegear-base/BaseLib.h"
 
 namespace BidCoS
 {
-	BaseLib::Obj* GD::bl = nullptr;
-	BidCoS* GD::family = nullptr;
-	BaseLib::Output GD::out;
-	std::map<std::string, std::shared_ptr<IBidCoSInterface>> GD::physicalInterfaces;
-	std::shared_ptr<IBidCoSInterface> GD::defaultPhysicalInterface;
-	BaseLib::DeviceDescription::Devices GD::rpcDevices(BIDCOS_FAMILY_ID);
+
+using namespace BaseLib;
+
+class Interfaces : public BaseLib::Systems::PhysicalInterfaces
+{
+public:
+	Interfaces(BaseLib::Obj* bl, std::vector<std::shared_ptr<Systems::PhysicalInterfaceSettings>> physicalInterfaceSettings);
+	virtual ~Interfaces();
+
+protected:
+	virtual void create();
+};
+
 }
+
+#endif

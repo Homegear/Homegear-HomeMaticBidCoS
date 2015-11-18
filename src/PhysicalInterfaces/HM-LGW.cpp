@@ -99,13 +99,13 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 
 	if(settings->lanKey.empty())
 	{
-		_out.printError("Error: No security key specified in physicalinterfaces.conf.");
+		_out.printError("Error: No security key specified in homematicbidcos.conf.");
 		return;
 	}
 
 	if(settings->rfKey.empty())
 	{
-		_out.printError("Error: No RF AES key specified in physicalinterfaces.conf for communication with your BidCoS devices.");
+		_out.printError("Error: No RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices.");
 	}
 
 	if(!settings->rfKey.empty())
@@ -113,7 +113,7 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		_rfKey = _bl->hf.getUBinary(settings->rfKey);
 		if(_rfKey.size() != 16)
 		{
-			_out.printError("Error: The RF AES key specified in physicalinterfaces.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
+			_out.printError("Error: The RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
 			_rfKey.clear();
 		}
 	}
@@ -123,20 +123,20 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		_oldRFKey = _bl->hf.getUBinary(settings->oldRFKey);
 		if(_oldRFKey.size() != 16)
 		{
-			_out.printError("Error: The old RF AES key specified in physicalinterfaces.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
+			_out.printError("Error: The old RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
 			_oldRFKey.clear();
 		}
 	}
 
 	if(!_rfKey.empty() && settings->currentRFKeyIndex == 0)
 	{
-		_out.printWarning("Warning: currentRFKeyIndex in physicalinterfaces.conf is not set. Setting it to \"1\".");
+		_out.printWarning("Warning: currentRFKeyIndex in homematicbidcos.conf is not set. Setting it to \"1\".");
 		settings->currentRFKeyIndex = 1;
 	}
 
 	if(!_oldRFKey.empty() && settings->currentRFKeyIndex == 1)
 	{
-		_out.printWarning("Warning: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
+		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
 		_oldRFKey.clear();
 	}
 
@@ -145,19 +145,19 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		_oldRFKey.clear();
 		if(settings->currentRFKeyIndex > 0)
 		{
-			_out.printWarning("Warning: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
+			_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
 			settings->currentRFKeyIndex = 0;
 		}
 	}
 
 	if(_oldRFKey.empty() && settings->currentRFKeyIndex > 1)
 	{
-		_out.printWarning("Warning: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
+		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
 	}
 
 	if(settings->currentRFKeyIndex > 253)
 	{
-		_out.printError("Error: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
+		_out.printError("Error: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
 		settings->currentRFKeyIndex = 253;
 	}
 }
@@ -1105,7 +1105,7 @@ void HM_LGW::doInit()
 		if(parts.size() != 2 || parts.at(0).size() != 3 || parts.at(0).at(0) != 'S' || parts.at(1).size() < 15 || parts.at(1).compare(0, 15, "BidCoS-over-LAN") != 0)
 		{
 			_stopped = true;
-			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please check your AES key in physicalinterfaces.conf. Stopping listening.");
+			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please check your AES key in homematicbidcos.conf. Stopping listening.");
 			return;
 		}
 		uint8_t packetIndex = (_math.getNumber(parts.at(0).at(1)) << 4) + _math.getNumber(parts.at(0).at(2));
@@ -1640,7 +1640,7 @@ bool HM_LGW::aesInit()
 
 	if(_settings->lanKey.empty())
 	{
-		_out.printError("Error: No AES key specified in physicalinterfaces.conf for communication with your HM-LGW.");
+		_out.printError("Error: No AES key specified in homematicbidcos.conf for communication with your HM-LGW.");
 		return false;
 	}
 
@@ -2600,7 +2600,7 @@ void HM_LGW::processInitKeepAlive(std::string& packet)
 		if(parts.size() != 2 || parts.at(0).size() != 3 || parts.at(0).at(0) != 'S' || parts.at(1).size() < 6 || parts.at(1).compare(0, 6, "SysCom") != 0)
 		{
 			_stopCallbackThread = true;
-			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please check your AES key in physicalinterfaces.conf. Stopping listening.");
+			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please check your AES key in homematicbidcos.conf. Stopping listening.");
 			return;
 		}
 

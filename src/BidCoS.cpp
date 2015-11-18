@@ -28,19 +28,8 @@
  */
 
 #include "BidCoS.h"
-#include "PhysicalInterfaces/IBidCoSInterface.h"
-#include "PhysicalInterfaces/COC.h"
-#include "PhysicalInterfaces/CUL.h"
-#include "PhysicalInterfaces/CulAes.h"
-#include "PhysicalInterfaces/CUNO.h"
-#include "PhysicalInterfaces/TICC1100.h"
-#include "PhysicalInterfaces/TICC1101.h"
-#include "PhysicalInterfaces/HM-CFG-LAN.h"
-#include "PhysicalInterfaces/HM-LGW.h"
-#ifdef BIDCOSRTLSDRLAN
-#include "PhysicalInterfaces/RTLSDR-LAN.h"
-#endif
 #include "Devices/HomeMaticCentral.h"
+#include "Interfaces.h"
 #include "BidCoSDeviceTypes.h"
 #include "Devices/HM-CC-TC.h"
 #include "Devices/HM-SD.h"
@@ -49,15 +38,15 @@
 
 namespace BidCoS
 {
-BidCoS::BidCoS(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSink* eventHandler) : BaseLib::Systems::DeviceFamily(bl, eventHandler)
+BidCoS::BidCoS(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSink* eventHandler) : BaseLib::Systems::DeviceFamily(bl, eventHandler, BIDCOS_FAMILY_ID, "HomeMatic BidCoS")
 {
 	GD::bl = bl;
 	GD::family = this;
 	GD::out.init(bl);
 	GD::out.setPrefix("Module HomeMatic BidCoS: ");
 	GD::out.printDebug("Debug: Loading module...");
-	_family = 0;
 	GD::rpcDevices.init(_bl, this);
+	_physicalInterfaces.reset(new Interfaces(bl, _settings->getPhysicalInterfaceSettings()));
 }
 
 BidCoS::~BidCoS()
@@ -85,51 +74,6 @@ void BidCoS::dispose()
 }
 
 std::shared_ptr<BaseLib::Systems::Central> BidCoS::getCentral() { return _central; }
-
-std::shared_ptr<BaseLib::Systems::IPhysicalInterface> BidCoS::createPhysicalDevice(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings)
-{
-	try
-	{
-		GD::out.printDebug("Debug: Creating physical device. Type defined in physicalinterfaces.conf is: " + settings->type);
-		std::shared_ptr<IBidCoSInterface> device;
-		if(!settings) return device;
-		if(settings->type == "cul") device.reset(new CUL(settings));
-		else if(settings->type == "culaes") device.reset(new CulAes(settings));
-		else if(settings->type == "coc") device.reset(new COC(settings));
-		else if(settings->type == "cuno") device.reset(new CUNO(settings));
-#ifdef SPIINTERFACES
-		else if(settings->type == "cc1100") device.reset(new TICC1100(settings));
-#ifdef BIDCOSTICC1101
-		else if(settings->type == "devtest") device.reset(new TICC1101(settings));
-#endif
-#endif
-		else if(settings->type == "hmcfglan") device.reset(new HM_CFG_LAN(settings));
-		else if(settings->type == "hmlgw") device.reset(new HM_LGW(settings));
-#ifdef BIDCOSRTLSDRLAN
-		else if(settings->type == "rtlsdrlan") device.reset(new RTLSDR_LAN(settings));
-#endif
-		else GD::out.printError("Error: Unsupported physical device type for family HomeMatic BidCoS: " + settings->type);
-		if(device)
-		{
-			GD::physicalInterfaces[settings->id] = device;
-			if(settings->isDefault || !GD::defaultPhysicalInterface) GD::defaultPhysicalInterface = device;
-		}
-		return device;
-	}
-	catch(const std::exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
-	return std::shared_ptr<BaseLib::Systems::IPhysicalInterface>();
-}
 
 int32_t BidCoS::getUniqueAddress(uint8_t firstByte)
 {
@@ -289,7 +233,7 @@ void BidCoS::load()
 	try
 	{
 		_devices.clear();
-		std::shared_ptr<BaseLib::Database::DataTable> rows = _bl->db->getDevices((uint32_t)_family);
+		std::shared_ptr<BaseLib::Database::DataTable> rows = _bl->db->getDevices((uint32_t)getFamily());
 		bool spyDeviceExists = false;
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
 		{

@@ -30,6 +30,8 @@
 #ifndef GD_H_
 #define GD_H_
 
+#define BIDCOS_FAMILY_ID 0
+
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 #include "BidCoS.h"
 

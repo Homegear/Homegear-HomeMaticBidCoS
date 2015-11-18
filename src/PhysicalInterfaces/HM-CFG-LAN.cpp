@@ -60,7 +60,7 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 
 	if(settings->rfKey.empty())
 	{
-		_out.printError("Error: No RF AES key specified in physicalinterfaces.conf on your HM-CFG-LAN for communication with your BidCoS devices.");
+		_out.printError("Error: No RF AES key specified in homematicbidcos.conf on your HM-CFG-LAN for communication with your BidCoS devices.");
 	}
 
 	if(!settings->rfKey.empty())
@@ -68,7 +68,7 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		_rfKey = _bl->hf.getUBinary(settings->rfKey);
 		if(_rfKey.size() != 16)
 		{
-			_out.printError("Error: The RF AES key specified in physicalinterfaces.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
+			_out.printError("Error: The RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
 			_rfKey.clear();
 		}
 	}
@@ -78,20 +78,20 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		_oldRFKey = _bl->hf.getUBinary(settings->oldRFKey);
 		if(_oldRFKey.size() != 16)
 		{
-			_out.printError("Error: The old RF AES key specified in physicalinterfaces.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
+			_out.printError("Error: The old RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
 			_oldRFKey.clear();
 		}
 	}
 
 	if(!_rfKey.empty() && settings->currentRFKeyIndex == 0)
 	{
-		_out.printWarning("Warning: currentRFKeyIndex in physicalinterfaces.conf is not set. Setting it to \"1\".");
+		_out.printWarning("Warning: currentRFKeyIndex in homematicbidcos.conf is not set. Setting it to \"1\".");
 		settings->currentRFKeyIndex = 1;
 	}
 
 	if(!_oldRFKey.empty() && settings->currentRFKeyIndex == 1)
 	{
-		_out.printWarning("Warning: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
+		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
 		_oldRFKey.clear();
 	}
 
@@ -100,19 +100,19 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		_oldRFKey.clear();
 		if(settings->currentRFKeyIndex > 0)
 		{
-			_out.printWarning("Warning: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
+			_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
 			settings->currentRFKeyIndex = 0;
 		}
 	}
 
 	if(_oldRFKey.empty() && settings->currentRFKeyIndex > 1)
 	{
-		_out.printWarning("Warning: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
+		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
 	}
 
 	if(settings->currentRFKeyIndex > 253)
 	{
-		_out.printError("Error: The RF AES key index specified in physicalinterfaces.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
+		_out.printError("Error: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
 		settings->currentRFKeyIndex = 253;
 	}
 }
@@ -569,7 +569,7 @@ bool HM_CFG_LAN::aesInit()
 
 	if(_settings->lanKey.size() != 32)
 	{
-		_out.printError("Error: The AES key specified in physicalinterfaces.conf for communication with your HM-CFG-LAN has the wrong size.");
+		_out.printError("Error: The AES key specified in homematicbidcos.conf for communication with your HM-CFG-LAN has the wrong size.");
 		return false;
 		//_key.resize(16);
 		//MD5((uint8_t*)_settings->lanKey.c_str(), _settings->lanKey.size(), &_key.at(0));
@@ -579,7 +579,7 @@ bool HM_CFG_LAN::aesInit()
 		_key = _bl->hf.getUBinary(_settings->lanKey);
 		if(_key.size() != 16)
 		{
-			_out.printError("Error: The AES key specified in physicalinterfaces.conf for communication with your HM-CFG-LAN is not a valid hexadecimal string.");
+			_out.printError("Error: The AES key specified in homematicbidcos.conf for communication with your HM-CFG-LAN is not a valid hexadecimal string.");
 			return false;
 		}
 	}
@@ -826,7 +826,7 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 			if(!_useAES)
 			{
 				_stopCallbackThread = true;
-				_out.printError("Error: Error communicating with HM-CFG-LAN. Device requires AES, but no AES key was specified in physicalinterfaces.conf.");
+				_out.printError("Error: Error communicating with HM-CFG-LAN. Device requires AES, but no AES key was specified in homematicbidcos.conf.");
 				return false;
 			}
 			if(data.size() != 35)
@@ -961,7 +961,7 @@ void HM_CFG_LAN::processInit(std::string& packet)
 		if(parts.size() < 7 || (parts.at(0) != "HHM-LAN-IF" && parts.at(0) != "HHM-USB-IF"))
 		{
 			_stopCallbackThread = true;
-			_out.printError("Error: First packet from HM-CFG-LAN does not start with \"HHM-LAN-IF\", \"HHM-USB-IF\" or has wrong structure. Please check your AES key in physicalinterfaces.conf. Stopping listening. Packet was: " + packet);
+			_out.printError("Error: First packet from HM-CFG-LAN does not start with \"HHM-LAN-IF\", \"HHM-USB-IF\" or has wrong structure. Please check your AES key in homematicbidcos.conf. Stopping listening. Packet was: " + packet);
 			return;
 		}
 		_startUpTime = BaseLib::HelperFunctions::getTime() - (int64_t)BaseLib::Math::getNumber(parts.at(5), true);

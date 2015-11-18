@@ -54,7 +54,7 @@ TICC1100::TICC1100(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> 
 		_out.printDebug("Debug: PATABLE will be set to 0x" + BaseLib::HelperFunctions::getHexString(settings->txPowerSetting, 2));
 		if(settings->interruptPin != 0 && settings->interruptPin != 2)
 		{
-			if(settings->interruptPin > 0) _out.printWarning("Warning: Setting for interruptPin for device CC1100 in physicalinterfaces.conf is invalid.");
+			if(settings->interruptPin > 0) _out.printWarning("Warning: Setting for interruptPin for device CC1100 in homematicbidcos.conf is invalid.");
 			settings->interruptPin = 2;
 		}
 
@@ -197,7 +197,7 @@ void TICC1100::setConfig()
 			0x00, //28: RCCTRL0
 		};
 	}
-	else _out.printError("Error: Unknown value for \"oscillatorFrequency\" in physicalinterfaces.conf. Valid values are 26000000 and 27000000.");
+	else _out.printError("Error: Unknown value for \"oscillatorFrequency\" in homematicbidcos.conf. Valid values are 26000000 and 27000000.");
 }
 
 void TICC1100::enableUpdateMode()
@@ -354,11 +354,7 @@ void TICC1100::setup(int32_t userID, int32_t groupID)
 		_out.printDebug("Debug: CC1100: Setting GPIO permissions");
 		setGPIOPermission(1, userID, groupID, true);
 		if(gpioDefined(2)) setGPIOPermission(2, userID, groupID, false);
-		_out.printDebug("Debug: CC1100: Setting GPIO direction");
-		setGPIODirection(1, GPIODirection::IN);
 		if(gpioDefined(2)) setGPIODirection(2, GPIODirection::OUT);
-		_out.printDebug("Debug: CC1100: Settings GPIO edge");
-		setGPIOEdge(1, GPIOEdge::BOTH);
 	}
     catch(const std::exception& ex)
     {
@@ -850,6 +846,10 @@ void TICC1100::startListening()
 		if(!_fileDescriptor || _fileDescriptor->descriptor == -1) return;
 
 		initChip();
+		_out.printDebug("Debug: CC1100: Setting GPIO direction");
+		setGPIODirection(1, GPIODirection::IN);
+		_out.printDebug("Debug: CC1100: Settings GPIO edge");
+		setGPIOEdge(1, GPIOEdge::BOTH);
 		openGPIO(1, true);
 		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1) throw(BaseLib::Exception("Couldn't listen to rf device, because the gpio pointer is not valid: " + _settings->device));
 		if(gpioDefined(2)) //Enable high gain mode

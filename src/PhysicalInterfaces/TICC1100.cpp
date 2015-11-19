@@ -352,7 +352,7 @@ void TICC1100::setup(int32_t userID, int32_t groupID)
 		exportGPIO(1);
 		if(gpioDefined(2)) exportGPIO(2);
 		_out.printDebug("Debug: CC1100: Setting GPIO permissions");
-		setGPIOPermission(1, userID, groupID, true);
+		setGPIOPermission(1, userID, groupID, false);
 		if(gpioDefined(2)) setGPIOPermission(2, userID, groupID, false);
 		if(gpioDefined(2)) setGPIODirection(2, GPIODirection::OUT);
 	}

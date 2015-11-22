@@ -54,6 +54,7 @@ class HM_CC_TC : public HomeMaticDevice
         int32_t getNewValueState() { return _newValveState; }
         std::string handleCLICommand(std::string command);
 
+        void handleAck(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet);
     protected:
         virtual void init();
         void loadVariables();

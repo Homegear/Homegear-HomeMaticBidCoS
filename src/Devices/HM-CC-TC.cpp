@@ -603,4 +603,28 @@ void HM_CC_TC::reset()
 {
     HomeMaticDevice::reset();
 }
+
+void HM_CC_TC::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
+{
+	try
+	{
+		std::shared_ptr<BidCoSPeer> peer(getPeer(packet->senderAddress()));
+		if(peer) peer->config[0xFFFF] = 0; //Decalcification done
+	}
+	catch(const std::exception& ex)
+    {
+		_peersMutex.unlock();
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	_peersMutex.unlock();
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	_peersMutex.unlock();
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
 }

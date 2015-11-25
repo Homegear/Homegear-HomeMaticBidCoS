@@ -594,7 +594,7 @@ void CulAes::startListening()
 			_out.printError("Error: Could not get central address. Stopping listening.");
 			return;
 		}
-		_myAddress = GD::family->getCentral()->physicalAddress();
+		_myAddress = GD::family->getCentral()->getAddress();
 		_aesHandshake->setMyAddress(_myAddress);
 
 		startQueue(0, 45, SCHED_FIFO);

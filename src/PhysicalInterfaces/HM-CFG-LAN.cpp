@@ -511,7 +511,7 @@ void HM_CFG_LAN::createInitCommandQueue()
 		}
 
 		std::vector<char> packet = {'A'};
-		_myAddress = GD::family->getCentral()->physicalAddress();
+		_myAddress = GD::family->getCentral()->getAddress();
 		std::string hexString = BaseLib::HelperFunctions::getHexString(_myAddress, 6) + "\r\n";
 		packet.insert(packet.end(), hexString.begin(), hexString.end());
 		_initCommandQueue.push_back(packet);

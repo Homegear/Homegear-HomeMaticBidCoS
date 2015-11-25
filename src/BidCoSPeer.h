@@ -54,7 +54,6 @@ namespace BidCoS
 {
 class PendingBidCoSQueues;
 class CallbackFunctionParameter;
-class HomeMaticDevice;
 class HomeMaticCentral;
 class BidCoSQueue;
 class BidCoSMessages;
@@ -131,6 +130,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		void setGeneralCounter(int32_t value) { _generalCounter = value; saveVariable(22, value); }
 		//End
 
+		virtual bool isVirtual() { return false; }
         void setCentralFeatures(bool value) { _centralFeatures = value; }
 
         std::unordered_map<int32_t, int32_t> config;
@@ -139,10 +139,10 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         bool peerInfoPacketsEnabled = true;
 
         void worker();
-        virtual std::string handleCLICommand(std::string command);
+        virtual std::string handleCliCommand(std::string command);
         void initializeLinkConfig(int32_t channel, int32_t address, int32_t remoteChannel, bool useConfigFunction);
         void applyConfigFunction(int32_t channel, int32_t address, int32_t remoteChannel);
-        virtual bool load(BaseLib::Systems::LogicalDevice* device);
+        virtual bool load(BaseLib::Systems::ICentral* device);
         virtual void save(bool savePeer, bool saveVariables, bool saveCentralConfig);
         void serializePeers(std::vector<uint8_t>& encodedData);
         void unserializePeers(std::shared_ptr<std::vector<char>> serializedData);
@@ -150,8 +150,6 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         void unserializeNonCentralConfig(std::shared_ptr<std::vector<char>> serializedData);
         void serializeVariablesToReset(std::vector<uint8_t>& encodedData);
         void unserializeVariablesToReset(std::shared_ptr<std::vector<char>> serializedData);
-        virtual void loadVariables(BaseLib::Systems::LogicalDevice* device = nullptr, std::shared_ptr<BaseLib::Database::DataTable> rows = std::shared_ptr<BaseLib::Database::DataTable>());
-        virtual void saveVariables();
         virtual void savePeers();
         void saveNonCentralConfig();
         void saveVariablesToReset();
@@ -159,14 +157,11 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         bool aesEnabled();
         bool aesEnabled(int32_t channel);
         void checkAESKey(bool onlyPushing = false);
-        void deletePairedVirtualDevice(int32_t address);
-        void deletePairedVirtualDevices();
         bool hasTeam() { return !_team.serialNumber.empty(); }
         virtual bool isTeam() { return _serialNumber.front() == '*'; }
         bool hasPeers(int32_t channel) { if(_peers.find(channel) == _peers.end() || _peers[channel].empty()) return false; else return true; }
         void addPeer(int32_t channel, std::shared_ptr<BaseLib::Systems::BasicPeer> peer);
-        std::shared_ptr<HomeMaticDevice> getHiddenPeerDevice();
-        std::shared_ptr<BaseLib::Systems::BasicPeer> getHiddenPeer(int32_t channel);
+        std::shared_ptr<BaseLib::Systems::BasicPeer> getVirtualPeer(int32_t channel);
         void removePeer(int32_t channel, int32_t address, int32_t remoteChannel);
         std::shared_ptr<IBidCoSInterface> getPhysicalInterface() { return _physicalInterface; }
         void addVariableToResetCallback(std::shared_ptr<CallbackFunctionParameter> parameters);
@@ -184,6 +179,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         virtual bool firmwareUpdateAvailable();
         std::string printConfig();
         virtual IBidCoSInterface::PeerInfo getPeerInfo();
+        virtual uint64_t getVirtualPeerId();
 
         /**
 		 * This method polls a peer to check if it is reachable.
@@ -303,14 +299,16 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		 */
 		std::thread _pingThread;
 
+		virtual void loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<BaseLib::Database::DataTable>& rows);
+        virtual void saveVariables();
+
 		virtual void setPhysicalInterface(std::shared_ptr<IBidCoSInterface> interface);
 
 		//ServiceMessages event handling
 		virtual void onConfigPending(bool configPending);
 		//End ServiceMessages event handling
 
-		virtual std::shared_ptr<BaseLib::Systems::Central> getCentral();
-		virtual std::shared_ptr<BaseLib::Systems::LogicalDevice> getDevice(int32_t address);
+		virtual std::shared_ptr<BaseLib::Systems::ICentral> getCentral();
 
 		/**
 		 * {@inheritDoc}

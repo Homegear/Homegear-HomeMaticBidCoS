@@ -37,8 +37,6 @@ namespace BidCoS
 enum class DeviceType : uint32_t
 {
 	none = 0xFFFFFFFF,
-	HMSD = 			0xFFFFFFFE,
-	HMCENTRAL = 	0xFFFFFFFD,
 	HMRCV50 = 		0x0000,
 	HMLCSW1PLOM54 =	0x0001,
 	HMLCSW1SM =		0x0002,

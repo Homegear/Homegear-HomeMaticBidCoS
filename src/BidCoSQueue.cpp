@@ -30,8 +30,11 @@
 #include "BidCoSQueue.h"
 #include "BidCoSMessage.h"
 #include "PendingBidCoSQueues.h"
+#include "HomeMaticCentral.h"
 #include "homegear-base/BaseLib.h"
 #include "GD.h"
+
+#include <memory>
 
 namespace BidCoS
 {
@@ -106,7 +109,8 @@ void BidCoSQueue::serialize(std::vector<uint8_t>& encodedData)
 			else
 			{
 				encoder.encodeBoolean(encodedData, true);
-				encoder.encodeByte(encodedData, message->getDirection());
+				uint8_t dummy = 0;
+				encoder.encodeByte(encodedData, dummy);
 				encoder.encodeByte(encodedData, message->getMessageType());
 				std::vector<std::pair<uint32_t, int32_t>>* subtypes = message->getSubtypes();
 				encoder.encodeByte(encodedData, subtypes->size());
@@ -137,7 +141,7 @@ void BidCoSQueue::serialize(std::vector<uint8_t>& encodedData)
 	_queueMutex.unlock();
 }
 
-void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData, HomeMaticDevice* device, uint32_t position)
+void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData, uint32_t position)
 {
 	try
 	{
@@ -165,7 +169,7 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 			int32_t messageExists = decoder.decodeBoolean(*serializedData, position);
 			if(messageExists)
 			{
-				int32_t direction = decoder.decodeByte(*serializedData, position);
+				decoder.decodeByte(*serializedData, position);
 				int32_t messageType = decoder.decodeByte(*serializedData, position);
 				uint32_t subtypeSize = decoder.decodeByte(*serializedData, position);
 				std::vector<std::pair<uint32_t, int32_t>> subtypes;
@@ -173,7 +177,8 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 				{
 					subtypes.push_back(std::pair<uint32_t, int32_t>(decoder.decodeByte(*serializedData, position), decoder.decodeByte(*serializedData, position)));
 				}
-				entry->setMessage(device->getMessages()->find(direction, messageType, subtypes), false);
+				std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
+				if(central) entry->setMessage(central->getMessages()->find(messageType, subtypes), false);
 			}
 			parameterName = decoder.decodeString(*serializedData, position);
 			channel = decoder.decodeInteger(*serializedData, position);
@@ -353,37 +358,18 @@ void BidCoSQueue::resend(uint32_t threadId, bool burst)
 				GD::out.printDebug("Sending from resend thread " + std::to_string(threadId) + " of queue " + std::to_string(id) + ".");
 				std::shared_ptr<BidCoSPacket> packet = _queue.front().getPacket();
 				if(!packet) return;
-				if(_queue.front().getType() == QueueEntryType::MESSAGE)
+				bool stealthy = _queue.front().stealthy;
+				_queueMutex.unlock();
+				_sendThreadMutex.lock();
+				if(_sendThread.joinable()) _sendThread.join();
+				if(_stopResendThread || _disposing)
 				{
-					GD::out.printDebug("Invoking outgoing message handler from BidCoSQueue.");
-					BidCoSMessage* message = _queue.front().getMessage().get();
-					_queueMutex.unlock();
-					_sendThreadMutex.lock();
-					if(_sendThread.joinable()) _sendThread.join();
-					if(_stopResendThread || _disposing)
-					{
-						_sendThreadMutex.unlock();
-						return;
-					}
-					_sendThread = std::thread(&BidCoSMessage::invokeMessageHandlerOutgoing, message, packet);
-					BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
 					_sendThreadMutex.unlock();
+					return;
 				}
-				else
-				{
-					bool stealthy = _queue.front().stealthy;
-					_queueMutex.unlock();
-					_sendThreadMutex.lock();
-					if(_sendThread.joinable()) _sendThread.join();
-					if(_stopResendThread || _disposing)
-					{
-						_sendThreadMutex.unlock();
-						return;
-					}
-					_sendThread = std::thread(&BidCoSQueue::send, this, packet, stealthy);
-					BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
-					_sendThreadMutex.unlock();
-				}
+				_sendThread = std::thread(&BidCoSQueue::send, this, packet, stealthy);
+				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
+				_sendThreadMutex.unlock();
 			}
 			else _queueMutex.unlock(); //Has to be unlocked before startResendThread
 			if(_stopResendThread) return;
@@ -437,7 +423,7 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSPacket> packet, bool stealthy, bool
 		entry.stealthy = stealthy;
 		entry.forceResend = forceResend;
 		_queueMutex.lock();
-		if(!noSending && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()->getDirection() == DIRECTIONIN)))
+		if(!noSending && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE)))
 		{
 			_queue.push_back(entry);
 			_queueMutex.unlock();
@@ -549,100 +535,18 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSQueue> pendingQueue, bool popImmedi
     _queueMutex.unlock();
 }
 
-void BidCoSQueue::push(std::shared_ptr<BidCoSMessage> message, std::shared_ptr<BidCoSPacket> packet, bool forceResend)
-{
-	try
-	{
-		if(_disposing) return;
-		if(!message || !packet) return;
-		if(message->getDirection() != DIRECTIONOUT) GD::out.printWarning("Warning: Wrong push method used. Packet is not necessary for incoming messages");
-		BidCoSQueueEntry entry;
-		entry.setMessage(message, true);
-		entry.setPacket(packet, false);
-		entry.forceResend = forceResend;
-		_queueMutex.lock();
-		if(!noSending && entry.getMessage()->getDirection() == DIRECTIONOUT && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()->getDirection() == DIRECTIONIN)))
-		{
-			_queue.push_back(entry);
-			_queueMutex.unlock();
-			_resendCounter = 0;
-			if(!noSending)
-			{
-				_sendThreadMutex.lock();
-				if(_disposing)
-				{
-					_sendThreadMutex.unlock();
-					return;
-				}
-				if(_sendThread.joinable()) _sendThread.join();
-				_sendThread = std::thread(&BidCoSMessage::invokeMessageHandlerOutgoing, message.get(), entry.getPacket());
-				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
-				_sendThreadMutex.unlock();
-				startResendThread(forceResend);
-			}
-		}
-		else
-		{
-			_queue.push_back(entry);
-			_queueMutex.unlock();
-		}
-	}
-	catch(const std::exception& ex)
-    {
-		_queueMutex.unlock();
-		_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
 void BidCoSQueue::push(std::shared_ptr<BidCoSMessage> message, bool forceResend)
 {
 	try
 	{
 		if(_disposing) return;
 		if(!message) return;
-		if(message->getDirection() == DIRECTIONOUT) GD::out.printCritical("Critical: Wrong push method used. Please provide the received packet for outgoing messages");
 		BidCoSQueueEntry entry;
 		entry.setMessage(message, true);
 		entry.forceResend = forceResend;
 		_queueMutex.lock();
-		if(!noSending && entry.getMessage()->getDirection() == DIRECTIONOUT && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()->getDirection() == DIRECTIONIN)))
-		{
-			_queue.push_back(entry);
-			_queueMutex.unlock();
-			_resendCounter = 0;
-			if(!noSending)
-			{
-				_sendThreadMutex.lock();
-				if(_disposing)
-				{
-					_sendThreadMutex.unlock();
-					return;
-				}
-				if(_sendThread.joinable()) _sendThread.join();
-				_sendThread = std::thread(&BidCoSMessage::invokeMessageHandlerOutgoing, message.get(), entry.getPacket());
-				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
-				_sendThreadMutex.unlock();
-				startResendThread(forceResend);
-			}
-		}
-		else
-		{
-			_queue.push_back(entry);
-			_queueMutex.unlock();
-		}
+		_queue.push_back(entry);
+		_queueMutex.unlock();
 	}
 	catch(const std::exception& ex)
     {
@@ -819,7 +723,8 @@ void BidCoSQueue::send(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
 			packet->setControlByte(packet->controlByte() | 0x10);
 			_setWakeOnRadioBit = false;
 		}
-		if(device) device->sendPacket(_physicalInterface, packet, stealthy);
+		std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
+		if(central) central->sendPacket(_physicalInterface, packet, stealthy);
 		else GD::out.printError("Error: Device pointer of queue " + std::to_string(id) + " is null.");
 	}
 	catch(const std::exception& ex)
@@ -1005,29 +910,7 @@ void BidCoSQueue::pushPendingQueue()
 		pendingQueueID = queue->pendingQueueID;
 		for(std::list<BidCoSQueueEntry>::iterator i = queue->getQueue()->begin(); i != queue->getQueue()->end(); ++i)
 		{
-			if(!noSending && i->getType() == QueueEntryType::MESSAGE && i->getMessage()->getDirection() == DIRECTIONOUT && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()->getDirection() == DIRECTIONIN)))
-			{
-				_queueMutex.lock();
-				_queue.push_back(*i);
-				_queueMutex.unlock();
-				_resendCounter = 0;
-				if(!noSending)
-				{
-					_sendThreadMutex.lock();
-					if(_disposing)
-					{
-						_sendThreadMutex.unlock();
-						return;
-					}
-					if(_sendThread.joinable()) _sendThread.join();
-					_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-					_sendThread = std::thread(&BidCoSMessage::invokeMessageHandlerOutgoing, i->getMessage().get(), i->getPacket());
-					_sendThreadMutex.unlock();
-					BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
-					startResendThread(i->forceResend);
-				}
-			}
-			else if(!noSending && i->getType() == QueueEntryType::PACKET && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()->getDirection() == DIRECTIONIN)))
+			if(!noSending && i->getType() == QueueEntryType::PACKET && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE)))
 			{
 				_queueMutex.lock();
 				_queue.push_back(*i);
@@ -1124,41 +1007,24 @@ void BidCoSQueue::nextQueueEntry()
 				return;
 			}
 		}
-		if((_queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()->getDirection() == DIRECTIONOUT) || _queue.front().getType() == QueueEntryType::PACKET)
+		if(_queue.front().getType() == QueueEntryType::PACKET)
 		{
 			_resendCounter = 0;
 			if(!noSending)
 			{
 				bool forceResend = _queue.front().forceResend;
 				std::shared_ptr<BidCoSPacket> packet = _queue.front().getPacket();
-				if(_queue.front().getType() == QueueEntryType::MESSAGE)
+				bool stealthy = _queue.front().stealthy;
+				_queueMutex.unlock();
+				_sendThreadMutex.lock();
+				if(_disposing)
 				{
-					BidCoSMessage* message = _queue.front().getMessage().get();
-					_queueMutex.unlock();
-					_sendThreadMutex.lock();
-					if(_disposing)
-					{
-						_sendThreadMutex.unlock();
-						return;
-					}
-					if(_sendThread.joinable()) _sendThread.join();
-					_sendThread = std::thread(&BidCoSMessage::invokeMessageHandlerOutgoing, message, packet);
 					_sendThreadMutex.unlock();
+					return;
 				}
-				else
-				{
-					bool stealthy = _queue.front().stealthy;
-					_queueMutex.unlock();
-					_sendThreadMutex.lock();
-					if(_disposing)
-					{
-						_sendThreadMutex.unlock();
-						return;
-					}
-					if(_sendThread.joinable()) _sendThread.join();
-					_sendThread = std::thread(&BidCoSQueue::send, this, packet, stealthy);
-					_sendThreadMutex.unlock();
-				}
+				if(_sendThread.joinable()) _sendThread.join();
+				_sendThread = std::thread(&BidCoSQueue::send, this, packet, stealthy);
+				_sendThreadMutex.unlock();
 				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
 				startResendThread(forceResend);
 			}

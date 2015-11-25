@@ -41,7 +41,6 @@
 
 namespace BidCoS
 {
-class HomeMaticDevice;
 enum class BidCoSQueueType;
 
 class BidCoSQueueData
@@ -62,7 +61,7 @@ public:
 	virtual ~BidCoSQueueManager();
 
 	std::shared_ptr<BidCoSQueue> get(int32_t address);
-	std::shared_ptr<BidCoSQueue> createQueue(HomeMaticDevice* device, std::shared_ptr<IBidCoSInterface> physicalInterface, BidCoSQueueType queueType, int32_t address);
+	std::shared_ptr<BidCoSQueue> createQueue(std::shared_ptr<IBidCoSInterface> physicalInterface, BidCoSQueueType queueType, int32_t address);
 	void resetQueue(int32_t address, uint32_t id);
 	void dispose(bool wait = true);
 protected:

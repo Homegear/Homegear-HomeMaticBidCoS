@@ -27,53 +27,47 @@
  * files in the program, then also delete it here.
  */
 
-#ifndef HM_CC_TC_H
-#define HM_CC_TC_H
+#ifndef HMCCTC_H
+#define HMCCTC_H
 
-#include <thread>
-#include <memory>
-#include <vector>
-
-class BidCoSQueue;
-enum class BidCoSQueueType;
-
-#include "../HomeMaticDevice.h"
+#include "../BidCoSPeer.h"
 
 namespace BidCoS
 {
-class HM_CC_TC : public HomeMaticDevice
+
+class HmCcTc : public BidCoSPeer
 {
     public:
-        HM_CC_TC(IDeviceEventSink* eventHandler);
-        HM_CC_TC(uint32_t deviceType, std::string, int32_t, IDeviceEventSink* eventHandler);
-        virtual ~HM_CC_TC();
-        void dispose();
-        void stopThreads();
+		HmCcTc(uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler);
+		HmCcTc(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler);
+		virtual ~HmCcTc();
+		virtual void dispose();
 
-        void setValveState(int32_t valveState);
+		virtual bool isVirtual() { return true; }
+
+		void setValveState(int32_t valveState);
         int32_t getNewValueState() { return _newValveState; }
-        std::string handleCLICommand(std::string command);
-
-        void handleAck(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet);
     protected:
-        virtual void init();
-        void loadVariables();
-        void saveVariables();
-    private:
-        //In table variables
+		//In table variables
         int32_t _currentDutyCycleDeviceAddress = -1;
         int32_t _valveState = 0;
         int32_t _newValveState = 0;
         int64_t _lastDutyCycleEvent = 0;
         //End
 
+        std::unordered_map<int32_t, bool> _decalcification;
+
         const int32_t _dutyCycleTimeOffset = 3000;
         bool _stopDutyCycleThread = false;
         std::thread _dutyCycleThread;
         int32_t _dutyCycleCounter  = 0;
         std::thread _sendDutyCyclePacketThread;
-        void reset();
+        uint8_t _dutyCycleMessageCounter = 0;
 
+        virtual void loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<BaseLib::Database::DataTable>& rows);
+        virtual void saveVariables();
+
+        int32_t calculateCycleLength(uint8_t messageCounter);
         int32_t getNextDutyCycleDeviceAddress();
         int64_t calculateLastDutyCycleEvent();
         int32_t getAdjustmentCommand(int32_t peerAddress);

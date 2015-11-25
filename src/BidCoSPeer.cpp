@@ -32,13 +32,14 @@ class CallbackFunctionParameter;
 #include "BidCoSPeer.h"
 #include "BidCoSQueue.h"
 #include "PendingBidCoSQueues.h"
-#include "Devices/HomeMaticCentral.h"
+#include "HomeMaticCentral.h"
 #include "homegear-base/BaseLib.h"
 #include "GD.h"
+#include "VirtualPeers/HmCcTc.h"
 
 namespace BidCoS
 {
-std::shared_ptr<BaseLib::Systems::Central> BidCoSPeer::getCentral()
+std::shared_ptr<BaseLib::Systems::ICentral> BidCoSPeer::getCentral()
 {
 	try
 	{
@@ -59,27 +60,6 @@ std::shared_ptr<BaseLib::Systems::Central> BidCoSPeer::getCentral()
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 	return std::shared_ptr<HomeMaticCentral>();
-}
-
-std::shared_ptr<BaseLib::Systems::LogicalDevice> BidCoSPeer::getDevice(int32_t address)
-{
-	try
-	{
-		return GD::family->get(address);
-	}
-	catch(const std::exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
-	return std::shared_ptr<BaseLib::Systems::LogicalDevice>();
 }
 
 void BidCoSPeer::setDefaultValue(BaseLib::Systems::RPCConfigurationParameter* parameter)
@@ -232,7 +212,7 @@ uint64_t BidCoSPeer::getTeamRemoteID()
 	{
 		if(_team.serialNumber.length() > 0 && _team.id == 0)
 		{
-			std::shared_ptr<BaseLib::Systems::Peer> peer = getCentral()->logicalDevice()->getPeer(_team.serialNumber);
+			std::shared_ptr<BaseLib::Systems::Peer> peer = getCentral()->getPeer(_team.serialNumber);
 			if(peer) setTeamRemoteID(peer->getID());
 		}
 		return _team.id;
@@ -288,8 +268,16 @@ void BidCoSPeer::setPhysicalInterfaceID(std::string id)
 		_physicalInterfaceID = id;
 		if(peerInfoPacketsEnabled && _physicalInterface->needsPeers()) _physicalInterface->removePeer(_address);
 		setPhysicalInterface(id.empty() ? GD::defaultPhysicalInterface : GD::physicalInterfaces.at(_physicalInterfaceID));
-		std::shared_ptr<HomeMaticDevice> virtualDevice = getHiddenPeerDevice();
-		if(virtualDevice && virtualDevice->getDeviceType() != (uint32_t)DeviceType::HMCENTRAL) virtualDevice->setPhysicalInterfaceID(id);
+		uint64_t virtualPeerId = getVirtualPeerId();
+		if(virtualPeerId > 0)
+		{
+			std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
+			if(central)
+			{
+				std::shared_ptr<BidCoSPeer> virtualPeer = central->getPeer(virtualPeerId);
+				if(virtualPeer) virtualPeer->setPhysicalInterfaceID(id);
+			}
+		}
 		saveVariable(19, _physicalInterfaceID);
 		if(peerInfoPacketsEnabled && _physicalInterface->needsPeers()) _physicalInterface->addPeer(getPeerInfo());
 	}
@@ -420,7 +408,7 @@ void BidCoSPeer::worker()
 			}
 			else
 			{
-				if(_centralFeatures && configCentral[0].find("POLLING") != configCentral[0].end() && configCentral[0].at("POLLING").data.size() > 0 && configCentral[0].at("POLLING").data.at(0) > 0 && configCentral[0].find("POLLING_INTERVAL") != configCentral[0].end())
+				if(configCentral[0].find("POLLING") != configCentral[0].end() && configCentral[0].at("POLLING").data.size() > 0 && configCentral[0].at("POLLING").data.at(0) > 0 && configCentral[0].find("POLLING_INTERVAL") != configCentral[0].end())
 				{
 					//Polling is enabled
 					BaseLib::Systems::RPCConfigurationParameter* parameter = &configCentral[0]["POLLING_INTERVAL"];
@@ -478,7 +466,7 @@ void BidCoSPeer::worker()
 	}
 }
 
-std::string BidCoSPeer::handleCLICommand(std::string command)
+std::string BidCoSPeer::handleCliCommand(std::string command)
 {
 	try
 	{
@@ -669,6 +657,7 @@ std::string BidCoSPeer::handleCLICommand(std::string command)
 				index++;
 			}
 
+			_peersMutex.lock();
 			if(_peers.empty())
 			{
 				stringStream << "No peers are paired to this peer." << std::endl;
@@ -681,6 +670,7 @@ std::string BidCoSPeer::handleCLICommand(std::string command)
 					stringStream << "Channel: " << i->first << "\tAddress: 0x" << std::hex << (*j)->address << "\tRemote channel: " << std::dec << (*j)->channel << "\tSerial number: " << (*j)->serialNumber << std::endl << std::dec;
 				}
 			}
+			_peersMutex.unlock();
 			return stringStream.str();
 		}
 		else return "Unknown command.\n";
@@ -773,15 +763,32 @@ void BidCoSPeer::addPeer(int32_t channel, std::shared_ptr<BaseLib::Systems::Basi
 	try
 	{
 		if(_rpcDevice->functions.find(channel) == _rpcDevice->functions.end()) return;
-		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
+		_peersMutex.lock();
+		try
 		{
-			if((*i)->address == peer->address && (*i)->channel == peer->channel)
+			for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
 			{
-				_peers[channel].erase(i);
-				break;
+				if((*i)->address == peer->address && (*i)->channel == peer->channel)
+				{
+					_peers[channel].erase(i);
+					break;
+				}
 			}
+			_peers[channel].push_back(peer);
 		}
-		_peers[channel].push_back(peer);
+		catch(const std::exception& ex)
+		{
+			GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+		}
+		catch(BaseLib::Exception& ex)
+		{
+			GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+		}
+		catch(...)
+		{
+			GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+		}
+		_peersMutex.unlock();
 		initializeLinkConfig(channel, peer->address, peer->channel, true);
 		savePeers();
 	}
@@ -799,41 +806,14 @@ void BidCoSPeer::addPeer(int32_t channel, std::shared_ptr<BaseLib::Systems::Basi
     }
 }
 
-std::shared_ptr<HomeMaticDevice> BidCoSPeer::getHiddenPeerDevice()
+std::shared_ptr<BaseLib::Systems::BasicPeer> BidCoSPeer::getVirtualPeer(int32_t channel)
 {
-	try
-	{
-		//This is pretty dirty, but as all hidden peers should be the same device, this should always work
-		for(std::unordered_map<int32_t, std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>>::iterator j = _peers.begin(); j != _peers.end(); ++j)
-		{
-			for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = j->second.begin(); i != j->second.end(); ++i)
-			{
-				if((*i)->hidden) return std::dynamic_pointer_cast<HomeMaticDevice>(getDevice((*i)->address));
-			}
-		}
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-	return std::shared_ptr<HomeMaticDevice>();
-}
-
-std::shared_ptr<BaseLib::Systems::BasicPeer> BidCoSPeer::getHiddenPeer(int32_t channel)
-{
+	_peersMutex.lock();
 	try
 	{
 		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
 		{
-			if((*i)->hidden) return *i;
+			if((*i)->isVirtual) return *i;
 		}
 	}
 	catch(const std::exception& ex)
@@ -848,11 +828,13 @@ std::shared_ptr<BaseLib::Systems::BasicPeer> BidCoSPeer::getHiddenPeer(int32_t c
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
+    _peersMutex.unlock();
 	return std::shared_ptr<BaseLib::Systems::BasicPeer>();
 }
 
 void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChannel)
 {
+	_peersMutex.lock();
 	try
 	{
 		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
@@ -860,6 +842,7 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
 			if((*i)->address == address && (*i)->channel == remoteChannel)
 			{
 				_peers[channel].erase(i);
+				_peersMutex.unlock();
 				if(linksCentral[channel].find(address) != linksCentral[channel].end() && linksCentral[channel][address].find(remoteChannel) != linksCentral[channel][address].end()) linksCentral[channel][address].erase(linksCentral[channel][address].find(remoteChannel));
 				_databaseMutex.lock();
 				BaseLib::Database::DataRow data;
@@ -874,6 +857,8 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
 				return;
 			}
 		}
+		_peersMutex.unlock();
+		return;
 	}
 	catch(const std::exception& ex)
     {
@@ -887,6 +872,7 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
+    _peersMutex.unlock();
     _databaseMutex.unlock();
 }
 
@@ -916,73 +902,13 @@ void BidCoSPeer::save(bool savePeer, bool variables, bool centralConfig)
     }
 }
 
-void BidCoSPeer::deletePairedVirtualDevice(int32_t address)
-{
-	try
-	{
-		std::shared_ptr<HomeMaticDevice> device(std::dynamic_pointer_cast<HomeMaticCentral>(getDevice(address)));
-		if(device && !device->isCentral())
-		{
-			GD::family->remove(device->getID());
-			device->reset();
-		}
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void BidCoSPeer::deletePairedVirtualDevices()
-{
-	try
-	{
-		std::map<int32_t, bool> deleted;
-		std::shared_ptr<HomeMaticDevice> device;
-		for(std::unordered_map<int32_t, std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>>::iterator i = _peers.begin(); i != _peers.end(); ++i)
-		{
-			for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator j = i->second.begin(); j != i->second.end(); ++j)
-			{
-				if(!*j) continue;
-				if((*j)->hidden && deleted.find((*j)->address) == deleted.end())
-				{
-					device = std::dynamic_pointer_cast<HomeMaticDevice>(getDevice((*j)->address));
-					if(device && !device->isCentral())
-					{
-						GD::family->remove(device->getID());
-						deleted[(*j)->address] = true;
-					}
-				}
-			}
-		}
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
 void BidCoSPeer::serializePeers(std::vector<uint8_t>& encodedData)
 {
+	_peersMutex.lock();
 	try
 	{
 		BaseLib::BinaryEncoder encoder(_bl);
+		encoder.encodeInteger(encodedData, 0);
 		encoder.encodeInteger(encodedData, _peers.size());
 		for(std::unordered_map<int32_t, std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>>::const_iterator i = _peers.begin(); i != _peers.end(); ++i)
 		{
@@ -990,12 +916,13 @@ void BidCoSPeer::serializePeers(std::vector<uint8_t>& encodedData)
 			encoder.encodeInteger(encodedData, i->second.size());
 			for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::const_iterator j = i->second.begin(); j != i->second.end(); ++j)
 			{
-				//TODO: Save id
 				if(!*j) continue;
+				encoder.encodeBoolean(encodedData, (*j)->isSender);
+				encoder.encodeInteger(encodedData, (*j)->id);
 				encoder.encodeInteger(encodedData, (*j)->address);
 				encoder.encodeInteger(encodedData, (*j)->channel);
 				encoder.encodeString(encodedData, (*j)->serialNumber);
-				encoder.encodeBoolean(encodedData, (*j)->hidden);
+				encoder.encodeBoolean(encodedData, (*j)->isVirtual);
 				encoder.encodeString(encodedData, (*j)->linkName);
 				encoder.encodeString(encodedData, (*j)->linkDescription);
 				encoder.encodeInteger(encodedData, (*j)->data.size());
@@ -1015,15 +942,25 @@ void BidCoSPeer::serializePeers(std::vector<uint8_t>& encodedData)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
+    _peersMutex.unlock();
 }
 
 void BidCoSPeer::unserializePeers(std::shared_ptr<std::vector<char>> serializedData)
 {
+	_peersMutex.lock();
 	try
 	{
 		BaseLib::BinaryDecoder decoder(_bl);
 		uint32_t position = 0;
-		uint32_t peersSize = decoder.decodeInteger(*serializedData, position);
+		uint32_t version = decoder.decodeInteger(*serializedData, position);
+		uint32_t peersSize = 0;
+		bool oldFormat = false;
+		if(version != 0)
+		{
+			oldFormat = true;
+			peersSize = version;
+		}
+		else peersSize = decoder.decodeInteger(*serializedData, position);
 		for(uint32_t i = 0; i < peersSize; i++)
 		{
 			uint32_t channel = decoder.decodeInteger(*serializedData, position);
@@ -1031,10 +968,15 @@ void BidCoSPeer::unserializePeers(std::shared_ptr<std::vector<char>> serializedD
 			for(uint32_t j = 0; j < peerCount; j++)
 			{
 				std::shared_ptr<BaseLib::Systems::BasicPeer> basicPeer(new BaseLib::Systems::BasicPeer());
+				if(!oldFormat)
+				{
+					basicPeer->isSender = decoder.decodeBoolean(*serializedData, position);
+					basicPeer->id = decoder.decodeInteger(*serializedData, position);
+				}
 				basicPeer->address = decoder.decodeInteger(*serializedData, position);
 				basicPeer->channel = decoder.decodeInteger(*serializedData, position);
 				basicPeer->serialNumber = decoder.decodeString(*serializedData, position);
-				basicPeer->hidden = decoder.decodeBoolean(*serializedData, position);
+				basicPeer->isVirtual = decoder.decodeBoolean(*serializedData, position);
 				_peers[channel].push_back(basicPeer);
 				basicPeer->linkName = decoder.decodeString(*serializedData, position);
 				basicPeer->linkDescription = decoder.decodeString(*serializedData, position);
@@ -1056,6 +998,7 @@ void BidCoSPeer::unserializePeers(std::shared_ptr<std::vector<char>> serializedD
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
+    _peersMutex.unlock();
 }
 
 void BidCoSPeer::serializeNonCentralConfig(std::vector<uint8_t>& encodedData)
@@ -1361,7 +1304,7 @@ void BidCoSPeer::enqueuePendingQueues()
 	}
 }
 
-void BidCoSPeer::loadVariables(BaseLib::Systems::LogicalDevice* device, std::shared_ptr<BaseLib::Database::DataTable> rows)
+void BidCoSPeer::loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<BaseLib::Database::DataTable>& rows)
 {
 	try
 	{
@@ -1416,7 +1359,7 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::LogicalDevice* device, std::sha
 				if(_centralFeatures && device)
 				{
 					pendingBidCoSQueues.reset(new PendingBidCoSQueues());
-					pendingBidCoSQueues->unserialize(row->second.at(5)->binaryValue, this, (HomeMaticDevice*)device);
+					pendingBidCoSQueues->unserialize(row->second.at(5)->binaryValue, this);
 				}
 				break;
 			case 17:
@@ -1454,11 +1397,12 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::LogicalDevice* device, std::sha
 	_databaseMutex.unlock();
 }
 
-bool BidCoSPeer::load(BaseLib::Systems::LogicalDevice* device)
+bool BidCoSPeer::load(BaseLib::Systems::ICentral* device)
 {
 	try
 	{
-		loadVariables((HomeMaticDevice*)device);
+		std::shared_ptr<BaseLib::Database::DataTable> rows;
+		loadVariables(device, rows);
 
 		_rpcDevice = GD::rpcDevices.find(_deviceType, _firmwareVersion, _countFromSysinfo);
 		if(!_rpcDevice)
@@ -1482,7 +1426,14 @@ bool BidCoSPeer::load(BaseLib::Systems::LogicalDevice* device)
 		serviceMessages.reset(new BaseLib::Systems::ServiceMessages(_bl, _peerID, _serialNumber, this));
 		serviceMessages->load();
 
-		checkAESKey();
+		if(aesEnabled())
+		{
+			if(!_physicalInterface->aesSupported())
+			{
+				GD::out.printWarning("Warning: Using interface " + _physicalInterface->getID() + ", which doesn't support AES handshakes for peer " + std::to_string(_peerID) + " which has AES handshakes enabled.");
+			}
+			else checkAESKey();
+		}
 
 		return true;
 	}
@@ -1591,7 +1542,7 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 		payload.push_back(_aesKeyIndex * 2);
 		std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, 0xA0, 0x04, central->getAddress(), _address, payload));
 		queue->push(configPacket);
-		queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 		payload.clear();
 		setMessageCounter(_messageCounter + 1);
 
@@ -1599,7 +1550,7 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 		payload.push_back((_aesKeyIndex * 2) + 1);
 		configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x04, central->getAddress(), _address, payload));
 		queue->push(configPacket);
-		queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 		setMessageCounter(_messageCounter + 1);
 
 		pendingBidCoSQueues->push(queue);
@@ -1625,6 +1576,40 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
+}
+
+uint64_t BidCoSPeer::getVirtualPeerId()
+{
+	_peersMutex.lock();
+	try
+	{
+		//This is pretty dirty, but as all virtual peers should be the same peer, this should always work
+		for(std::unordered_map<int32_t, std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>>::iterator j = _peers.begin(); j != _peers.end(); ++j)
+		{
+			for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = j->second.begin(); i != j->second.end(); ++i)
+			{
+				if((*i)->isVirtual)
+				{
+					_peersMutex.unlock();
+					return (*i)->id;
+				}
+			}
+		}
+	}
+	catch(const std::exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+    _peersMutex.unlock();
+	return 0;
 }
 
 std::string BidCoSPeer::printConfig()
@@ -2278,7 +2263,7 @@ PVariable BidCoSPeer::getValueFromDevice(PParameter& parameter, int32_t channel,
 		}
 		uint8_t controlByte = 0xA0;
 		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
-		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->physicalAddress(), _address, payload));
+		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->getAddress(), _address, payload));
 
 		for(BinaryPayloads::iterator i = frame->binaryPayloads.begin(); i != frame->binaryPayloads.end(); ++i)
 		{
@@ -2309,12 +2294,12 @@ PVariable BidCoSPeer::getValueFromDevice(PParameter& parameter, int32_t channel,
 		queue->channel = channel;
 		queue->push(packet);
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
-		if(responseFrame) queue->push(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(responseFrame->type, central.get(), 0, nullptr)));
-		else queue->push(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(-1, central.get(), 0, nullptr)));
+		if(responseFrame) queue->push(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(responseFrame->type, 0, nullptr)));
+		else queue->push(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(-1, 0, nullptr)));
 		pendingBidCoSQueues->remove(BidCoSQueueType::GETVALUE, parameter->id, channel);
 		pendingBidCoSQueues->push(queue);
 
-		if(HomeMaticDevice::isDimmer(_deviceType) || HomeMaticDevice::isSwitch(_deviceType)) queue->retries = 12;
+		if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
 		//Assign the queue managers queue to "queue".
 		queue = central->enqueuePendingQueues(_address);
 
@@ -2385,8 +2370,8 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 	{
 		if(!packet) return;
 		if(!_centralFeatures || _disposing) return;
-		if(packet->senderAddress() != _address && (!hasTeam() || packet->senderAddress() != _team.address || packet->destinationAddress() == getCentral()->physicalAddress())) return;
-		if(packet->destinationAddress() != getCentral()->physicalAddress() && aesEnabled()) return;
+		if(packet->senderAddress() != _address && (!hasTeam() || packet->senderAddress() != _team.address || packet->destinationAddress() == getCentral()->getAddress())) return;
+		if(packet->destinationAddress() != getCentral()->getAddress() && aesEnabled()) return;
 		if(!_rpcDevice) return;
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		if(!central) return;
@@ -2528,7 +2513,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 					std::vector<uint8_t> payload;
 					std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(packet->messageCounter(), 0xA1, 0x12, central->getAddress(), _address, payload));
 					queue->push(configPacket);
-					queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+					queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 
 					central->enqueuePackets(_address, queue, true);
 				}
@@ -2579,7 +2564,7 @@ PVariable BidCoSPeer::activateLinkParamset(int32_t clientID, int32_t channel, ui
 		std::shared_ptr<BaseLib::Systems::BasicPeer> remotePeer = getPeer(channel, remoteID, remoteChannel);
 		if(!remotePeer) return Variable::createError(-3, "Not paired to this peer.");
 		if(remotePeer->isSender) return Variable::createError(-3, "Remote peer needs to be sender.");
-		if(!HomeMaticDevice::isSwitch(getDeviceType()) && !HomeMaticDevice::isDimmer(getDeviceType())) return Variable::createError(-32400, "Method currently is only supported for dim and switch actuators.");
+		if(!HomeMaticCentral::isSwitch(getDeviceType()) && !HomeMaticCentral::isDimmer(getDeviceType())) return Variable::createError(-32400, "Method currently is only supported for dim and switch actuators.");
 
 		std::vector<uint8_t> payload;
 		payload.push_back(remotePeer->address >> 16);
@@ -2592,18 +2577,18 @@ PVariable BidCoSPeer::activateLinkParamset(int32_t clientID, int32_t channel, ui
 
 		uint8_t controlByte = 0xA0;
 		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
-		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, 0x3E, getCentral()->physicalAddress(), _address, payload));
+		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, 0x3E, getCentral()->getAddress(), _address, payload));
 		setMessageCounter(_messageCounter + 1);
 
 		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::PEER));
 		queue->noSending = true;
 		queue->push(packet);
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
-		queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 		pendingBidCoSQueues->push(queue);
 		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
 		{
-			if(HomeMaticDevice::isDimmer(_deviceType) || HomeMaticDevice::isSwitch(_deviceType)) queue->retries = 12; //Probably always true
+			if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12; //Probably always true
 			central->enqueuePendingQueues(_address);
 		}
 		else
@@ -2746,7 +2731,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 	try
 	{
 		if(_disposing) return Variable::createError(-32500, "Peer is disposing.");
-		if(!_centralFeatures) return Variable::createError(-2, "Not a central peer.");
+		if(!_centralFeatures) return Variable::createError(-2, "Peer is a virtual peer.");
 		if(channel < 0) channel = 0;
 		if(remoteChannel < 0) remoteChannel = 0;
 		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
@@ -2848,7 +2833,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 				firstPacket = false;
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, controlByte, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 
@@ -2867,7 +2852,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 						{
 							configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 							queue->push(configPacket);
-							queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+							queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 							payload.clear();
 							setMessageCounter(_messageCounter + 1);
 							payload.push_back(channel);
@@ -2879,7 +2864,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 				{
 					configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 					queue->push(configPacket);
-					queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+					queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 					payload.clear();
 					setMessageCounter(_messageCounter + 1);
 				}
@@ -2890,7 +2875,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 				payload.push_back(0x06);
 				configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 			}
@@ -2986,7 +2971,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 				firstPacket = false;
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, controlByte, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 
@@ -3005,7 +2990,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 						{
 							configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 							queue->push(configPacket);
-							queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+							queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 							payload.clear();
 							setMessageCounter(_messageCounter + 1);
 							payload.push_back(channel);
@@ -3017,7 +3002,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 				{
 					configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 					queue->push(configPacket);
-					queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+					queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 					payload.clear();
 					setMessageCounter(_messageCounter + 1);
 				}
@@ -3028,7 +3013,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 				payload.push_back(0x06);
 				configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 			}
@@ -3135,17 +3120,27 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 {
 	try
 	{
-		if(_deviceType.type() == (uint32_t)DeviceType::HMCCVD && valueKey == "VALVE_STATE" && _peers.find(1) != _peers.end() && _peers[1].size() > 0 && _peers[1].at(0)->hidden)
+		if(_deviceType.type() == (uint32_t)DeviceType::HMCCVD && valueKey == "VALVE_STATE")
 		{
-			if(!_peers[1].at(0)->device)
+			_peersMutex.lock();
+			std::unordered_map<int32_t, std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>>::iterator peersIterator = _peers.find(1);
+			if(peersIterator == _peers.end() || peersIterator->second.empty() || !peersIterator->second.at(0)->isVirtual)
 			{
-				_peers[1].at(0)->device = getDevice(_peers[1].at(0)->address);
-				if(_peers[1].at(0)->device->getDeviceType() != (uint32_t)DeviceType::HMCCTC) return false;
+				_peersMutex.unlock();
+				return false;
 			}
-			if(_peers[1].at(0)->device)
+			std::shared_ptr<BaseLib::Systems::BasicPeer> remotePeer = peersIterator->second.at(0);
+			_peersMutex.unlock();
+			if(!remotePeer->peer)
 			{
-				if(_peers[1].at(0)->device->getDeviceType() != (uint32_t)DeviceType::HMCCTC) return false;
-				HM_CC_TC* tc = (HM_CC_TC*)_peers[1].at(0)->device.get();
+				remotePeer->peer = getCentral()->getPeer(remotePeer->id);
+				if(remotePeer->peer->getDeviceType().type() != (uint32_t)DeviceType::HMCCTC) return false;
+			}
+			if(remotePeer->peer)
+			{
+				if(remotePeer->peer->getDeviceType().type() != (uint32_t)DeviceType::HMCCTC) return false;
+				std::shared_ptr<HmCcTc> tc(std::dynamic_pointer_cast<HmCcTc>(remotePeer->peer));
+				if(!tc) return false;
 				tc->setValveState(value->integerValue);
 				PParameter rpcParameter = valuesCentral[channel][valueKey].rpcParameter;
 				if(!rpcParameter) return false;
@@ -3317,7 +3312,7 @@ PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string v
 	{
 		Peer::setValue(clientID, channel, valueKey, value); //Ignore result, otherwise setHomegerValue might not be executed
 		if(_disposing) return Variable::createError(-32500, "Peer is disposing.");
-		if(!_centralFeatures) return Variable::createError(-2, "Not a central peer.");
+		if(!_centralFeatures) return Variable::createError(-2, "Peer is virtual.");
 		if(valueKey.empty()) return Variable::createError(-5, "Value key is empty.");
 		if(channel == 0 && serviceMessages->set(valueKey, value->booleanValue)) return PVariable(new Variable(VariableType::tVoid));
 		if(valuesCentral.find(channel) == valuesCentral.end()) return Variable::createError(-2, "Unknown channel.");
@@ -3404,7 +3399,7 @@ PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string v
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		uint8_t controlByte = 0xA0;
 		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
-		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->physicalAddress(), _address, payload));
+		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->getAddress(), _address, payload));
 
 		for(BinaryPayloads::iterator i = frame->binaryPayloads.begin(); i != frame->binaryPayloads.end(); ++i)
 		{
@@ -3457,9 +3452,9 @@ PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string v
 						if(j < blocks - 1)
 						{
 							queue->push(packet);
-							queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+							queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 							setMessageCounter(_messageCounter + 1);
-							packet = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->physicalAddress(), _address, payload));
+							packet = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->getAddress(), _address, payload));
 						}
 					}
 				}
@@ -3537,11 +3532,11 @@ PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string v
 		}
 		setMessageCounter(_messageCounter + 1);
 		queue->push(packet);
-		queue->push(central->getMessages()->find(DIRECTIONIN, 0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
 		pendingBidCoSQueues->push(queue);
 		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
 		{
-			if(HomeMaticDevice::isDimmer(_deviceType) || HomeMaticDevice::isSwitch(_deviceType)) queue->retries = 12;
+			if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
 			central->enqueuePendingQueues(_address);
 		}
 		else if((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))
@@ -3549,7 +3544,7 @@ PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string v
 			std::shared_ptr<BidCoSPacket> lastPacket = central->getReceivedPacket(_address);
 			if(lastPacket && BaseLib::HelperFunctions::getTime() - lastPacket->timeReceived() < 150)
 			{
-				if(HomeMaticDevice::isDimmer(_deviceType) || HomeMaticDevice::isSwitch(_deviceType)) queue->retries = 12;
+				if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
 				central->enqueuePendingQueues(_address);
 			}
 			else

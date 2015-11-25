@@ -52,7 +52,7 @@ void BidCoSMessages::add(std::shared_ptr<BidCoSMessage> message)
 	}
 }
 
-std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t direction, std::shared_ptr<BidCoSPacket> packet)
+std::shared_ptr<BidCoSMessage> BidCoSMessages::find(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
@@ -61,7 +61,7 @@ std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t direction, std::shar
 		std::shared_ptr<BidCoSMessage>* elementToReturn = nullptr;
 		for(uint32_t i = 0; i < _messages.size(); i++)
 		{
-			if(_messages[i]->getDirection() == direction && _messages[i]->typeIsEqual(packet))
+			if(_messages[i]->typeIsEqual(packet))
 			{
 				if((signed)_messages[i]->subtypeCount() > subtypeMax)
 				{
@@ -87,13 +87,13 @@ std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t direction, std::shar
 	return std::shared_ptr<BidCoSMessage>();
 }
 
-std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t direction, int32_t messageType, std::vector<std::pair<uint32_t, int32_t>> subtypes)
+std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t messageType, std::vector<std::pair<uint32_t, int32_t>> subtypes)
 {
 	try
 	{
 		for(uint32_t i = 0; i < _messages.size(); i++)
 		{
-			if(_messages[i]->getDirection() == direction && _messages[i]->typeIsEqual(messageType, &subtypes)) return _messages[i];
+			if(_messages[i]->typeIsEqual(messageType, &subtypes)) return _messages[i];
 		}
 	}
 	catch(const std::exception& ex)

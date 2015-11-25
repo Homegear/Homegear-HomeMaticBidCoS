@@ -28,6 +28,7 @@
  */
 
 #include "BidCoSMessage.h"
+#include "HomeMaticCentral.h"
 #include "GD.h"
 
 namespace BidCoS
@@ -36,54 +37,25 @@ BidCoSMessage::BidCoSMessage()
 {
 }
 
-BidCoSMessage::BidCoSMessage(int32_t messageType, HomeMaticDevice* device, int32_t access, void (HomeMaticDevice::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _device(device), _access(access), _messageHandlerIncoming(messageHandler)
+BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _messageHandler(messageHandler)
 {
-    _direction = DIRECTIONIN;
 }
 
-BidCoSMessage::BidCoSMessage(int32_t messageType, HomeMaticDevice* device, int32_t access, int32_t accessPairing, void (HomeMaticDevice::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _device(device), _access(access), _accessPairing(accessPairing), _messageHandlerIncoming(messageHandler)
+BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _accessPairing(accessPairing), _messageHandler(messageHandler)
 {
-    _direction = DIRECTIONIN;
-}
-
-BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t controlByte, HomeMaticDevice* device, void (HomeMaticDevice::*messageHandler)(int32_t, int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _controlByte(controlByte), _device(device), _messageHandlerOutgoing(messageHandler)
-{
-    _direction = DIRECTIONOUT;
 }
 
 BidCoSMessage::~BidCoSMessage()
 {
 }
 
-void BidCoSMessage::invokeMessageHandlerIncoming(std::shared_ptr<BidCoSPacket> packet)
+void BidCoSMessage::invokeMessageHandler(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
-		if(_device == nullptr || _messageHandlerIncoming == nullptr || packet == nullptr) return;
-		((_device)->*(_messageHandlerIncoming))(packet->messageCounter(), packet);
-	}
-	catch(const std::exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
-}
-
-void BidCoSMessage::invokeMessageHandlerOutgoing(std::shared_ptr<BidCoSPacket> packet)
-{
-	try
-	{
-		if(_device == nullptr || _messageHandlerOutgoing == nullptr || packet == nullptr) return;
-		//Actually the message counter implementation is not correct. See https://sathya.de/HMCWiki/index.php/Examples:Message_Counter
-		_device->messageCounter()->at(packet->senderAddress())++;
-		((_device)->*(_messageHandlerOutgoing))(_device->messageCounter()->at(packet->senderAddress()), _controlByte, packet);
+		std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
+		if(!central || _messageHandler == nullptr || packet == nullptr) return;
+		((central.get())->*(_messageHandler))(packet->messageCounter(), packet);
 	}
 	catch(const std::exception& ex)
 	{
@@ -220,11 +192,12 @@ bool BidCoSMessage::checkAccess(std::shared_ptr<BidCoSPacket> packet, std::share
 {
 	try
 	{
-		if(_device == nullptr || !packet) return false;
+		std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
+		if(!central || !packet) return false;
 
-		int32_t access = _device->isInPairingMode() ? _accessPairing : _access;
+		int32_t access = central->isInPairingMode() ? _accessPairing : _access;
 		if(access == NOACCESS) return false;
-		if(queue && !queue->isEmpty() && packet->destinationAddress() == _device->getAddress())
+		if(queue && !queue->isEmpty() && packet->destinationAddress() == central->getAddress())
 		{
 			if(packet->messageType() == 2 && packet->payload()->size() == 1 && packet->payload()->at(0) == 0x80)
 			{
@@ -241,7 +214,7 @@ bool BidCoSMessage::checkAccess(std::shared_ptr<BidCoSPacket> packet, std::share
 			}
 		}
 		if(access & FULLACCESS) return true;
-		if((access & ACCESSDESTISME) && packet->destinationAddress() != _device->getAddress())
+		if((access & ACCESSDESTISME) && packet->destinationAddress() != central->getAddress())
 		{
 			//GD::out.printMessage( "Access denied, because the destination address is not me: " << packet->hexString() << std::endl;
 			return false;
@@ -253,11 +226,11 @@ bool BidCoSMessage::checkAccess(std::shared_ptr<BidCoSPacket> packet, std::share
 		if(access & ACCESSPAIREDTOSENDER)
 		{
 			std::shared_ptr<BidCoSPeer> currentPeer;
-			if(_device->isInPairingMode() && queue && queue->peer && queue->peer->getAddress() == packet->senderAddress()) currentPeer = queue->peer;
-			if(!currentPeer) currentPeer = _device->getPeer(packet->senderAddress());
+			if(central->isInPairingMode() && queue && queue->peer && queue->peer->getAddress() == packet->senderAddress()) currentPeer = queue->peer;
+			if(!currentPeer) currentPeer = central->getPeer(packet->senderAddress());
 			if(!currentPeer) return false;
 		}
-		if((access & ACCESSCENTRAL) && _device->getCentralAddress() != packet->senderAddress())
+		if((access & ACCESSCENTRAL) && central->getAddress() != packet->senderAddress())
 		{
 			//GD::out.printMessage( "Access denied, because it is only granted to a paired central: " << packet->hexString() << std::endl;
 			return false;

@@ -46,7 +46,7 @@ namespace BidCoS
 {
 class BidCoSPeer;
 class BidCoSMessage;
-class HomeMaticDevice;
+class HomeMaticCentral;
 class PendingBidCoSQueues;
 
 enum class QueueEntryType { UNDEFINED, MESSAGE, PACKET };
@@ -109,7 +109,7 @@ class BidCoSQueue
         std::mutex _pushPendingQueueThreadMutex;
         bool _workingOnPendingQueue = false;
         int64_t _lastPop = 0;
-        void (HomeMaticDevice::*_queueProcessed)() = nullptr;
+        void (HomeMaticCentral::*_queueProcessed)() = nullptr;
         void pushPendingQueue();
         void sleepAndPushPendingQueue();
         void resend(uint32_t threadId, bool burst);
@@ -123,7 +123,6 @@ class BidCoSQueue
         uint32_t pendingQueueID = 0;
         std::shared_ptr<int64_t> lastAction;
         bool noSending = false;
-        HomeMaticDevice* device = nullptr;
         std::shared_ptr<BidCoSPeer> peer;
         std::shared_ptr<CallbackFunctionParameter> callbackParameter;
         delegate<void (std::shared_ptr<CallbackFunctionParameter>)> queueEmptyCallback;
@@ -136,7 +135,6 @@ class BidCoSQueue
         int32_t channel = -1;
 
         void push(std::shared_ptr<BidCoSMessage> message, bool forceResend = false);
-        void push(std::shared_ptr<BidCoSMessage> message, std::shared_ptr<BidCoSPacket> packet, bool forceResend = false);
         void pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy = false, bool popBeforePushing = false, bool forceResend = false);
         void push(std::shared_ptr<BidCoSPacket> packet, bool forceResend = false, bool stealthy = false);
         void push(std::shared_ptr<PendingBidCoSQueues>& pendingBidCoSQueues);
@@ -154,7 +152,7 @@ class BidCoSQueue
         void setWakeOnRadioBit();
         void dispose();
         void serialize(std::vector<uint8_t>& encodedData);
-        void unserialize(std::shared_ptr<std::vector<char>> serializedData, HomeMaticDevice* device, uint32_t position = 0);
+        void unserialize(std::shared_ptr<std::vector<char>> serializedData, uint32_t position = 0);
         void stopResendThread();
 
         BidCoSQueue();

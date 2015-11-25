@@ -75,7 +75,7 @@ void PendingBidCoSQueues::serialize(std::vector<uint8_t>& encodedData)
 	_queuesMutex.unlock();
 }
 
-void PendingBidCoSQueues::unserialize(std::shared_ptr<std::vector<char>> serializedData, BidCoSPeer* peer, HomeMaticDevice* device)
+void PendingBidCoSQueues::unserialize(std::shared_ptr<std::vector<char>> serializedData, BidCoSPeer* peer)
 {
 	try
 	{
@@ -87,7 +87,7 @@ void PendingBidCoSQueues::unserialize(std::shared_ptr<std::vector<char>> seriali
 		{
 			uint32_t queueLength = decoder.decodeInteger(*serializedData, position);
 			std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue());
-			queue->unserialize(serializedData, device, position);
+			queue->unserialize(serializedData, position);
 			position += queueLength;
 			queue->noSending = true;
 			bool hasCallbackFunction = decoder.decodeBoolean(*serializedData, position);

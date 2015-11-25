@@ -1080,7 +1080,7 @@ void HM_LGW::doInit()
 			return;
 		}
 
-		_myAddress = GD::family->getCentral()->physicalAddress();
+		_myAddress = GD::family->getCentral()->getAddress();
 
 		if(_stopped) return;
 		//BidCoS-over-LAN" packet

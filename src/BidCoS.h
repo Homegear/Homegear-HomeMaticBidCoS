@@ -36,7 +36,6 @@ using namespace BaseLib;
 
 namespace BidCoS
 {
-class HomeMaticDevice;
 class HomeMaticCentral;
 
 using namespace BaseLib;
@@ -50,18 +49,11 @@ public:
 	virtual void dispose();
 
 	virtual void load();
-	virtual std::shared_ptr<HomeMaticDevice> getDevice(int32_t address);
-	virtual std::shared_ptr<HomeMaticDevice> getDevice(std::string serialNumber);
-	virtual std::shared_ptr<BaseLib::Systems::Central> getCentral();
-	virtual std::string handleCLICommand(std::string& command);
+	virtual std::shared_ptr<BaseLib::Systems::ICentral> getCentral();
+	virtual std::string handleCliCommand(std::string& command);
 	virtual PVariable getPairingMethods();
 private:
-	std::shared_ptr<HomeMaticCentral> _central;
-
-	int32_t getUniqueAddress(uint8_t firstByte);
-	std::string getUniqueSerialNumber(std::string seedPrefix, uint32_t seedNumber);
 	void createCentral();
-	void createSpyDevice();
 };
 
 }

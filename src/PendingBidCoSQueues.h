@@ -42,14 +42,14 @@
 
 namespace BidCoS
 {
-class HomeMaticDevice;
 
-class PendingBidCoSQueues {
+class PendingBidCoSQueues
+{
 public:
 	PendingBidCoSQueues();
 	virtual ~PendingBidCoSQueues() {}
 	void serialize(std::vector<uint8_t>& encodedData);
-	void unserialize(std::shared_ptr<std::vector<char>> serializedData, BidCoSPeer* peer, HomeMaticDevice* device);
+	void unserialize(std::shared_ptr<std::vector<char>> serializedData, BidCoSPeer* peer);
 
 	void push(std::shared_ptr<BidCoSQueue> queue);
 	void pop();
@@ -69,5 +69,6 @@ private:
 	std::mutex _queuesMutex;
     std::deque<std::shared_ptr<BidCoSQueue>> _queues;
 };
+
 }
-#endif /* PENDINGBIDCOSQUEUES_H_ */
+#endif

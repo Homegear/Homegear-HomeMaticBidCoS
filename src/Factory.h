@@ -40,6 +40,7 @@ public:
 };
 
 extern "C" std::string getVersion();
+extern "C" int32_t getFamilyId();
 extern "C" BaseLib::Systems::SystemFactory* getFactory();
 
 #endif

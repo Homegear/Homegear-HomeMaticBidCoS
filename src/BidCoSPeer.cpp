@@ -3134,7 +3134,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 			if(!remotePeer->peer)
 			{
 				remotePeer->peer = getCentral()->getPeer(remotePeer->id);
-				if(remotePeer->peer->getDeviceType().type() != (uint32_t)DeviceType::HMCCTC) return false;
+				if(!remotePeer->peer || remotePeer->peer->getDeviceType().type() != (uint32_t)DeviceType::HMCCTC) return false;
 			}
 			if(remotePeer->peer)
 			{

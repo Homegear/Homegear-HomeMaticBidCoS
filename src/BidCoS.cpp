@@ -67,11 +67,13 @@ void BidCoS::dispose()
 
 	GD::physicalInterfaces.clear();
 	GD::defaultPhysicalInterface.reset();
-	_central.reset();
 	GD::rpcDevices.clear();
 }
 
-std::shared_ptr<BaseLib::Systems::ICentral> BidCoS::getCentral() { return _central; }
+std::shared_ptr<BaseLib::Systems::ICentral> BidCoS::initializeCentral(uint32_t deviceId, int32_t address, std::string serialNumber)
+{
+	return std::shared_ptr<HomeMaticCentral>(new HomeMaticCentral(deviceId, serialNumber, address, this));
+}
 
 void BidCoS::createCentral()
 {
@@ -100,68 +102,6 @@ void BidCoS::createCentral()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-}
-
-void BidCoS::load()
-{
-	try
-	{
-		std::shared_ptr<BaseLib::Database::DataTable> rows = _bl->db->getDevices((uint32_t)getFamily());
-		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
-		{
-			uint32_t deviceID = row->second.at(0)->intValue;
-			GD::out.printMessage("Loading HomeMatic BidCoS device " + std::to_string(deviceID));
-			int32_t address = row->second.at(1)->intValue;
-			std::string serialNumber = row->second.at(2)->textValue;
-			uint32_t deviceType = row->second.at(3)->intValue;
-
-			if(deviceType == 0xFFFFFFFD)
-			{
-				_central = std::shared_ptr<HomeMaticCentral>(new HomeMaticCentral(deviceID, serialNumber, address, this));
-				_central->load();
-				_central->loadPeers();
-			}
-		}
-		if(!GD::physicalInterfaces.empty())
-		{
-			if(!_central) createCentral();
-		}
-	}
-	catch(const std::exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
-}
-
-std::string BidCoS::handleCliCommand(std::string& command)
-{
-	try
-	{
-		std::ostringstream stringStream;
-		if(!_central) return "Error: No central exists.\n";
-		return _central->handleCliCommand(command);
-	}
-	catch(const std::exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    return "Error executing command. See log file for more details.\n";
 }
 
 PVariable BidCoS::getPairingMethods()

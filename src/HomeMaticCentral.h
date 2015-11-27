@@ -60,10 +60,6 @@ public:
 	std::shared_ptr<BidCoSPeer> getPeer(uint64_t id);
 	std::shared_ptr<BidCoSPeer> getPeer(std::string serialNumber);
 	std::shared_ptr<BidCoSQueue> getQueue(int32_t address);
-    virtual void loadPeers();
-	virtual void savePeers(bool full);
-	virtual void loadVariables();
-	virtual void saveVariables();
 	virtual void saveMessageCounters();
 	virtual void serializeMessageCounters(std::vector<uint8_t>& encodedData);
     virtual void unserializeMessageCounters(std::shared_ptr<std::vector<char>> serializedData);
@@ -169,6 +165,10 @@ protected:
 	std::thread _updateFirmwareThread;
 	//End
 
+	virtual void loadPeers();
+	virtual void savePeers(bool full);
+	virtual void loadVariables();
+	virtual void saveVariables();
 	void setUpBidCoSMessages();
 
 	std::shared_ptr<BidCoSPeer> createPeer(int32_t address, int32_t firmwareVersion, BaseLib::Systems::LogicalDeviceType deviceType, std::string serialNumber, int32_t remoteChannel, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet = std::shared_ptr<BidCoSPacket>(), bool save = true);

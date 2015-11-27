@@ -29,10 +29,16 @@
 
 #include "Factory.h"
 #include "../config.h"
+#include "GD.h"
 
 BaseLib::Systems::DeviceFamily* BidCoSFactory::createDeviceFamily(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSink* eventHandler)
 {
 	return new BidCoS::BidCoS(bl, eventHandler);
+}
+
+int32_t getFamilyId()
+{
+	return BIDCOS_FAMILY_ID;
 }
 
 std::string getVersion()

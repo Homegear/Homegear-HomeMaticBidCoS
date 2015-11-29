@@ -10,6 +10,10 @@ case $1 in
 		fi
 		chown -R homegear:homegear /var/lib/homegear/modules
 		chmod -R 550 /var/lib/homegear/modules
+		homegear -e mls > /dev/null 2>&1
+		if [ $? -eq 0 ]; then
+			homegear -e mld mod_homematicbidcos.so
+		fi
 		echo "##########################################################################"
 		echo "##########################################################################"
 		echo "### Please modify the file /etc/homegear/families/homematicbidcos.conf ###"

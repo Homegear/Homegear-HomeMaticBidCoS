@@ -78,8 +78,10 @@ std::shared_ptr<BaseLib::Systems::ICentral> BidCoS::initializeCentral(uint32_t d
 	if(!addressHex.empty()) addressFromSettings = BaseLib::Math::getNumber(addressHex);
 	if(addressFromSettings != 0)
 	{
+		std::shared_ptr<HomeMaticCentral> central(new HomeMaticCentral(deviceId, serialNumber, addressFromSettings, this));
+		if(address != addressFromSettings) central->save(true);
 		GD::out.printInfo("Info: Central address set to 0x" + BaseLib::HelperFunctions::getHexString(addressFromSettings, 6) + ".");
-		return std::shared_ptr<HomeMaticCentral>(new HomeMaticCentral(deviceId, serialNumber, addressFromSettings, this));
+		return central;
 	}
 	if(address == 0)
 	{

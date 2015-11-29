@@ -1057,7 +1057,9 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_
 			{
 				if(functionIterator->second->dynamicChannelCountIndex > -1)
 				{
-					std::vector<uint8_t> data = packet->getPosition(23.0, 0.7, -1);
+					double dynamicChannelCountSize = functionIterator->second->dynamicChannelCountSize;
+					if(dynamicChannelCountSize == 1.0) dynamicChannelCountSize = 0.7;
+					std::vector<uint8_t> data = packet->getPosition(23.0, dynamicChannelCountSize, -1);
 					if(!data.empty()) dynamicChannelCount = data.at(0);
 				}
 			}

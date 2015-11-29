@@ -45,6 +45,7 @@ public:
 
 	static BaseLib::Obj* bl;
 	static BidCoS* family;
+	static std::shared_ptr<Systems::FamilySettings> settings;
 	static std::map<std::string, std::shared_ptr<IBidCoSInterface>> physicalInterfaces;
 	static std::shared_ptr<IBidCoSInterface> defaultPhysicalInterface;
 	static BaseLib::DeviceDescription::Devices rpcDevices;

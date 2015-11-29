@@ -40,6 +40,7 @@ BidCoS::BidCoS(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSin
 {
 	GD::bl = bl;
 	GD::family = this;
+	GD::settings = _settings;
 	GD::out.init(bl);
 	GD::out.setPrefix("Module HomeMatic BidCoS: ");
 	GD::out.printDebug("Debug: Loading module...");
@@ -72,6 +73,23 @@ void BidCoS::dispose()
 
 std::shared_ptr<BaseLib::Systems::ICentral> BidCoS::initializeCentral(uint32_t deviceId, int32_t address, std::string serialNumber)
 {
+	int32_t addressFromSettings = 0;
+	std::string addressHex = GD::settings->get("centraladdress");
+	if(!addressHex.empty()) addressFromSettings = BaseLib::Math::getNumber(addressHex);
+	if(addressFromSettings != 0)
+	{
+		GD::out.printInfo("Info: Central address set to 0x" + BaseLib::HelperFunctions::getHexString(addressFromSettings, 6) + ".");
+		return std::shared_ptr<HomeMaticCentral>(new HomeMaticCentral(deviceId, serialNumber, addressFromSettings, this));
+	}
+	if(address == 0)
+	{
+		address = (0xfd << 16) + BaseLib::HelperFunctions::getRandomNumber(0, 0xFFFF);
+		std::shared_ptr<HomeMaticCentral> central(new HomeMaticCentral(deviceId, serialNumber, address, this));
+		central->save(true);
+		GD::out.printInfo("Info: Central address set to 0x" + BaseLib::HelperFunctions::getHexString(address, 6) + ".");
+		return central;
+	}
+	GD::out.printInfo("Info: Central address set to 0x" + BaseLib::HelperFunctions::getHexString(address, 6) + ".");
 	return std::shared_ptr<HomeMaticCentral>(new HomeMaticCentral(deviceId, serialNumber, address, this));
 }
 
@@ -81,7 +99,10 @@ void BidCoS::createCentral()
 	{
 		if(_central) return;
 
-		int32_t address = (0xfd << 16) + BaseLib::HelperFunctions::getRandomNumber(0, 0xFFFF);
+		int32_t address = 0;
+		std::string addressHex = GD::settings->get("centraladdress");
+		if(!addressHex.empty()) address = BaseLib::Math::getNumber(addressHex);
+		if(address == 0) address = (0xfd << 16) + BaseLib::HelperFunctions::getRandomNumber(0, 0xFFFF);
 		int32_t seedNumber = BaseLib::HelperFunctions::getRandomNumber(1, 9999999);
 		std::ostringstream stringstream;
 		stringstream << "VBC" << std::setw(7) << std::setfill('0') << std::dec << seedNumber;

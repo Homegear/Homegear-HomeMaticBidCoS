@@ -1404,7 +1404,7 @@ bool BidCoSPeer::load(BaseLib::Systems::ICentral* device)
 		std::shared_ptr<BaseLib::Database::DataTable> rows;
 		loadVariables(device, rows);
 
-		_rpcDevice = GD::rpcDevices.find(_deviceType, _firmwareVersion, _countFromSysinfo);
+		_rpcDevice = GD::family->getRpcDevices()->find(_deviceType, _firmwareVersion, _countFromSysinfo);
 		if(!_rpcDevice)
 		{
 			GD::out.printError("Error loading HomeMatic BidCoS peer " + std::to_string(_peerID) + ": Device type not found: 0x" + BaseLib::HelperFunctions::getHexString((uint32_t)_deviceType.type()) + " Firmware version: " + std::to_string(_firmwareVersion));

@@ -44,21 +44,12 @@ BidCoS::BidCoS(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSin
 	GD::out.init(bl);
 	GD::out.setPrefix("Module HomeMatic BidCoS: ");
 	GD::out.printDebug("Debug: Loading module...");
-	GD::rpcDevices.init(_bl, this);
 	_physicalInterfaces.reset(new Interfaces(bl, _settings->getPhysicalInterfaceSettings()));
 }
 
 BidCoS::~BidCoS()
 {
 
-}
-
-bool BidCoS::init()
-{
-	GD::out.printInfo("Loading XML RPC devices...");
-	GD::rpcDevices.load();
-	if(GD::rpcDevices.empty()) return false;
-	return true;
 }
 
 void BidCoS::dispose()
@@ -68,7 +59,6 @@ void BidCoS::dispose()
 
 	GD::physicalInterfaces.clear();
 	GD::defaultPhysicalInterface.reset();
-	GD::rpcDevices.clear();
 }
 
 std::shared_ptr<BaseLib::Systems::ICentral> BidCoS::initializeCentral(uint32_t deviceId, int32_t address, std::string serialNumber)

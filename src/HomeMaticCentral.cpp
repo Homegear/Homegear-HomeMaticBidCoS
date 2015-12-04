@@ -1047,7 +1047,7 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_
 		peer->setSerialNumber(serialNumber);
 		peer->setRemoteChannel(remoteChannel);
 		peer->setMessageCounter(messageCounter);
-		PHomegearDevice rpcDevice = GD::rpcDevices.find(deviceType, firmwareVersion);
+		PHomegearDevice rpcDevice = GD::family->getRpcDevices()->find(deviceType, firmwareVersion);
 		if(!rpcDevice) return std::shared_ptr<BidCoSPeer>();
 		int32_t dynamicChannelCount = -1;
 		if(packet)
@@ -1064,7 +1064,7 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_
 				}
 			}
 		}
-		rpcDevice = GD::rpcDevices.find(deviceType, firmwareVersion, dynamicChannelCount);
+		rpcDevice = GD::family->getRpcDevices()->find(deviceType, firmwareVersion, dynamicChannelCount);
 		if(!rpcDevice) return std::shared_ptr<BidCoSPeer>();
 		peer->setRpcDevice(rpcDevice);
 		if(dynamicChannelCount > -1) peer->setCountFromSysinfo(dynamicChannelCount);
@@ -2281,7 +2281,7 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 			tc->setFirmwareVersion(0x10);
 			tc->setDeviceType(BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, (uint32_t)DeviceType::HMCCTC));
 			tc->setSerialNumber(serialNumber);
-			PHomegearDevice rpcDevice = GD::rpcDevices.find(tc->getDeviceType(), 0x10);
+			PHomegearDevice rpcDevice = GD::family->getRpcDevices()->find(tc->getDeviceType(), 0x10);
 			if(!rpcDevice)
 			{
 				GD::out.printError("Error: Could not create virtual peer of type HM-CC-TC.");

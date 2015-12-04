@@ -48,12 +48,11 @@ public:
 	static std::shared_ptr<Systems::FamilySettings> settings;
 	static std::map<std::string, std::shared_ptr<IBidCoSInterface>> physicalInterfaces;
 	static std::shared_ptr<IBidCoSInterface> defaultPhysicalInterface;
-	static BaseLib::DeviceDescription::Devices rpcDevices;
 	static BaseLib::Output out;
 private:
 	GD();
 };
 
-} /* namespace BidCoS */
+}
 
-#endif /* GD_H_ */
+#endif

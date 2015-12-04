@@ -45,7 +45,6 @@ class BidCoS : public BaseLib::Systems::DeviceFamily
 public:
 	BidCoS(BaseLib::Obj* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSink* eventHandler);
 	virtual ~BidCoS();
-	virtual bool init();
 	virtual void dispose();
 
 	virtual PVariable getPairingMethods();

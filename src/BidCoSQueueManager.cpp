@@ -216,9 +216,6 @@ std::shared_ptr<BidCoSQueue> BidCoSQueueManager::createQueue(std::shared_ptr<IBi
 		queueData->id = queueData->queue->id;
 		_queues.insert(std::pair<int32_t, std::shared_ptr<BidCoSQueueData>>(address, queueData));
 		_queueMutex.unlock();
-		std::string savepointName("BidCoSQueue" + std::to_string(address) + "_" + std::to_string(queueData->id));
-		if(GD::bl->debugLevel >= 5) GD::out.printDebug("Creating SAVEPOINT " + savepointName);
-		GD::bl->db->createSavepointAsynchronous(savepointName);
 		return queueData->queue;
 	}
 	catch(const std::exception& ex)
@@ -240,8 +237,6 @@ std::shared_ptr<BidCoSQueue> BidCoSQueueManager::createQueue(std::shared_ptr<IBi
 
 void BidCoSQueueManager::resetQueue(int32_t address, uint32_t id)
 {
-	std::string savepointName("BidCoSQueue" + std::to_string(address) + "_" + std::to_string(id));
-	bool savePointReleased = false;
 	try
 	{
 		if(_disposing) return;
@@ -286,9 +281,6 @@ void BidCoSQueueManager::resetQueue(int32_t address, uint32_t id)
 		//so we need to unlock first
 		if(_queues.empty()) _stopWorkerThread = true;
 		_queueMutex.unlock();
-		if(GD::bl->debugLevel >= 5) GD::out.printDebug("Releasing SAVEPOINT " + savepointName);
-		GD::bl->db->releaseSavepointAsynchronous(savepointName);
-		savePointReleased = true;
 		if(setUnreach) peer->serviceMessages->setUnreach(true, true);
 	}
 	catch(const std::exception& ex)
@@ -305,11 +297,6 @@ void BidCoSQueueManager::resetQueue(int32_t address, uint32_t id)
     {
     	_queueMutex.unlock();
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    if(!savePointReleased)
-    {
-		if(GD::bl->debugLevel >= 5) GD::out.printDebug("Releasing SAVEPOINT " + savepointName);
-		GD::bl->db->releaseSavepointAsynchronous(savepointName);
     }
 }
 

@@ -267,7 +267,7 @@ void HomeMaticCentral::loadPeers()
 					team->setRpcDevice(rpcDevice->group);
 					team->initializeCentralConfig();
 					team->setID(peer->getID() | (1 << 30));
-					team->setInterface(-1, peer->getPhysicalInterfaceID());
+					team->setInterface(nullptr, peer->getPhysicalInterfaceID());
 					_peersBySerial[team->getSerialNumber()] = team;
 					_peersById[team->getID()] = team;
 				}
@@ -1174,7 +1174,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				index++;
 			}
 
-			setInstallMode(-1, true, duration, false);
+			setInstallMode(nullptr, true, duration, false);
 			stringStream << "Pairing mode enabled." << std::endl;
 			return stringStream.str();
 		}
@@ -1205,7 +1205,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				index++;
 			}
 
-			setInstallMode(-1, false, -1, false);
+			setInstallMode(nullptr, false, -1, false);
 			stringStream << "Pairing mode disabled." << std::endl;
 			return stringStream.str();
 		}
@@ -1556,7 +1556,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					stringStream << "All peers are up to date." << std::endl;
 					return stringStream.str();
 				}
-				result = updateFirmware(-1, ids, false);
+				result = updateFirmware(nullptr, ids, false);
 			}
 			else if(!peerExists(peerID)) stringStream << "This peer is not paired to this central." << std::endl;
 			else
@@ -1568,7 +1568,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					return stringStream.str();
 				}
 				ids.push_back(peerID);
-				result = updateFirmware(-1, ids, manually);
+				result = updateFirmware(nullptr, ids, manually);
 			}
 			if(!result) stringStream << "Unknown error." << std::endl;
 			else if(result->errorStruct) stringStream << result->structValue->at("faultString")->stringValue << std::endl;
@@ -2440,7 +2440,7 @@ void HomeMaticCentral::addHomegearFeaturesRemote(std::shared_ptr<BidCoSPeer> pee
 			peer->serviceMessages->setConfigPending(true);
 
 			//putParamset pushes the packets on pendingQueues, but does not send immediately
-			if(!paramset->structValue->empty()) peer->putParamset(-1, channel, ParameterGroup::Type::Enum::link, 0xFFFFFFFFFFFFFFFF, channel, paramset, true);
+			if(!paramset->structValue->empty()) peer->putParamset(nullptr, channel, ParameterGroup::Type::Enum::link, 0xFFFFFFFFFFFFFFFF, channel, paramset, true);
 		}
 		else
 		{
@@ -2466,7 +2466,7 @@ void HomeMaticCentral::addHomegearFeaturesRemote(std::shared_ptr<BidCoSPeer> pee
 				peer->serviceMessages->setConfigPending(true);
 
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
-				if(!paramset->structValue->empty()) peer->putParamset(-1, i->first, ParameterGroup::Type::Enum::link, 0xFFFFFFFFFFFFFFFF, i->first, paramset, true);
+				if(!paramset->structValue->empty()) peer->putParamset(nullptr, i->first, ParameterGroup::Type::Enum::link, 0xFFFFFFFFFFFFFFFF, i->first, paramset, true);
 			}
 		}
 
@@ -3357,14 +3357,14 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 					{
 						//Peer (smoke detector) has team but no peer. Add peer to it's own team:
 						GD::out.printInfo("Info: Peer has no group set. Resetting group to default.");
-						setTeam(-1, peer->getID(), -1, 0, -1, true, true);
+						setTeam(nullptr, peer->getID(), -1, 0, -1, true, true);
 					}
 				}
 			}
 			if(rpcFunction->hasGroup && !peerFound)
 			{
 				//Peer has no team yet so set it needs to be defined
-				setTeam(-1, peer->getSerialNumber(), localChannel, "", 0, true, false);
+				setTeam(nullptr, peer->getSerialNumber(), localChannel, "", 0, true, false);
 			}
 			if(packet->payload()->size() >= 2 && packet->payload()->at(0) == 0x03 && packet->payload()->at(1) == 0x00)
 			{
@@ -3529,7 +3529,7 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 					}
 				}
 			}
-			if(!peer->getPairingComplete() && !parametersToEnforce->structValue->empty()) peer->putParamset(-1, channel, type, 0, -1, parametersToEnforce, true);
+			if(!peer->getPairingComplete() && !parametersToEnforce->structValue->empty()) peer->putParamset(nullptr, channel, type, 0, -1, parametersToEnforce, true);
 		}
 		if((continuousData || multiPacket) && !multiPacketEnd && (packet->controlByte() & 0x20)) //Multiple config response packets
 		{
@@ -3616,7 +3616,7 @@ void HomeMaticCentral::resetTeam(std::shared_ptr<BidCoSPeer> peer, uint32_t chan
 		if(teamCreated)
 		{
 			PVariable deviceDescriptions(new Variable(VariableType::tArray));
-			deviceDescriptions->arrayValue = team->getDeviceDescriptions(-1, true, std::map<std::string, bool>());
+			deviceDescriptions->arrayValue = team->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
 			raiseRPCNewDevices(deviceDescriptions);
 		}
 		else raiseRPCUpdateDevice(team->getID(), peer->getTeamRemoteChannel(), team->getSerialNumber() + ":" + std::to_string(peer->getTeamRemoteChannel()), 2);
@@ -3842,7 +3842,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 					}
 					if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) queue->setWakeOnRadioBit();
 					PVariable deviceDescriptions(new Variable(VariableType::tArray));
-					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(-1, true, std::map<std::string, bool>());
+					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
 					raiseRPCNewDevices(deviceDescriptions);
 					GD::out.printMessage("Added peer 0x" + BaseLib::HelperFunctions::getHexString(queue->peer->getAddress()) + ".");
 					for(Functions::iterator i = queue->peer->getRpcDevice()->functions.begin(); i != queue->peer->getRpcDevice()->functions.end(); ++i)
@@ -3852,7 +3852,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 							queue->peer->peerInfoPacketsEnabled = false;
 							PVariable variables(new Variable(VariableType::tStruct));
 							variables->structValue->insert(StructElement("AES_ACTIVE", PVariable(new Variable(true))));
-							queue->peer->putParamset(-1, i->first, ParameterGroup::Type::config, 0, -1, variables, true);
+							queue->peer->putParamset(nullptr, i->first, ParameterGroup::Type::config, 0, -1, variables, true);
 							queue->peer->peerInfoPacketsEnabled = true;
 						}
 						if(i->second->hasGroup)
@@ -3952,7 +3952,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
     }
 }
 
-PVariable HomeMaticCentral::addDevice(int32_t clientID, std::string serialNumber)
+PVariable HomeMaticCentral::addDevice(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber)
 {
 	try
 	{
@@ -3991,7 +3991,7 @@ PVariable HomeMaticCentral::addDevice(int32_t clientID, std::string serialNumber
 		}
 		else
 		{
-			return peer->getDeviceDescription(clientID, -1, std::map<std::string, bool>());
+			return peer->getDeviceDescription(clientInfo, -1, std::map<std::string, bool>());
 		}
 	}
 	catch(const std::exception& ex)
@@ -4009,7 +4009,7 @@ PVariable HomeMaticCentral::addDevice(int32_t clientID, std::string serialNumber
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::addLink(int32_t clientID, std::string senderSerialNumber, int32_t senderChannelIndex, std::string receiverSerialNumber, int32_t receiverChannelIndex, std::string name, std::string description)
+PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, std::string senderSerialNumber, int32_t senderChannelIndex, std::string receiverSerialNumber, int32_t receiverChannelIndex, std::string name, std::string description)
 {
 	try
 	{
@@ -4019,7 +4019,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, std::string senderSerialNu
 		std::shared_ptr<BidCoSPeer> receiver = getPeer(receiverSerialNumber);
 		if(!sender) return Variable::createError(-2, "Sender device not found.");
 		if(!receiver) return Variable::createError(-2, "Receiver device not found.");
-		return addLink(clientID, sender->getID(), senderChannelIndex, receiver->getID(), receiverChannelIndex, name, description);
+		return addLink(clientInfo, sender->getID(), senderChannelIndex, receiver->getID(), receiverChannelIndex, name, description);
 	}
 	catch(const std::exception& ex)
 	{
@@ -4036,7 +4036,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, std::string senderSerialNu
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t senderChannelIndex, uint64_t receiverID, int32_t receiverChannelIndex, std::string name, std::string description)
+PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t senderID, int32_t senderChannelIndex, uint64_t receiverID, int32_t receiverChannelIndex, std::string name, std::string description)
 {
 	try
 	{
@@ -4147,7 +4147,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(i->second.data)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
-				sender->putParamset(clientID, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
+				sender->putParamset(clientInfo, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
 
 				Scenarios::iterator scenarioIterator = receiverFunction->linkParameters->scenarios.find("default");
 				if(scenarioIterator != receiverFunction->linkParameters->scenarios.end())
@@ -4162,7 +4162,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 						}
 					}
 					//putParamset pushes the packets on pendingQueues, but does not send immediately
-					sender->putParamset(clientID, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
+					sender->putParamset(clientInfo, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
 				}
 			}
 
@@ -4246,7 +4246,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(i->second.data)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
-				receiver->putParamset(clientID, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);
+				receiver->putParamset(clientInfo, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);
 
 				Scenarios::iterator scenarioIterator = senderFunction->linkParameters->scenarios.find("default");
 				if(scenarioIterator != senderFunction->linkParameters->scenarios.end())
@@ -4261,7 +4261,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 						}
 					}
 					//putParamset pushes the packets on pendingQueues, but does not send immediately
-					receiver->putParamset(clientID, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);
+					receiver->putParamset(clientInfo, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);
 				}
 			}
 
@@ -4284,7 +4284,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 		//I'm assuming that senderChannelIndex is always the first of the two grouped channels
 		if(channelGroupedWith > senderChannelIndex)
 		{
-			return addLink(clientID, senderID, channelGroupedWith, receiverID, receiverChannelIndex, name, description);
+			return addLink(clientInfo, senderID, channelGroupedWith, receiverID, receiverChannelIndex, name, description);
 		}
 		else
 		{
@@ -4306,7 +4306,7 @@ PVariable HomeMaticCentral::addLink(int32_t clientID, uint64_t senderID, int32_t
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::removeLink(int32_t clientID, std::string senderSerialNumber, int32_t senderChannelIndex, std::string receiverSerialNumber, int32_t receiverChannelIndex)
+PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, std::string senderSerialNumber, int32_t senderChannelIndex, std::string receiverSerialNumber, int32_t receiverChannelIndex)
 {
 	try
 	{
@@ -4316,7 +4316,7 @@ PVariable HomeMaticCentral::removeLink(int32_t clientID, std::string senderSeria
 		std::shared_ptr<BidCoSPeer> receiver = getPeer(receiverSerialNumber);
 		if(!sender) return Variable::createError(-2, "Sender device not found.");
 		if(!receiver) return Variable::createError(-2, "Receiver device not found.");
-		return removeLink(clientID, sender->getID(), senderChannelIndex, receiver->getID(), receiverChannelIndex);
+		return removeLink(clientInfo, sender->getID(), senderChannelIndex, receiver->getID(), receiverChannelIndex);
 	}
 	catch(const std::exception& ex)
 	{
@@ -4333,7 +4333,7 @@ PVariable HomeMaticCentral::removeLink(int32_t clientID, std::string senderSeria
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::removeLink(int32_t clientID, uint64_t senderID, int32_t senderChannelIndex, uint64_t receiverID, int32_t receiverChannelIndex)
+PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint64_t senderID, int32_t senderChannelIndex, uint64_t receiverID, int32_t receiverChannelIndex)
 {
 	try
 	{
@@ -4459,7 +4459,7 @@ PVariable HomeMaticCentral::removeLink(int32_t clientID, uint64_t senderID, int3
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::deleteDevice(int32_t clientID, std::string serialNumber, int32_t flags)
+PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t flags)
 {
 	try
 	{
@@ -4467,7 +4467,7 @@ PVariable HomeMaticCentral::deleteDevice(int32_t clientID, std::string serialNum
 		if(serialNumber[0] == '*') return Variable::createError(-2, "Cannot delete virtual device.");
 		std::shared_ptr<BidCoSPeer> peer = getPeer(serialNumber);
 		if(!peer) return PVariable(new Variable(VariableType::tVoid));
-		return deleteDevice(clientID, peer->getID(), flags);
+		return deleteDevice(clientInfo, peer->getID(), flags);
 	}
 	catch(const std::exception& ex)
     {
@@ -4484,7 +4484,7 @@ PVariable HomeMaticCentral::deleteDevice(int32_t clientID, std::string serialNum
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::deleteDevice(int32_t clientID, uint64_t peerID, int32_t flags)
+PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t flags)
 {
 	try
 	{
@@ -4539,7 +4539,7 @@ PVariable HomeMaticCentral::deleteDevice(int32_t clientID, uint64_t peerID, int3
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::listTeams(int32_t clientID)
+PVariable HomeMaticCentral::listTeams(BaseLib::PRpcClientInfo clientInfo)
 {
 	try
 	{
@@ -4560,7 +4560,7 @@ PVariable HomeMaticCentral::listTeams(int32_t clientID)
 			std::this_thread::sleep_for(std::chrono::milliseconds(3));
 			std::string serialNumber = (*i)->getSerialNumber();
 			if(serialNumber.empty() || serialNumber.at(0) != '*') continue;
-			std::shared_ptr<std::vector<PVariable>> descriptions = (*i)->getDeviceDescriptions(clientID, true, std::map<std::string, bool>());
+			std::shared_ptr<std::vector<PVariable>> descriptions = (*i)->getDeviceDescriptions(clientInfo, true, std::map<std::string, bool>());
 			if(!descriptions) continue;
 			for(std::vector<PVariable>::iterator j = descriptions->begin(); j != descriptions->end(); ++j)
 			{
@@ -4585,7 +4585,7 @@ PVariable HomeMaticCentral::listTeams(int32_t clientID)
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::setTeam(int32_t clientID, std::string serialNumber, int32_t channel, std::string teamSerialNumber, int32_t teamChannel, bool force, bool burst)
+PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, std::string teamSerialNumber, int32_t teamChannel, bool force, bool burst)
 {
 	try
 	{
@@ -4598,7 +4598,7 @@ PVariable HomeMaticCentral::setTeam(int32_t clientID, std::string serialNumber, 
 			if(!team) return Variable::createError(-2, "Group does not exist.");
 			teamID = team->getID();
 		}
-		return setTeam(peer->getID(), channel, teamID, teamChannel, force, burst);
+		return setTeam(clientInfo, peer->getID(), channel, teamID, teamChannel, force, burst);
 	}
 	catch(const std::exception& ex)
     {
@@ -4615,7 +4615,7 @@ PVariable HomeMaticCentral::setTeam(int32_t clientID, std::string serialNumber, 
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::setTeam(int32_t clientID, uint64_t peerID, int32_t channel, uint64_t teamID, int32_t teamChannel, bool force, bool burst)
+PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, uint64_t teamID, int32_t teamChannel, bool force, bool burst)
 {
 	try
 	{
@@ -4778,7 +4778,7 @@ PVariable HomeMaticCentral::setTeam(int32_t clientID, uint64_t peerID, int32_t c
     return Variable::createError(-32500, "Unknown application error.");
 }*/
 
-PVariable HomeMaticCentral::getDeviceInfo(int32_t clientID, uint64_t id, std::map<std::string, bool> fields)
+PVariable HomeMaticCentral::getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, uint64_t id, std::map<std::string, bool> fields)
 {
 	try
 	{
@@ -4787,7 +4787,7 @@ PVariable HomeMaticCentral::getDeviceInfo(int32_t clientID, uint64_t id, std::ma
 			std::shared_ptr<BidCoSPeer> peer(getPeer(id));
 			if(!peer) return Variable::createError(-2, "Unknown device.");
 
-			return peer->getDeviceInfo(clientID, fields);
+			return peer->getDeviceInfo(clientInfo, fields);
 		}
 		else
 		{
@@ -4806,7 +4806,7 @@ PVariable HomeMaticCentral::getDeviceInfo(int32_t clientID, uint64_t id, std::ma
 			{
 				//listDevices really needs a lot of resources, so wait a little bit after each device
 				std::this_thread::sleep_for(std::chrono::milliseconds(3));
-				PVariable info = (*i)->getDeviceInfo(clientID, fields);
+				PVariable info = (*i)->getDeviceInfo(clientInfo, fields);
 				if(!info) continue;
 				array->arrayValue->push_back(info);
 			}
@@ -4832,7 +4832,7 @@ PVariable HomeMaticCentral::getDeviceInfo(int32_t clientID, uint64_t id, std::ma
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::getInstallMode(int32_t clientID)
+PVariable HomeMaticCentral::getInstallMode(BaseLib::PRpcClientInfo clientInfo)
 {
 	try
 	{
@@ -4886,7 +4886,7 @@ void HomeMaticCentral::pairingModeTimer(int32_t duration, bool debugOutput)
     }
 }
 
-PVariable HomeMaticCentral::activateLinkParamset(int32_t clientID, std::string serialNumber, int32_t channel, std::string remoteSerialNumber, int32_t remoteChannel, bool longPress)
+PVariable HomeMaticCentral::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, std::string remoteSerialNumber, int32_t remoteChannel, bool longPress)
 {
 	try
 	{
@@ -4902,7 +4902,7 @@ PVariable HomeMaticCentral::activateLinkParamset(int32_t clientID, std::string s
 			}
 			else remoteID = remotePeer->getID();
 		}
-		return peer->activateLinkParamset(clientID, channel, remoteID, remoteChannel, longPress);
+		return peer->activateLinkParamset(clientInfo, channel, remoteID, remoteChannel, longPress);
 	}
 	catch(const std::exception& ex)
     {
@@ -4919,13 +4919,13 @@ PVariable HomeMaticCentral::activateLinkParamset(int32_t clientID, std::string s
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::activateLinkParamset(int32_t clientID, uint64_t peerID, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress)
+PVariable HomeMaticCentral::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress)
 {
 	try
 	{
 		std::shared_ptr<BidCoSPeer> peer(getPeer(peerID));
 		if(!peer) return Variable::createError(-2, "Unknown device.");
-		return peer->activateLinkParamset(clientID, channel, remoteID, remoteChannel, longPress);
+		return peer->activateLinkParamset(clientInfo, channel, remoteID, remoteChannel, longPress);
 	}
 	catch(const std::exception& ex)
     {
@@ -4942,7 +4942,7 @@ PVariable HomeMaticCentral::activateLinkParamset(int32_t clientID, uint64_t peer
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::putParamset(int32_t clientID, std::string serialNumber, int32_t channel, ParameterGroup::Type::Enum type, std::string remoteSerialNumber, int32_t remoteChannel, PVariable paramset)
+PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, ParameterGroup::Type::Enum type, std::string remoteSerialNumber, int32_t remoteChannel, PVariable paramset)
 {
 	try
 	{
@@ -4958,7 +4958,7 @@ PVariable HomeMaticCentral::putParamset(int32_t clientID, std::string serialNumb
 			}
 			else remoteID = remotePeer->getID();
 		}
-		PVariable result = peer->putParamset(clientID, channel, type, remoteID, remoteChannel, paramset);
+		PVariable result = peer->putParamset(clientInfo, channel, type, remoteID, remoteChannel, paramset);
 		if(result->errorStruct) return result;
 		int32_t waitIndex = 0;
 		while(_bidCoSQueueManager.get(peer->getAddress()) && waitIndex < 50)
@@ -4984,13 +4984,13 @@ PVariable HomeMaticCentral::putParamset(int32_t clientID, std::string serialNumb
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::putParamset(int32_t clientID, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable paramset)
+PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable paramset)
 {
 	try
 	{
 		std::shared_ptr<BidCoSPeer> peer(getPeer(peerID));
 		if(!peer) return Variable::createError(-2, "Unknown device.");
-		PVariable result = peer->putParamset(clientID, channel, type, remoteID, remoteChannel, paramset);
+		PVariable result = peer->putParamset(clientInfo, channel, type, remoteID, remoteChannel, paramset);
 		if(result->errorStruct) return result;
 		int32_t waitIndex = 0;
 		while(_bidCoSQueueManager.get(peer->getAddress()) && waitIndex < 50)
@@ -5016,7 +5016,7 @@ PVariable HomeMaticCentral::putParamset(int32_t clientID, uint64_t peerID, int32
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::setInstallMode(int32_t clientID, bool on, uint32_t duration, bool debugOutput)
+PVariable HomeMaticCentral::setInstallMode(BaseLib::PRpcClientInfo clientInfo, bool on, uint32_t duration, bool debugOutput)
 {
 	try
 	{
@@ -5054,7 +5054,7 @@ PVariable HomeMaticCentral::setInstallMode(int32_t clientID, bool on, uint32_t d
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::updateFirmware(int32_t clientID, std::vector<uint64_t> ids, bool manual)
+PVariable HomeMaticCentral::updateFirmware(BaseLib::PRpcClientInfo clientInfo, std::vector<uint64_t> ids, bool manual)
 {
 	try
 	{
@@ -5086,13 +5086,13 @@ PVariable HomeMaticCentral::updateFirmware(int32_t clientID, std::vector<uint64_
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::setInterface(int32_t clientID, uint64_t peerID, std::string interfaceID)
+PVariable HomeMaticCentral::setInterface(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, std::string interfaceID)
 {
 	try
 	{
 		std::shared_ptr<BidCoSPeer> peer(getPeer(peerID));
 		if(!peer) return Variable::createError(-2, "Unknown device.");
-		return peer->setInterface(clientID, interfaceID);
+		return peer->setInterface(clientInfo, interfaceID);
 	}
 	catch(const std::exception& ex)
     {

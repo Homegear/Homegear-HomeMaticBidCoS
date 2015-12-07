@@ -113,25 +113,25 @@ public:
 	void sendRequestConfig(int32_t address, uint8_t localChannel, uint8_t list = 0, int32_t remoteAddress = 0, uint8_t remoteChannel = 0);
 	void sendOK(int32_t messageCounter, int32_t destinationAddress, std::vector<uint8_t> payload = std::vector<uint8_t>());
 
-	virtual BaseLib::PVariable activateLinkParamset(int32_t clientID, std::string serialNumber, int32_t channel, std::string remoteSerialNumber, int32_t remoteChannel, bool longPress);
-	virtual BaseLib::PVariable activateLinkParamset(int32_t clientID, uint64_t peerID, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress);
-	virtual BaseLib::PVariable addDevice(int32_t clientID, std::string serialNumber);
-	virtual BaseLib::PVariable addLink(int32_t clientID, std::string senderSerialNumber, int32_t senderChannel, std::string receiverSerialNumber, int32_t receiverChannel, std::string name, std::string description);
-	virtual BaseLib::PVariable addLink(int32_t clientID, uint64_t senderID, int32_t senderChannel, uint64_t receiverID, int32_t receiverChannel, std::string name, std::string description);
-	virtual BaseLib::PVariable deleteDevice(int32_t clientID, std::string serialNumber, int32_t flags);
-	virtual BaseLib::PVariable deleteDevice(int32_t clientID, uint64_t peerID, int32_t flags);
-	virtual BaseLib::PVariable getDeviceInfo(int32_t clientID, uint64_t id, std::map<std::string, bool> fields);
-	virtual BaseLib::PVariable getInstallMode(int32_t clientID);
-	virtual BaseLib::PVariable listTeams(int32_t clientID);
-	virtual BaseLib::PVariable putParamset(int32_t clientID, std::string serialNumber, int32_t channel, ParameterGroup::Type::Enum type, std::string remoteSerialNumber, int32_t remoteChannel, BaseLib::PVariable paramset);
-	virtual BaseLib::PVariable putParamset(int32_t clientID, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, BaseLib::PVariable paramset);
-	virtual BaseLib::PVariable removeLink(int32_t clientID, std::string senderSerialNumber, int32_t senderChannel, std::string receiverSerialNumber, int32_t receiverChannel);
-	virtual BaseLib::PVariable removeLink(int32_t clientID, uint64_t senderID, int32_t senderChannel, uint64_t receiverID, int32_t receiverChannel);
-	virtual BaseLib::PVariable setTeam(int32_t clientID, std::string serialNumber, int32_t channel, std::string teamSerialNumber, int32_t teamChannel, bool force = false, bool burst = true);
-	virtual BaseLib::PVariable setTeam(int32_t clientID, uint64_t peerID, int32_t channel, uint64_t teamID, int32_t teamChannel, bool force = false, bool burst = true);
-	virtual BaseLib::PVariable setInstallMode(int32_t clientID, bool on, uint32_t duration = 60, bool debugOutput = true);
-	virtual BaseLib::PVariable updateFirmware(int32_t clientID, std::vector<uint64_t> ids, bool manual);
-	virtual BaseLib::PVariable setInterface(int32_t clientID, uint64_t peerID, std::string interfaceID);
+	virtual BaseLib::PVariable activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, std::string remoteSerialNumber, int32_t remoteChannel, bool longPress);
+	virtual BaseLib::PVariable activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress);
+	virtual BaseLib::PVariable addDevice(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber);
+	virtual BaseLib::PVariable addLink(BaseLib::PRpcClientInfo clientInfo, std::string senderSerialNumber, int32_t senderChannel, std::string receiverSerialNumber, int32_t receiverChannel, std::string name, std::string description);
+	virtual BaseLib::PVariable addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t senderID, int32_t senderChannel, uint64_t receiverID, int32_t receiverChannel, std::string name, std::string description);
+	virtual BaseLib::PVariable deleteDevice(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t flags);
+	virtual BaseLib::PVariable deleteDevice(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t flags);
+	virtual BaseLib::PVariable getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, uint64_t id, std::map<std::string, bool> fields);
+	virtual BaseLib::PVariable getInstallMode(BaseLib::PRpcClientInfo clientInfo);
+	virtual BaseLib::PVariable listTeams(BaseLib::PRpcClientInfo clientInfo);
+	virtual BaseLib::PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, ParameterGroup::Type::Enum type, std::string remoteSerialNumber, int32_t remoteChannel, BaseLib::PVariable paramset);
+	virtual BaseLib::PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, BaseLib::PVariable paramset);
+	virtual BaseLib::PVariable removeLink(BaseLib::PRpcClientInfo clientInfo, std::string senderSerialNumber, int32_t senderChannel, std::string receiverSerialNumber, int32_t receiverChannel);
+	virtual BaseLib::PVariable removeLink(BaseLib::PRpcClientInfo clientInfo, uint64_t senderID, int32_t senderChannel, uint64_t receiverID, int32_t receiverChannel);
+	virtual BaseLib::PVariable setTeam(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, std::string teamSerialNumber, int32_t teamChannel, bool force = false, bool burst = true);
+	virtual BaseLib::PVariable setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, uint64_t teamID, int32_t teamChannel, bool force = false, bool burst = true);
+	virtual BaseLib::PVariable setInstallMode(BaseLib::PRpcClientInfo clientInfo, bool on, uint32_t duration = 60, bool debugOutput = true);
+	virtual BaseLib::PVariable updateFirmware(BaseLib::PRpcClientInfo clientInfo, std::vector<uint64_t> ids, bool manual);
+	virtual BaseLib::PVariable setInterface(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, std::string interfaceID);
 protected:
 	// {{{ In table variables
         std::unordered_map<int32_t, uint8_t> _messageCounter;

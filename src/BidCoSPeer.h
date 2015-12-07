@@ -195,32 +195,32 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         /**
          * {@inheritDoc}
          */
-        virtual PVariable activateLinkParamset(int32_t clientID, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress);
+        virtual PVariable activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress);
 
         /**
          * {@inheritDoc}
          */
-        virtual PVariable getDeviceDescription(int32_t clientID, int32_t channel, std::map<std::string, bool> fields);
+        virtual PVariable getDeviceDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, std::map<std::string, bool> fields);
 
         /**
          * {@inheritDoc}
          */
-        virtual PVariable getDeviceInfo(int32_t clientID, std::map<std::string, bool> fields);
+        virtual PVariable getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, std::map<std::string, bool> fields);
 
         /**
          * {@inheritDoc}
          */
-        virtual PVariable getParamsetDescription(int32_t clientID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel);
+        virtual PVariable getParamsetDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel);
 
         /**
          * {@inheritDoc}
          */
-        virtual PVariable getParamset(int32_t clientID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel);
+        virtual PVariable getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel);
 
         /**
          * {@inheritDoc}
          */
-        virtual PVariable putParamset(int32_t clientID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool onlyPushing = false);
+        virtual PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool onlyPushing = false);
 
         /**
          * Sets the physical interface for this peer.
@@ -228,7 +228,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
          * @param interfaceID The id of the physical interface as defined in physicalinterfaces.conf
          * @return Returns "RPC void" on success, RPC error "-5" when the interface is unknown, RPC error "-103" to "-100" on AES errors. See the RPC reference for more information.
          */
-        virtual PVariable setInterface(int32_t clientID, std::string interfaceID);
+        virtual PVariable setInterface(BaseLib::PRpcClientInfo clientInfo, std::string interfaceID);
 
         /**
          * Checks if the interface with ID interfaceID has better reception than the current interface. If that is the case and the configuration parameter "ROAMING" is "true" for the peer, the interface will be changed.
@@ -240,7 +240,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         /**
          * {@inheritDoc}
          */
-        virtual PVariable setValue(int32_t clientID, uint32_t channel, std::string valueKey, PVariable value);
+        virtual PVariable setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t channel, std::string valueKey, PVariable value);
         //End RPC methods
     protected:
         uint32_t _lastRSSIDevice = 0;

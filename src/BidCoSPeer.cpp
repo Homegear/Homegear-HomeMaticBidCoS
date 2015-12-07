@@ -376,7 +376,7 @@ void BidCoSPeer::worker()
 				else
 				{
 					PVariable rpcValue = valuesCentral.at((*i)->channel).at((*i)->key).rpcParameter->convertFromPacket((*i)->data);
-					setValue(-1, (*i)->channel, (*i)->key, rpcValue);
+					setValue(nullptr, (*i)->channel, (*i)->key, rpcValue);
 				}
 			}
 			_variablesToResetMutex.lock();
@@ -2556,7 +2556,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
     }
 }
 
-PVariable BidCoSPeer::activateLinkParamset(int32_t clientID, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress)
+PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress)
 {
 	try
 	{
@@ -2614,11 +2614,11 @@ PVariable BidCoSPeer::activateLinkParamset(int32_t clientID, int32_t channel, ui
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::getDeviceDescription(int32_t clientID, int32_t channel, std::map<std::string, bool> fields)
+PVariable BidCoSPeer::getDeviceDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, std::map<std::string, bool> fields)
 {
 	try
 	{
-		PVariable description(Peer::getDeviceDescription(clientID, channel, fields));
+		PVariable description(Peer::getDeviceDescription(clientInfo, channel, fields));
 		if(description->errorStruct || description->structValue->empty()) return description;
 
 		if(channel > -1)
@@ -2667,11 +2667,11 @@ PVariable BidCoSPeer::getDeviceDescription(int32_t clientID, int32_t channel, st
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::getDeviceInfo(int32_t clientID, std::map<std::string, bool> fields)
+PVariable BidCoSPeer::getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, std::map<std::string, bool> fields)
 {
 	try
 	{
-		PVariable info(Peer::getDeviceInfo(clientID, fields));
+		PVariable info(Peer::getDeviceInfo(clientInfo, fields));
 		if(info->errorStruct) return info;
 
 		if(fields.empty() || fields.find("INTERFACE") != fields.end()) info->structValue->insert(StructElement("INTERFACE", PVariable(new Variable(_physicalInterface->getID()))));
@@ -2693,7 +2693,7 @@ PVariable BidCoSPeer::getDeviceInfo(int32_t clientID, std::map<std::string, bool
     return PVariable();
 }
 
-PVariable BidCoSPeer::getParamsetDescription(int32_t clientID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel)
+PVariable BidCoSPeer::getParamsetDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel)
 {
 	try
 	{
@@ -2709,7 +2709,7 @@ PVariable BidCoSPeer::getParamsetDescription(int32_t clientID, int32_t channel, 
 			if(!remotePeer) return Variable::createError(-2, "Unknown remote peer.");
 		}
 
-		return Peer::getParamsetDescription(clientID, parameterGroup);
+		return Peer::getParamsetDescription(clientInfo, parameterGroup);
 	}
 	catch(const std::exception& ex)
     {
@@ -2726,7 +2726,7 @@ PVariable BidCoSPeer::getParamsetDescription(int32_t clientID, int32_t channel, 
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool onlyPushing)
+PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool onlyPushing)
 {
 	try
 	{
@@ -2898,7 +2898,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
 			for(Struct::iterator i = variables->structValue->begin(); i != variables->structValue->end(); ++i)
 			{
 				if(i->first.empty() || !i->second) continue;
-				setValue(clientID, channel, i->first, i->second);
+				setValue(clientInfo, channel, i->first, i->second);
 			}
 		}
 		else if(type == ParameterGroup::Type::Enum::link)
@@ -3047,7 +3047,7 @@ PVariable BidCoSPeer::putParamset(int32_t clientID, int32_t channel, ParameterGr
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::getParamset(int32_t clientID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel)
+PVariable BidCoSPeer::getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel)
 {
 	try
 	{
@@ -3259,7 +3259,7 @@ void BidCoSPeer::addVariableToResetCallback(std::shared_ptr<CallbackFunctionPara
     }
 }
 
-PVariable BidCoSPeer::setInterface(int32_t clientID, std::string interfaceID)
+PVariable BidCoSPeer::setInterface(BaseLib::PRpcClientInfo clientInfo, std::string interfaceID)
 {
 	try
 	{
@@ -3306,11 +3306,11 @@ PVariable BidCoSPeer::setInterface(int32_t clientID, std::string interfaceID)
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string valueKey, PVariable value)
+PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t channel, std::string valueKey, PVariable value)
 {
 	try
 	{
-		Peer::setValue(clientID, channel, valueKey, value); //Ignore result, otherwise setHomegerValue might not be executed
+		Peer::setValue(clientInfo, channel, valueKey, value); //Ignore result, otherwise setHomegerValue might not be executed
 		if(_disposing) return Variable::createError(-32500, "Peer is disposing.");
 		if(!_centralFeatures) return Variable::createError(-2, "Peer is virtual.");
 		if(valueKey.empty()) return Variable::createError(-5, "Value key is empty.");
@@ -3367,7 +3367,7 @@ PVariable BidCoSPeer::setValue(int32_t clientID, uint32_t channel, std::string v
 				toggleValue = toggleParam->rpcParameter->convertFromPacket(temp);
 			}
 			else return Variable::createError(-6, "Toggle parameter has to be of type boolean, float or integer.");
-			return setValue(clientID, channel, toggleCast->parameter, toggleValue);
+			return setValue(clientInfo, channel, toggleCast->parameter, toggleValue);
 		}
 		if(rpcParameter->setPackets.empty()) return Variable::createError(-6, "parameter is read only");
 		std::string setRequest = rpcParameter->setPackets.front()->id;

@@ -31,6 +31,7 @@
 #define GD_H_
 
 #define BIDCOS_FAMILY_ID 0
+#define BIDCOS_FAMILY_NAME "HomeMatic BidCoS"
 
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 #include "BidCoS.h"

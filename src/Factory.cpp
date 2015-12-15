@@ -41,6 +41,11 @@ int32_t getFamilyId()
 	return BIDCOS_FAMILY_ID;
 }
 
+std::string getFamilyName()
+{
+	return BIDCOS_FAMILY_NAME;
+}
+
 std::string getVersion()
 {
 	return VERSION;

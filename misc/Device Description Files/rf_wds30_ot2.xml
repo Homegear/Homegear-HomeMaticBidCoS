@@ -12,7 +12,7 @@
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
@@ -24,7 +24,7 @@
 			<configParameters>wds30ot2_ch_master--1</configParameters>
 			<variables>wds30ot2_ch_values--1</variables>
 		</function>
-		<function channel="5" type="WEATHER" channelCount="1">
+		<function channel="5" type="WEATHER">
 			<properties>
 				<linkSenderFunctionTypes>
 					<type>WEATHER_T</type>
@@ -47,6 +47,45 @@
 					<index>12.7</index>
 					<size>0.1</size>
 					<parameterId>LOWBAT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="MEASURE_EVENT1">
+			<direction>toCentral</direction>
+			<type>0x53</type>
+			<channelIndex>10:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>2.0</size>
+					<parameterId>TEMPERATURE</parameterId>
+					<isSigned>true</isSigned>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="MEASURE_EVENT2">
+			<direction>toCentral</direction>
+			<type>0x53</type>
+			<channelIndex>13:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>14.0</index>
+					<size>2.0</size>
+					<parameterId>TEMPERATURE</parameterId>
+					<isSigned>true</isSigned>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="MEASURE_EVENT3">
+			<direction>toCentral</direction>
+			<type>0x53</type>
+			<channelIndex>16:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>17.0</index>
+					<size>2.0</size>
+					<parameterId>TEMPERATURE</parameterId>
+					<isSigned>true</isSigned>
 				</element>
 			</binaryPayload>
 		</packet>
@@ -346,9 +385,6 @@
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
-					<packet id="MEASURE_EVENT1">
-						<type>event</type>
-					</packet>
 					<packet id="MEASURE_EVENT1">
 						<type>event</type>
 					</packet>

@@ -2681,6 +2681,7 @@ void HomeMaticCentral::addHomegearFeatures(std::shared_ptr<BidCoSPeer> peer, int
 		GD::out.printDebug("Debug: Adding homegear features. Device type: 0x" + BaseLib::HelperFunctions::getHexString((int32_t)peer->getDeviceType().type()));
 		if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCVD) addHomegearFeaturesHMCCVD(peer, channel, pushPendingBidCoSQueues);
 		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMPB4DISWM ||
+				peer->getDeviceType().type() == (uint32_t)DeviceType::HmPb4DisWm2 ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC4 ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC8 ||
 				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC4B ||

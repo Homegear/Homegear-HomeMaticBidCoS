@@ -131,6 +131,7 @@ enum class DeviceType : uint32_t
 	HmRcKey43 =		0x00D6,
 	HMRC8 =			0x00DA,
 	HmSenMdirWm55 =	0x00DB,
+	HmPb4DisWm2 =	0x00DD,
 	HmRc2PbuFm = 	0x00E0,
 	HmRcDisHXEu = 	0x00E1,
 	HmEsPmsw1Dr =	0x00EA,

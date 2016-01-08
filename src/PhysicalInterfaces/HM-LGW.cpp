@@ -870,7 +870,7 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 					//0x0D is returned, when there is no response to the A003 packet and if the 8002
 					//packet doesn't match
 					//Example: FD000501BC040D025E14
-					_out.printWarning("Warning: AES handshake failed for packet: " + _bl->hf.getHexString(packetBytes));
+					_out.printInfo("Info: AES handshake failed for packet, because either the response data of the last handshake packet didn't match or the last handshake packet wasn't received: " + _bl->hf.getHexString(packetBytes));
 					return;
 				}
 				else if(responsePacket.at(6) == 0x03)
@@ -1105,7 +1105,7 @@ void HM_LGW::doInit()
 		if(parts.size() != 2 || parts.at(0).size() != 3 || parts.at(0).at(0) != 'S' || parts.at(1).size() < 15 || parts.at(1).compare(0, 15, "BidCoS-over-LAN") != 0)
 		{
 			_stopped = true;
-			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please check your AES key in homematicbidcos.conf. Stopping listening.");
+			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please double check the setting \"lanKey\" in homematicbidcos.conf. The key is most probably wrong. Stopping listening.");
 			return;
 		}
 		uint8_t packetIndex = (_math.getNumber(parts.at(0).at(1)) << 4) + _math.getNumber(parts.at(0).at(2));

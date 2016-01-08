@@ -263,6 +263,16 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		//End
 
 		/**
+		 * Time stamp of the current packet received by any communication module. Needed for roaming.
+		 */
+		int64_t _currentPacketReceivedTimeFromAnyInterface = 0;
+
+		/**
+		 * Time stamp of the last packet received by any communication module. Needed for roaming.
+		 */
+		int64_t _lastPacketReceivedTimeFromAnyInterface = 0;
+
+		/**
 		 * Stores information about the current best interface based on the RSSI.
 		 * The first element it the time stamp of the information, the second the RSSI and the third the ID of the interface.
 		 */

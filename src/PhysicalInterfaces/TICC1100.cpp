@@ -848,7 +848,7 @@ void TICC1100::startListening()
 		initChip();
 		_out.printDebug("Debug: CC1100: Setting GPIO direction");
 		setGPIODirection(1, GPIODirection::IN);
-		_out.printDebug("Debug: CC1100: Settings GPIO edge");
+		_out.printDebug("Debug: CC1100: Setting GPIO edge");
 		setGPIOEdge(1, GPIOEdge::BOTH);
 		openGPIO(1, true);
 		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1) throw(BaseLib::Exception("Couldn't listen to rf device, because the gpio pointer is not valid: " + _settings->device));

@@ -355,7 +355,7 @@ void TICC1101::setup(int32_t userID, int32_t groupID)
 		setGPIOPermission(1, userID, groupID, true);
 		_out.printDebug("Debug: CC1100: Setting GPIO direction");
 		setGPIODirection(1, GPIODirection::IN);
-		_out.printDebug("Debug: CC1100: Settings GPIO edge");
+		_out.printDebug("Debug: CC1100: Setting GPIO edge");
 		setGPIOEdge(1, GPIOEdge::BOTH);
 	}
     catch(const std::exception& ex)

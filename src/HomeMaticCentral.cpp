@@ -756,6 +756,17 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->timeReceived()) << " HomeMatic BidCoS packet received (" + senderID + (bidCoSPacket->rssiDevice() ? ", RSSI: 0x" + _bl->hf.getHexString(bidCoSPacket->rssiDevice(), 2) : "") + "): " + bidCoSPacket->hexString() << std::endl;
 		if(!bidCoSPacket) return false;
+
+		// {{{ Intercept packet
+		/*if(bidCoSPacket->senderAddress() == 0x19A4E0 && bidCoSPacket->messageType() == 0x41)
+		{
+			std::vector<uint8_t> payload({ 0x00, 0x0B, 0x03 });
+			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(0x2F, 0x80, 0x02, _address, bidCoSPacket->senderAddress(), payload));
+			sendPacket(GD::defaultPhysicalInterface, packet);
+			return true;
+		}*/
+		// }}}
+
 		if(bidCoSPacket->senderAddress() == _address) //Packet spoofed
 		{
 			std::shared_ptr<BidCoSPeer> peer(getPeer(bidCoSPacket->destinationAddress()));

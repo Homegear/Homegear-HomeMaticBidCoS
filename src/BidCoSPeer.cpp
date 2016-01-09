@@ -2757,17 +2757,45 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 
 		if(type == ParameterGroup::Type::Enum::config)
 		{
+			std::unordered_map<uint32_t, std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>>::iterator configIterator = configCentral.find(channel);
+			if(configIterator == configCentral.end()) return Variable::createError(-3, "Unknown parameter set");
+
 			bool aesActivated = false;
 			std::map<int32_t, std::map<int32_t, std::vector<uint8_t>>> changedParameters;
 			//allParameters is necessary to temporarily store all values. It is used to set changedParameters.
 			//This is necessary when there are multiple variables per index and not all of them are changed.
 			std::map<int32_t, std::map<int32_t, std::vector<uint8_t>>> allParameters;
+
+			// {{{ Add missing parameters at the same index
+				std::map<std::string, PParameter> parametersToAdd;
+				for(Struct::iterator i = variables->structValue->begin(); i != variables->structValue->end(); ++i)
+				{
+					if(configIterator->second.find(i->first) == configIterator->second.end()) continue;
+					BaseLib::Systems::RPCConfigurationParameter* parameter = &configIterator->second[i->first];
+					if(!parameter->rpcParameter) continue;
+					std::vector<PParameter> parameters;
+					int32_t size = (parameter->rpcParameter->physical->size) < 1 ? 1 : (int32_t)parameter->rpcParameter->physical->size;
+					if(parameter->rpcParameter->physical->size > 1.0 && std::fmod(parameter->rpcParameter->physical->size, 1) != 0) size += 1;
+					parameterGroup->getIndices((uint32_t)parameter->rpcParameter->physical->index, (uint32_t)parameter->rpcParameter->physical->index + (size - 1), parameter->rpcParameter->physical->list, parameters);
+					for(std::vector<PParameter>::iterator j = parameters.begin(); j != parameters.end(); ++j)
+					{
+						if(variables->structValue->find((*j)->id) == variables->structValue->end() && parametersToAdd.find((*j)->id) == parametersToAdd.end()) parametersToAdd[(*j)->id] = *j;
+					}
+				}
+				for(std::map<std::string, PParameter>::iterator i = parametersToAdd.begin(); i != parametersToAdd.end(); ++i)
+				{
+					if(configIterator->second.find(i->first) == configIterator->second.end()) continue;
+					BaseLib::Systems::RPCConfigurationParameter* parameter = &configIterator->second[i->first];
+					variables->structValue->insert(std::pair<std::string, PVariable>(i->first, i->second->convertFromPacket(parameter->data)));
+				}
+			// }}}
+
 			for(Struct::iterator i = variables->structValue->begin(); i != variables->structValue->end(); ++i)
 			{
 				if(i->first.empty() || !i->second) continue;
 				std::vector<uint8_t> value;
-				if(configCentral[channel].find(i->first) == configCentral[channel].end()) continue;
-				BaseLib::Systems::RPCConfigurationParameter* parameter = &configCentral[channel][i->first];
+				if(configIterator->second.find(i->first) == configIterator->second.end()) continue;
+				BaseLib::Systems::RPCConfigurationParameter* parameter = &configIterator->second[i->first];
 				if(!parameter->rpcParameter) continue;
 				if(i->first == "AES_ACTIVE")
 				{
@@ -2806,7 +2834,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
 				else saveParameter(0, ParameterGroup::Type::Enum::config, channel, i->first, parameter->data);
 				if(peerInfoPacketsEnabled && i->first == "AES_ACTIVE" && !aesActivated) _physicalInterface->setAES(getPeerInfo(), channel);
-				GD::out.printInfo("Info: Parameter " + i->first + " of peer " + std::to_string(_peerID) + " and channel " + std::to_string(channel) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(allParameters[list][intIndex]) + ".");
+				GD::out.printInfo("Info: Parameter " + i->first + " of peer " + std::to_string(_peerID) + " and channel " + std::to_string(channel) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameter->data) + ".");
 				//Only send to device when parameter is of type config;
 				if(parameter->rpcParameter->physical->operationType != IPhysical::OperationType::Enum::config && parameter->rpcParameter->physical->operationType != IPhysical::OperationType::Enum::configString) continue;
 				//Don't active AES, when aesAlways is true as it is activated already
@@ -2912,12 +2940,15 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 		}
 		else if(type == ParameterGroup::Type::Enum::link)
 		{
+			std::unordered_map<uint32_t, std::unordered_map<int32_t, std::unordered_map<uint32_t, std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>>>>::iterator configIterator = linksCentral.find(channel);
+			if(configIterator == linksCentral.end()) return Variable::createError(-3, "Unknown parameter set");
+
 			std::shared_ptr<BaseLib::Systems::BasicPeer> remotePeer;
 			if(remoteID == 0) remoteID = 0xFFFFFFFFFFFFFFFF; //Remote peer is central
 			remotePeer = getPeer(channel, remoteID, remoteChannel);
 			if(!remotePeer) return Variable::createError(-3, "Not paired to this peer.");
-			if(linksCentral[channel].find(remotePeer->address) == linksCentral[channel].end()) Variable::createError(-3, "Unknown parameter set.");
-			if(linksCentral[channel][_address].find(remotePeer->channel) == linksCentral[channel][_address].end()) Variable::createError(-3, "Unknown parameter set.");
+			if(configIterator->second.find(remotePeer->address) == configIterator->second.end()) Variable::createError(-3, "Unknown parameter set.");
+			if(configIterator->second[_address].find(remotePeer->channel) == configIterator->second[_address].end()) Variable::createError(-3, "Unknown parameter set.");
 
 			std::map<int32_t, std::map<int32_t, std::vector<uint8_t>>> changedParameters;
 			//allParameters is necessary to temporarily store all values. It is used to set changedParameters.
@@ -2927,8 +2958,8 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 			{
 				if(i->first.empty() || !i->second) continue;
 				std::vector<uint8_t> value;
-				if(linksCentral[channel][remotePeer->address][remotePeer->channel].find(i->first) == linksCentral[channel][remotePeer->address][remotePeer->channel].end()) continue;
-				BaseLib::Systems::RPCConfigurationParameter* parameter = &linksCentral[channel][remotePeer->address][remotePeer->channel][i->first];
+				if(configIterator->second[remotePeer->address][remotePeer->channel].find(i->first) == configIterator->second[remotePeer->address][remotePeer->channel].end()) continue;
+				BaseLib::Systems::RPCConfigurationParameter* parameter = &configIterator->second[remotePeer->address][remotePeer->channel][i->first];
 				if(!parameter->rpcParameter) continue;
 				parameter->rpcParameter->convertToPacket(i->second, value);
 				std::vector<uint8_t> shiftedValue = value;

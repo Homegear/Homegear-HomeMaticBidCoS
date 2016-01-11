@@ -55,7 +55,7 @@ namespace BidCoS
 
 class BidCoSPacket;
 
-class CulAes : public IBidCoSInterface, public BaseLib::IQueue
+class CulAes : public IBidCoSInterface, public BaseLib::ITimedQueue
 {
     public:
 		CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
@@ -74,14 +74,13 @@ class CulAes : public IBidCoSInterface, public BaseLib::IQueue
         virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
         virtual void removePeer(int32_t address);
     protected:
-        class QueueEntry : public BaseLib::IQueueEntry
+        class QueueEntry : public BaseLib::ITimedQueueEntry
 		{
 		public:
 			QueueEntry() {}
-			QueueEntry(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime) { this->packet = packet; this->sendingTime = sendingTime; }
+			QueueEntry(int64_t sendingTime, std::shared_ptr<BidCoSPacket> packet) : ITimedQueueEntry(sendingTime) { this->packet = packet; }
 			virtual ~QueueEntry() {}
 
-			int64_t sendingTime = 0;
 			std::shared_ptr<BidCoSPacket> packet;
 		};
 
@@ -100,7 +99,7 @@ class CulAes : public IBidCoSInterface, public BaseLib::IQueue
         void writeToDevice(std::string, bool);
         std::string readFromDevice();
         void listen();
-        void processQueueEntry(int32_t index, std::shared_ptr<BaseLib::IQueueEntry>& entry);
+        void processQueueEntry(int32_t index, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
         void queuePacket(std::shared_ptr<BidCoSPacket> packet);
 };
 

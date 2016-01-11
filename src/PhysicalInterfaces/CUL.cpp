@@ -472,7 +472,7 @@ void CUL::listen()
         		continue;
         	}
         	std::string packetHex = readFromDevice();
-        	if(packetHex.size() > 21) //21 is minimal packet length (=10 Byte + CUL "A")
+        	if(packetHex.size() > 21) //21 is minimal packet length (=10 bytes + CUL "A")
         	{
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
 				raisePacketReceived(packet);

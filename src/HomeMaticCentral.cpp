@@ -434,12 +434,6 @@ void HomeMaticCentral::savePeers(bool full)
 		//Don't change this to _peersById, because then teams would be saved!
 		for(std::map<uint64_t, std::shared_ptr<BaseLib::Systems::Peer>>::iterator i = _peersById.begin(); i != _peersById.end(); ++i)
 		{
-			//Necessary, because peers can be assigned to multiple virtual devices
-			if(i->second->getParentID() != _deviceId)
-			{
-				GD::out.printDebug("Debug: Not saving peer " + std::to_string(i->second->getID()) + ", because the parent device ID does not match. This is normal, if the peer is paired to the central AND a virtual device.");
-				continue;
-			}
 			//We are always printing this, because the init script needs it
 			GD::out.printMessage("(Shutdown) => Saving HomeMatic BidCoS peer " + std::to_string(i->second->getID()) + " with address 0x" + BaseLib::HelperFunctions::getHexString(i->second->getAddress(), 6));
 			i->second->save(full, full, full);

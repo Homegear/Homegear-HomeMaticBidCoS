@@ -35,7 +35,7 @@
 namespace BidCoS
 {
 
-CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings), BaseLib::IQueue(GD::bl)
+CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings), BaseLib::ITimedQueue(GD::bl)
 {
 	_bl = GD::bl;
 	_out.init(GD::bl);
@@ -201,18 +201,15 @@ void CulAes::removePeer(int32_t address)
     _peersMutex.unlock();
 }
 
-void CulAes::processQueueEntry(int32_t index, std::shared_ptr<BaseLib::IQueueEntry>& entry)
+void CulAes::processQueueEntry(int32_t index, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
 {
 	try
 	{
 		std::shared_ptr<QueueEntry> queueEntry;
 		queueEntry = std::dynamic_pointer_cast<QueueEntry>(entry);
 		if(!queueEntry || !queueEntry->packet) return;
-		int64_t timeToSleep = 0;
-		int64_t time = BaseLib::HelperFunctions::getTime();
-		if(queueEntry->sendingTime > 0) timeToSleep = queueEntry->sendingTime - time;
-		if(timeToSleep > 0) std::this_thread::sleep_for(std::chrono::milliseconds(timeToSleep));
-		sendPacket(queueEntry->packet);
+		writeToDevice("As" + queueEntry->packet->hexString() + "\n", true);
+		queueEntry->packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 	}
     catch(const std::exception& ex)
     {
@@ -235,7 +232,7 @@ void CulAes::queuePacket(std::shared_ptr<BidCoSPacket> packet)
 		int64_t sendingTime = packet->timeReceived();
 		if(sendingTime <= 0) sendingTime = BaseLib::HelperFunctions::getTime();
 		sendingTime = sendingTime + _settings->responseDelay;
-		std::shared_ptr<BaseLib::IQueueEntry> entry(new QueueEntry(packet, sendingTime));
+		std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new QueueEntry(sendingTime, packet));
 		if(!enqueue(0, entry)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
 	}
 	catch(const std::exception& ex)
@@ -272,6 +269,18 @@ void CulAes::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 		if(_updateMode && !bidCoSPacket->isUpdatePacket())
 		{
 			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ", because update mode is enabled.");
+			return;
+		}
+		if(bidCoSPacket->messageType() == 0x02 && packet->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
+		{
+			_out.printDebug("Debug: Ignoring ACK packet.", 6);
+			_lastPacketSent = BaseLib::HelperFunctions::getTime();
+			return;
+		}
+		if((bidCoSPacket->controlByte() & 0x01) && packet->senderAddress() == _myAddress && (bidCoSPacket->payload()->empty() || (bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)))
+		{
+			_out.printDebug("Debug: Ignoring wake up packet.", 6);
+			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
 		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key
@@ -670,7 +679,7 @@ void CulAes::listen()
         		continue;
         	}
         	std::string packetHex = readFromDevice();
-        	if(packetHex.size() > 21) //21 is minimal packet length (=10 Byte + CUL "A")
+        	if(packetHex.size() > 21) //21 is minimal packet length (=10 bytes + CUL "A")
         	{
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
 				if(packet->destinationAddress() == _myAddress)
@@ -756,13 +765,12 @@ void CulAes::listen()
 					}
 					else
 					{
-						/*if(packet->controlByte() & 0x40)
+						if(packet->controlByte() & 0x20)
 						{
-							std::vector<uint8_t> payload(5);
-							payload.push_back(0);
+							std::vector<uint8_t> payload { 0 };
 							std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), 0x80, 0x02, _myAddress, packet->senderAddress(), payload));
 							queuePacket(ackPacket);
-						}*/
+						}
 						raisePacketReceived(packet);
 					}
 				}

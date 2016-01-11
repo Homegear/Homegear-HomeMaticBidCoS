@@ -2954,6 +2954,31 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 			//allParameters is necessary to temporarily store all values. It is used to set changedParameters.
 			//This is necessary when there are multiple variables per index and not all of them are changed.
 			std::map<int32_t, std::map<int32_t, std::vector<uint8_t>>> allParameters;
+
+			// {{{ Add missing parameters at the same index
+				std::map<std::string, PParameter> parametersToAdd;
+				for(Struct::iterator i = variables->structValue->begin(); i != variables->structValue->end(); ++i)
+				{
+					if(configIterator->second[remotePeer->address][remotePeer->channel].find(i->first) == configIterator->second[remotePeer->address][remotePeer->channel].end()) continue;
+					BaseLib::Systems::RPCConfigurationParameter* parameter = &configIterator->second[remotePeer->address][remotePeer->channel][i->first];
+					if(!parameter->rpcParameter) continue;
+					std::vector<PParameter> parameters;
+					int32_t size = (parameter->rpcParameter->physical->size) < 1 ? 1 : (int32_t)parameter->rpcParameter->physical->size;
+					if(parameter->rpcParameter->physical->size > 1.0 && std::fmod(parameter->rpcParameter->physical->size, 1) != 0) size += 1;
+					parameterGroup->getIndices((uint32_t)parameter->rpcParameter->physical->index, (uint32_t)parameter->rpcParameter->physical->index + (size - 1), parameter->rpcParameter->physical->list, parameters);
+					for(std::vector<PParameter>::iterator j = parameters.begin(); j != parameters.end(); ++j)
+					{
+						if(variables->structValue->find((*j)->id) == variables->structValue->end() && parametersToAdd.find((*j)->id) == parametersToAdd.end()) parametersToAdd[(*j)->id] = *j;
+					}
+				}
+				for(std::map<std::string, PParameter>::iterator i = parametersToAdd.begin(); i != parametersToAdd.end(); ++i)
+				{
+					if(configIterator->second[remotePeer->address][remotePeer->channel].find(i->first) == configIterator->second[remotePeer->address][remotePeer->channel].end()) continue;
+					BaseLib::Systems::RPCConfigurationParameter* parameter = &configIterator->second[remotePeer->address][remotePeer->channel][i->first];
+					variables->structValue->insert(std::pair<std::string, PVariable>(i->first, i->second->convertFromPacket(parameter->data)));
+				}
+			// }}}
+
 			for(Struct::iterator i = variables->structValue->begin(); i != variables->structValue->end(); ++i)
 			{
 				if(i->first.empty() || !i->second) continue;

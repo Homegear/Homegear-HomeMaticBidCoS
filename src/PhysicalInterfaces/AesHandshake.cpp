@@ -190,42 +190,23 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 {
 	std::shared_ptr<BidCoSPacket> cFrame;
 	std::shared_ptr<BidCoSPacket> aFrame;
-    _handshakeInfoMutex.lock();
-	try
 	{
+		std::lock_guard<std::mutex> hanshakeInfoGuard(_handshakeInfoMutex);
 		HandshakeInfo* handshakeInfo = &_handshakeInfoRequest[rFrame->senderAddress()];
 		int64_t time = BaseLib::HelperFunctions::getTime();
-		if(!handshakeInfo->mFrame || !handshakeInfo->cFrame || time - handshakeInfo->mFrame->timeReceived() > 1000)
-		{
-			_handshakeInfoMutex.unlock();
-			return aFrame;
-		}
+		if(!handshakeInfo->mFrame || !handshakeInfo->cFrame || time - handshakeInfo->mFrame->timeReceived() > 1000) return aFrame;
 		mFrame = handshakeInfo->mFrame;
 		cFrame = handshakeInfo->cFrame;
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    _handshakeInfoMutex.unlock();
 
-    _decryptMutex.lock();
     try
 	{
+    	std::lock_guard<std::mutex> decryptGuard(_decryptMutex);
     	if(_bl->debugLevel >= 4)_out.printInfo("Info: r-Frame is: " + rFrame->hexString());
     	std::vector<uint8_t> rfKey;
     	getKey(rfKey, keyIndex);
     	if(rfKey.empty())
     	{
-    		_decryptMutex.unlock();
     		return aFrame;
     	}
     	std::vector<uint8_t> tempKey;
@@ -241,20 +222,14 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		if((result = gcry_cipher_setkey(_decryptHandle, &tempKey.at(0), tempKey.size())) != GPG_ERR_NO_ERROR)
 		{
 			_out.printError("Error: Could not set key for decryption: " + _bl->hf.getGCRYPTError(result));
-			_decryptMutex.unlock();
 			return aFrame;
 		}
 
 		std::vector<uint8_t> pd(tempKey.size());
-		if(!_decryptHandle)
-		{
-			_decryptMutex.unlock();
-			return aFrame;
-		}
+		if(!_decryptHandle) return aFrame;
 		if((result = gcry_cipher_decrypt(_decryptHandle, &pd.at(0), pd.size(), &rFrame->payload()->at(0), rFrame->payload()->size())) != GPG_ERR_NO_ERROR)
 		{
 			_out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
-			_decryptMutex.unlock();
 			return aFrame;
 		}
 
@@ -270,7 +245,6 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		if((result = gcry_cipher_decrypt(_decryptHandle, &pdd.at(0), pdd.size(), &pd.at(0), pd.size())) != GPG_ERR_NO_ERROR)
 		{
 			_out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
-			_decryptMutex.unlock();
 			return aFrame;
 		}
 
@@ -278,83 +252,43 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		{
 			if(i == 6)
 			{
-				if(pdd[i] != mFrame->messageCounter())
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != mFrame->messageCounter()) return aFrame;
 			}
 			else if(i == 7)
 			{
-				if((pdd[i] & 0xBF) != (mFrame->controlByte() & 0xBF))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if((pdd[i] & 0xBF) != (mFrame->controlByte() & 0xBF)) return aFrame;
 			}
 			else if(i == 8)
 			{
-				if(pdd[i] != mFrame->messageType())
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != mFrame->messageType()) return aFrame;
 			}
 			else if(i == 9)
 			{
-				if(pdd[i] != (mFrame->senderAddress() >> 16))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != (mFrame->senderAddress() >> 16)) return aFrame;
 			}
 			else if(i == 19)
 			{
-				if(pdd[i] != ((mFrame->senderAddress() >> 8) & 0xFF))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != ((mFrame->senderAddress() >> 8) & 0xFF)) return aFrame;
 			}
 			else if(i == 11)
 			{
-				if(pdd[i] != (mFrame->senderAddress() & 0xFF))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != (mFrame->senderAddress() & 0xFF)) return aFrame;
 			}
 			else if(i == 12)
 			{
-				if(pdd[i] != (mFrame->destinationAddress() >> 16))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != (mFrame->destinationAddress() >> 16)) return aFrame;
 			}
 			else if(i == 13)
 			{
-				if(pdd[i] != ((mFrame->destinationAddress() >> 8) & 0xFF))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != ((mFrame->destinationAddress() >> 8) & 0xFF)) return aFrame;
 			}
 			else if(i == 14)
 			{
-				if(pdd[i] != (mFrame->destinationAddress() & 0xFF))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(pdd[i] != (mFrame->destinationAddress() & 0xFF)) return aFrame;
 			}
 			else if(i == 15)
 			{
-				if(!mFrame->payload()->empty() && pdd[i] != mFrame->payload()->at(0))
-				{
-					_decryptMutex.unlock();
-					return aFrame;
-				}
+				if(!mFrame->payload()->empty() && pdd[i] != mFrame->payload()->at(0)) return aFrame;
 			}
 		}
 
@@ -380,7 +314,6 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-    _decryptMutex.unlock();
     return aFrame;
 }
 // }}}

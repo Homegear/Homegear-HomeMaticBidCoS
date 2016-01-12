@@ -31,8 +31,7 @@
 #include "GD.h"
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 #include "PhysicalInterfaces/COC.h"
-#include "PhysicalInterfaces/CUL.h"
-#include "PhysicalInterfaces/CulAes.h"
+#include "PhysicalInterfaces/Cul.h"
 #include "PhysicalInterfaces/CUNO.h"
 #include "PhysicalInterfaces/TICC1100.h"
 #include "PhysicalInterfaces/TICC1101.h"
@@ -64,8 +63,7 @@ void Interfaces::create()
 			std::shared_ptr<IBidCoSInterface> device;
 			if(!*i) continue;
 			GD::out.printDebug("Debug: Creating physical device. Type defined in homematicbidcos.conf is: " + (*i)->type);
-			if((*i)->type == "cul") device.reset(new CUL(*i));
-			else if((*i)->type == "culaes") device.reset(new CulAes(*i));
+			if((*i)->type == "cul") device.reset(new Cul(*i));
 			else if((*i)->type == "coc") device.reset(new COC(*i));
 			else if((*i)->type == "cuno") device.reset(new CUNO(*i));
 	#ifdef SPIINTERFACES

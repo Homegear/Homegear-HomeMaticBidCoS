@@ -27,15 +27,15 @@
  * files in the program, then also delete it here.
  */
 
-#include "CulAes.h"
 #include "../BidCoSPacket.h"
 #include "homegear-base/BaseLib.h"
 #include "../GD.h"
+#include "Cul.h"
 
 namespace BidCoS
 {
 
-CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings), BaseLib::ITimedQueue(GD::bl)
+Cul::Cul(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings), BaseLib::ITimedQueue(GD::bl)
 {
 	_bl = GD::bl;
 	_out.init(GD::bl);
@@ -50,7 +50,7 @@ CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, _rfKey, _oldRfKey, _currentRfKeyIndex));
 }
 
-CulAes::~CulAes()
+Cul::~Cul()
 {
 	try
 	{
@@ -75,7 +75,7 @@ CulAes::~CulAes()
     }
 }
 
-void CulAes::addPeer(PeerInfo peerInfo)
+void Cul::addPeer(PeerInfo peerInfo)
 {
 	try
 	{
@@ -100,7 +100,7 @@ void CulAes::addPeer(PeerInfo peerInfo)
     _peersMutex.unlock();
 }
 
-void CulAes::addPeers(std::vector<PeerInfo>& peerInfos)
+void Cul::addPeers(std::vector<PeerInfo>& peerInfos)
 {
 	try
 	{
@@ -123,7 +123,7 @@ void CulAes::addPeers(std::vector<PeerInfo>& peerInfos)
     }
 }
 
-void CulAes::removePeer(int32_t address)
+void Cul::removePeer(int32_t address)
 {
 	try
 	{
@@ -145,7 +145,7 @@ void CulAes::removePeer(int32_t address)
     _peersMutex.unlock();
 }
 
-void CulAes::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
+void Cul::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
 {
 	try
 	{
@@ -177,7 +177,7 @@ void CulAes::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLi
 	}
 }
 
-void CulAes::queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime)
+void Cul::queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime)
 {
 	try
 	{
@@ -210,7 +210,7 @@ void CulAes::queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTi
     }
 }
 
-void CulAes::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
+void Cul::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 {
 	try
 	{
@@ -286,7 +286,7 @@ void CulAes::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
     }
 }
 
-void CulAes::enableUpdateMode()
+void Cul::enableUpdateMode()
 {
 	try
 	{
@@ -307,7 +307,7 @@ void CulAes::enableUpdateMode()
     }
 }
 
-void CulAes::disableUpdateMode()
+void Cul::disableUpdateMode()
 {
 	try
 	{
@@ -330,7 +330,7 @@ void CulAes::disableUpdateMode()
     }
 }
 
-void CulAes::openDevice()
+void Cul::openDevice()
 {
 	try
 	{
@@ -390,7 +390,7 @@ void CulAes::openDevice()
     }
 }
 
-void CulAes::closeDevice()
+void Cul::closeDevice()
 {
 	try
 	{
@@ -411,7 +411,7 @@ void CulAes::closeDevice()
     }
 }
 
-void CulAes::setupDevice()
+void Cul::setupDevice()
 {
 	try
 	{
@@ -456,7 +456,7 @@ void CulAes::setupDevice()
     }
 }
 
-std::string CulAes::readFromDevice()
+std::string Cul::readFromDevice()
 {
 	try
 	{
@@ -529,7 +529,7 @@ std::string CulAes::readFromDevice()
 	return "";
 }
 
-void CulAes::writeToDevice(std::string data, bool printSending)
+void Cul::writeToDevice(std::string data, bool printSending)
 {
     try
     {
@@ -569,7 +569,7 @@ void CulAes::writeToDevice(std::string data, bool printSending)
     _lastPacketSent = BaseLib::HelperFunctions::getTime();
 }
 
-void CulAes::startListening()
+void Cul::startListening()
 {
 	try
 	{
@@ -592,7 +592,7 @@ void CulAes::startListening()
 		_stopped = false;
 		writeToDevice("X21\nAr\n", false);
 		std::this_thread::sleep_for(std::chrono::milliseconds(400));
-		_listenThread = std::thread(&CulAes::listen, this);
+		_listenThread = std::thread(&Cul::listen, this);
 		BaseLib::Threads::setThreadPriority(_bl, _listenThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
 		IPhysicalInterface::startListening();
 	}
@@ -610,7 +610,7 @@ void CulAes::startListening()
     }
 }
 
-void CulAes::stopListening()
+void Cul::stopListening()
 {
 	try
 	{
@@ -645,7 +645,7 @@ void CulAes::stopListening()
     }
 }
 
-void CulAes::listen()
+void Cul::listen()
 {
     try
     {
@@ -864,7 +864,7 @@ void CulAes::listen()
     }
 }
 
-void CulAes::setup(int32_t userID, int32_t groupID)
+void Cul::setup(int32_t userID, int32_t groupID)
 {
     try
     {

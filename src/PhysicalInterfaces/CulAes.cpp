@@ -47,67 +47,7 @@ CulAes::CulAes(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		settings->listenThreadPolicy = SCHED_FIFO;
 	}
 
-	std::string rfKeyHex = GD::settings->get("rfkey");
-	std::string oldRfKeyHex = GD::settings->get("oldrfkey");
-	int32_t currentRfKeyIndex = GD::settings->getNumber("currentrfkeyindex");
-
-	if(!rfKeyHex.empty() && currentRFKeyIndex == 0)
-	{
-		_out.printWarning("Warning: currentRFKeyIndex in homematicbidcos.conf is not set. Setting it to \"1\".");
-		currentRFKeyIndex = 1;
-	}
-
-	std::vector<uint8_t> rfKey;
-	std::vector<uint8_t> oldRfKey;
-	if(!rfKeyHex.empty())
-	{
-		rfKey = _bl->hf.getUBinary(rfKeyHex);
-		if(rfKey.size() != 16)
-		{
-			_out.printError("Error: The RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
-			rfKey.clear();
-			return;
-		}
-	}
-
-	if(!oldRfKeyHex.empty())
-	{
-		oldRfKey = _bl->hf.getUBinary(oldRfKeyHex);
-		if(oldRfKey.size() != 16)
-		{
-			_out.printError("Error: The old RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
-			oldRfKey.clear();
-		}
-	}
-
-	if(!oldRfKey.empty() && currentRFKeyIndex == 1)
-	{
-		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
-		oldRfKey.clear();
-	}
-
-	if(!oldRfKey.empty() && rfKey.empty())
-	{
-		oldRfKey.clear();
-		if(currentRFKeyIndex > 0)
-		{
-			_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
-			currentRFKeyIndex = 0;
-		}
-	}
-
-	if(oldRfKey.empty() && currentRFKeyIndex > 1)
-	{
-		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
-	}
-
-	if(currentRFKeyIndex > 253)
-	{
-		_out.printError("Error: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
-		currentRFKeyIndex = 253;
-	}
-
-	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, rfKey, oldRfKey, currentRFKeyIndex));
+	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, _rfKey, _oldRfKey, _currentRfKeyIndex));
 }
 
 CulAes::~CulAes()

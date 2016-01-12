@@ -57,68 +57,6 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		_useAES = false;
 		_out.printInfo("Info: Disabling AES encryption for communication with HM-CFG-LAN.");
 	}
-
-	std::string rfKeyHex = GD::settings->get("rfkey");
-	std::string oldRfKeyHex = GD::settings->get("oldrfkey");
-	_currentRfKeyIndex = GD::settings->getNumber("currentrfkeyindex");
-
-	if(rfKeyHex.empty())
-	{
-		_out.printError("Error: No RF AES key specified in homematicbidcos.conf on your HM-CFG-LAN for communication with your BidCoS devices.");
-	}
-
-	if(!rfKeyHex.empty())
-	{
-		_rfKey = _bl->hf.getUBinary(rfKeyHex);
-		if(_rfKey.size() != 16)
-		{
-			_out.printError("Error: The RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
-			_rfKey.clear();
-		}
-	}
-
-	if(!oldRfKeyHex.empty())
-	{
-		_oldRFKey = _bl->hf.getUBinary(oldRfKeyHex);
-		if(_oldRFKey.size() != 16)
-		{
-			_out.printError("Error: The old RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
-			_oldRFKey.clear();
-		}
-	}
-
-	if(!_rfKey.empty() && _currentRfKeyIndex == 0)
-	{
-		_out.printWarning("Warning: currentRFKeyIndex in homematicbidcos.conf is not set. Setting it to \"1\".");
-		_currentRfKeyIndex = 1;
-	}
-
-	if(!_oldRFKey.empty() && _currentRfKeyIndex == 1)
-	{
-		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
-		_oldRFKey.clear();
-	}
-
-	if(!_oldRFKey.empty() && _rfKey.empty())
-	{
-		_oldRFKey.clear();
-		if(_currentRfKeyIndex > 0)
-		{
-			_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
-			_currentRfKeyIndex = 0;
-		}
-	}
-
-	if(_oldRFKey.empty() && _currentRfKeyIndex > 1)
-	{
-		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
-	}
-
-	if(_currentRfKeyIndex > 253)
-	{
-		_out.printError("Error: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
-		_currentRfKeyIndex = 253;
-	}
 }
 
 HM_CFG_LAN::~HM_CFG_LAN()
@@ -548,9 +486,9 @@ void HM_CFG_LAN::createInitCommandQueue()
 		_initCommandQueue.push_back(packet);
 
 		packet.clear();
-		if(!_oldRFKey.empty())
+		if(!_oldRfKey.empty())
 		{
-			hexString = "Y02," + BaseLib::HelperFunctions::getHexString(_currentRfKeyIndex - 1, 2) + "," + BaseLib::HelperFunctions::getHexString(_oldRFKey) + "\r\n";
+			hexString = "Y02," + BaseLib::HelperFunctions::getHexString(_currentRfKeyIndex - 1, 2) + "," + BaseLib::HelperFunctions::getHexString(_oldRfKey) + "\r\n";
 		}
 		else hexString = "Y02,00,\r\n";
 		packet.insert(packet.end(), hexString.begin(), hexString.end());

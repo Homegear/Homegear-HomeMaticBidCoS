@@ -35,6 +35,7 @@
 #ifdef SPIINTERFACES
 
 #include "IBidCoSInterface.h"
+#include "AesHandshake.h"
 
 #include <thread>
 #include <iostream>

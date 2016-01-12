@@ -64,12 +64,17 @@ public:
 	virtual bool autoResend() { return false; }
 	virtual bool needsPeers() { return false; }
 	virtual bool firmwareUpdatesSupported() { return true; }
-	virtual uint32_t currentRFKeyIndex() { return _settings->currentRFKeyIndex; }
-	virtual std::string rfKey() { return _settings->rfKey; }
+	virtual uint32_t currentRFKeyIndex() { return _currentRfKeyIndex; }
+	virtual std::string rfKey() { return _rfKeyHex; }
 
-	virtual uint32_t getCurrentRFKeyIndex() { return _settings->currentRFKeyIndex; }
+	virtual uint32_t getCurrentRFKeyIndex() { return _currentRfKeyIndex; }
 protected:
 	BaseLib::Output _out;
+	int32_t _currentRfKeyIndex = 0;
+	std::string _rfKeyHex;
+	std::string _oldRfKeyHex;
+	std::vector<uint8_t> _rfKey;
+	std::vector<uint8_t> _oldRfKey;
 };
 
 }

@@ -302,7 +302,24 @@ void CulAes::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 		}
 		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key
 		{
-			if(!_aesHandshake->generateKeyChangePacket(bidCoSPacket)) return;
+			std::lock_guard<std::mutex> peersGuard(_peersMutex);
+			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->destinationAddress());
+			if(peerIterator != _peers.end())
+			{
+				if((bidCoSPacket->payload()->at(1) + 2) / 2 > peerIterator->second.keyIndex)
+				{
+					if(!_aesHandshake->generateKeyChangePacket(bidCoSPacket)) return;
+				}
+				else
+				{
+					_out.printInfo("Info: Ignoring AES key update packet, because a key with this index is already set.");
+					std::vector<uint8_t> payload { 0 };
+					std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(bidCoSPacket->messageCounter(), 0x80, 0x02, bidCoSPacket->destinationAddress(), _myAddress, payload));
+					raisePacketReceived(ackPacket);
+					return;
+				}
+			}
+
 		}
 
 		writeToDevice("As" + packet->hexString() + "\n", true);
@@ -731,6 +748,7 @@ void CulAes::listen()
 							}
 							else if(packet->messageType() == 0x02 && packet->payload()->size() == 8 && packet->payload()->at(0) == 0x04)
 							{
+								peerIterator->second.keyIndex = packet->payload()->back() / 2;
 								std::shared_ptr<BidCoSPacket> mFrame;
 								std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame, peerIterator->second.keyIndex);
 								if(!rFrame)
@@ -741,12 +759,14 @@ void CulAes::listen()
 								}
 
 								// {{{ Remove wrongly queued non AES packets from queue id map
+									bool requeue = false;
 									{
 										std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
 										std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
 
 										if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 300)
 										{
+											requeue = true;
 											for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
 											{
 												removeQueueEntry(0, *queueId);
@@ -754,8 +774,11 @@ void CulAes::listen()
 											_queueIds.erase(idIterator);
 										}
 									}
-									queuePacket(mFrame, mFrame->timeSending() + 600);
-									queuePacket(mFrame, mFrame->timeSending() + 1200);
+									if(requeue)
+									{
+										queuePacket(mFrame, mFrame->timeSending() + 600);
+										queuePacket(mFrame, mFrame->timeSending() + 1200);
+									}
 								// }}}
 
 								queuePacket(rFrame);
@@ -835,7 +858,7 @@ void CulAes::listen()
 						{
 							std::vector<uint8_t> payload { 0 };
 							uint8_t controlByte = 0x80;
-							if((packet->controlByte() & 2) && wakeUp) controlByte |= 1;
+							if((packet->controlByte() & 2) && wakeUp && packet->messageType() != 0) controlByte |= 1;
 							std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), controlByte, 0x02, _myAddress, packet->senderAddress(), payload));
 							queuePacket(ackPacket);
 						}

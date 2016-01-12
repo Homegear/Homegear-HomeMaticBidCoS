@@ -837,6 +837,23 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
+		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key if necessary
+		{
+			std::lock_guard<std::mutex> peersGuard(_peersMutex);
+			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->destinationAddress());
+			if(peerIterator != _peers.end())
+			{
+				if((bidCoSPacket->payload()->at(1) + 2) / 2 <= peerIterator->second.keyIndex)
+				{
+					_out.printInfo("Info: Ignoring AES key update packet, because a key with this index is already set.");
+					std::vector<uint8_t> payload { 0 };
+					std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(bidCoSPacket->messageCounter(), 0x80, 0x02, bidCoSPacket->destinationAddress(), _myAddress, payload));
+					raisePacketReceived(ackPacket);
+					return;
+				}
+			}
+
+		}
 
 		std::vector<char> packetBytes = bidCoSPacket->byteArraySigned();
 		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + _bl->hf.getHexString(packetBytes));
@@ -2666,6 +2683,19 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 			}
 			_lastPacketReceived = BaseLib::HelperFunctions::getTime();
 			bool wakeUp = packet.at(5) == 5 && (packet.at(6) & 0x10);
+
+			// {{{ Update AES key index
+			std::lock_guard<std::mutex> peersGuard(_peersMutex);
+			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->senderAddress());
+			if(peerIterator != _peers.end())
+			{
+				if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->payload()->size() == 8 && bidCoSPacket->payload()->at(0) == 0x04)
+				{
+					peerIterator->second.keyIndex = bidCoSPacket->payload()->back() / 2;
+				}
+			}
+			// }}}
+
 			raisePacketReceived(bidCoSPacket);
 			if(wakeUp) //Wake up was sent
 			{

@@ -301,7 +301,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		aPayload.push_back(pd.at(1));
 		aPayload.push_back(pd.at(2));
 		aPayload.push_back(pd.at(3));
-		aFrame.reset(new BidCoSPacket(mFrame->messageCounter(), ((mFrame->controlByte() & 2) && wakeUp) ? 0x81 : 0x80, 0x02, _myAddress, mFrame->senderAddress(), aPayload));
+		aFrame.reset(new BidCoSPacket(mFrame->messageCounter(), ((mFrame->controlByte() & 2) && wakeUp && mFrame->messageType() != 0) ? 0x81 : 0x80, 0x02, _myAddress, mFrame->senderAddress(), aPayload));
 		aFrame->setTimeReceived(rFrame->timeReceived());
 	}
     catch(const std::exception& ex)

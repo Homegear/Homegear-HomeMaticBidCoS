@@ -57,7 +57,7 @@
 
 namespace BidCoS
 {
-class TICC1100 : public IBidCoSInterface
+class TICC1100 : public IBidCoSInterface, public BaseLib::ITimedQueue
 {
 public:
 	struct CommandStrobes
@@ -199,14 +199,34 @@ public:
 	virtual void setup(int32_t userID, int32_t groupID);
 	void enableUpdateMode();
 	void disableUpdateMode();
+	virtual bool aesSupported() { return true; }
+	virtual bool autoResend() { return true; }
+	virtual bool needsPeers() { return true; }
+	virtual void addPeer(PeerInfo peerInfo);
+	virtual void addPeers(std::vector<PeerInfo>& peerInfos);
+	virtual void setWakeUp(PeerInfo peerInfo) { addPeer(peerInfo); }
+	virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
+	virtual void removePeer(int32_t address);
 protected:
-	//const int32_t BCM2708_PERI_BASE = 0x20000000;
-	//const int32_t GPIO_BASE = (BCM2708_PERI_BASE + 0x200000);
-	//const int32_t PAGE_SIZE = (4*1024);
-	//const int32_t BLOCK_SIZE = (4*1024);
+	class QueueEntry : public BaseLib::ITimedQueueEntry
+	{
+	public:
+		QueueEntry() {}
+		QueueEntry(int64_t sendingTime, std::shared_ptr<BidCoSPacket> packet) : ITimedQueueEntry(sendingTime) { this->packet = packet; }
+		virtual ~QueueEntry() {}
 
-	//volatile pointer for memory mapped devices
-	//volatile unsigned* _gpio = nullptr;
+		std::shared_ptr<BidCoSPacket> packet;
+	};
+
+	BaseLib::Obj* _bl = nullptr;
+	int64_t _lastAesHandshakeGc = 0;
+	std::shared_ptr<AesHandshake> _aesHandshake;
+	std::mutex _queueIdsMutex;
+	std::map<int32_t, std::set<int64_t>> _queueIds;
+	std::mutex _peersMutex;
+	std::map<int32_t, PeerInfo> _peers;
+	int32_t _myAddress = 0x1C6940;
+
 	std::vector<uint8_t> _config;
 	std::vector<uint8_t> _patable;
 	struct spi_ioc_transfer _transfer;
@@ -232,6 +252,10 @@ protected:
     uint8_t writeRegister(Registers::Enum registerAddress, uint8_t value, bool check = false);
     void writeRegisters(Registers::Enum startAddress, std::vector<uint8_t>& values);
     bool checkStatus(uint8_t statusByte, Status::Enum status);
+    void sendPacketRaw(std::shared_ptr<BaseLib::Systems::Packet> packet);
+
+    void processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
+    void queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime = 0);
 };
 
 }

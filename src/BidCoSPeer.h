@@ -235,7 +235,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
          * @param interfaceID The id of the interface to check
          * @param rssi The receive strength signal indicator of the interface
          */
-        virtual void checkForBestInterface(std::string interfaceID, int32_t rssi);
+        virtual void checkForBestInterface(std::string interfaceID, int32_t rssi, uint8_t messageCounter);
 
         /**
          * {@inheritDoc}
@@ -263,26 +263,26 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		//End
 
 		/**
-		 * Time stamp of the current packet received by any communication module. Needed for roaming.
+		 * Message counter of the current packet received by any communication module. Needed for roaming.
 		 */
-		int64_t _currentPacketReceivedTimeFromAnyInterface = 0;
+		int32_t _currentPacketMessageCounterFromAnyInterface = 0;
 
 		/**
-		 * Time stamp of the last packet received by any communication module. Needed for roaming.
+		 * Message counter of the last packet received by any communication module. Needed for roaming.
 		 */
-		int64_t _lastPacketReceivedTimeFromAnyInterface = 0;
-
-		/**
-		 * Stores information about the current best interface based on the RSSI.
-		 * The first element it the time stamp of the information, the second the RSSI and the third the ID of the interface.
-		 */
-		std::tuple<int64_t, int32_t, std::string> _bestInterfaceLast;
+		int32_t _lastPacketMessageCounterFromAnyInterface = 0;
 
 		/**
 		 * Stores information about the current best interface based on the RSSI.
-		 * The first element it the time stamp of the information, the second the RSSI and the third the ID of the interface.
+		 * The first element is the message counter, the second the RSSI and the third the ID of the interface.
 		 */
-		std::tuple<int64_t, int32_t, std::string> _bestInterfaceCurrent;
+		std::tuple<int32_t, int32_t, std::string> _bestInterfaceLast;
+
+		/**
+		 * Stores information about the current best interface based on the RSSI.
+		 * The first element is the message counter, the second the RSSI and the third the ID of the interface.
+		 */
+		std::tuple<int32_t, int32_t, std::string> _bestInterfaceCurrent;
 
 
 		/**

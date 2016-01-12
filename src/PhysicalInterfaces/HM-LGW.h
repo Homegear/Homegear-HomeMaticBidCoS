@@ -132,6 +132,7 @@ class HM_LGW  : public IBidCoSInterface
         int32_t _lastKeepAliveResponse2 = 0;
         int32_t _lastTimePacket = 0;
         int64_t _startUpTime = 0;
+        int32_t _currentRfKeyIndex = 0;
         int32_t _myAddress = 0x1C6940;
         std::vector<uint8_t> _packetBuffer;
         uint8_t _packetIndex = 0;

@@ -315,8 +315,8 @@ BidCoSPeer::BidCoSPeer(uint32_t parentID, bool centralFeatures, IPeerEventSink* 
 		}
 		setPhysicalInterface(GD::defaultPhysicalInterface);
 		_lastPing = BaseLib::HelperFunctions::getTime() - (BaseLib::HelperFunctions::getRandomNumber(1, 60) * 10000);
-		_bestInterfaceCurrent = std::tuple<int64_t, int32_t, std::string>(0, 0, "");
-		_bestInterfaceLast = std::tuple<int64_t, int32_t, std::string>(0, 0, "");
+		_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
+		_bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
 	}
 	catch(const std::exception& ex)
     {
@@ -336,8 +336,8 @@ BidCoSPeer::BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, ui
 {
 	setPhysicalInterface(GD::defaultPhysicalInterface);
 	_lastPing = BaseLib::HelperFunctions::getTime() - (BaseLib::HelperFunctions::getRandomNumber(1, 60) * 10000);
-	_bestInterfaceCurrent = std::tuple<int64_t, int32_t, std::string>(0, 0, "");
-	_bestInterfaceLast = std::tuple<int64_t, int32_t, std::string>(0, 0, "");
+	_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
+	_bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
 }
 
 void BidCoSPeer::worker()
@@ -1372,7 +1372,7 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::ICentral* device, std::shared_p
 			case 19:
 				_physicalInterfaceID = row->second.at(4)->textValue;
 				if(!_physicalInterfaceID.empty() && GD::physicalInterfaces.find(_physicalInterfaceID) != GD::physicalInterfaces.end()) setPhysicalInterface(GD::physicalInterfaces.at(_physicalInterfaceID));
-				_bestInterfaceLast = std::tuple<int64_t, int32_t, std::string>(0, 0, _physicalInterfaceID);
+				_bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(-1, 0, _physicalInterfaceID);
 				break;
 			case 20:
 				_valuePending = row->second.at(3)->intValue;
@@ -2121,26 +2121,25 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
     }
 }
 
-void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi)
+void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi, uint8_t messageCounter)
 {
 	try
 	{
 		if(configCentral.find(0) == configCentral.end() || configCentral.at(0).find("ROAMING") == configCentral.at(0).end() || configCentral.at(0).at("ROAMING").data.size() == 0 || configCentral.at(0).at("ROAMING").data.at(0) == 0) return;
 		if(interfaceID.empty() || GD::physicalInterfaces.find(interfaceID) == GD::physicalInterfaces.end()) return;
 
-		int64_t now = GD::bl->hf.getTime();
-		if(std::get<0>(_bestInterfaceCurrent) < now - 120 && !std::get<2>(_bestInterfaceCurrent).empty()) //Assume that all packets arrive within 120 ms.
+		if(std::get<0>(_bestInterfaceCurrent) != messageCounter && !std::get<2>(_bestInterfaceCurrent).empty())
 		{
-			if(_lastPacketReceivedTimeFromAnyInterface < now - 120) _lastPacketReceivedTimeFromAnyInterface = _currentPacketReceivedTimeFromAnyInterface;
-			_currentPacketReceivedTimeFromAnyInterface = now;
+			if(_lastPacketMessageCounterFromAnyInterface != messageCounter) _lastPacketMessageCounterFromAnyInterface = _currentPacketMessageCounterFromAnyInterface;
+			_currentPacketMessageCounterFromAnyInterface = messageCounter;
 			int32_t rssiDifference = std::get<1>(_bestInterfaceLast) - std::get<1>(_bestInterfaceCurrent);
-			if((rssiDifference > 10 || std::get<0>(_bestInterfaceLast) < _lastPacketReceivedTimeFromAnyInterface - 120) && std::get<2>(_bestInterfaceCurrent) != _physicalInterfaceID)
+			if((rssiDifference > 10 || std::get<0>(_bestInterfaceLast) != _lastPacketMessageCounterFromAnyInterface) && std::get<2>(_bestInterfaceCurrent) != _physicalInterfaceID)
 			{
 				_bestInterfaceLast = _bestInterfaceCurrent;
 				GD::bl->out.printInfo("Info: Changing interface of peer " + std::to_string(_peerID) + " to " + std::get<2>(_bestInterfaceLast) + ", because the reception is better.");
 				setPhysicalInterfaceID(std::get<2>(_bestInterfaceLast));
 			}
-			_bestInterfaceCurrent = std::tuple<int64_t, int32_t, std::string>(now, 0, "");
+			_bestInterfaceCurrent = std::tuple<int64_t, int32_t, std::string>(messageCounter, 0, "");
 		}
 		if(std::get<2>(_bestInterfaceCurrent).empty() || std::get<1>(_bestInterfaceCurrent) == 0 || std::get<1>(_bestInterfaceCurrent) > rssi)
 		{
@@ -2153,9 +2152,9 @@ void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi)
 					return;
 				}
 			}
-			_bestInterfaceCurrent = std::tuple<int64_t, int32_t, std::string>(now, rssi, interfaceID);
+			_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID);
 		}
-		if(std::get<2>(_bestInterfaceLast) == interfaceID) _bestInterfaceLast = std::tuple<int64_t, int32_t, std::string>(now, rssi, interfaceID); //Update time stamp and rssi
+		if(std::get<2>(_bestInterfaceLast) == interfaceID) _bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID); //Update message counter and rssi
 	}
 	catch(const std::exception& ex)
     {

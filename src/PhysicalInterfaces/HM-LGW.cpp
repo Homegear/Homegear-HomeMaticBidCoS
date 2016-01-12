@@ -103,14 +103,18 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		return;
 	}
 
-	if(settings->rfKey.empty())
+	std::string rfKeyHex = GD::settings->get("rfkey");
+	std::string oldRfKeyHex = GD::settings->get("oldrfkey");
+	_currentRfKeyIndex = GD::settings->getNumber("currentrfkeyindex");
+
+	if(rfKeyHex.empty())
 	{
 		_out.printError("Error: No RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices.");
 	}
 
-	if(!settings->rfKey.empty())
+	if(!rfKeyHex.empty())
 	{
-		_rfKey = _bl->hf.getUBinary(settings->rfKey);
+		_rfKey = _bl->hf.getUBinary(rfKeyHex);
 		if(_rfKey.size() != 16)
 		{
 			_out.printError("Error: The RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
@@ -118,9 +122,9 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		}
 	}
 
-	if(!settings->oldRFKey.empty())
+	if(!oldRfKeyHex.empty())
 	{
-		_oldRFKey = _bl->hf.getUBinary(settings->oldRFKey);
+		_oldRFKey = _bl->hf.getUBinary(oldRfKeyHex);
 		if(_oldRFKey.size() != 16)
 		{
 			_out.printError("Error: The old RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
@@ -128,13 +132,13 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		}
 	}
 
-	if(!_rfKey.empty() && settings->currentRFKeyIndex == 0)
+	if(!_rfKey.empty() && _currentRfKeyIndex == 0)
 	{
 		_out.printWarning("Warning: currentRFKeyIndex in homematicbidcos.conf is not set. Setting it to \"1\".");
-		settings->currentRFKeyIndex = 1;
+		_currentRfKeyIndex = 1;
 	}
 
-	if(!_oldRFKey.empty() && settings->currentRFKeyIndex == 1)
+	if(!_oldRFKey.empty() && _currentRfKeyIndex == 1)
 	{
 		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
 		_oldRFKey.clear();
@@ -143,22 +147,22 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 	if(!_oldRFKey.empty() && _rfKey.empty())
 	{
 		_oldRFKey.clear();
-		if(settings->currentRFKeyIndex > 0)
+		if(_currentRfKeyIndex > 0)
 		{
 			_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
-			settings->currentRFKeyIndex = 0;
+			_currentRfKeyIndex = 0;
 		}
 	}
 
-	if(_oldRFKey.empty() && settings->currentRFKeyIndex > 1)
+	if(_oldRFKey.empty() && _currentRfKeyIndex > 1)
 	{
 		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
 	}
 
-	if(settings->currentRFKeyIndex > 253)
+	if(_currentRfKeyIndex > 253)
 	{
 		_out.printError("Error: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
-		settings->currentRFKeyIndex = 253;
+		_currentRfKeyIndex = 253;
 	}
 }
 
@@ -1398,15 +1402,14 @@ void HM_LGW::doInit()
 		payload.clear();
 		payload.push_back(1);
 		payload.push_back(3);
-		if(_settings->rfKey.empty())
+		if(_rfKey.empty())
 		{
 			payload.push_back(0);
 		}
 		else
 		{
-			std::vector<char> rfKey = _bl->hf.getBinary(_settings->rfKey);
-			payload.insert(payload.end(), rfKey.begin(), rfKey.end());
-			payload.push_back(_settings->currentRFKeyIndex);
+			payload.insert(payload.end(), _rfKey.begin(), _rfKey.end());
+			payload.push_back(_currentRfKeyIndex);
 		}
 		buildPacket(requestPacket, payload);
 		_packetIndex++;
@@ -1419,7 +1422,7 @@ void HM_LGW::doInit()
 		}
 
 		//12th packet
-		if(_settings->currentRFKeyIndex > 1 && !_settings->oldRFKey.empty())
+		if(_currentRfKeyIndex > 1 && !_oldRFKey.empty())
 		{
 			if(_stopped) return;
 			responsePacket.clear();
@@ -1427,9 +1430,8 @@ void HM_LGW::doInit()
 			payload.clear();
 			payload.push_back(1);
 			payload.push_back(0xF);
-			std::vector<char> rfKey = _bl->hf.getBinary(_settings->oldRFKey);
-			payload.insert(payload.end(), rfKey.begin(), rfKey.end());
-			payload.push_back(_settings->currentRFKeyIndex - 1);
+			payload.insert(payload.end(), _oldRFKey.begin(), _oldRFKey.end());
+			payload.push_back(_currentRfKeyIndex - 1);
 			buildPacket(requestPacket, payload);
 			_packetIndex++;
 			getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);

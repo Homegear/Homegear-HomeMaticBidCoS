@@ -778,7 +778,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 			return false;
 		}
 		std::shared_ptr<BidCoSPeer> peer(getPeer(bidCoSPacket->senderAddress()));
-		if(peer) peer->checkForBestInterface(senderID, bidCoSPacket->rssiDevice());
+		if(peer && bidCoSPacket->messageType() != 0x02 && bidCoSPacket->messageType() != 0x03) peer->checkForBestInterface(senderID, bidCoSPacket->rssiDevice(), bidCoSPacket->messageCounter()); //Ignore ACK and AES handshake packets.
 		std::shared_ptr<IBidCoSInterface> physicalInterface = getPhysicalInterface(bidCoSPacket->senderAddress());
 		if(physicalInterface->getID() != senderID) return true;
 		bool handled = false;

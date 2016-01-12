@@ -58,14 +58,18 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		_out.printInfo("Info: Disabling AES encryption for communication with HM-CFG-LAN.");
 	}
 
-	if(settings->rfKey.empty())
+	std::string rfKeyHex = GD::settings->get("rfkey");
+	std::string oldRfKeyHex = GD::settings->get("oldrfkey");
+	_currentRfKeyIndex = GD::settings->getNumber("currentrfkeyindex");
+
+	if(rfKeyHex.empty())
 	{
 		_out.printError("Error: No RF AES key specified in homematicbidcos.conf on your HM-CFG-LAN for communication with your BidCoS devices.");
 	}
 
-	if(!settings->rfKey.empty())
+	if(!rfKeyHex.empty())
 	{
-		_rfKey = _bl->hf.getUBinary(settings->rfKey);
+		_rfKey = _bl->hf.getUBinary(rfKeyHex);
 		if(_rfKey.size() != 16)
 		{
 			_out.printError("Error: The RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
@@ -73,9 +77,9 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		}
 	}
 
-	if(!settings->oldRFKey.empty())
+	if(!oldRfKeyHex.empty())
 	{
-		_oldRFKey = _bl->hf.getUBinary(settings->oldRFKey);
+		_oldRFKey = _bl->hf.getUBinary(oldRfKeyHex);
 		if(_oldRFKey.size() != 16)
 		{
 			_out.printError("Error: The old RF AES key specified in homematicbidcos.conf for communication with your BidCoS devices is not a valid hexadecimal string.");
@@ -83,13 +87,13 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		}
 	}
 
-	if(!_rfKey.empty() && settings->currentRFKeyIndex == 0)
+	if(!_rfKey.empty() && _currentRfKeyIndex == 0)
 	{
 		_out.printWarning("Warning: currentRFKeyIndex in homematicbidcos.conf is not set. Setting it to \"1\".");
-		settings->currentRFKeyIndex = 1;
+		_currentRfKeyIndex = 1;
 	}
 
-	if(!_oldRFKey.empty() && settings->currentRFKeyIndex == 1)
+	if(!_oldRFKey.empty() && _currentRfKeyIndex == 1)
 	{
 		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is \"1\" but \"OldRFKey\" is specified. That is not possible. Increase the key index to \"2\".");
 		_oldRFKey.clear();
@@ -98,22 +102,22 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 	if(!_oldRFKey.empty() && _rfKey.empty())
 	{
 		_oldRFKey.clear();
-		if(settings->currentRFKeyIndex > 0)
+		if(_currentRfKeyIndex > 0)
 		{
 			_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"0\" but no AES key is specified. Setting it to \"0\".");
-			settings->currentRFKeyIndex = 0;
+			_currentRfKeyIndex = 0;
 		}
 	}
 
-	if(_oldRFKey.empty() && settings->currentRFKeyIndex > 1)
+	if(_oldRFKey.empty() && _currentRfKeyIndex > 1)
 	{
 		_out.printWarning("Warning: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is larger than \"1\" but \"OldRFKey\" is not specified. Please set your old RF key or set key index to \"1\".");
 	}
 
-	if(settings->currentRFKeyIndex > 253)
+	if(_currentRfKeyIndex > 253)
 	{
 		_out.printError("Error: The RF AES key index specified in homematicbidcos.conf for communication with your BidCoS devices is greater than \"253\". That is not allowed.");
-		settings->currentRFKeyIndex = 253;
+		_currentRfKeyIndex = 253;
 	}
 }
 
@@ -537,7 +541,7 @@ void HM_CFG_LAN::createInitCommandQueue()
 		hexString = "C\r\n";
 		if(!_rfKey.empty())
 		{
-			hexString += "Y01," + BaseLib::HelperFunctions::getHexString(_settings->currentRFKeyIndex, 2) + "," + BaseLib::HelperFunctions::getHexString(_rfKey) + "\r\n";
+			hexString += "Y01," + BaseLib::HelperFunctions::getHexString(_currentRfKeyIndex, 2) + "," + BaseLib::HelperFunctions::getHexString(_rfKey) + "\r\n";
 		}
 		else hexString += "Y01,00,\r\n";
 		packet.insert(packet.end(), hexString.begin(), hexString.end());
@@ -546,7 +550,7 @@ void HM_CFG_LAN::createInitCommandQueue()
 		packet.clear();
 		if(!_oldRFKey.empty())
 		{
-			hexString = "Y02," + BaseLib::HelperFunctions::getHexString(_settings->currentRFKeyIndex - 1, 2) + "," + BaseLib::HelperFunctions::getHexString(_oldRFKey) + "\r\n";
+			hexString = "Y02," + BaseLib::HelperFunctions::getHexString(_currentRfKeyIndex - 1, 2) + "," + BaseLib::HelperFunctions::getHexString(_oldRFKey) + "\r\n";
 		}
 		else hexString = "Y02,00,\r\n";
 		packet.insert(packet.end(), hexString.begin(), hexString.end());

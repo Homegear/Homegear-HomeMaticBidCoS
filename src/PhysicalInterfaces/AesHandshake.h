@@ -50,7 +50,8 @@ class AesHandshake
         void setMFrame(std::shared_ptr<BidCoSPacket> mFrame);
         std::shared_ptr<BidCoSPacket> getCFrame(std::shared_ptr<BidCoSPacket> mFrame);
         std::shared_ptr<BidCoSPacket> getRFrame(std::shared_ptr<BidCoSPacket> cFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex);
-        std::shared_ptr<BidCoSPacket> getAFrame(std::shared_ptr<BidCoSPacket> rFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex);
+        std::shared_ptr<BidCoSPacket> getAFrame(std::shared_ptr<BidCoSPacket> rFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex, bool wakeUp);
+        bool handshakeStarted(int32_t address);
         bool checkAFrame(std::shared_ptr<BidCoSPacket> aFrame);
         bool generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChangeTemplate);
     private:
@@ -60,6 +61,7 @@ class AesHandshake
         	HandshakeInfo() {}
         	virtual ~HandshakeInfo() {}
 
+        	bool handshakeStarted = false;
         	std::shared_ptr<BidCoSPacket> mFrame;
         	std::shared_ptr<BidCoSPacket> cFrame;
         	std::shared_ptr<std::vector<uint8_t>> pd;

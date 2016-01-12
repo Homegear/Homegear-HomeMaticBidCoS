@@ -201,7 +201,7 @@ void CulAes::removePeer(int32_t address)
     _peersMutex.unlock();
 }
 
-void CulAes::processQueueEntry(int32_t index, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
+void CulAes::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
 {
 	try
 	{
@@ -210,6 +210,14 @@ void CulAes::processQueueEntry(int32_t index, std::shared_ptr<BaseLib::ITimedQue
 		if(!queueEntry || !queueEntry->packet) return;
 		writeToDevice("As" + queueEntry->packet->hexString() + "\n", true);
 		queueEntry->packet->setTimeSending(BaseLib::HelperFunctions::getTime());
+
+		// {{{ Remove packet from queue id map
+			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+			std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(queueEntry->packet->destinationAddress());
+			if(idIterator == _queueIds.end()) return;
+			idIterator->second.erase(id);
+			if(idIterator->second.empty()) _queueIds.erase(idIterator);
+		// }}}
 	}
     catch(const std::exception& ex)
     {
@@ -225,15 +233,24 @@ void CulAes::processQueueEntry(int32_t index, std::shared_ptr<BaseLib::ITimedQue
 	}
 }
 
-void CulAes::queuePacket(std::shared_ptr<BidCoSPacket> packet)
+void CulAes::queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime)
 {
 	try
 	{
-		int64_t sendingTime = packet->timeReceived();
-		if(sendingTime <= 0) sendingTime = BaseLib::HelperFunctions::getTime();
-		sendingTime = sendingTime + _settings->responseDelay;
+		if(sendingTime == 0)
+		{
+			sendingTime = packet->timeReceived();
+			if(sendingTime <= 0) sendingTime = BaseLib::HelperFunctions::getTime();
+			sendingTime = sendingTime + _settings->responseDelay;
+		}
 		std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new QueueEntry(sendingTime, packet));
-		if(!enqueue(0, entry)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
+		int64_t id;
+		if(!enqueue(0, entry, id)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
+
+		// {{{ Add packet to queue id map
+			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+			_queueIds[packet->destinationAddress()].insert(id);
+		// }}}
 	}
 	catch(const std::exception& ex)
     {
@@ -291,6 +308,8 @@ void CulAes::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 		writeToDevice("As" + packet->hexString() + "\n", true);
 		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 		_aesHandshake->setMFrame(bidCoSPacket);
+		queuePacket(bidCoSPacket, packet->timeSending() + 200);
+		queuePacket(bidCoSPacket, packet->timeSending() + 400);
 	}
 	catch(const std::exception& ex)
     {
@@ -685,27 +704,29 @@ void CulAes::listen()
 				if(packet->destinationAddress() == _myAddress)
 				{
 					bool aesHandshake = false;
-					_peersMutex.lock();
+					bool wakeUp = false;
 					try
 					{
+						std::lock_guard<std::mutex> peersGuard(_peersMutex);
 						std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
 						if(peerIterator != _peers.end())
 						{
+							wakeUp = peerIterator->second.wakeUp;
 							if(packet->messageType() == 0x03)
 							{
 								std::shared_ptr<BidCoSPacket> mFrame;
-								std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame, peerIterator->second.keyIndex);
+								std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame, peerIterator->second.keyIndex, wakeUp);
 								if(!aFrame)
 								{
 									if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
 									else _out.printError("Error: No m-Frame found for r-Frame.");
-									_peersMutex.unlock();
 									continue;
 								}
 								if(_bl->debugLevel >= 5) _out.printDebug("Debug: AES handshake successful.");
 								queuePacket(aFrame);
+								mFrame->setTimeReceived(BaseLib::HelperFunctions::getTime());
 								raisePacketReceived(mFrame);
-								_peersMutex.unlock();
+
 								continue;
 							}
 							else if(packet->messageType() == 0x02 && packet->payload()->size() == 8 && packet->payload()->at(0) == 0x04)
@@ -716,24 +737,70 @@ void CulAes::listen()
 								{
 									if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
 									else _out.printError("Error: No m-Frame found for c-Frame.");
-									_peersMutex.unlock();
 									continue;
 								}
+
+								// {{{ Remove wrongly queued non AES packets from queue id map
+									{
+										std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+										std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
+
+										if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 300)
+										{
+											for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+											{
+												removeQueueEntry(0, *queueId);
+											}
+											_queueIds.erase(idIterator);
+										}
+									}
+									queuePacket(mFrame, mFrame->timeSending() + 600);
+									queuePacket(mFrame, mFrame->timeSending() + 1200);
+								// }}}
+
 								queuePacket(rFrame);
-								_peersMutex.unlock();
 								continue;
 							}
 							else if(packet->messageType() == 0x02)
 							{
-								if(!_aesHandshake->checkAFrame(packet))
+								if(_aesHandshake->handshakeStarted(packet->senderAddress()) && !_aesHandshake->checkAFrame(packet))
 								{
 									_out.printError("Error: ACK has invalid signature.");
-									_peersMutex.unlock();
 									continue;
 								}
+
+								// {{{ Remove packet from queue id map
+								{
+									std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+									std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
+									if(idIterator != _queueIds.end())
+									{
+										for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+										{
+											removeQueueEntry(0, *queueId);
+										}
+										_queueIds.erase(idIterator);
+									}
+								}
+								// }}}
 							}
 							else
 							{
+								// {{{ Remove packet from queue id map
+								{
+									std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+									std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
+									if(idIterator != _queueIds.end())
+									{
+										for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+										{
+											removeQueueEntry(0, *queueId);
+										}
+										_queueIds.erase(idIterator);
+									}
+								}
+								// }}}
+
 								if(packet->payload()->size() > 1)
 								{
 									//Packet type 0x4X has channel at index 0 all other types at index 1
@@ -757,7 +824,6 @@ void CulAes::listen()
 					{
 						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 					}
-					_peersMutex.unlock();
 					if(aesHandshake)
 					{
 						if(_bl->debugLevel >= 5) _out.printDebug("Debug: Doing AES handshake.");
@@ -768,10 +834,39 @@ void CulAes::listen()
 						if(packet->controlByte() & 0x20)
 						{
 							std::vector<uint8_t> payload { 0 };
-							std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), 0x80, 0x02, _myAddress, packet->senderAddress(), payload));
+							uint8_t controlByte = 0x80;
+							if((packet->controlByte() & 2) && wakeUp) controlByte |= 1;
+							std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), controlByte, 0x02, _myAddress, packet->senderAddress(), payload));
 							queuePacket(ackPacket);
 						}
 						raisePacketReceived(packet);
+					}
+				}
+				else if(packet->destinationAddress() == 0 && (packet->controlByte() & 2)) //Packet is wake me up packet
+				{
+					try
+					{
+						std::lock_guard<std::mutex> peersGuard(_peersMutex);
+						std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
+						if(peerIterator != _peers.end() && peerIterator->second.wakeUp)
+						{
+							std::vector<uint8_t> payload;
+							std::shared_ptr<BidCoSPacket> wakeUpPacket(new BidCoSPacket(packet->messageCounter(), 0xA1, 0x12, _myAddress, packet->senderAddress(), payload));
+							queuePacket(wakeUpPacket);
+						}
+						raisePacketReceived(packet);
+					}
+					catch(const std::exception& ex)
+					{
+						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+					}
+					catch(BaseLib::Exception& ex)
+					{
+						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+					}
+					catch(...)
+					{
+						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 					}
 				}
 				else raisePacketReceived(packet);

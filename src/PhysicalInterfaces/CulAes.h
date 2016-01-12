@@ -71,6 +71,7 @@ class CulAes : public IBidCoSInterface, public BaseLib::ITimedQueue
         virtual bool needsPeers() { return true; }
         virtual void addPeer(PeerInfo peerInfo);
         virtual void addPeers(std::vector<PeerInfo>& peerInfos);
+        virtual void setWakeUp(PeerInfo peerInfo) { addPeer(peerInfo); }
         virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
         virtual void removePeer(int32_t address);
     protected:
@@ -87,6 +88,8 @@ class CulAes : public IBidCoSInterface, public BaseLib::ITimedQueue
         BaseLib::Obj* _bl = nullptr;
         int64_t _lastAesHandshakeGc = 0;
         std::shared_ptr<AesHandshake> _aesHandshake;
+        std::mutex _queueIdsMutex;
+        std::map<int32_t, std::set<int64_t>> _queueIds;
         std::mutex _peersMutex;
         std::map<int32_t, PeerInfo> _peers;
 
@@ -99,8 +102,8 @@ class CulAes : public IBidCoSInterface, public BaseLib::ITimedQueue
         void writeToDevice(std::string, bool);
         std::string readFromDevice();
         void listen();
-        void processQueueEntry(int32_t index, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
-        void queuePacket(std::shared_ptr<BidCoSPacket> packet);
+        void processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
+        void queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime = 0);
 };
 
 }

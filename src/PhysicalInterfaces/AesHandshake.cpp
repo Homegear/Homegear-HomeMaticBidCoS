@@ -167,6 +167,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getCFrame(std::shared_ptr<BidCoSPack
 	{
 		HandshakeInfo* handshakeInfo = &_handshakeInfoRequest[mFrame->senderAddress()];
 		*handshakeInfo = HandshakeInfo();
+		handshakeInfo->handshakeStarted = true;
 		handshakeInfo->mFrame = mFrame;
 		handshakeInfo->cFrame = cFrame;
 	}
@@ -186,7 +187,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getCFrame(std::shared_ptr<BidCoSPack
     return cFrame;
 }
 
-std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPacket> rFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex)
+std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPacket> rFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex, bool wakeUp)
 {
 	std::shared_ptr<BidCoSPacket> cFrame;
 	std::shared_ptr<BidCoSPacket> aFrame;
@@ -195,6 +196,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		HandshakeInfo* handshakeInfo = &_handshakeInfoRequest[rFrame->senderAddress()];
 		int64_t time = BaseLib::HelperFunctions::getTime();
 		if(!handshakeInfo->mFrame || !handshakeInfo->cFrame || time - handshakeInfo->mFrame->timeReceived() > 1000) return aFrame;
+		handshakeInfo->handshakeStarted = true;
 		mFrame = handshakeInfo->mFrame;
 		cFrame = handshakeInfo->cFrame;
     }
@@ -299,7 +301,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		aPayload.push_back(pd.at(1));
 		aPayload.push_back(pd.at(2));
 		aPayload.push_back(pd.at(3));
-		aFrame.reset(new BidCoSPacket(mFrame->messageCounter(), 0x80, 0x02, _myAddress, mFrame->senderAddress(), aPayload));
+		aFrame.reset(new BidCoSPacket(mFrame->messageCounter(), ((mFrame->controlByte() & 2) && wakeUp) ? 0x81 : 0x80, 0x02, _myAddress, mFrame->senderAddress(), aPayload));
 		aFrame->setTimeReceived(rFrame->timeReceived());
 	}
     catch(const std::exception& ex)
@@ -359,6 +361,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 			_handshakeInfoMutex.unlock();
 			return rFrame;
 		}
+		handshakeInfo->handshakeStarted = true;
 		mFrame = handshakeInfo->mFrame;
 	}
     catch(const std::exception& ex)
@@ -486,6 +489,32 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
     }
     _encryptMutex.unlock();
     return rFrame;
+}
+
+bool AesHandshake::handshakeStarted(int32_t address)
+{
+	try
+	{
+		std::lock_guard<std::mutex> handshakeInfoGuard(_handshakeInfoMutex);
+		HandshakeInfo* handshakeInfo = &_handshakeInfoResponse[address];
+		if(!handshakeInfo->handshakeStarted || !handshakeInfo->mFrame || BaseLib::HelperFunctions::getTime() - handshakeInfo->mFrame->timeSending() > 1000)
+		{
+			return false;
+		}
+	}
+	catch(const std::exception& ex)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+    return true;
 }
 
 bool AesHandshake::checkAFrame(std::shared_ptr<BidCoSPacket> aFrame)

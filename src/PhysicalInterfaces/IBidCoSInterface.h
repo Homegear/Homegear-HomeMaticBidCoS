@@ -45,7 +45,7 @@ public:
 		std::vector<char> getAESChannelMap();
 
 		bool aesEnabled = false;
-		bool wakeUp = 0;
+		bool wakeUp = false;
 		int32_t address = 0;
 		int32_t keyIndex = 0;
 		std::map<int32_t, bool> aesChannels;

@@ -748,7 +748,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 	{
 		if(_disposing) return false;
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
-		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->timeReceived()) << " HomeMatic BidCoS packet received (" + senderID + (bidCoSPacket->rssiDevice() ? ", RSSI: -" + (int32_t)(bidCoSPacket->rssiDevice()) + " dBm" : "") + "): " + bidCoSPacket->hexString() << std::endl;
+		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->timeReceived()) << " HomeMatic BidCoS packet received (" << senderID << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
 		if(!bidCoSPacket) return false;
 
 		// {{{ Intercept packet

@@ -1184,7 +1184,11 @@ void TICC1100::mainThread()
 					if(!_sending) _txMutex.try_lock(); //We are receiving, don't send now
 					continue; //Packet is being received. Wait for GDO high
 				}
-				if(_sending) endSending();
+				if(_sending)
+				{
+					endSending();
+					_txMutex.unlock();
+				}
 				else
 				{
 					//sendCommandStrobe(CommandStrobes::Enum::SIDLE);
@@ -1216,6 +1220,7 @@ void TICC1100::mainThread()
 						sendCommandStrobe(CommandStrobes::Enum::SFRX);
 						sendCommandStrobe(CommandStrobes::Enum::SRX);
 					}
+					_txMutex.unlock();
 					if(packet)
 					{
 						if(_firstPacket) _firstPacket = false;
@@ -1404,7 +1409,6 @@ void TICC1100::mainThread()
 						}
 					}
 				}
-				_txMutex.unlock(); //Packet sent or received, now we can send again
 			}
 			else if(pollResult < 0)
 			{

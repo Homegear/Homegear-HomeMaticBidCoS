@@ -1095,6 +1095,7 @@ void TICC1100::stopListening()
 {
 	try
 	{
+		stopQueue(0);
 		if(_listenThread.joinable())
 		{
 			_stopCallbackThread = true;
@@ -1105,7 +1106,6 @@ void TICC1100::stopListening()
 		closeGPIO(1);
 		_stopped = true;
 		IPhysicalInterface::stopListening();
-		stopQueue(0);
 	}
 	catch(const std::exception& ex)
     {

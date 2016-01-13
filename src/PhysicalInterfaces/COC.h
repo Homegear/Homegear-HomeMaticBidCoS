@@ -31,11 +31,12 @@
 #define COC_H
 
 #include "IBidCoSInterface.h"
+#include "AesHandshake.h"
 
 namespace BidCoS
 {
 
-class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerialReaderWriterEventSink
+class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerialReaderWriterEventSink, public BaseLib::ITimedQueue
 {
     public:
 		COC(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
@@ -47,7 +48,35 @@ class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerial
         void enableUpdateMode();
         void disableUpdateMode();
         bool isOpen() { return _socket && _socket->isOpen(); }
+
+        virtual bool aesSupported() { return true; }
+        virtual bool autoResend() { return true; }
+        virtual bool needsPeers() { return true; }
+        virtual void addPeer(PeerInfo peerInfo);
+        virtual void addPeers(std::vector<PeerInfo>& peerInfos);
+        virtual void setWakeUp(PeerInfo peerInfo) { addPeer(peerInfo); }
+        virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
+        virtual void removePeer(int32_t address);
     protected:
+        class QueueEntry : public BaseLib::ITimedQueueEntry
+		{
+		public:
+			QueueEntry() {}
+			QueueEntry(int64_t sendingTime, std::shared_ptr<BidCoSPacket> packet) : ITimedQueueEntry(sendingTime) { this->packet = packet; }
+			virtual ~QueueEntry() {}
+
+			std::shared_ptr<BidCoSPacket> packet;
+		};
+
+        BaseLib::Obj* _bl = nullptr;
+        int64_t _lastAesHandshakeGc = 0;
+        std::shared_ptr<AesHandshake> _aesHandshake;
+        std::mutex _queueIdsMutex;
+        std::map<int32_t, std::set<int64_t>> _queueIds;
+        std::mutex _peersMutex;
+        std::map<int32_t, PeerInfo> _peers;
+        int32_t _myAddress = 0x1C6940;
+
         // {{{ Event handling
         BaseLib::PEventHandler _eventHandlerSelf;
         virtual void lineReceived(const std::string& data);
@@ -57,6 +86,9 @@ class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerial
         std::string stackPrefix;
 
         void writeToDevice(std::string data);
+
+        void processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
+        void queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime = 0);
     private:
 };
 

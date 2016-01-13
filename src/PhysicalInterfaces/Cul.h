@@ -66,6 +66,7 @@ class Cul : public IBidCoSInterface, public BaseLib::ITimedQueue
         virtual void setup(int32_t userID, int32_t groupID);
         void enableUpdateMode();
         void disableUpdateMode();
+
         virtual bool aesSupported() { return true; }
         virtual bool autoResend() { return true; }
         virtual bool needsPeers() { return true; }
@@ -92,9 +93,9 @@ class Cul : public IBidCoSInterface, public BaseLib::ITimedQueue
         std::map<int32_t, std::set<int64_t>> _queueIds;
         std::mutex _peersMutex;
         std::map<int32_t, PeerInfo> _peers;
+        int32_t _myAddress = 0x1C6940;
 
         struct termios _termios;
-        int32_t _myAddress = 0x1C6940;
 
         void openDevice();
         void closeDevice();
@@ -102,6 +103,7 @@ class Cul : public IBidCoSInterface, public BaseLib::ITimedQueue
         void writeToDevice(std::string, bool);
         std::string readFromDevice();
         void listen();
+
         void processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
         void queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime = 0);
 };

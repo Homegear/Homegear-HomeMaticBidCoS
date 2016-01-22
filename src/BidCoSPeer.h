@@ -90,8 +90,8 @@ public:
 class BidCoSPeer : public BaseLib::Systems::Peer
 {
     public:
-		BidCoSPeer(uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler);
-		BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler);
+		BidCoSPeer(uint32_t parentID, IPeerEventSink* eventHandler);
+		BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, IPeerEventSink* eventHandler);
 		virtual ~BidCoSPeer();
 
 		//Features
@@ -131,7 +131,6 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		//End
 
 		virtual bool isVirtual() { return false; }
-        void setCentralFeatures(bool value) { _centralFeatures = value; }
 
         std::unordered_map<int32_t, int32_t> config;
         std::vector<std::pair<std::string, uint32_t>> teamChannels;

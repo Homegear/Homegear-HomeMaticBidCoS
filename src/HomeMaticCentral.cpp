@@ -236,14 +236,14 @@ void HomeMaticCentral::loadPeers()
 			std::shared_ptr<BidCoSPeer> peer;
 			if(address == _address)
 			{
-				if(row->second.at(4)->intValue == (uint32_t)DeviceType::HMCCTC) peer.reset(new HmCcTc(peerId, address, row->second.at(3)->textValue, _deviceId, true, this));
+				if(row->second.at(4)->intValue == (uint32_t)DeviceType::HMCCTC) peer.reset(new HmCcTc(peerId, address, row->second.at(3)->textValue, _deviceId, this));
 				else
 				{
 					GD::out.printError("Error: Unknown virtual peer: 0x" + BaseLib::HelperFunctions::getHexString(row->second.at(4)->intValue));
 					continue;
 				}
 			}
-			else peer.reset(new BidCoSPeer(peerId, address, row->second.at(3)->textValue, _deviceId, true, this));
+			else peer.reset(new BidCoSPeer(peerId, address, row->second.at(3)->textValue, _deviceId, this));
 			if(!peer->load(this)) continue;
 			PHomegearDevice rpcDevice = peer->getRpcDevice();
 			if(!rpcDevice) continue;
@@ -1060,7 +1060,7 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_
 {
 	try
 	{
-		std::shared_ptr<BidCoSPeer> peer(new BidCoSPeer(_deviceId, true, this));
+		std::shared_ptr<BidCoSPeer> peer(new BidCoSPeer(_deviceId, this));
 		peer->setAddress(address);
 		peer->setFirmwareVersion(firmwareVersion);
 		peer->setDeviceType(deviceType);
@@ -1110,7 +1110,7 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createTeam(int32_t address, BaseLi
 {
 	try
 	{
-		std::shared_ptr<BidCoSPeer> team(new BidCoSPeer(_deviceId, true, this));
+		std::shared_ptr<BidCoSPeer> team(new BidCoSPeer(_deviceId, this));
 		team->setAddress(address);
 		team->setDeviceType(deviceType);
 		team->setSerialNumber(serialNumber);
@@ -2296,7 +2296,7 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 			if(peer->hasPeers(1) && !peer->getPeer(1, _address)) return; //Already linked to a HM-CC-TC
 			std::string temp = peer->getSerialNumber().substr(3);
 			std::string serialNumber = getUniqueSerialNumber("VCD", BaseLib::Math::getNumber(temp));
-			tc.reset(new HmCcTc(_deviceId, false, this));
+			tc.reset(new HmCcTc(_deviceId, this));
 			tc->setAddress(_address);
 			tc->setFirmwareVersion(0x10);
 			tc->setDeviceType(BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, (uint32_t)DeviceType::HMCCTC));

@@ -34,12 +34,12 @@
 namespace BidCoS
 {
 
-HmCcTc::HmCcTc(uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler) : BidCoSPeer(parentID, centralFeatures, eventHandler)
+HmCcTc::HmCcTc(uint32_t parentID, IPeerEventSink* eventHandler) : BidCoSPeer(parentID, eventHandler)
 {
 	startDutyCycle(-1); //Peer is newly created
 }
 
-HmCcTc::HmCcTc(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler) : BidCoSPeer(id, address, serialNumber, parentID, centralFeatures, eventHandler)
+HmCcTc::HmCcTc(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, IPeerEventSink* eventHandler) : BidCoSPeer(id, address, serialNumber, parentID, eventHandler)
 {
 }
 

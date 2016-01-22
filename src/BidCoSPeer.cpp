@@ -304,15 +304,12 @@ void BidCoSPeer::setPhysicalInterface(std::shared_ptr<IBidCoSInterface> interfac
     }
 }
 
-BidCoSPeer::BidCoSPeer(uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler) : Peer(GD::bl, parentID, centralFeatures, eventHandler)
+BidCoSPeer::BidCoSPeer(uint32_t parentID, IPeerEventSink* eventHandler) : Peer(GD::bl, parentID, eventHandler)
 {
 	try
 	{
 		_team.address = 0;
-		if(centralFeatures)
-		{
-			pendingBidCoSQueues.reset(new PendingBidCoSQueues());
-		}
+		pendingBidCoSQueues.reset(new PendingBidCoSQueues());
 		setPhysicalInterface(GD::defaultPhysicalInterface);
 		_lastPing = BaseLib::HelperFunctions::getTime() - (BaseLib::HelperFunctions::getRandomNumber(1, 60) * 10000);
 		_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
@@ -332,7 +329,7 @@ BidCoSPeer::BidCoSPeer(uint32_t parentID, bool centralFeatures, IPeerEventSink* 
     }
 }
 
-BidCoSPeer::BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler) : Peer(GD::bl, id, address, serialNumber, parentID, centralFeatures, eventHandler)
+BidCoSPeer::BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, IPeerEventSink* eventHandler) : Peer(GD::bl, id, address, serialNumber, parentID, eventHandler)
 {
 	setPhysicalInterface(GD::defaultPhysicalInterface);
 	_lastPing = BaseLib::HelperFunctions::getTime() - (BaseLib::HelperFunctions::getRandomNumber(1, 60) * 10000);
@@ -342,7 +339,7 @@ BidCoSPeer::BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, ui
 
 void BidCoSPeer::worker()
 {
-	if(!_centralFeatures || _disposing) return;
+	if(_disposing) return;
 	std::vector<uint32_t> positionsToDelete;
 	std::vector<std::shared_ptr<VariableToReset>> variablesToReset;
 	int32_t index;
@@ -1270,7 +1267,7 @@ void BidCoSPeer::savePendingQueues()
 {
 	try
 	{
-		if(!_centralFeatures || !pendingBidCoSQueues) return;
+		if(!pendingBidCoSQueues) return;
 		std::vector<uint8_t> serializedData;
 		pendingBidCoSQueues->serialize(serializedData);
 		saveVariable(16, serializedData);
@@ -1372,7 +1369,7 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::ICentral* device, std::shared_p
 				unserializeVariablesToReset(row->second.at(5)->binaryValue);
 				break;
 			case 16:
-				if(_centralFeatures && device)
+				if(device)
 				{
 					pendingBidCoSQueues.reset(new PendingBidCoSQueues());
 					pendingBidCoSQueues->unserialize(row->second.at(5)->binaryValue, this);
@@ -1397,7 +1394,7 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::ICentral* device, std::shared_p
 				break;
 			}
 		}
-		if(_centralFeatures && !pendingBidCoSQueues) pendingBidCoSQueues.reset(new PendingBidCoSQueues());
+		if(!pendingBidCoSQueues) pendingBidCoSQueues.reset(new PendingBidCoSQueues());
 	}
 	catch(const std::exception& ex)
     {
@@ -1530,7 +1527,7 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 {
 	try
 	{
-		if(!_rpcDevice || !_rpcDevice->encryption || !_centralFeatures) return;
+		if(!_rpcDevice || !_rpcDevice->encryption) return;
 		if(!aesEnabled()) return;
 		if(_aesKeyIndex == (signed)_physicalInterface->getCurrentRFKeyIndex())
 		{
@@ -2186,7 +2183,7 @@ void BidCoSPeer::setRSSIDevice(uint8_t rssi)
 {
 	try
 	{
-		if(!_centralFeatures || _disposing || rssi == 0) return;
+		if(_disposing || rssi == 0) return;
 		uint32_t time = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		if(valuesCentral.find(0) != valuesCentral.end() && valuesCentral.at(0).find("RSSI_DEVICE") != valuesCentral.at(0).end() && (time - _lastRSSIDevice) > 10)
 		{
@@ -2389,7 +2386,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 	try
 	{
 		if(!packet) return;
-		if(!_centralFeatures || _disposing) return;
+		if(_disposing) return;
 		if(packet->senderAddress() != _address && (!hasTeam() || packet->senderAddress() != _team.address || packet->destinationAddress() == getCentral()->getAddress())) return;
 		if(packet->destinationAddress() != getCentral()->getAddress() && aesEnabled()) return;
 		if(!_rpcDevice) return;
@@ -2751,7 +2748,6 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 	try
 	{
 		if(_disposing) return Variable::createError(-32500, "Peer is disposing.");
-		if(!_centralFeatures) return Variable::createError(-2, "Peer is a virtual peer.");
 		if(channel < 0) channel = 0;
 		if(remoteChannel < 0) remoteChannel = 0;
 		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
@@ -3388,7 +3384,6 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 	{
 		Peer::setValue(clientInfo, channel, valueKey, value, wait); //Ignore result, otherwise setHomegerValue might not be executed
 		if(_disposing) return Variable::createError(-32500, "Peer is disposing.");
-		if(!_centralFeatures) return Variable::createError(-2, "Peer is virtual.");
 		if(valueKey.empty()) return Variable::createError(-5, "Value key is empty.");
 		if(channel == 0 && serviceMessages->set(valueKey, value->booleanValue)) return PVariable(new Variable(VariableType::tVoid));
 		if(valuesCentral.find(channel) == valuesCentral.end()) return Variable::createError(-2, "Unknown channel.");

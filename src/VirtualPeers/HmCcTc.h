@@ -38,8 +38,8 @@ namespace BidCoS
 class HmCcTc : public BidCoSPeer
 {
     public:
-		HmCcTc(uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler);
-		HmCcTc(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, bool centralFeatures, IPeerEventSink* eventHandler);
+		HmCcTc(uint32_t parentID, IPeerEventSink* eventHandler);
+		HmCcTc(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, IPeerEventSink* eventHandler);
 		virtual ~HmCcTc();
 		virtual void dispose();
 

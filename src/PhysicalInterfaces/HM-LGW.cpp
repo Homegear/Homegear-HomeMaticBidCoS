@@ -109,9 +109,9 @@ HM_LGW::~HM_LGW()
 	try
 	{
 		_stopCallbackThread = true;
-		if(_initThread.joinable()) _initThread.join();
-		if(_listenThread.joinable()) _listenThread.join();
-		if(_listenThreadKeepAlive.joinable()) _listenThreadKeepAlive.join();
+		GD::bl->threadManager.join(_initThread);
+		GD::bl->threadManager.join(_listenThread);
+		GD::bl->threadManager.join(_listenThreadKeepAlive);
 		aesCleanup();
 	}
     catch(const std::exception& ex)
@@ -331,7 +331,7 @@ void HM_LGW::sendPeers()
     _peersMutex.unlock();
 
     //There is no duty cycle => tested with version 1.1.3
-    /*std::thread t1(&HM_LGW::dutyCycleTest, this, 0x123456);
+    /*std::thead t1(&HM_LGW::dutyCycleTest, this, 0x123456);
 	t1.detach();*/
 }
 
@@ -1494,12 +1494,12 @@ void HM_LGW::startListening()
 		_socketKeepAlive->setReadTimeout(1000000);
 		_out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_stopped = false;
-		_listenThread = std::thread(&HM_LGW::listen, this);
-		if(_settings->listenThreadPriority > -1) BaseLib::Threads::setThreadPriority(_bl, _listenThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
-		_listenThreadKeepAlive = std::thread(&HM_LGW::listenKeepAlive, this);
-		if(_settings->listenThreadPriority > -1) BaseLib::Threads::setThreadPriority(_bl, _listenThreadKeepAlive.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
-		_initThread = std::thread(&HM_LGW::doInit, this);
-		if(_settings->listenThreadPriority > -1) BaseLib::Threads::setThreadPriority(_bl, _initThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::listen, this);
+		else GD::bl->threadManager.start(_listenThread, true, &HM_LGW::listen, this);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThreadKeepAlive, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::listenKeepAlive, this);
+		else GD::bl->threadManager.start(_listenThreadKeepAlive, true, &HM_LGW::listenKeepAlive, this);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
+		else GD::bl->threadManager.start(_initThread, true, &HM_LGW::doInit, this);
 		IPhysicalInterface::startListening();
 	}
     catch(const std::exception& ex)
@@ -1522,7 +1522,7 @@ void HM_LGW::reconnect()
 	{
 		_socket->close();
 		_socketKeepAlive->close();
-		if(_initThread.joinable()) _initThread.join();
+		GD::bl->threadManager.join(_initThread);
 		aesInit();
 		_requestsMutex.lock();
 		_requests.clear();
@@ -1536,8 +1536,8 @@ void HM_LGW::reconnect()
 		_socketKeepAlive->open();
 		_out.printInfo("Connected to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
-		_initThread = std::thread(&HM_LGW::doInit, this);
-		if(_settings->listenThreadPriority > -1) BaseLib::Threads::setThreadPriority(_bl, _initThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
+		else GD::bl->threadManager.start(_initThread, true, &HM_LGW::doInit, this);
 	}
     catch(const std::exception& ex)
     {
@@ -1558,9 +1558,9 @@ void HM_LGW::stopListening()
 	try
 	{
 		_stopCallbackThread = true;
-		if(_initThread.joinable()) _initThread.join();
-		if(_listenThread.joinable()) _listenThread.join();
-		if(_listenThreadKeepAlive.joinable()) _listenThreadKeepAlive.join();
+		GD::bl->threadManager.join(_initThread);
+		GD::bl->threadManager.join(_listenThread);
+		GD::bl->threadManager.join(_listenThreadKeepAlive);
 		_stopCallbackThread = false;
 		_socket->close();
 		_socketKeepAlive->close();

@@ -126,32 +126,28 @@ void HomeMaticCentral::stopThreads()
 {
 	try
 	{
+		_bl->threadManager.join(_resetThread);
+
 		_sendPacketThreadMutex.lock();
-		if(_sendPacketThread.joinable()) _sendPacketThread.join();
+		_bl->threadManager.join(_sendPacketThread);
 		_sendPacketThreadMutex.unlock();
 
 		_sendMultiplePacketsThreadMutex.lock();
-		if(_sendMultiplePacketsThread.joinable()) _sendMultiplePacketsThread.join();
+		_bl->threadManager.join(_sendMultiplePacketsThread);
 		_sendMultiplePacketsThreadMutex.unlock();
 
 		_pairingModeThreadMutex.lock();
-		if(_pairingModeThread.joinable())
-		{
-			_stopPairingModeThread = true;
-			_pairingModeThread.join();
-		}
+		_stopPairingModeThread = true;
+		_bl->threadManager.join(_pairingModeThread);
 		_pairingModeThreadMutex.unlock();
 
 		_updateFirmwareThreadMutex.lock();
-		if(_updateFirmwareThread.joinable()) _updateFirmwareThread.join();
+		_bl->threadManager.join(_updateFirmwareThread);
 		_updateFirmwareThreadMutex.unlock();
 
 		_stopWorkerThread = true;
-		if(_workerThread.joinable())
-		{
-			GD::out.printDebug("Debug: Waiting for worker thread of device " + std::to_string(_deviceId) + "...");
-			_workerThread.join();
-		}
+		GD::out.printDebug("Debug: Waiting for worker thread of device " + std::to_string(_deviceId) + "...");
+		_bl->threadManager.join(_workerThread);
 	}
     catch(const std::exception& ex)
     {
@@ -185,8 +181,7 @@ void HomeMaticCentral::init()
 			i->second->addEventHandler((BaseLib::Systems::IPhysicalInterface::IPhysicalInterfaceEventSink*)this);
 		}
 
-		_workerThread = std::thread(&HomeMaticCentral::worker, this);
-		BaseLib::Threads::setThreadPriority(_bl, _workerThread.native_handle(), _bl->settings.workerThreadPriority(), _bl->settings.workerThreadPolicy());
+		_bl->threadManager.start(_workerThread, true, _bl->settings.workerThreadPriority(), _bl->settings.workerThreadPolicy(), &HomeMaticCentral::worker, this);
 	}
 	catch(const std::exception& ex)
     {
@@ -748,6 +743,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 	{
 		if(_disposing) return false;
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
+		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->timeReceived() + 10000) GD::out.printError("Error: Packet was processed more than 10 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
 		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->timeReceived()) << " HomeMatic BidCoS packet received (" << senderID << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
 		if(!bidCoSPacket) return false;
 
@@ -813,6 +809,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 				return true; //Packet is handled by queue. Don't check if queue is empty!
 			}
 		}
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog: Packet " + packet->hexString() + " is now passed to the peer.");
 		if(team)
 		{
 			team->packetReceived(bidCoSPacket);
@@ -862,7 +859,7 @@ std::shared_ptr<IBidCoSInterface> HomeMaticCentral::getPhysicalInterface(int32_t
     return GD::defaultPhysicalInterface;
 }
 
-std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t deviceAddress)
+std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t deviceAddress, bool wait, bool* result)
 {
 	try
 	{
@@ -871,6 +868,7 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t devi
 		if(!peer || !peer->pendingBidCoSQueues)
 		{
 			_enqueuePendingQueuesMutex.unlock();
+			if(result) *result = true;
 			return std::shared_ptr<BidCoSQueue>();
 		}
 		std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.get(deviceAddress);
@@ -878,6 +876,7 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t devi
 		if(!queue)
 		{
 			_enqueuePendingQueuesMutex.unlock();
+			if(result) *result = true;
 			return std::shared_ptr<BidCoSQueue>();
 		}
 		if(!queue->peer) queue->peer = peer;
@@ -887,6 +886,21 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t devi
 			queue->push(peer->pendingBidCoSQueues);
 		}
 		_enqueuePendingQueuesMutex.unlock();
+
+		if(wait)
+		{
+			int32_t waitIndex = 0;
+			std::this_thread::sleep_for(std::chrono::milliseconds(50));
+			while(!peer->pendingQueuesEmpty() && waitIndex < 50)
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(50));
+				waitIndex++;
+			}
+
+			if(result) *result = peer->pendingQueuesEmpty();
+		}
+		else if(result) *result = true;
+
 		return queue;
 	}
 	catch(const std::exception& ex)
@@ -902,6 +916,7 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t devi
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _enqueuePendingQueuesMutex.unlock();
+    if(result) *result = false;
     return std::shared_ptr<BidCoSQueue>();
 }
 
@@ -999,8 +1014,8 @@ void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface>
 		if(!isThread)
 		{
 			_sendMultiplePacketsThreadMutex.lock();
-			if(_sendMultiplePacketsThread.joinable()) _sendMultiplePacketsThread.join();
-			_sendMultiplePacketsThread = std::thread(&HomeMaticCentral::sendPacketMultipleTimes, this, physicalInterface, packet, peerAddress, count, delay, useCentralMessageCounter, true);
+			_bl->threadManager.join(_sendMultiplePacketsThread);
+			_bl->threadManager.start(_sendMultiplePacketsThread, false, &HomeMaticCentral::sendPacketMultipleTimes, this, physicalInterface, packet, peerAddress, count, delay, useCentralMessageCounter, true);
 			_sendMultiplePacketsThreadMutex.unlock();
 			return;
 		}
@@ -1317,7 +1332,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 				}
 
-				stringStream << "Added peer " + std::to_string(peer->getID()) + " with address 0x" << std::hex << peerAddress << " of type 0x" << (int32_t)deviceType << " with serial number " << serialNumber << " and firmware version 0x" << firmwareVersion << "." << std::dec << std::endl;
+				stringStream << "Added peer " + std::to_string(peer->getID()) + " with address 0x" << std::hex << peerAddress << " of type 0x" << BaseLib::HelperFunctions::getHexString(deviceType) << " with serial number " << serialNumber << " and firmware version 0x" << firmwareVersion << "." << std::dec << std::endl;
 			}
 			return stringStream.str();
 		}
@@ -3982,8 +3997,8 @@ PVariable HomeMaticCentral::addDevice(BaseLib::PRpcClientInfo clientInfo, std::s
 			packet->setMessageCounter(_messageCounter[0]);
 			_messageCounter[0]++;
 			_sendPacketThreadMutex.lock();
-			if(_sendPacketThread.joinable()) _sendPacketThread.join();
-			_sendPacketThread = std::thread(&HomeMaticCentral::sendPacket, this, GD::defaultPhysicalInterface, packet, false);
+			_bl->threadManager.join(_sendPacketThread);
+			_bl->threadManager.start(_sendPacketThread, false, &HomeMaticCentral::sendPacket, this, GD::defaultPhysicalInterface, packet, false);
 			_sendPacketThreadMutex.unlock();
 			std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 			peer = getPeer(serialNumber);
@@ -4506,13 +4521,13 @@ PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, uin
 		//Reset
 		if(flags & 0x01)
 		{
-			std::thread t(&HomeMaticCentral::reset, this, id, defer);
-			t.detach();
+			_bl->threadManager.join(_resetThread);
+			_bl->threadManager.start(_resetThread, false, &HomeMaticCentral::reset, this, id, defer);
 		}
 		else
 		{
-			std::thread t(&HomeMaticCentral::unpair, this, id, defer);
-			t.detach();
+			_bl->threadManager.join(_resetThread);
+			_bl->threadManager.start(_resetThread, false, &HomeMaticCentral::unpair, this, id, defer);
 		}
 		//Force delete
 		if(force) deletePeer(peer->getID());
@@ -5034,13 +5049,13 @@ PVariable HomeMaticCentral::setInstallMode(BaseLib::PRpcClientInfo clientInfo, b
 			return Variable::createError(-32500, "Central is disposing.");
 		}
 		_stopPairingModeThread = true;
-		if(_pairingModeThread.joinable()) _pairingModeThread.join();
+		_bl->threadManager.join(_pairingModeThread);
 		_stopPairingModeThread = false;
 		_timeLeftInPairingMode = 0;
 		if(on && duration >= 5)
 		{
 			_timeLeftInPairingMode = duration; //It's important to set it here, because the thread often doesn't completely initialize before getInstallMode requests _timeLeftInPairingMode
-			_pairingModeThread = std::thread(&HomeMaticCentral::pairingModeTimer, this, duration, debugOutput);
+			_bl->threadManager.start(_pairingModeThread, false, &HomeMaticCentral::pairingModeTimer, this, duration, debugOutput);
 		}
 		_pairingModeThreadMutex.unlock();
 		return PVariable(new Variable(VariableType::tVoid));
@@ -5072,8 +5087,8 @@ PVariable HomeMaticCentral::updateFirmware(BaseLib::PRpcClientInfo clientInfo, s
 			_updateFirmwareThreadMutex.unlock();
 			return Variable::createError(-32500, "Central is disposing.");
 		}
-		if(_updateFirmwareThread.joinable()) _updateFirmwareThread.join();
-		_updateFirmwareThread = std::thread(&HomeMaticCentral::updateFirmwares, this, ids, manual);
+		_bl->threadManager.join(_updateFirmwareThread);
+		_bl->threadManager.start(_updateFirmwareThread, false, &HomeMaticCentral::updateFirmwares, this, ids, manual);
 		_updateFirmwareThreadMutex.unlock();
 		return PVariable(new Variable(true));
 	}

@@ -10,14 +10,14 @@
 		<encryption>true</encryption>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
 			<configParameters>alarmactuator_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="ALARMACTUATOR" channelCount="1">
+		<function channel="1" type="ALARMACTUATOR">
 			<properties>
 				<dynamicChannelCount>23:0.5</dynamicChannelCount>
 				<linkReceiverFunctionTypes>
@@ -384,6 +384,31 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
 				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
@@ -880,31 +905,6 @@
 				</logicalInteger>
 				<physicalInteger groupId="AES_KEY">
 					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING">
-				<properties>
-					<internal>true</internal>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING_INTERVAL">
-				<properties>
-					<internal>true</internal>
-					<unit>min</unit>
-				</properties>
-				<logicalInteger>
-					<minimumValue>10</minimumValue>
-					<maximumValue>1440</maximumValue>
-					<defaultValue>60</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="CENTRAL_ADDRESS_SPOOFED">

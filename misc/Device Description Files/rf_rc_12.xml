@@ -19,14 +19,14 @@
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
 			<configParameters>remote_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="KEY" channelCount="1">
+		<function channel="1" type="KEY">
 			<properties>
 				<encryptionEnabledByDefault>true</encryptionEnabledByDefault>
 				<dynamicChannelCount>23:1.0</dynamicChannelCount>

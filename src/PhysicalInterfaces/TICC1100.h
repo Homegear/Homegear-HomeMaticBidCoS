@@ -238,6 +238,7 @@ protected:
 
 	void setConfig();
 	void setupDevice();
+	void initDevice();
 	void openDevice();
     void closeDevice();
     void endSending();

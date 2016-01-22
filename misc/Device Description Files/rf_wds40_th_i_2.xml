@@ -13,14 +13,14 @@
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
 			<configParameters>wds40_th_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="WEATHER" channelCount="1">
+		<function channel="1" type="WEATHER">
 			<properties>
 				<linkSenderFunctionTypes>
 					<type>WEATHER_TH</type>

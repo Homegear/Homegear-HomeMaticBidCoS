@@ -93,7 +93,7 @@ public:
 	 * @param deviceAddress The BidCoS address of the device to enqueue the packets for.
 	 * @return Returns the queue managers BidCoS queue for the peer or nullptr when there are no pending queues or on errors.
 	 */
-	std::shared_ptr<BidCoSQueue> enqueuePendingQueues(int32_t deviceAddress);
+	std::shared_ptr<BidCoSQueue> enqueuePendingQueues(int32_t deviceAddress, bool wait = false, bool* result = nullptr);
 	std::string getUniqueSerialNumber(std::string seedPrefix, uint32_t seedNumber);
 	uint64_t getPeerIdFromSerial(std::string serialNumber) { std::shared_ptr<BidCoSPeer> peer = getPeer(serialNumber); if(peer) return peer->getID(); else return 0; }
 	void updateFirmwares(std::vector<uint64_t> ids, bool manual);
@@ -149,6 +149,7 @@ protected:
     std::thread _sendMultiplePacketsThread;
     std::mutex _sendPacketThreadMutex;
     std::thread _sendPacketThread;
+    std::thread _resetThread;
 
     bool _pairing = false;
 	uint32_t _timeLeftInPairingMode = 0;

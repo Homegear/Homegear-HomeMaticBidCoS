@@ -27,7 +27,7 @@
 	</supportedDevices>
 	<properties/>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
@@ -46,7 +46,7 @@
 			<variables>ws550_ch_th_values--1</variables>
 			<linkParameters>ws550_ch_ths_link--1</linkParameters>
 		</function>
-		<function channel="9" type="WS_CS" channelCount="1">
+		<function channel="9" type="WS_CS">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>WEATHER_CS</type>
@@ -56,7 +56,7 @@
 			<variables>ws550_ch_cs_values--9</variables>
 			<linkParameters>ws550_ch_cs_link--9</linkParameters>
 		</function>
-		<function channel="10" type="WEATHER" channelCount="1">
+		<function channel="10" type="WEATHER">
 			<properties>
 				<linkSenderFunctionTypes>
 					<type>WEATHER_THP</type>
@@ -148,6 +148,31 @@
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
 		</configParameters>
 		<configParameters id="ws550_ch_cs_master--9"/>
 		<configParameters id="ws550_ch_th_master--1"/>
@@ -209,31 +234,6 @@
 				<logicalInteger/>
 				<physicalInteger groupId="RSSI_PEER">
 					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING">
-				<properties>
-					<internal>true</internal>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING_INTERVAL">
-				<properties>
-					<internal>true</internal>
-					<unit>min</unit>
-				</properties>
-				<logicalInteger>
-					<minimumValue>10</minimumValue>
-					<maximumValue>1440</maximumValue>
-					<defaultValue>60</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="CENTRAL_ADDRESS_SPOOFED">

@@ -17,7 +17,7 @@
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
@@ -41,7 +41,7 @@
 			<variables>remote_ch_values--1</variables>
 			<linkParameters>remote_ch_link--1</linkParameters>
 		</function>
-		<function channel="3" type="KEY" channelCount="1">
+		<function channel="3" type="KEY">
 			<properties>
 				<encryptionEnabledByDefault>true</encryptionEnabledByDefault>
 				<defaultLinkScenarioElementId>T</defaultLinkScenarioElementId>
@@ -55,7 +55,7 @@
 			<variables>remote_ch_values--3</variables>
 			<linkParameters>remote_ch_link--3</linkParameters>
 		</function>
-		<function channel="4" type="KEY" channelCount="1">
+		<function channel="4" type="KEY">
 			<properties>
 				<encryptionEnabledByDefault>true</encryptionEnabledByDefault>
 				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>

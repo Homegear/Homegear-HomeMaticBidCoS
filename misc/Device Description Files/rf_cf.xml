@@ -10,14 +10,14 @@
 		<encryption>true</encryption>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
 			<configParameters>maint_ch_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="SIGNAL_LED" channelCount="1">
+		<function channel="1" type="SIGNAL_LED">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -29,7 +29,7 @@
 			<variables>signal_led_ch_values--1</variables>
 			<linkParameters>signal_led_ch_link--1</linkParameters>
 		</function>
-		<function channel="2" type="SIGNAL_CHIME" channelCount="1">
+		<function channel="2" type="SIGNAL_CHIME">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -227,6 +227,31 @@
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
 		</configParameters>
 		<configParameters id="signal_chime_ch_master--2">
 			<parameter id="AES_ACTIVE">
@@ -344,31 +369,6 @@
 				<logicalInteger/>
 				<physicalInteger groupId="RSSI_PEER">
 					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING">
-				<properties>
-					<internal>true</internal>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING_INTERVAL">
-				<properties>
-					<internal>true</internal>
-					<unit>min</unit>
-				</properties>
-				<logicalInteger>
-					<minimumValue>10</minimumValue>
-					<maximumValue>1440</maximumValue>
-					<defaultValue>60</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="CENTRAL_ADDRESS_SPOOFED">

@@ -240,7 +240,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         /**
          * {@inheritDoc}
          */
-        virtual PVariable setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t channel, std::string valueKey, PVariable value);
+        virtual PVariable setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t channel, std::string valueKey, PVariable value, bool wait);
         //End RPC methods
     protected:
         uint32_t _lastRSSIDevice = 0;

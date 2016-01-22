@@ -51,10 +51,10 @@ BidCoSQueueManager::~BidCoSQueueManager()
 	{
 		if(!_disposing) dispose();
 		_workerThreadMutex.lock();
-		if(_workerThread.joinable()) _workerThread.join();
+		GD::bl->threadManager.join(_workerThread);
 		_workerThreadMutex.unlock();
 		_resetQueueThreadMutex.lock();
-		if(_resetQueueThread.joinable()) _resetQueueThread.join(); //After waiting for worker thread!
+		GD::bl->threadManager.join(_resetQueueThread); //After waiting for worker thread!
 		_resetQueueThreadMutex.unlock();
 	}
     catch(const std::exception& ex)
@@ -115,9 +115,9 @@ void BidCoSQueueManager::worker()
 							_resetQueueThreadMutex.unlock();
 							return;
 						}
-						if(_resetQueueThread.joinable()) _resetQueueThread.join();
+						GD::bl->threadManager.join(_resetQueueThread);
 						//Has to be called in a thread as resetQueue might cause queuing (retrying in setUnreach) and therefore a deadlock
-						_resetQueueThread = std::thread(&BidCoSQueueManager::resetQueue, this, lastQueue, queue->id);
+						GD::bl->threadManager.start(_resetQueueThread, true, &BidCoSQueueManager::resetQueue, this, lastQueue, queue->id);
 					}
 					catch(const std::exception& ex)
 					{
@@ -185,10 +185,9 @@ std::shared_ptr<BidCoSQueue> BidCoSQueueManager::createQueue(std::shared_ptr<IBi
 				}
 				try //Catch "Resource deadlock avoided". Error should be fixed, but just in case.
 				{
-					if(_workerThread.joinable()) _workerThread.join();
+					GD::bl->threadManager.join(_workerThread);
 					_stopWorkerThread = false;
-					_workerThread = std::thread(&BidCoSQueueManager::worker, this);
-					BaseLib::Threads::setThreadPriority(GD::bl, _workerThread.native_handle(), GD::bl->settings.workerThreadPriority(), GD::bl->settings.workerThreadPolicy());
+					GD::bl->threadManager.start(_workerThread, true, GD::bl->settings.workerThreadPriority(), GD::bl->settings.workerThreadPolicy(), &BidCoSQueueManager::worker, this);
 				}
 				catch(const std::exception& ex)
 				{

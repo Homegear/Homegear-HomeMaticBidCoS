@@ -85,7 +85,7 @@ TICC1100::~TICC1100()
 	try
 	{
 		_stopCallbackThread = true;
-		if(_listenThread.joinable()) _listenThread.join();
+		GD::bl->threadManager.join(_listenThread);
 		closeDevice();
 		closeGPIO(1);
 	}
@@ -1036,22 +1036,7 @@ void TICC1100::startListening()
 	try
 	{
 		stopListening();
-		openDevice();
-		if(!_fileDescriptor || _fileDescriptor->descriptor == -1) return;
-
-		initChip();
-		_out.printDebug("Debug: CC1100: Setting GPIO direction");
-		setGPIODirection(1, GPIODirection::IN);
-		_out.printDebug("Debug: CC1100: Setting GPIO edge");
-		setGPIOEdge(1, GPIOEdge::BOTH);
-		openGPIO(1, true);
-		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1) throw(BaseLib::Exception("Couldn't listen to rf device, because the gpio pointer is not valid: " + _settings->device));
-		if(gpioDefined(2)) //Enable high gain mode
-		{
-			openGPIO(2, false);
-			if(!getGPIO(2)) setGPIO(2, true);
-			closeGPIO(2);
-		}
+		initDevice();
 
 		if(!_aesHandshake) return; //AES is not initialized
 
@@ -1069,8 +1054,8 @@ void TICC1100::startListening()
 		_stopped = false;
 		_firstPacket = true;
 		_stopCallbackThread = false;
-		_listenThread = std::thread(&TICC1100::mainThread, this);
-		BaseLib::Threads::setThreadPriority(_bl, _listenThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &TICC1100::mainThread, this);
+		else GD::bl->threadManager.start(_listenThread, true, &TICC1100::mainThread, this);
 		IPhysicalInterface::startListening();
 
 		//For sniffing update packets
@@ -1091,16 +1076,48 @@ void TICC1100::startListening()
     }
 }
 
+void TICC1100::initDevice()
+{
+	try
+	{
+		openDevice();
+		if(!_fileDescriptor || _fileDescriptor->descriptor == -1) return;
+
+		initChip();
+		_out.printDebug("Debug: CC1100: Setting GPIO direction");
+		setGPIODirection(1, GPIODirection::IN);
+		_out.printDebug("Debug: CC1100: Setting GPIO edge");
+		setGPIOEdge(1, GPIOEdge::BOTH);
+		openGPIO(1, true);
+		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1) throw(BaseLib::Exception("Couldn't listen to rf device, because the gpio pointer is not valid: " + _settings->device));
+		if(gpioDefined(2)) //Enable high gain mode
+		{
+			openGPIO(2, false);
+			if(!getGPIO(2)) setGPIO(2, true);
+			closeGPIO(2);
+		}
+	}
+    catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+
 void TICC1100::stopListening()
 {
 	try
 	{
 		stopQueue(0);
-		if(_listenThread.joinable())
-		{
-			_stopCallbackThread = true;
-			_listenThread.join();
-		}
+		_stopCallbackThread = true;
+		GD::bl->threadManager.join(_listenThread);
 		_stopCallbackThread = false;
 		if(_fileDescriptor->descriptor != -1) closeDevice();
 		closeGPIO(1);
@@ -1153,128 +1170,179 @@ void TICC1100::mainThread()
 		int32_t bytesRead;
 		std::vector<char> readBuffer({'0'});
 
-        while(!_stopCallbackThread && _fileDescriptor->descriptor > -1 && _gpioDescriptors[1]->descriptor > -1)
+        while(!_stopCallbackThread)
         {
-        	if(_stopped)
+        	try
         	{
-        		std::this_thread::sleep_for(std::chrono::milliseconds(200));
-        		continue;
-        	}
-        	pollfd pollstruct {
-				(int)_gpioDescriptors[1]->descriptor,
-				(short)(POLLPRI | POLLERR),
-				(short)0
-			};
-
-			pollResult = poll(&pollstruct, 1, 100);
-			/*if(pollstruct.revents & POLLERR)
-			{
-				_out.printWarning("Warning: Error polling GPIO. Reopening...");
-				closeGPIO();
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-				openGPIO(_settings->gpio1);
-			}*/
-			if(pollResult > 0)
-			{
-				if(lseek(_gpioDescriptors[1]->descriptor, 0, SEEK_SET) == -1) throw BaseLib::Exception("Could not poll gpio: " + std::string(strerror(errno)));
-				bytesRead = read(_gpioDescriptors[1]->descriptor, &readBuffer[0], 1);
-				if(!bytesRead) continue;
-				if(readBuffer.at(0) == 0x30)
+				if(_stopped)
 				{
-					if(!_sending) _txMutex.try_lock(); //We are receiving, don't send now
-					continue; //Packet is being received. Wait for GDO high
+					std::this_thread::sleep_for(std::chrono::milliseconds(200));
+					continue;
 				}
-				if(_sending)
+				if(!_stopCallbackThread && (_fileDescriptor->descriptor == -1 || _gpioDescriptors[1]->descriptor == -1))
 				{
-					endSending();
-					_txMutex.unlock();
-				}
-				else
-				{
-					//sendCommandStrobe(CommandStrobes::Enum::SIDLE);
-					std::shared_ptr<BidCoSPacket> packet;
-					if(crcOK())
+					_out.printError("Connection to TI CC1101 closed unexpectedly... Trying to reconnect...");
+					_stopped = true; //Set to true, so that sendPacket aborts
+					if(_sending)
 					{
-						uint8_t firstByte = readRegister(Registers::Enum::FIFO);
-						std::vector<uint8_t> encodedData = readRegisters(Registers::Enum::FIFO, firstByte + 1); //Read packet + RSSI
-						std::vector<uint8_t> decodedData(encodedData.size());
-						if(encodedData.size() >= 9)
-						{
-							decodedData[0] = firstByte;
-							decodedData[1] = (~encodedData[1]) ^ 0x89;
-							uint32_t i = 2;
-							for(; i < firstByte; i++)
-							{
-								decodedData[i] = (encodedData[i - 1] + 0xDC) ^ encodedData[i];
-							}
-							decodedData[i] = encodedData[i] ^ decodedData[2];
-							decodedData[i + 1] = encodedData[i + 1]; //RSSI_DEVICE
+						std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+						_sending = false;
+					}
+					_txMutex.unlock(); //Make sure _txMutex is unlocked
 
-							packet.reset(new BidCoSPacket(decodedData, true, BaseLib::HelperFunctions::getTime()));
-						}
-						else _out.printWarning("Warning: Too small packet received: " + BaseLib::HelperFunctions::getHexString(encodedData));
-					}
-					else _out.printDebug("Debug: BidCoS packet received, but CRC failed.");
-					if(!_sendingPending)
+					initDevice();
+					_stopped = false;
+					continue;
+				}
+
+				pollfd pollstruct {
+					(int)_gpioDescriptors[1]->descriptor,
+					(short)(POLLPRI | POLLERR),
+					(short)0
+				};
+
+				pollResult = poll(&pollstruct, 1, 100);
+				/*if(pollstruct.revents & POLLERR)
+				{
+					_out.printWarning("Warning: Error polling GPIO. Reopening...");
+					closeGPIO();
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					openGPIO(_settings->gpio1);
+				}*/
+				if(pollResult > 0)
+				{
+					if(lseek(_gpioDescriptors[1]->descriptor, 0, SEEK_SET) == -1) throw BaseLib::Exception("Could not poll gpio: " + std::string(strerror(errno)));
+					bytesRead = read(_gpioDescriptors[1]->descriptor, &readBuffer[0], 1);
+					if(!bytesRead) continue;
+					if(readBuffer.at(0) == 0x30)
 					{
-						sendCommandStrobe(CommandStrobes::Enum::SFRX);
-						sendCommandStrobe(CommandStrobes::Enum::SRX);
+						if(!_sending) _txMutex.try_lock(); //We are receiving, don't send now
+						continue; //Packet is being received. Wait for GDO high
 					}
-					_txMutex.unlock();
-					if(packet)
+					if(_sending)
 					{
-						if(_firstPacket) _firstPacket = false;
-						else
+						endSending();
+						_txMutex.unlock();
+					}
+					else
+					{
+						//sendCommandStrobe(CommandStrobes::Enum::SIDLE);
+						std::shared_ptr<BidCoSPacket> packet;
+						if(crcOK())
 						{
-							if(packet->destinationAddress() == _myAddress)
+							uint8_t firstByte = readRegister(Registers::Enum::FIFO);
+							std::vector<uint8_t> encodedData = readRegisters(Registers::Enum::FIFO, firstByte + 1); //Read packet + RSSI
+							std::vector<uint8_t> decodedData(encodedData.size());
+							if(encodedData.size() >= 9)
 							{
-								bool aesHandshake = false;
-								bool wakeUp = false;
-								try
+								decodedData[0] = firstByte;
+								decodedData[1] = (~encodedData[1]) ^ 0x89;
+								uint32_t i = 2;
+								for(; i < firstByte; i++)
 								{
-									std::lock_guard<std::mutex> peersGuard(_peersMutex);
-									std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
-									if(peerIterator != _peers.end())
+									decodedData[i] = (encodedData[i - 1] + 0xDC) ^ encodedData[i];
+								}
+								decodedData[i] = encodedData[i] ^ decodedData[2];
+								decodedData[i + 1] = encodedData[i + 1]; //RSSI_DEVICE
+
+								packet.reset(new BidCoSPacket(decodedData, true, BaseLib::HelperFunctions::getTime()));
+							}
+							else _out.printWarning("Warning: Too small packet received: " + BaseLib::HelperFunctions::getHexString(encodedData));
+						}
+						else _out.printDebug("Debug: BidCoS packet received, but CRC failed.");
+						if(!_sendingPending)
+						{
+							sendCommandStrobe(CommandStrobes::Enum::SFRX);
+							sendCommandStrobe(CommandStrobes::Enum::SRX);
+						}
+						_txMutex.unlock();
+						if(packet)
+						{
+							if(_firstPacket) _firstPacket = false;
+							else
+							{
+								if(packet->destinationAddress() == _myAddress)
+								{
+									bool aesHandshake = false;
+									bool wakeUp = false;
+									bool knowsPeer = false;
+									try
 									{
-										wakeUp = peerIterator->second.wakeUp;
-										if(packet->messageType() == 0x03)
+										std::lock_guard<std::mutex> peersGuard(_peersMutex);
+										std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
+										if(peerIterator != _peers.end())
 										{
-											std::shared_ptr<BidCoSPacket> mFrame;
-											std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame, peerIterator->second.keyIndex, wakeUp);
-											if(!aFrame)
+											knowsPeer = true;
+											wakeUp = peerIterator->second.wakeUp;
+											if(packet->messageType() == 0x03)
 											{
-												if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
-												else _out.printError("Error: No m-Frame found for r-Frame.");
+												std::shared_ptr<BidCoSPacket> mFrame;
+												std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame, peerIterator->second.keyIndex, wakeUp);
+												if(!aFrame)
+												{
+													if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
+													else _out.printError("Error: No m-Frame found for r-Frame.");
+													continue;
+												}
+												if(_bl->debugLevel >= 5) _out.printDebug("Debug: AES handshake successful.");
+												queuePacket(aFrame);
+												mFrame->setTimeReceived(BaseLib::HelperFunctions::getTime());
+												raisePacketReceived(mFrame);
+
 												continue;
 											}
-											if(_bl->debugLevel >= 5) _out.printDebug("Debug: AES handshake successful.");
-											queuePacket(aFrame);
-											mFrame->setTimeReceived(BaseLib::HelperFunctions::getTime());
-											raisePacketReceived(mFrame);
-
-											continue;
-										}
-										else if(packet->messageType() == 0x02 && packet->payload()->size() == 8 && packet->payload()->at(0) == 0x04)
-										{
-											peerIterator->second.keyIndex = packet->payload()->back() / 2;
-											std::shared_ptr<BidCoSPacket> mFrame;
-											std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame, peerIterator->second.keyIndex);
-											if(!rFrame)
+											else if(packet->messageType() == 0x02 && packet->payload()->size() == 8 && packet->payload()->at(0) == 0x04)
 											{
-												if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
-												else _out.printError("Error: No m-Frame found for c-Frame.");
+												peerIterator->second.keyIndex = packet->payload()->back() / 2;
+												std::shared_ptr<BidCoSPacket> mFrame;
+												std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame, peerIterator->second.keyIndex);
+												if(!rFrame)
+												{
+													if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
+													else _out.printError("Error: No m-Frame found for c-Frame.");
+													continue;
+												}
+
+												// {{{ Remove wrongly queued non AES packets from queue id map
+													bool requeue = false;
+													{
+														std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+														std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
+
+														if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 300)
+														{
+															requeue = true;
+															for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+															{
+																removeQueueEntry(0, *queueId);
+															}
+															_queueIds.erase(idIterator);
+														}
+													}
+													if(requeue)
+													{
+														queuePacket(mFrame, mFrame->timeSending() + 600);
+														queuePacket(mFrame, mFrame->timeSending() + 1200);
+													}
+												// }}}
+
+												queuePacket(rFrame);
 												continue;
 											}
+											else if(packet->messageType() == 0x02)
+											{
+												if(_aesHandshake->handshakeStarted(packet->senderAddress()) && !_aesHandshake->checkAFrame(packet))
+												{
+													_out.printError("Error: ACK has invalid signature.");
+													continue;
+												}
 
-											// {{{ Remove wrongly queued non AES packets from queue id map
-												bool requeue = false;
+												// {{{ Remove packet from queue id map
 												{
 													std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
 													std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
-
-													if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 300)
+													if(idIterator != _queueIds.end())
 													{
-														requeue = true;
 														for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
 														{
 															removeQueueEntry(0, *queueId);
@@ -1282,174 +1350,132 @@ void TICC1100::mainThread()
 														_queueIds.erase(idIterator);
 													}
 												}
-												if(requeue)
-												{
-													queuePacket(mFrame, mFrame->timeSending() + 600);
-													queuePacket(mFrame, mFrame->timeSending() + 1200);
-												}
-											// }}}
-
-											queuePacket(rFrame);
-											continue;
-										}
-										else if(packet->messageType() == 0x02)
-										{
-											if(_aesHandshake->handshakeStarted(packet->senderAddress()) && !_aesHandshake->checkAFrame(packet))
-											{
-												_out.printError("Error: ACK has invalid signature.");
-												continue;
+												// }}}
 											}
-
-											// {{{ Remove packet from queue id map
+											else
 											{
-												std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
-												std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
-												if(idIterator != _queueIds.end())
+												// {{{ Remove packet from queue id map
 												{
-													for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+													std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+													std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
+													if(idIterator != _queueIds.end())
 													{
-														removeQueueEntry(0, *queueId);
+														for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+														{
+															removeQueueEntry(0, *queueId);
+														}
+														_queueIds.erase(idIterator);
 													}
-													_queueIds.erase(idIterator);
 												}
-											}
-											// }}}
-										}
-										else
-										{
-											// {{{ Remove packet from queue id map
-											{
-												std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
-												std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
-												if(idIterator != _queueIds.end())
-												{
-													for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
-													{
-														removeQueueEntry(0, *queueId);
-													}
-													_queueIds.erase(idIterator);
-												}
-											}
-											// }}}
+												// }}}
 
-											if(packet->payload()->size() > 1)
-											{
-												//Packet type 0x4X has channel at index 0 all other types at index 1
-												if((packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
-												else if(peerIterator->second.aesChannels[packet->payload()->at(1) & 0x3F]) aesHandshake = true;
+												if(packet->payload()->size() > 1)
+												{
+													//Packet type 0x4X has channel at index 0 all other types at index 1
+													if((packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
+													else if(peerIterator->second.aesChannels[packet->payload()->at(1) & 0x3F]) aesHandshake = true;
+												}
+												else if(packet->payload()->size() == 1 && (packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
+												else if(peerIterator->second.aesChannels[0]) aesHandshake = true;
 											}
-											else if(packet->payload()->size() == 1 && (packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
-											else if(peerIterator->second.aesChannels[0]) aesHandshake = true;
 										}
 									}
-								}
-								catch(const std::exception& ex)
-								{
-									_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-								}
-								catch(BaseLib::Exception& ex)
-								{
-									_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-								}
-								catch(...)
-								{
-									_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-								}
-								if(aesHandshake)
-								{
-									if(_bl->debugLevel >= 5) _out.printDebug("Debug: Doing AES handshake.");
-									queuePacket(_aesHandshake->getCFrame(packet));
-								}
-								else
-								{
-									if(packet->controlByte() & 0x20)
+									catch(const std::exception& ex)
 									{
-										std::vector<uint8_t> payload { 0 };
-										uint8_t controlByte = 0x80;
-										if((packet->controlByte() & 2) && wakeUp && packet->messageType() != 0) controlByte |= 1;
-										std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), controlByte, 0x02, _myAddress, packet->senderAddress(), payload));
-										queuePacket(ackPacket);
+										_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 									}
-									raisePacketReceived(packet);
-								}
-							}
-							else if(packet->destinationAddress() == 0 && (packet->controlByte() & 2)) //Packet is wake me up packet
-							{
-								try
-								{
-									std::lock_guard<std::mutex> peersGuard(_peersMutex);
-									std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
-									if(peerIterator != _peers.end() && peerIterator->second.wakeUp)
+									catch(BaseLib::Exception& ex)
 									{
-										std::vector<uint8_t> payload;
-										std::shared_ptr<BidCoSPacket> wakeUpPacket(new BidCoSPacket(packet->messageCounter(), 0xA1, 0x12, _myAddress, packet->senderAddress(), payload));
-										queuePacket(wakeUpPacket);
+										_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 									}
-									raisePacketReceived(packet);
+									catch(...)
+									{
+										_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+									}
+									if(aesHandshake)
+									{
+										if(_bl->debugLevel >= 5) _out.printDebug("Debug: Doing AES handshake.");
+										queuePacket(_aesHandshake->getCFrame(packet));
+									}
+									else
+									{
+										if(knowsPeer && (packet->controlByte() & 0x20))
+										{
+											std::vector<uint8_t> payload { 0 };
+											uint8_t controlByte = 0x80;
+											if((packet->controlByte() & 2) && wakeUp && packet->messageType() != 0) controlByte |= 1;
+											std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), controlByte, 0x02, _myAddress, packet->senderAddress(), payload));
+											queuePacket(ackPacket);
+										}
+										raisePacketReceived(packet);
+									}
 								}
-								catch(const std::exception& ex)
+								else if(packet->destinationAddress() == 0 && (packet->controlByte() & 2)) //Packet is wake me up packet
 								{
-									_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+									try
+									{
+										std::lock_guard<std::mutex> peersGuard(_peersMutex);
+										std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
+										if(peerIterator != _peers.end() && peerIterator->second.wakeUp)
+										{
+											std::vector<uint8_t> payload;
+											std::shared_ptr<BidCoSPacket> wakeUpPacket(new BidCoSPacket(packet->messageCounter(), 0xA1, 0x12, _myAddress, packet->senderAddress(), payload));
+											queuePacket(wakeUpPacket);
+										}
+										raisePacketReceived(packet);
+									}
+									catch(const std::exception& ex)
+									{
+										_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+									}
+									catch(BaseLib::Exception& ex)
+									{
+										_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+									}
+									catch(...)
+									{
+										_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+									}
 								}
-								catch(BaseLib::Exception& ex)
+								else raisePacketReceived(packet);
+								if(_bl->hf.getTime() - _lastAesHandshakeGc > 30000)
 								{
-									_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+									_lastAesHandshakeGc = _bl->hf.getTime();
+									_aesHandshake->collectGarbage();
 								}
-								catch(...)
-								{
-									_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-								}
-							}
-							else raisePacketReceived(packet);
-							if(_bl->hf.getTime() - _lastAesHandshakeGc > 30000)
-							{
-								_lastAesHandshakeGc = _bl->hf.getTime();
-								_aesHandshake->collectGarbage();
 							}
 						}
 					}
 				}
+				else if(pollResult < 0)
+				{
+					_txMutex.unlock();
+					_out.printError("Error: Could not poll gpio: " + std::string(strerror(errno)) + ". Reopening...");
+					closeGPIO(1);
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					openGPIO(1, true);
+				}
+				//pollResult == 0 is timeout
 			}
-			else if(pollResult < 0)
+			catch(const std::exception& ex)
 			{
 				_txMutex.unlock();
-				_out.printError("Error: Could not poll gpio: " + std::string(strerror(errno)) + ". Reopening...");
-				closeGPIO(1);
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-				openGPIO(1, true);
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			//pollResult == 0 is timeout
+			catch(BaseLib::Exception& ex)
+			{
+				_txMutex.unlock();
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+			}
+			catch(...)
+			{
+				_txMutex.unlock();
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+			}
         }
     }
     catch(const std::exception& ex)
     {
-    	_txMutex.unlock();
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_txMutex.unlock();
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_txMutex.unlock();
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    try
-    {
-		if(!_stopCallbackThread && (_fileDescriptor->descriptor == -1 || _gpioDescriptors[1]->descriptor == -1))
-		{
-			_out.printError("Connection to TI CC1101 closed inexpectedly... Trying to reconnect...");
-			_stopCallbackThread = true; //Set to true, so that sendPacket aborts
-			_txMutex.unlock(); //Make sure _txMutex is unlocked
-			std::thread thread(&TICC1100::startListening, this);
-			thread.detach();
-		}
-		else _txMutex.unlock(); //Make sure _txMutex is unlocked
-	}
-    catch(const std::exception& ex)
-    {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(BaseLib::Exception& ex)
@@ -1460,6 +1486,7 @@ void TICC1100::mainThread()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
+    _txMutex.unlock();
 }
 }
 #endif

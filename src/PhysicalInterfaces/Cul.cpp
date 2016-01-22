@@ -54,11 +54,8 @@ Cul::~Cul()
 {
 	try
 	{
-		if(_listenThread.joinable())
-		{
-			_stopCallbackThread = true;
-			_listenThread.join();
-		}
+		_stopCallbackThread = true;
+		GD::bl->threadManager.join(_listenThread);
 		closeDevice();
 	}
     catch(const std::exception& ex)
@@ -592,8 +589,8 @@ void Cul::startListening()
 		_stopped = false;
 		writeToDevice("X21\nAr\n", false);
 		std::this_thread::sleep_for(std::chrono::milliseconds(400));
-		_listenThread = std::thread(&Cul::listen, this);
-		BaseLib::Threads::setThreadPriority(_bl, _listenThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Cul::listen, this);
+		else GD::bl->threadManager.start(_listenThread, true, &Cul::listen, this);
 		IPhysicalInterface::startListening();
 	}
     catch(const std::exception& ex)
@@ -615,11 +612,8 @@ void Cul::stopListening()
 	try
 	{
 		stopQueue(0);
-		if(_listenThread.joinable())
-		{
-			_stopCallbackThread = true;
-			_listenThread.join();
-		}
+		_stopCallbackThread = true;
+		GD::bl->threadManager.join(_listenThread);
 		_stopCallbackThread = false;
 		if(_fileDescriptor->descriptor > -1)
 		{
@@ -665,12 +659,14 @@ void Cul::listen()
 				{
 					bool aesHandshake = false;
 					bool wakeUp = false;
+					bool knowsPeer = false;
 					try
 					{
 						std::lock_guard<std::mutex> peersGuard(_peersMutex);
 						std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
 						if(peerIterator != _peers.end())
 						{
+							knowsPeer = true;
 							wakeUp = peerIterator->second.wakeUp;
 							if(packet->messageType() == 0x03)
 							{
@@ -797,7 +793,7 @@ void Cul::listen()
 					}
 					else
 					{
-						if(packet->controlByte() & 0x20)
+						if(knowsPeer && (packet->controlByte() & 0x20))
 						{
 							std::vector<uint8_t> payload { 0 };
 							uint8_t controlByte = 0x80;

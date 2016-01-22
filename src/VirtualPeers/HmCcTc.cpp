@@ -53,8 +53,8 @@ void HmCcTc::dispose()
 	try
 	{
 		_stopDutyCycleThread = true;
-		if(_dutyCycleThread.joinable()) _dutyCycleThread.join();
-		if(_sendDutyCyclePacketThread.joinable()) _sendDutyCyclePacketThread.join();
+		_bl->threadManager.join(_dutyCycleThread);
+		_bl->threadManager.join(_sendDutyCyclePacketThread);
 		BidCoSPeer::dispose();
 	}
 	catch(const std::exception& ex)
@@ -216,8 +216,7 @@ void HmCcTc::startDutyCycle(int64_t lastDutyCycleEvent)
 			GD::out.printCritical("HomeMatic BidCoS peer " + std::to_string(_peerID) + ": Duty cycle thread already started. Something went very wrong.");
 			return;
 		}
-		_dutyCycleThread = std::thread(&HmCcTc::dutyCycleThread, this, lastDutyCycleEvent);
-		BaseLib::Threads::setThreadPriority(_bl, _dutyCycleThread.native_handle(), 35);
+		_bl->threadManager.start(_dutyCycleThread, true, 35, SCHED_FIFO, &HmCcTc::dutyCycleThread, this, lastDutyCycleEvent);
 	}
     catch(const std::exception& ex)
     {
@@ -280,9 +279,8 @@ void HmCcTc::dutyCycleThread(int64_t lastDutyCycleEvent)
 				std::this_thread::sleep_for(std::chrono::microseconds(nextDutyCycleEvent - timePoint - 2000000));
 				if(_stopDutyCycleThread) break;
 
-				if(_sendDutyCyclePacketThread.joinable()) _sendDutyCyclePacketThread.join();
-				_sendDutyCyclePacketThread = std::thread(&HmCcTc::sendDutyCyclePacket, this, _dutyCycleMessageCounter, nextDutyCycleEvent);
-				BaseLib::Threads::setThreadPriority(_bl, _sendDutyCyclePacketThread.native_handle(), 99);
+				_bl->threadManager.join(_sendDutyCyclePacketThread);
+				_bl->threadManager.start(_sendDutyCyclePacketThread, false, 99, SCHED_FIFO, &HmCcTc::sendDutyCyclePacket, this, _dutyCycleMessageCounter, nextDutyCycleEvent);
 
 				_lastDutyCycleEvent = nextDutyCycleEvent;
 				cycleLength = calculateCycleLength(_dutyCycleMessageCounter);

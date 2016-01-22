@@ -10,14 +10,14 @@
 		<timeout>88200</timeout>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
 			<configParameters>tiptronic_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="ACTOR_WINDOW" channelCount="1">
+		<function channel="1" type="ACTOR_WINDOW">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -29,7 +29,7 @@
 			<variables>actor_ch_values--1</variables>
 			<linkParameters>actor_window_ch_link--1</linkParameters>
 		</function>
-		<function channel="2" type="SENSOR_WINDOW" channelCount="1">
+		<function channel="2" type="SENSOR_WINDOW">
 			<properties>
 				<linkSenderFunctionTypes>
 					<type>WCS_TIPTRONIC_SENSOR</type>
@@ -41,7 +41,7 @@
 			<variables>sensor_window_ch_values--2</variables>
 			<linkParameters>sensor_window_ch_link--2</linkParameters>
 		</function>
-		<function channel="3" type="ACTOR_SECURITY" channelCount="1">
+		<function channel="3" type="ACTOR_SECURITY">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -747,6 +747,31 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>10</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>60</defaultValue>
+				</logicalInteger>
 				<physicalInteger groupId="">
 					<operationType>store</operationType>
 				</physicalInteger>
@@ -1840,31 +1865,6 @@
 				<logicalBoolean/>
 				<physicalInteger groupId="UPDATE_PENDING">
 					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING">
-				<properties>
-					<internal>true</internal>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING_INTERVAL">
-				<properties>
-					<internal>true</internal>
-					<unit>min</unit>
-				</properties>
-				<logicalInteger>
-					<minimumValue>10</minimumValue>
-					<maximumValue>1440</maximumValue>
-					<defaultValue>60</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="CENTRAL_ADDRESS_SPOOFED">

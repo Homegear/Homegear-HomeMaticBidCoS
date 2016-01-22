@@ -13,7 +13,7 @@
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
@@ -37,7 +37,7 @@
 			<variables>remote_ch_values--1</variables>
 			<linkParameters>remote_ch_link--1</linkParameters>
 		</function>
-		<function channel="3" type="MOTION_DETECTOR" channelCount="1">
+		<function channel="3" type="MOTION_DETECTOR">
 			<properties>
 				<linkSenderFunctionTypes>
 					<type>KEYMATIC</type>

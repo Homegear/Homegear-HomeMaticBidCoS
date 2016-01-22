@@ -380,7 +380,7 @@ void BidCoSPeer::worker()
 				else
 				{
 					PVariable rpcValue = valuesCentral.at((*i)->channel).at((*i)->key).rpcParameter->convertFromPacket((*i)->data);
-					setValue(nullptr, (*i)->channel, (*i)->key, rpcValue);
+					setValue(nullptr, (*i)->channel, (*i)->key, rpcValue, false);
 				}
 			}
 			_variablesToResetMutex.lock();
@@ -404,8 +404,8 @@ void BidCoSPeer::worker()
 					if(!_disposing && !deleting && _lastPing < time) //Check that _lastPing wasn't set in putParamset after locking the mutex
 					{
 						_lastPing = time; //Set here to avoid race condition between worker thread and ping thread
-						if(_pingThread.joinable()) _pingThread.join();
-						_pingThread = std::thread(&BidCoSPeer::pingThread, this);
+						_bl->threadManager.join(_pingThread);
+						_bl->threadManager.start(_pingThread, false, &BidCoSPeer::pingThread, this);
 					}
 					_pingThreadMutex.unlock();
 				}
@@ -429,8 +429,8 @@ void BidCoSPeer::worker()
 							if(!_disposing && !deleting && _lastPing < time) //Check that _lastPing wasn't set in putParamset after locking the mutex
 							{
 								_lastPing = time; //Set here to avoid race condition between worker thread and ping thread
-								if(_pingThread.joinable()) _pingThread.join();
-								_pingThread = std::thread(&BidCoSPeer::pingThread, this);
+								_bl->threadManager.join(_pingThread);
+								_bl->threadManager.start(_pingThread, false, &BidCoSPeer::pingThread, this);
 							}
 							_pingThreadMutex.unlock();
 						}
@@ -709,7 +709,19 @@ bool BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
 				for(std::map<std::string, PPacket>::iterator j = i->second.begin(); j != i->second.end(); ++j)
 				{
 					if(j->second->associatedVariables.empty()) continue;
-					PVariable result = getValueFromDevice(j->second->associatedVariables.at(0), i->first, !waitForResponse);
+					if(valuesCentral.find(i->first) == valuesCentral.end()) continue;
+					int32_t associatedVariablesIndex = -1;
+					for(uint32_t k = 0; k < j->second->associatedVariables.size(); k++)
+					{
+						if(valuesCentral[i->first].find(j->second->associatedVariables.at(k)->id) != valuesCentral[i->first].end())
+						{
+							associatedVariablesIndex = k;
+							break;
+						}
+					}
+					if(associatedVariablesIndex == -1) continue;
+					PVariable result = getValueFromDevice(j->second->associatedVariables.at(associatedVariablesIndex), i->first, !waitForResponse);
+					if(result && result->errorStruct) GD::out.printError("Error: getValueFromDevice in ping returned RPC error: " + result->structValue->at("faultString")->stringValue);
 					if(!result || result->errorStruct || result->type == VariableType::tVoid) return false;
 				}
 			}
@@ -2934,7 +2946,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 			for(Struct::iterator i = variables->structValue->begin(); i != variables->structValue->end(); ++i)
 			{
 				if(i->first.empty() || !i->second) continue;
-				setValue(clientInfo, channel, i->first, i->second);
+				setValue(clientInfo, channel, i->first, i->second, false);
 			}
 		}
 		else if(type == ParameterGroup::Type::Enum::link)
@@ -3370,11 +3382,11 @@ PVariable BidCoSPeer::setInterface(BaseLib::PRpcClientInfo clientInfo, std::stri
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t channel, std::string valueKey, PVariable value)
+PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t channel, std::string valueKey, PVariable value, bool wait)
 {
 	try
 	{
-		Peer::setValue(clientInfo, channel, valueKey, value); //Ignore result, otherwise setHomegerValue might not be executed
+		Peer::setValue(clientInfo, channel, valueKey, value, wait); //Ignore result, otherwise setHomegerValue might not be executed
 		if(_disposing) return Variable::createError(-32500, "Peer is disposing.");
 		if(!_centralFeatures) return Variable::createError(-2, "Peer is virtual.");
 		if(valueKey.empty()) return Variable::createError(-5, "Value key is empty.");
@@ -3431,7 +3443,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 				toggleValue = toggleParam->rpcParameter->convertFromPacket(temp);
 			}
 			else return Variable::createError(-6, "Toggle parameter has to be of type boolean, float or integer.");
-			return setValue(clientInfo, channel, toggleCast->parameter, toggleValue);
+			return setValue(clientInfo, channel, toggleCast->parameter, toggleValue, wait);
 		}
 		if(rpcParameter->setPackets.empty()) return Variable::createError(-6, "parameter is read only");
 		std::string setRequest = rpcParameter->setPackets.front()->id;
@@ -3601,7 +3613,13 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
 		{
 			if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
-			central->enqueuePendingQueues(_address);
+			bool result = false;
+			central->enqueuePendingQueues(_address, wait, &result);
+			if(!result)
+			{
+				if((_deviceType.type() == 0x19 || _deviceType.type() == 0x26 || _deviceType.type() == 0x27 || _deviceType.type() == 0x28) && valueKey == "STATE" && value->booleanValue) pendingBidCoSQueues->remove(BidCoSQueueType::PEER, valueKey, channel); //Clear queue of KeyMatic and WinMatic when STATE was set to true;
+				return Variable::createError(-100, "No answer from device.");
+			}
 		}
 		else if((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))
 		{
@@ -3609,7 +3627,9 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 			if(lastPacket && BaseLib::HelperFunctions::getTime() - lastPacket->timeReceived() < 150)
 			{
 				if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
-				central->enqueuePendingQueues(_address);
+				bool result = false;
+				central->enqueuePendingQueues(_address, wait, &result);
+				if(!result) return Variable::createError(-100, "No answer from device.");
 			}
 			else
 			{

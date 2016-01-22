@@ -58,11 +58,8 @@ CUNO::~CUNO()
 {
 	try
 	{
-		if(_listenThread.joinable())
-		{
-			_stopCallbackThread = true;
-			_listenThread.join();
-		}
+		_stopCallbackThread = true;
+		GD::bl->threadManager.join(_listenThread);
 	}
     catch(const std::exception& ex)
     {
@@ -391,8 +388,8 @@ void CUNO::startListening()
 		_socket->setAutoConnect(false);
 		_out.printDebug("Connecting to CUNO with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_stopped = false;
-		_listenThread = std::thread(&CUNO::listen, this);
-		if(_settings->listenThreadPriority > -1) BaseLib::Threads::setThreadPriority(_bl, _listenThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &CUNO::listen, this);
+		else GD::bl->threadManager.start(_listenThread, true, &CUNO::listen, this);
 		IPhysicalInterface::startListening();
 	}
     catch(const std::exception& ex)
@@ -440,11 +437,8 @@ void CUNO::stopListening()
 	{
 		stopQueue(0);
 		if(_socket->connected()) send("Ax\nX00\n");
-		if(_listenThread.joinable())
-		{
-			_stopCallbackThread = true;
-			_listenThread.join();
-		}
+		_stopCallbackThread = true;
+		GD::bl->threadManager.join(_listenThread);
 		_stopCallbackThread = false;
 		_socket->close();
 		_stopped = true;
@@ -564,12 +558,14 @@ void CUNO::processData(std::vector<uint8_t>& data)
 				{
 					bool aesHandshake = false;
 					bool wakeUp = false;
+					bool knowsPeer = false;
 					try
 					{
 						std::lock_guard<std::mutex> peersGuard(_peersMutex);
 						std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
 						if(peerIterator != _peers.end())
 						{
+							knowsPeer = true;
 							wakeUp = peerIterator->second.wakeUp;
 							if(packet->messageType() == 0x03)
 							{
@@ -696,7 +692,7 @@ void CUNO::processData(std::vector<uint8_t>& data)
 					}
 					else
 					{
-						if(packet->controlByte() & 0x20)
+						if(knowsPeer && (packet->controlByte() & 0x20))
 						{
 							std::vector<uint8_t> payload { 0 };
 							uint8_t controlByte = 0x80;

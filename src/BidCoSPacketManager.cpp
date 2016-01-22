@@ -41,8 +41,7 @@ BidCoSPacketManager::BidCoSPacketManager()
 {
 	try
 	{
-		_workerThread = std::thread(&BidCoSPacketManager::worker, this);
-		BaseLib::Threads::setThreadPriority(GD::bl, _workerThread.native_handle(), GD::bl->settings.workerThreadPriority(), GD::bl->settings.workerThreadPolicy());
+		GD::bl->threadManager.start(_workerThread, true, GD::bl->settings.workerThreadPriority(), GD::bl->settings.workerThreadPolicy(), &BidCoSPacketManager::worker, this);
 	}
 	catch(const std::exception& ex)
     {
@@ -61,7 +60,7 @@ BidCoSPacketManager::BidCoSPacketManager()
 BidCoSPacketManager::~BidCoSPacketManager()
 {
 	if(!_disposing) dispose();
-	if(_workerThread.joinable()) _workerThread.join();
+	GD::bl->threadManager.join(_workerThread);
 }
 
 void BidCoSPacketManager::dispose(bool wait)

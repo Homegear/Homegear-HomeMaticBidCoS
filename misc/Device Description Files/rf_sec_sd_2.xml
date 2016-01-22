@@ -12,14 +12,14 @@
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
 			<configParameters>HM-Sec-SD-2_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="SMOKE_DETECTOR" channelCount="1">
+		<function channel="1" type="SMOKE_DETECTOR">
 			<properties>
 				<encryptionEnabledByDefault>true</encryptionEnabledByDefault>
 				<direction>sender</direction>
@@ -58,7 +58,7 @@
 			<direction>toCentral</direction>
 			<type>0x10</type>
 			<subtype>0x6</subtype>
-			<subtypeIndex>9</subtypeIndex>
+			<subtypeIndex>9:0.6</subtypeIndex>
 			<channelIndex>10</channelIndex>
 			<binaryPayload>
 				<element>
@@ -77,6 +77,18 @@
 				</element>
 				<element>
 					<index>12.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL_ERROR">
+			<direction>toCentral</direction>
+			<type>0x40</type>
+			<channel>0</channel>
+			<binaryPayload>
+				<element>
+					<index>9.7</index>
 					<size>0.1</size>
 					<parameterId>LOWBAT</parameterId>
 				</element>
@@ -154,6 +166,31 @@
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>360</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
 		</configParameters>
 		<configParameters id="smoke_detector_ch_master--1">
 			<parameter id="AES_ACTIVE">
@@ -211,8 +248,14 @@
 				</properties>
 				<logicalBoolean/>
 				<physicalInteger groupId="LOWBAT">
+					<size>0.1</size>
 					<operationType>internal</operationType>
 				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL_ERROR">
+						<type>event</type>
+					</packet>
+				</packets>
 			</parameter>
 			<parameter id="DUTYCYCLE">
 				<properties>
@@ -253,31 +296,6 @@
 				</logicalInteger>
 				<physicalInteger groupId="AES_KEY">
 					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING">
-				<properties>
-					<internal>true</internal>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING_INTERVAL">
-				<properties>
-					<internal>true</internal>
-					<unit>min</unit>
-				</properties>
-				<logicalInteger>
-					<minimumValue>360</minimumValue>
-					<maximumValue>1440</maximumValue>
-					<defaultValue>360</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="CENTRAL_ADDRESS_SPOOFED">
@@ -429,14 +447,14 @@
 			<receiveMode>wakeOnRadio</receiveMode>
 		</properties>
 		<functions>
-			<function channel="0" type="MAINTENANCE" channelCount="1">
+			<function channel="0" type="MAINTENANCE">
 				<properties>
 					<internal>true</internal>
 				</properties>
 				<configParameters>maint_ch_master--0</configParameters>
 				<variables>maint_ch_values--0</variables>
 			</function>
-			<function channel="1" type="SMOKE_DETECTOR_TEAM_V2" channelCount="1">
+			<function channel="1" type="SMOKE_DETECTOR_TEAM_V2">
 				<properties>
 					<encryptionEnabledByDefault>true</encryptionEnabledByDefault>
 					<direction>sender</direction>
@@ -486,7 +504,6 @@
 			<variables id="smoke_detector_team_ch_values--1">
 				<parameter id="STATE">
 					<properties>
-						<writeable>false</writeable>
 						<control>DANGER.STATE</control>
 						<casts>
 							<booleanInteger>
@@ -509,7 +526,6 @@
 				</parameter>
 				<parameter id="INSTALL_TEST">
 					<properties>
-						<writeable>false</writeable>
 						<internal>true</internal>
 					</properties>
 					<logicalAction/>
@@ -524,6 +540,15 @@
 							<type>event</type>
 						</packet>
 					</packets>
+				</parameter>
+				<parameter id="SENDERADDRESS">
+					<properties>
+						<writeable>false</writeable>
+					</properties>
+					<logicalString/>
+					<physicalString groupId="">
+						<operationType>command</operationType>
+					</physicalString>
 				</parameter>
 			</variables>
 			<linkParameters id="sd_team_ch_link--1">

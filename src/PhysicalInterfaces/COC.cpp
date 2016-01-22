@@ -469,12 +469,14 @@ void COC::lineReceived(const std::string& data)
 			{
 				bool aesHandshake = false;
 				bool wakeUp = false;
+				bool knowsPeer = false;
 				try
 				{
 					std::lock_guard<std::mutex> peersGuard(_peersMutex);
 					std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
 					if(peerIterator != _peers.end())
 					{
+						knowsPeer = true;
 						wakeUp = peerIterator->second.wakeUp;
 						if(packet->messageType() == 0x03)
 						{
@@ -601,7 +603,7 @@ void COC::lineReceived(const std::string& data)
 				}
 				else
 				{
-					if(packet->controlByte() & 0x20)
+					if(knowsPeer && (packet->controlByte() & 0x20))
 					{
 						std::vector<uint8_t> payload { 0 };
 						uint8_t controlByte = 0x80;

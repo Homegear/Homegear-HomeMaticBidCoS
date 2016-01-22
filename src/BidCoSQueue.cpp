@@ -216,13 +216,13 @@ void BidCoSQueue::dispose()
 		if(_disposing) return;
 		_disposing = true;
 		_startResendThreadMutex.lock();
-		if(_startResendThread.joinable()) _startResendThread.join();
+		GD::bl->threadManager.join(_startResendThread);
 		_startResendThreadMutex.unlock();
 		_pushPendingQueueThreadMutex.lock();
-		if(_pushPendingQueueThread.joinable()) _pushPendingQueueThread.join();
+		GD::bl->threadManager.join(_pushPendingQueueThread);
 		_pushPendingQueueThreadMutex.unlock();
 		_sendThreadMutex.lock();
-        if(_sendThread.joinable()) _sendThread.join();
+		GD::bl->threadManager.join(_sendThread);
         _sendThreadMutex.unlock();
 		stopResendThread();
 		stopPopWaitThread();
@@ -361,14 +361,14 @@ void BidCoSQueue::resend(uint32_t threadId, bool burst)
 				bool stealthy = _queue.front().stealthy;
 				_queueMutex.unlock();
 				_sendThreadMutex.lock();
-				if(_sendThread.joinable()) _sendThread.join();
+				GD::bl->threadManager.join(_sendThread);
 				if(_stopResendThread || _disposing)
 				{
 					_sendThreadMutex.unlock();
 					return;
 				}
-				_sendThread = std::thread(&BidCoSQueue::send, this, packet, stealthy);
-				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
+
+				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, packet, stealthy);
 				_sendThreadMutex.unlock();
 			}
 			else _queueMutex.unlock(); //Has to be unlocked before startResendThread
@@ -382,8 +382,8 @@ void BidCoSQueue::resend(uint32_t threadId, bool burst)
 					 _startResendThreadMutex.unlock();
 					 return;
 				}
-				if(_startResendThread.joinable()) _startResendThread.join();
-				_startResendThread = std::thread(&BidCoSQueue::startResendThread, this, forceResend);
+				GD::bl->threadManager.join(_startResendThread);
+				GD::bl->threadManager.start(_startResendThread, true, &BidCoSQueue::startResendThread, this, forceResend);
 				_startResendThreadMutex.unlock();
 			}
 			else _resendCounter = 0;
@@ -436,9 +436,8 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSPacket> packet, bool stealthy, bool
 					_sendThreadMutex.unlock();
 					return;
 				}
-				if(_sendThread.joinable()) _sendThread.join();
-				_sendThread = std::thread(&BidCoSQueue::send, this, entry.getPacket(), entry.stealthy);
-				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
+				GD::bl->threadManager.join(_sendThread);
+				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, entry.getPacket(), entry.stealthy);
 				_sendThreadMutex.unlock();
 				startResendThread(forceResend);
 			}
@@ -603,9 +602,8 @@ void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy,
 					_sendThreadMutex.unlock();
 					return;
 				}
-				if(_sendThread.joinable()) _sendThread.join();
-				_sendThread = std::thread(&BidCoSQueue::send, this, entry.getPacket(), entry.stealthy);
-				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
+				GD::bl->threadManager.join(_sendThread);
+				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, entry.getPacket(), entry.stealthy);
 				_sendThreadMutex.unlock();
 				startResendThread(forceResend);
 			}
@@ -642,7 +640,7 @@ void BidCoSQueue::stopPopWaitThread()
 	try
 	{
 		_stopPopWaitThread = true;
-		if(_popWaitThread.joinable()) _popWaitThread.join();
+		GD::bl->threadManager.join(_popWaitThread);
 		_stopPopWaitThread = false;
 	}
 	catch(const std::exception& ex)
@@ -666,8 +664,7 @@ void BidCoSQueue::popWait(uint32_t waitingTime)
 		if(_disposing) return;
 		stopResendThread();
 		stopPopWaitThread();
-		_popWaitThread = std::thread(&BidCoSQueue::popWaitThread, this, _popWaitThreadId++, waitingTime);
-		BaseLib::Threads::setThreadPriority(GD::bl, _popWaitThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
+		GD::bl->threadManager.start(_popWaitThread, true, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::popWaitThread, this, _popWaitThreadId++, waitingTime);
 	}
 	catch(const std::exception& ex)
     {
@@ -747,7 +744,7 @@ void BidCoSQueue::stopResendThread()
 	{
 		_resendThreadMutex.lock();
 		_stopResendThread = true;
-		if(_resendThread.joinable()) _resendThread.join();
+		GD::bl->threadManager.join(_resendThread);
 		_stopResendThread = false;
 	}
 	catch(const std::exception& ex)
@@ -795,10 +792,9 @@ void BidCoSQueue::startResendThread(bool force)
 			try
 			{
 				_stopResendThread = true;
-				if(_resendThread.joinable()) _resendThread.join();
+				GD::bl->threadManager.join(_resendThread);
 				_stopResendThread = false;
-				_resendThread = std::thread(&BidCoSQueue::resend, this, _resendThreadId++, burst);
-				BaseLib::Threads::setThreadPriority(GD::bl, _resendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
+				GD::bl->threadManager.start(_resendThread, true, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::resend, this, _resendThreadId++, burst);
 			}
 			catch(const std::exception& ex)
 			{
@@ -924,11 +920,10 @@ void BidCoSQueue::pushPendingQueue()
 						_sendThreadMutex.unlock();
 						return;
 					}
-					if(_sendThread.joinable()) _sendThread.join();
+					GD::bl->threadManager.join(_sendThread);
 					_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-					_sendThread = std::thread(&BidCoSQueue::send, this, i->getPacket(), i->stealthy);
+					GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, i->getPacket(), i->stealthy);
 					_sendThreadMutex.unlock();
-					BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
 					startResendThread(i->forceResend);
 				}
 			}
@@ -1000,9 +995,8 @@ void BidCoSQueue::nextQueueEntry()
 					_pushPendingQueueThreadMutex.unlock();
 					return;
 				}
-				if(_pushPendingQueueThread.joinable()) _pushPendingQueueThread.join();
-				_pushPendingQueueThread = std::thread(&BidCoSQueue::pushPendingQueue, this);
-				BaseLib::Threads::setThreadPriority(GD::bl, _pushPendingQueueThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
+				GD::bl->threadManager.join(_pushPendingQueueThread);
+				GD::bl->threadManager.start(_pushPendingQueueThread, true, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::pushPendingQueue, this);
 				_pushPendingQueueThreadMutex.unlock();
 				return;
 			}
@@ -1022,10 +1016,9 @@ void BidCoSQueue::nextQueueEntry()
 					_sendThreadMutex.unlock();
 					return;
 				}
-				if(_sendThread.joinable()) _sendThread.join();
-				_sendThread = std::thread(&BidCoSQueue::send, this, packet, stealthy);
+				GD::bl->threadManager.join(_sendThread);
+				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, packet, stealthy);
 				_sendThreadMutex.unlock();
-				BaseLib::Threads::setThreadPriority(GD::bl, _sendThread.native_handle(), GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy());
 				startResendThread(forceResend);
 			}
 			else _queueMutex.unlock();

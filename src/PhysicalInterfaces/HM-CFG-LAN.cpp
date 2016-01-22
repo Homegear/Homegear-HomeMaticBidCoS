@@ -63,11 +63,8 @@ HM_CFG_LAN::~HM_CFG_LAN()
 {
 	try
 	{
-		if(_listenThread.joinable())
-		{
-			_stopCallbackThread = true;
-			_listenThread.join();
-		}
+		_stopCallbackThread = true;
+		GD::bl->threadManager.join(_listenThread);
 		if(_useAES) aesCleanup();
 	}
     catch(const std::exception& ex)
@@ -381,8 +378,8 @@ void HM_CFG_LAN::startListening()
 		//_socket->open();
 		//_out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
-		_listenThread = std::thread(&HM_CFG_LAN::listen, this);
-		if(_settings->listenThreadPriority > -1) BaseLib::Threads::setThreadPriority(_bl, _listenThread.native_handle(), _settings->listenThreadPriority, _settings->listenThreadPolicy);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_CFG_LAN::listen, this);
+		else GD::bl->threadManager.start(_listenThread, true, &HM_CFG_LAN::listen, this);
 		IPhysicalInterface::startListening();
 	}
     catch(const std::exception& ex)
@@ -429,11 +426,8 @@ void HM_CFG_LAN::stopListening()
 {
 	try
 	{
-		if(_listenThread.joinable())
-		{
-			_stopCallbackThread = true;
-			_listenThread.join();
-		}
+		_stopCallbackThread = true;
+		GD::bl->threadManager.join(_listenThread);
 		_stopCallbackThread = false;
 		_socket->close();
 		if(_useAES) aesCleanup();
@@ -459,6 +453,7 @@ void HM_CFG_LAN::createInitCommandQueue()
 {
 	try
 	{
+		_initStarted = GD::bl->hf.getTime();
 		_initComplete = false;
 		_initCommandQueue.clear();
 
@@ -937,6 +932,11 @@ void HM_CFG_LAN::processInit(std::string& packet)
 			_initCommandQueue.pop_front();
 			sendPeers();
 		}
+	}
+	else if(GD::bl->hf.getTime() - _initStarted > 30000)
+	{
+		_out.printWarning("Warning: Init queue did not complete within 30 seconds. Reconnecting...");
+		reconnect();
 	}
 }
 

@@ -20,7 +20,7 @@
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
-		<function channel="0" type="MAINTENANCE" channelCount="1">
+		<function channel="0" type="MAINTENANCE">
 			<properties>
 				<internal>true</internal>
 			</properties>
@@ -45,12 +45,12 @@
 			<variables>remote_ch_values--1</variables>
 			<linkParameters>remote_ch_link--1</linkParameters>
 		</function>
-		<function channel="17" type="CENTRAL_KEY" channelCount="1">
+		<function channel="17" type="CENTRAL_KEY">
 			<properties/>
 			<configParameters>remote_ch_master--17</configParameters>
 			<variables>remote_ch_values--17</variables>
 		</function>
-		<function channel="18" type="DISPLAY" channelCount="1">
+		<function channel="18" type="DISPLAY">
 			<properties/>
 			<configParameters>display_ch_master--18</configParameters>
 			<variables>display_ch_values--18</variables>
@@ -770,6 +770,31 @@
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="POLLING">
+				<properties>
+					<internal>true</internal>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POLLING_INTERVAL">
+				<properties>
+					<internal>true</internal>
+					<unit>min</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>360</minimumValue>
+					<maximumValue>1440</maximumValue>
+					<defaultValue>360</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
 		</configParameters>
 		<variables id="display_ch_values--18">
 			<parameter id="TEXT">
@@ -1167,31 +1192,6 @@
 				<logicalInteger/>
 				<physicalInteger groupId="RSSI_PEER">
 					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING">
-				<properties>
-					<internal>true</internal>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POLLING_INTERVAL">
-				<properties>
-					<internal>true</internal>
-					<unit>min</unit>
-				</properties>
-				<logicalInteger>
-					<minimumValue>360</minimumValue>
-					<maximumValue>1440</maximumValue>
-					<defaultValue>360</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="CENTRAL_ADDRESS_SPOOFED">

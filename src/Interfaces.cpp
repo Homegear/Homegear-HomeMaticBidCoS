@@ -34,12 +34,8 @@
 #include "PhysicalInterfaces/Cul.h"
 #include "PhysicalInterfaces/CUNO.h"
 #include "PhysicalInterfaces/TICC1100.h"
-#include "PhysicalInterfaces/TICC1101.h"
 #include "PhysicalInterfaces/HM-CFG-LAN.h"
 #include "PhysicalInterfaces/HM-LGW.h"
-#ifdef BIDCOSRTLSDRLAN
-#include "PhysicalInterfaces/RTLSDR-LAN.h"
-#endif
 
 namespace BidCoS
 {

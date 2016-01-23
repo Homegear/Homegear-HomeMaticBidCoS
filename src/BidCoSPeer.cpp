@@ -2146,7 +2146,9 @@ void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi, ui
 			{
 				_bestInterfaceLast = _bestInterfaceCurrent;
 				GD::bl->out.printInfo("Info: Changing interface of peer " + std::to_string(_peerID) + " to " + std::get<2>(_bestInterfaceLast) + ", because the reception is better.");
+				if(_bl->settings.devLog()) GD::bl->out.printMessage("Devlog: Changing physical interface from " + _physicalInterfaceID + " to " + std::get<2>(_bestInterfaceLast) + " start.");
 				setPhysicalInterfaceID(std::get<2>(_bestInterfaceLast));
+				if(_bl->settings.devLog()) GD::bl->out.printMessage("Devlog: Changing physical interface end.");
 			}
 			_bestInterfaceCurrent = std::tuple<int64_t, int32_t, std::string>(messageCounter, 0, "");
 		}

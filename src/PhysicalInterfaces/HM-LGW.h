@@ -132,6 +132,7 @@ class HM_LGW  : public IBidCoSInterface
         std::string _port;
         std::unique_ptr<BaseLib::SocketOperations> _socket;
         std::unique_ptr<BaseLib::SocketOperations> _socketKeepAlive;
+        std::mutex _getResponseMutex;
         std::mutex _requestsMutex;
         std::map<uint8_t, std::shared_ptr<Request>> _requests;
         std::mutex _sendMutex;

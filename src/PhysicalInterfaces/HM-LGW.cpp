@@ -943,6 +943,7 @@ void HM_LGW::getResponse(const std::vector<char>& packet, std::vector<uint8_t>& 
 	try
     {
 		if(packet.size() < 8 || _stopped) return;
+		std::lock_guard<std::mutex> getResponseGuard(_getResponseMutex);
 		std::shared_ptr<Request> request(new Request(responseControlByte, responseType));
 		_requestsMutex.lock();
 		_requests[messageCounter] = request;
@@ -1908,6 +1909,7 @@ void HM_LGW::sendTimePacket()
 {
 	try
     {
+		std::lock_guard<std::mutex> getResponseGuard(_getResponseMutex);
 		const auto timePoint = std::chrono::system_clock::now();
 		time_t t = std::chrono::system_clock::to_time_t(timePoint);
 		tm* localTime = std::localtime(&t);

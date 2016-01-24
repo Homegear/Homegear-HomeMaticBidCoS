@@ -2140,7 +2140,8 @@ void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi, ui
 		}
 		if(std::get<2>(_bestInterfaceCurrent).empty() || std::get<1>(_bestInterfaceCurrent) == 0 || std::get<1>(_bestInterfaceCurrent) > rssi)
 		{
-			_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID);
+			std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator interfaceIterator = GD::physicalInterfaces.find(interfaceID);
+			if(interfaceIterator != GD::physicalInterfaces.end() && interfaceIterator->second->isOpen()) _bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID);
 		}
 		if(std::get<2>(_bestInterfaceLast) == interfaceID) _bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID); //Update message counter and rssi
 	}

@@ -75,15 +75,13 @@ class HM_LGW  : public IBidCoSInterface
         void stopListening();
         virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
         virtual bool isOpen() { return _initComplete && _socket->connected(); }
-        virtual bool firmwareUpdatesSupported() { return true; }
 
         virtual void addPeer(PeerInfo peerInfo);
         virtual void addPeers(std::vector<PeerInfo>& peerInfos);
         virtual void setWakeUp(PeerInfo peerInfo);
         virtual void setAES(PeerInfo peerInfo, int32_t channel);
         virtual void removePeer(int32_t address);
-        virtual void sendPeers();
-        virtual void sendPeer(PeerInfo& peerInfo);
+
         void enableUpdateMode();
         void disableUpdateMode();
     protected:
@@ -178,6 +176,8 @@ class HM_LGW  : public IBidCoSInterface
 
         void reconnect();
         void doInit();
+        void sendPeers();
+        void sendPeer(PeerInfo& peerInfo);
         void processData(std::vector<uint8_t>& data);
         void processDataKeepAlive(std::vector<uint8_t>& data);
         void processPacket(std::vector<uint8_t>& packet);

@@ -179,6 +179,7 @@ void HM_CFG_LAN::sendPeers()
 		{
 			send(getPeerInfoPacket(i->second));
 		}
+		_out.printInfo("Info: Initialization completed.");
 		_initComplete = true; //Init complete is set here within _peersMutex, so there is no conflict with addPeer() and peers are not sent twice
 	}
     catch(const std::exception& ex)
@@ -270,9 +271,10 @@ void HM_CFG_LAN::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 
 		}
 
-		if(!_initComplete)
+		if(!isOpen())
 		{
-			_out.printWarning(std::string("Warning: !!!Not!!! sending packet, because init sequence is not complete: ") + bidCoSPacket->hexString());
+			if(!_initComplete) _out.printWarning(std::string("Warning: !!!Not!!! sending packet, because init sequence is not complete: ") + bidCoSPacket->hexString());
+			else _out.printWarning(std::string("Warning: !!!Not!!! sending packet, because device is not connected or opened: ") + bidCoSPacket->hexString());
 			return;
 		}
 

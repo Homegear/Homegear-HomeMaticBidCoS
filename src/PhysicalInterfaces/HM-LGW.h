@@ -73,12 +73,8 @@ class HM_LGW  : public IBidCoSInterface
         virtual ~HM_LGW();
         void startListening();
         void stopListening();
-        void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
-        int64_t lastAction() { return _lastAction; }
+        virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
         virtual bool isOpen() { return _initComplete && _socket->connected(); }
-        virtual bool aesSupported() { return true; }
-        virtual bool autoResend() { return true; }
-        virtual bool needsPeers() { return true; }
         virtual bool firmwareUpdatesSupported() { return true; }
 
         virtual void addPeer(PeerInfo peerInfo);
@@ -91,6 +87,29 @@ class HM_LGW  : public IBidCoSInterface
         void enableUpdateMode();
         void disableUpdateMode();
     protected:
+        enum class AddPeerQueueEntryType
+		{
+			add,
+			remove,
+			aes,
+			wakeUp
+		};
+
+        class AddPeerQueueEntry : public BaseLib::ITimedQueueEntry
+		{
+		public:
+			AddPeerQueueEntry() {}
+			AddPeerQueueEntry(PeerInfo& peerInfo, AddPeerQueueEntryType type, int64_t sendingTime) : ITimedQueueEntry(sendingTime) { this->peerInfo = peerInfo; this->type = type; }
+			AddPeerQueueEntry(PeerInfo& peerInfo, int32_t channel, AddPeerQueueEntryType type, int64_t sendingTime) : ITimedQueueEntry(sendingTime) { this->peerInfo = peerInfo; this->channel = channel; this->type = type; }
+			AddPeerQueueEntry(int32_t address, AddPeerQueueEntryType type, int64_t sendingTime) : ITimedQueueEntry(sendingTime) { this->address = address; this->type = type; }
+			virtual ~AddPeerQueueEntry() {}
+
+			AddPeerQueueEntryType type = AddPeerQueueEntryType::add;
+			int32_t address = 0;
+			int32_t channel = 0;
+			PeerInfo peerInfo;
+		};
+
         class Request
         {
         public:
@@ -111,9 +130,6 @@ class HM_LGW  : public IBidCoSInterface
         BaseLib::Math _math;
         std::thread _listenThreadKeepAlive;
         std::thread _initThread;
-        std::mutex _peersMutex;
-        std::map<int32_t, PeerInfo> _peers;
-        int64_t _lastAction = 0;
         std::string _hostname;
         std::string _port;
         std::unique_ptr<BaseLib::SocketOperations> _socket;
@@ -123,7 +139,6 @@ class HM_LGW  : public IBidCoSInterface
         std::mutex _sendMutex;
         std::mutex _sendMutexKeepAlive;
         bool _initStarted = false;
-        bool _initComplete = false;
         bool _firstPacket = true;
         bool _initCompleteKeepAlive = false;
         int32_t _lastKeepAlive1 = 0;
@@ -132,7 +147,6 @@ class HM_LGW  : public IBidCoSInterface
         int32_t _lastKeepAliveResponse2 = 0;
         int32_t _lastTimePacket = 0;
         int64_t _startUpTime = 0;
-        int32_t _myAddress = 0x1C6940;
         std::vector<uint8_t> _packetBuffer;
         uint8_t _packetIndex = 0;
         uint8_t _packetIndexKeepAlive = 0;
@@ -184,6 +198,7 @@ class HM_LGW  : public IBidCoSInterface
         void listenKeepAlive();
         void getFileDescriptor(bool& timedout);
         std::shared_ptr<BaseLib::FileDescriptor> getConnection(std::string& hostname, const std::string& port, std::string& ipAddress);
+        virtual void processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
     private:
 };
 

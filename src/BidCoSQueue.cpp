@@ -95,7 +95,7 @@ void BidCoSQueue::serialize(std::vector<uint8_t>& encodedData)
 		{
 			encoder.encodeByte(encodedData, (uint8_t)i->getType());
 			encoder.encodeBoolean(encodedData, i->stealthy);
-			encoder.encodeBoolean(encodedData, i->forceResend);
+			encoder.encodeBoolean(encodedData, true); //dummy
 			if(!i->getPacket()) encoder.encodeBoolean(encodedData, false);
 			else
 			{
@@ -155,7 +155,7 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 			BidCoSQueueEntry* entry = &_queue.back();
 			entry->setType((QueueEntryType)decoder.decodeByte(*serializedData, position));
 			entry->stealthy = decoder.decodeBoolean(*serializedData, position);
-			entry->forceResend = decoder.decodeBoolean(*serializedData, position);
+			decoder.decodeBoolean(*serializedData, position); //dummy
 			int32_t packetExists = decoder.decodeBoolean(*serializedData, position);
 			if(packetExists)
 			{
@@ -224,7 +224,6 @@ void BidCoSQueue::dispose()
 		_sendThreadMutex.lock();
 		GD::bl->threadManager.join(_sendThread);
         _sendThreadMutex.unlock();
-		stopResendThread();
 		stopPopWaitThread();
 		_queueMutex.lock();
 		_queue.clear();
@@ -264,156 +263,7 @@ bool BidCoSQueue::pendingQueuesEmpty()
 	 return (!_pendingQueues || _pendingQueues->empty());
 }
 
-void BidCoSQueue::resend(uint32_t threadId, bool burst)
-{
-	try
-	{
-		//Add ~100 milliseconds after popping, otherwise the first resend is 100 ms too early.
-		int64_t timeSinceLastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - _lastPop;
-		int32_t i = 0;
-		std::chrono::milliseconds sleepingTime;
-		uint32_t responseDelay = _physicalInterface->responseDelay();
-		if(timeSinceLastPop < responseDelay)
-		{
-			sleepingTime = std::chrono::milliseconds((responseDelay - timeSinceLastPop) / 3);
-			if(_resendCounter == 0)
-			{
-				while(!_stopResendThread && i < 3)
-				{
-					std::this_thread::sleep_for(sleepingTime);
-					i++;
-				}
-			}
-		}
-		if(_stopResendThread) return;
-		if(_resendCounter < 4)
-		{
-			//Sleep for 200 ms 5 times
-			i = 0;
-			if(burst)
-			{
-				longKeepAlive();
-				sleepingTime = std::chrono::milliseconds(100);
-			}
-			else
-			{
-				keepAlive();
-				sleepingTime = std::chrono::milliseconds(25);
-			}
-			while(!_stopResendThread && i < 8)
-			{
-				std::this_thread::sleep_for(sleepingTime);
-				i++;
-			}
-		}
-		else if(_resendCounter >= 4 && _resendCounter < 6)
-		{
-			longKeepAlive();
-			//Sleep for 500 ms
-			i = 0;
-			sleepingTime = std::chrono::milliseconds(50);
-			while(!_stopResendThread && i < 10)
-			{
-				std::this_thread::sleep_for(sleepingTime);
-				i++;
-			}
-		}
-		else if(_resendCounter >= 6 && _resendCounter < 8)
-		{
-			longKeepAlive();
-			//Sleep for 1000 ms
-			i = 0;
-			sleepingTime = std::chrono::milliseconds(50);
-			while(!_stopResendThread && i < 20)
-			{
-				std::this_thread::sleep_for(sleepingTime);
-				i++;
-			}
-		}
-		else
-		{
-			longKeepAlive();
-			//Sleep for 2000 ms
-			i = 0;
-			sleepingTime = std::chrono::milliseconds(100);
-			while(!_stopResendThread && i < 20)
-			{
-				std::this_thread::sleep_for(sleepingTime);
-				i++;
-			}
-		}
-		if(_stopResendThread) return;
-
-		_queueMutex.lock();
-		if(!_queue.empty() && !_stopResendThread)
-		{
-			if(_stopResendThread)
-			{
-				_queueMutex.unlock();
-				return;
-			}
-			bool forceResend = _queue.front().forceResend;
-			if(!noSending)
-			{
-				GD::out.printDebug("Sending from resend thread " + std::to_string(threadId) + " of queue " + std::to_string(id) + ".");
-				std::shared_ptr<BidCoSPacket> packet = _queue.front().getPacket();
-				if(!packet) return;
-				bool stealthy = _queue.front().stealthy;
-				_queueMutex.unlock();
-				_sendThreadMutex.lock();
-				GD::bl->threadManager.join(_sendThread);
-				if(_stopResendThread || _disposing)
-				{
-					_sendThreadMutex.unlock();
-					return;
-				}
-
-				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, packet, stealthy);
-				_sendThreadMutex.unlock();
-			}
-			else _queueMutex.unlock(); //Has to be unlocked before startResendThread
-			if(_stopResendThread) return;
-			if(_resendCounter < ((signed)retries - 2)) //This actually means that the message will be sent three times all together if there is no response
-			{
-				_resendCounter++;
-				_startResendThreadMutex.lock();
-				if(_disposing)
-				{
-					 _startResendThreadMutex.unlock();
-					 return;
-				}
-				GD::bl->threadManager.join(_startResendThread);
-				GD::bl->threadManager.start(_startResendThread, true, &BidCoSQueue::startResendThread, this, forceResend);
-				_startResendThreadMutex.unlock();
-			}
-			else _resendCounter = 0;
-		}
-		else _queueMutex.unlock();
-	}
-	catch(const std::exception& ex)
-    {
-		_queueMutex.unlock();
-		_sendThreadMutex.unlock();
-		_startResendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	_startResendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	_startResendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void BidCoSQueue::push(std::shared_ptr<BidCoSPacket> packet, bool stealthy, bool forceResend)
+void BidCoSQueue::push(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
 {
 	try
 	{
@@ -421,13 +271,11 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSPacket> packet, bool stealthy, bool
 		BidCoSQueueEntry entry;
 		entry.setPacket(packet, true);
 		entry.stealthy = stealthy;
-		entry.forceResend = forceResend;
 		_queueMutex.lock();
 		if(!noSending && (_queue.size() == 0 || (_queue.size() == 1 && _queue.front().getType() == QueueEntryType::MESSAGE)))
 		{
 			_queue.push_back(entry);
 			_queueMutex.unlock();
-			_resendCounter = 0;
 			if(!noSending)
 			{
 				_sendThreadMutex.lock();
@@ -439,7 +287,6 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSPacket> packet, bool stealthy, bool
 				GD::bl->threadManager.join(_sendThread);
 				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, entry.getPacket(), entry.stealthy);
 				_sendThreadMutex.unlock();
-				startResendThread(forceResend);
 			}
 		}
 		else
@@ -534,7 +381,7 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSQueue> pendingQueue, bool popImmedi
     _queueMutex.unlock();
 }
 
-void BidCoSQueue::push(std::shared_ptr<BidCoSMessage> message, bool forceResend)
+void BidCoSQueue::push(std::shared_ptr<BidCoSMessage> message)
 {
 	try
 	{
@@ -542,7 +389,6 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSMessage> message, bool forceResend)
 		if(!message) return;
 		BidCoSQueueEntry entry;
 		entry.setMessage(message, true);
-		entry.forceResend = forceResend;
 		_queueMutex.lock();
 		_queue.push_back(entry);
 		_queueMutex.unlock();
@@ -567,7 +413,7 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSMessage> message, bool forceResend)
     }
 }
 
-void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy, bool popBeforePushing, bool forceResend)
+void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy, bool popBeforePushing)
 {
 	try
 	{
@@ -577,9 +423,6 @@ void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy,
 		{
 			GD::out.printDebug("Popping from BidCoSQueue and pushing packet at the front: " + std::to_string(id));
 			if(_popWaitThread.joinable()) _stopPopWaitThread = true;
-			_resendThreadMutex.lock();
-			if(_resendThread.joinable()) _stopResendThread = true;
-			_resendThreadMutex.unlock();
 			_queueMutex.lock();
 			_queue.pop_front();
 			_queueMutex.unlock();
@@ -587,13 +430,11 @@ void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy,
 		BidCoSQueueEntry entry;
 		entry.setPacket(packet, true);
 		entry.stealthy = stealthy;
-		entry.forceResend = forceResend;
 		if(!noSending)
 		{
 			_queueMutex.lock();
 			_queue.push_front(entry);
 			_queueMutex.unlock();
-			_resendCounter = 0;
 			if(!noSending)
 			{
 				_sendThreadMutex.lock();
@@ -605,7 +446,6 @@ void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy,
 				GD::bl->threadManager.join(_sendThread);
 				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, entry.getPacket(), entry.stealthy);
 				_sendThreadMutex.unlock();
-				startResendThread(forceResend);
 			}
 		}
 		else
@@ -662,7 +502,6 @@ void BidCoSQueue::popWait(uint32_t waitingTime)
 	try
 	{
 		if(_disposing) return;
-		stopResendThread();
 		stopPopWaitThread();
 		GD::bl->threadManager.start(_popWaitThread, true, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::popWaitThread, this, _popWaitThreadId++, waitingTime);
 	}
@@ -738,97 +577,10 @@ void BidCoSQueue::send(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
     }
 }
 
-void BidCoSQueue::stopResendThread()
-{
-	try
-	{
-		_resendThreadMutex.lock();
-		_stopResendThread = true;
-		GD::bl->threadManager.join(_resendThread);
-		_stopResendThread = false;
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    _resendThreadMutex.unlock();
-}
-
-void BidCoSQueue::startResendThread(bool force)
-{
-	try
-	{
-		if(noSending || _disposing) return;
-		_queueMutex.lock();
-		if(_queue.empty())
-		{
-			_queueMutex.unlock();
-			return;
-		}
-		uint8_t controlByte = 0;
-		if(_queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage())
-		{
-			controlByte = _queue.front().getMessage()->getControlByte();
-		}
-		else if(_queue.front().getPacket())
-		{
-			controlByte = _queue.front().getPacket()->controlByte();
-		}
-		else throw BaseLib::Exception("Packet or message pointer of BidCoS queue is empty.");
-
-		_queueMutex.unlock();
-		if(!_physicalInterface->autoResend() && ((!(controlByte & 0x02) && (controlByte & 0x20)) || force)) //Resend when no response?
-		{
-			bool burst = controlByte & 0x10;
-			_resendThreadMutex.lock();
-			try
-			{
-				_stopResendThread = true;
-				GD::bl->threadManager.join(_resendThread);
-				_stopResendThread = false;
-				GD::bl->threadManager.start(_resendThread, true, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::resend, this, _resendThreadId++, burst);
-			}
-			catch(const std::exception& ex)
-			{
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-			}
-			catch(...)
-			{
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-			}
-			_resendThreadMutex.unlock();
-		}
-	}
-	catch(const std::exception& ex)
-    {
-		_queueMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
 void BidCoSQueue::clear()
 {
 	try
 	{
-		stopResendThread();
 		_queueMutex.lock();
 		if(_pendingQueues) _pendingQueues->clear();
 		_queue.clear();
@@ -902,7 +654,6 @@ void BidCoSQueue::pushPendingQueue()
 		_queueType = queue->getQueueType();
 		queueEmptyCallback = queue->queueEmptyCallback;
 		callbackParameter = queue->callbackParameter;
-		retries = queue->retries;
 		pendingQueueID = queue->pendingQueueID;
 		for(std::list<BidCoSQueueEntry>::iterator i = queue->getQueue()->begin(); i != queue->getQueue()->end(); ++i)
 		{
@@ -911,7 +662,6 @@ void BidCoSQueue::pushPendingQueue()
 				_queueMutex.lock();
 				_queue.push_back(*i);
 				_queueMutex.unlock();
-				_resendCounter = 0;
 				if(!noSending)
 				{
 					_sendThreadMutex.lock();
@@ -924,7 +674,6 @@ void BidCoSQueue::pushPendingQueue()
 					_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 					GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, i->getPacket(), i->stealthy);
 					_sendThreadMutex.unlock();
-					startResendThread(i->forceResend);
 				}
 			}
 			else
@@ -979,7 +728,6 @@ void BidCoSQueue::nextQueueEntry()
 			if(_workingOnPendingQueue && !_pendingQueues->empty()) _pendingQueues->pop(pendingQueueID);
 			if(!_pendingQueues || (_pendingQueues && _pendingQueues->empty()))
 			{
-				_stopResendThread = true;
 				GD::out.printInfo("Info: Queue " + std::to_string(id) + " is empty and there are no pending queues.");
 				_workingOnPendingQueue = false;
 				_queueMutex.unlock();
@@ -1003,10 +751,8 @@ void BidCoSQueue::nextQueueEntry()
 		}
 		if(_queue.front().getType() == QueueEntryType::PACKET)
 		{
-			_resendCounter = 0;
 			if(!noSending)
 			{
-				bool forceResend = _queue.front().forceResend;
 				std::shared_ptr<BidCoSPacket> packet = _queue.front().getPacket();
 				bool stealthy = _queue.front().stealthy;
 				_queueMutex.unlock();
@@ -1019,7 +765,6 @@ void BidCoSQueue::nextQueueEntry()
 				GD::bl->threadManager.join(_sendThread);
 				GD::bl->threadManager.start(_sendThread, false, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::send, this, packet, stealthy);
 				_sendThreadMutex.unlock();
-				startResendThread(forceResend);
 			}
 			else _queueMutex.unlock();
 		}
@@ -1056,9 +801,6 @@ void BidCoSQueue::pop()
 		keepAlive();
 		GD::out.printDebug("Popping from BidCoSQueue: " + std::to_string(id));
 		if(_popWaitThread.joinable()) _stopPopWaitThread = true;
-		_resendThreadMutex.lock();
-		if(_resendThread.joinable()) _stopResendThread = true;
-		_resendThreadMutex.unlock();
 		_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		_queueMutex.lock();
 		if(_queue.empty())

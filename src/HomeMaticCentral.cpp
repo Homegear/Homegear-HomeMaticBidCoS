@@ -252,7 +252,7 @@ void HomeMaticCentral::loadPeers()
 			if(!peer->getSerialNumber().empty()) _peersBySerial[peer->getSerialNumber()] = peer;
 			_peersById[peerId] = peer;
 			_peersMutex.unlock();
-			if(peer->getPhysicalInterface()->needsPeers()) peer->getPhysicalInterface()->addPeer(peer->getPeerInfo());
+			peer->getPhysicalInterface()->addPeer(peer->getPeerInfo());
 			if(!peer->getTeamRemoteSerialNumber().empty())
 			{
 				_peersMutex.lock();
@@ -1020,7 +1020,7 @@ void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface>
 			return;
 		}
 		if(!packet || !physicalInterface) return;
-		if(physicalInterface->autoResend() && (packet->controlByte() & 0x20) && delay < 700) delay = 700;
+		if((packet->controlByte() & 0x20) && delay < 700) delay = 700;
 		std::shared_ptr<BidCoSPeer> peer = getPeer(peerAddress);
 		if(!peer) return;
 		for(int32_t i = 0; i < count; i++)
@@ -2789,7 +2789,7 @@ void HomeMaticCentral::deletePeer(uint64_t id)
 		}
 		raiseRPCDeleteDevices(deviceAddresses, deviceInfo);
 		uint64_t virtualPeerId = peer->getVirtualPeerId();
-		if(peer->getPhysicalInterface()->needsPeers()) peer->getPhysicalInterface()->removePeer(peer->getAddress());
+		peer->getPhysicalInterface()->removePeer(peer->getAddress());
 		_peersMutex.lock();
 		if(_peersBySerial.find(peer->getSerialNumber()) != _peersBySerial.end()) _peersBySerial.erase(peer->getSerialNumber());
 		if(_peersById.find(id) != _peersById.end()) _peersById.erase(id);
@@ -2993,25 +2993,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 				GD::out.printWarning("Warning: Device type not supported. Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 				return;
 			}
-			if((rpcDevice->functions.find(0) != rpcDevice->functions.end() && rpcDevice->functions.at(0)->forceEncryption) || (rpcDevice->functions.find(1) != rpcDevice->functions.end() && rpcDevice->functions.at(1)->forceEncryption))
-			{
-				//AES is mandatory try to find AES capable interface, if the default interface has no AES support.
-				if(!peer->getPhysicalInterface()->aesSupported())
-				{
-					for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
-					{
-						if(i->second->aesSupported())
-						{
-							GD::out.printInfo("Info: Setting default interface of new peer to " + i->second->getID() + ", because peer requires AES support.");
-							peer->setPhysicalInterfaceID(i->second->getID());
-							queue->setPhysicalInterface(i->second);
-							break;
-						}
-					}
-				}
-				if(!peer->getPhysicalInterface()->aesSupported()) GD::out.printError("Error: No physical interface supporting AES could be found. Can't pair peer of type with serial number \"" + serialNumber + "\". Trying anyway, but the pairing probably will fail.");
-			}
-			if(peer->getPhysicalInterface()->needsPeers()) peer->getPhysicalInterface()->addPeer(peer->getPeerInfo());
+			peer->getPhysicalInterface()->addPeer(peer->getPeerInfo());
 
 			//CONFIG_START
 			payload.push_back(0);
@@ -3560,7 +3542,7 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 			std::vector<uint8_t> payload;
 			payload.push_back(0x00);
 			std::shared_ptr<BidCoSPacket> ok(new BidCoSPacket(packet->messageCounter(), 0x80, 0x02, _address, packet->senderAddress(), payload));
-			queue->pushFront(ok, true, false, true);
+			queue->pushFront(ok, true, false);
 			//No popping from queue to stay at the same position until all response packets are received!!!
 			//The popping is done with the last packet, which has no BIDI control bit set. See https://sathya.de/HMCWiki/index.php/Examples:Message_Counter
 		}
@@ -3869,7 +3851,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 					GD::out.printMessage("Added peer 0x" + BaseLib::HelperFunctions::getHexString(queue->peer->getAddress()) + ".");
 					for(Functions::iterator i = queue->peer->getRpcDevice()->functions.begin(); i != queue->peer->getRpcDevice()->functions.end(); ++i)
 					{
-						if(queue->peer->getPhysicalInterface()->aesSupported() && i->second->encryptionEnabledByDefault)
+						if(i->second->encryptionEnabledByDefault)
 						{
 							queue->peer->peerInfoPacketsEnabled = false;
 							PVariable variables(new Variable(VariableType::tStruct));

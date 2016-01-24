@@ -35,9 +35,8 @@
 namespace BidCoS
 {
 
-Cul::Cul(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings), BaseLib::ITimedQueue(GD::bl)
+Cul::Cul(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings)
 {
-	_bl = GD::bl;
 	_out.init(GD::bl);
 	_out.setPrefix(GD::out.getPrefix() + "CUL \"" + settings->id + "\": ");
 
@@ -72,215 +71,32 @@ Cul::~Cul()
     }
 }
 
-void Cul::addPeer(PeerInfo peerInfo)
+void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
-		if(peerInfo.address == 0) return;
-		_peersMutex.lock();
-		//Remove old peer first. removePeer() is not called, so we don't need to unlock _peersMutex
-		if(_peers.find(peerInfo.address) != _peers.end()) _peers.erase(peerInfo.address);
-		_peers[peerInfo.address] = peerInfo;
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    _peersMutex.unlock();
-}
-
-void Cul::addPeers(std::vector<PeerInfo>& peerInfos)
-{
-	try
-	{
-		for(std::vector<PeerInfo>::iterator i = peerInfos.begin(); i != peerInfos.end(); ++i)
+		if(_fileDescriptor->descriptor == -1)
 		{
-			addPeer(*i);
-		}
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void Cul::removePeer(int32_t address)
-{
-	try
-	{
-		_peersMutex.lock();
-		if(_peers.find(address) != _peers.end()) _peers.erase(address);
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    _peersMutex.unlock();
-}
-
-void Cul::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
-{
-	try
-	{
-		std::shared_ptr<QueueEntry> queueEntry;
-		queueEntry = std::dynamic_pointer_cast<QueueEntry>(entry);
-		if(!queueEntry || !queueEntry->packet) return;
-		writeToDevice("As" + queueEntry->packet->hexString() + "\n", true);
-		queueEntry->packet->setTimeSending(BaseLib::HelperFunctions::getTime());
-
-		// {{{ Remove packet from queue id map
-			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
-			std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(queueEntry->packet->destinationAddress());
-			if(idIterator == _queueIds.end()) return;
-			idIterator->second.erase(id);
-			if(idIterator->second.empty()) _queueIds.erase(idIterator);
-		// }}}
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
-}
-
-void Cul::queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime)
-{
-	try
-	{
-		if(sendingTime == 0)
-		{
-			sendingTime = packet->timeReceived();
-			if(sendingTime <= 0) sendingTime = BaseLib::HelperFunctions::getTime();
-			sendingTime = sendingTime + _settings->responseDelay;
-		}
-		std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new QueueEntry(sendingTime, packet));
-		int64_t id;
-		if(!enqueue(0, entry, id)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
-
-		// {{{ Add packet to queue id map
-			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
-			_queueIds[packet->destinationAddress()].insert(id);
-		// }}}
-	}
-	catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void Cul::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
-{
-	try
-	{
-		if(!packet)
-		{
-			_out.printWarning("Warning: Packet was nullptr.");
+			_bl->out.printError("Error: Couldn't write to CUL device, because the file descriptor is not valid: " + _settings->device);
 			return;
 		}
-		if(_fileDescriptor->descriptor == -1) throw(BaseLib::Exception("Couldn't write to CUL device, because the file descriptor is not valid: " + _settings->device));
-		if(packet->payload()->size() > 54)
-		{
-			if(_bl->debugLevel >= 2) _out.printError("Error: Tried to send packet larger than 64 bytes. That is not supported.");
-			return;
-		}
-		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
-		if(!bidCoSPacket) return;
-		if(_updateMode && !bidCoSPacket->isUpdatePacket())
-		{
-			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ", because update mode is enabled.");
-			return;
-		}
-		if(bidCoSPacket->messageType() == 0x02 && packet->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
-		{
-			_out.printDebug("Debug: Ignoring ACK packet.", 6);
-			_lastPacketSent = BaseLib::HelperFunctions::getTime();
-			return;
-		}
-		if((bidCoSPacket->controlByte() & 0x01) && packet->senderAddress() == _myAddress && (bidCoSPacket->payload()->empty() || (bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)))
-		{
-			_out.printDebug("Debug: Ignoring wake up packet.", 6);
-			_lastPacketSent = BaseLib::HelperFunctions::getTime();
-			return;
-		}
-		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key
-		{
-			std::lock_guard<std::mutex> peersGuard(_peersMutex);
-			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->destinationAddress());
-			if(peerIterator != _peers.end())
-			{
-				if((bidCoSPacket->payload()->at(1) + 2) / 2 > peerIterator->second.keyIndex)
-				{
-					if(!_aesHandshake->generateKeyChangePacket(bidCoSPacket)) return;
-				}
-				else
-				{
-					_out.printInfo("Info: Ignoring AES key update packet, because a key with this index is already set.");
-					std::vector<uint8_t> payload { 0 };
-					std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(bidCoSPacket->messageCounter(), 0x80, 0x02, bidCoSPacket->destinationAddress(), _myAddress, payload));
-					raisePacketReceived(ackPacket);
-					return;
-				}
-			}
-
-		}
-
+		std::string packetString = packet->hexString();
+		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
 		writeToDevice("As" + packet->hexString() + "\n", true);
-		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
-		_aesHandshake->setMFrame(bidCoSPacket);
-		queuePacket(bidCoSPacket, packet->timeSending() + 200);
-		queuePacket(bidCoSPacket, packet->timeSending() + 400);
+		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
 	catch(const std::exception& ex)
     {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(BaseLib::Exception& ex)
     {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(...)
     {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+	}
 }
 
 void Cul::enableUpdateMode()
@@ -583,7 +399,7 @@ void Cul::startListening()
 		_myAddress = GD::family->getCentral()->getAddress();
 		_aesHandshake->setMyAddress(_myAddress);
 
-		startQueue(0, 45, SCHED_FIFO);
+		IBidCoSInterface::startListening();
 		openDevice();
 		if(_fileDescriptor->descriptor == -1) return;
 		_stopped = false;
@@ -591,7 +407,6 @@ void Cul::startListening()
 		std::this_thread::sleep_for(std::chrono::milliseconds(400));
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Cul::listen, this);
 		else GD::bl->threadManager.start(_listenThread, true, &Cul::listen, this);
-		IPhysicalInterface::startListening();
 	}
     catch(const std::exception& ex)
     {
@@ -611,7 +426,7 @@ void Cul::stopListening()
 {
 	try
 	{
-		stopQueue(0);
+		IBidCoSInterface::stopListening();
 		_stopCallbackThread = true;
 		GD::bl->threadManager.join(_listenThread);
 		_stopCallbackThread = false;
@@ -623,7 +438,6 @@ void Cul::stopListening()
 			closeDevice();
 		}
 		_stopped = true;
-		IPhysicalInterface::stopListening();
 	}
 	catch(const std::exception& ex)
     {
@@ -654,189 +468,8 @@ void Cul::listen()
         	std::string packetHex = readFromDevice();
         	if(packetHex.size() > 21) //21 is minimal packet length (=10 bytes + CUL "A")
         	{
-				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
-				if(packet->destinationAddress() == _myAddress)
-				{
-					bool aesHandshake = false;
-					bool wakeUp = false;
-					bool knowsPeer = false;
-					try
-					{
-						std::lock_guard<std::mutex> peersGuard(_peersMutex);
-						std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
-						if(peerIterator != _peers.end())
-						{
-							knowsPeer = true;
-							wakeUp = peerIterator->second.wakeUp;
-							if(packet->messageType() == 0x03)
-							{
-								std::shared_ptr<BidCoSPacket> mFrame;
-								std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame, peerIterator->second.keyIndex, wakeUp);
-								if(!aFrame)
-								{
-									if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
-									else _out.printError("Error: No m-Frame found for r-Frame.");
-									continue;
-								}
-								if(_bl->debugLevel >= 5) _out.printDebug("Debug: AES handshake successful.");
-								queuePacket(aFrame);
-								mFrame->setTimeReceived(BaseLib::HelperFunctions::getTime());
-								raisePacketReceived(mFrame);
-
-								continue;
-							}
-							else if(packet->messageType() == 0x02 && packet->payload()->size() == 8 && packet->payload()->at(0) == 0x04)
-							{
-								peerIterator->second.keyIndex = packet->payload()->back() / 2;
-								std::shared_ptr<BidCoSPacket> mFrame;
-								std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame, peerIterator->second.keyIndex);
-								if(!rFrame)
-								{
-									if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
-									else _out.printError("Error: No m-Frame found for c-Frame.");
-									continue;
-								}
-
-								// {{{ Remove wrongly queued non AES packets from queue id map
-									bool requeue = false;
-									{
-										std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
-										std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
-
-										if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 300)
-										{
-											requeue = true;
-											for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
-											{
-												removeQueueEntry(0, *queueId);
-											}
-											_queueIds.erase(idIterator);
-										}
-									}
-									if(requeue)
-									{
-										queuePacket(mFrame, mFrame->timeSending() + 600);
-										queuePacket(mFrame, mFrame->timeSending() + 1200);
-									}
-								// }}}
-
-								queuePacket(rFrame);
-								continue;
-							}
-							else if(packet->messageType() == 0x02)
-							{
-								if(_aesHandshake->handshakeStarted(packet->senderAddress()) && !_aesHandshake->checkAFrame(packet))
-								{
-									_out.printError("Error: ACK has invalid signature.");
-									continue;
-								}
-
-								// {{{ Remove packet from queue id map
-								{
-									std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
-									std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
-									if(idIterator != _queueIds.end())
-									{
-										for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
-										{
-											removeQueueEntry(0, *queueId);
-										}
-										_queueIds.erase(idIterator);
-									}
-								}
-								// }}}
-							}
-							else
-							{
-								// {{{ Remove packet from queue id map
-								{
-									std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
-									std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
-									if(idIterator != _queueIds.end())
-									{
-										for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
-										{
-											removeQueueEntry(0, *queueId);
-										}
-										_queueIds.erase(idIterator);
-									}
-								}
-								// }}}
-
-								if(packet->payload()->size() > 1)
-								{
-									//Packet type 0x4X has channel at index 0 all other types at index 1
-									if((packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
-									else if(peerIterator->second.aesChannels[packet->payload()->at(1) & 0x3F]) aesHandshake = true;
-								}
-								else if(packet->payload()->size() == 1 && (packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
-								else if(peerIterator->second.aesChannels[0]) aesHandshake = true;
-							}
-						}
-					}
-					catch(const std::exception& ex)
-					{
-						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-					}
-					catch(BaseLib::Exception& ex)
-					{
-						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-					}
-					catch(...)
-					{
-						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-					}
-					if(aesHandshake)
-					{
-						if(_bl->debugLevel >= 5) _out.printDebug("Debug: Doing AES handshake.");
-						queuePacket(_aesHandshake->getCFrame(packet));
-					}
-					else
-					{
-						if(knowsPeer && (packet->controlByte() & 0x20))
-						{
-							std::vector<uint8_t> payload { 0 };
-							uint8_t controlByte = 0x80;
-							if((packet->controlByte() & 2) && wakeUp && packet->messageType() != 0) controlByte |= 1;
-							std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), controlByte, 0x02, _myAddress, packet->senderAddress(), payload));
-							queuePacket(ackPacket);
-						}
-						raisePacketReceived(packet);
-					}
-				}
-				else if(packet->destinationAddress() == 0 && (packet->controlByte() & 2)) //Packet is wake me up packet
-				{
-					try
-					{
-						std::lock_guard<std::mutex> peersGuard(_peersMutex);
-						std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
-						if(peerIterator != _peers.end() && peerIterator->second.wakeUp)
-						{
-							std::vector<uint8_t> payload;
-							std::shared_ptr<BidCoSPacket> wakeUpPacket(new BidCoSPacket(packet->messageCounter(), 0xA1, 0x12, _myAddress, packet->senderAddress(), payload));
-							queuePacket(wakeUpPacket);
-						}
-						raisePacketReceived(packet);
-					}
-					catch(const std::exception& ex)
-					{
-						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-					}
-					catch(BaseLib::Exception& ex)
-					{
-						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-					}
-					catch(...)
-					{
-						_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-					}
-				}
-				else raisePacketReceived(packet);
-				if(_bl->hf.getTime() - _lastAesHandshakeGc > 30000)
-				{
-					_lastAesHandshakeGc = _bl->hf.getTime();
-					_aesHandshake->collectGarbage();
-				}
+        		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
+				processReceivedPacket(packet);
         	}
         	else if(!packetHex.empty())
         	{

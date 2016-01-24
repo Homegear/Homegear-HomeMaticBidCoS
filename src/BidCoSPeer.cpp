@@ -66,14 +66,7 @@ void BidCoSPeer::setDefaultValue(BaseLib::Systems::RPCConfigurationParameter* pa
 {
 	try
 	{
-		if(parameter->rpcParameter->id == "AES_ACTIVE" && !_physicalInterface->aesSupported())
-		{
-			parameter->data.push_back(0);
-		}
-		else
-		{
-			parameter->rpcParameter->convertToPacket(parameter->rpcParameter->logical->getDefaultValue(), parameter->data);
-		}
+		parameter->rpcParameter->convertToPacket(parameter->rpcParameter->logical->getDefaultValue(), parameter->data);
 	}
 	catch(const std::exception& ex)
 	{
@@ -266,7 +259,7 @@ void BidCoSPeer::setPhysicalInterfaceID(std::string id)
 	if(id.empty() || (GD::physicalInterfaces.find(id) != GD::physicalInterfaces.end() && GD::physicalInterfaces.at(id)))
 	{
 		_physicalInterfaceID = id;
-		if(peerInfoPacketsEnabled && _physicalInterface->needsPeers()) _physicalInterface->removePeer(_address);
+		if(peerInfoPacketsEnabled) _physicalInterface->removePeer(_address);
 		setPhysicalInterface(id.empty() ? GD::defaultPhysicalInterface : GD::physicalInterfaces.at(_physicalInterfaceID));
 		uint64_t virtualPeerId = getVirtualPeerId();
 		if(virtualPeerId > 0)
@@ -279,7 +272,7 @@ void BidCoSPeer::setPhysicalInterfaceID(std::string id)
 			}
 		}
 		saveVariable(19, _physicalInterfaceID);
-		if(peerInfoPacketsEnabled && _physicalInterface->needsPeers()) _physicalInterface->addPeer(getPeerInfo());
+		if(peerInfoPacketsEnabled) _physicalInterface->addPeer(getPeerInfo());
 	}
 }
 
@@ -1440,14 +1433,7 @@ bool BidCoSPeer::load(BaseLib::Systems::ICentral* device)
 		serviceMessages.reset(new BaseLib::Systems::ServiceMessages(_bl, _peerID, _serialNumber, this));
 		serviceMessages->load();
 
-		if(aesEnabled())
-		{
-			if(!_physicalInterface->aesSupported())
-			{
-				GD::out.printWarning("Warning: Using interface " + _physicalInterface->getID() + ", which doesn't support AES handshakes for peer " + std::to_string(_peerID) + " which has AES handshakes enabled.");
-			}
-			else checkAESKey();
-		}
+		if(aesEnabled()) checkAESKey();
 
 		return true;
 	}
@@ -1793,7 +1779,7 @@ void BidCoSPeer::onConfigPending(bool configPending)
 		HomegearDevice::ReceiveModes::Enum rxModes = getRXModes();
 		if(configPending)
 		{
-			if(((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig)) && _physicalInterface->autoResend())
+			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Setting physical device's wake up flag.");
 				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
@@ -1801,7 +1787,7 @@ void BidCoSPeer::onConfigPending(bool configPending)
 		}
 		else
 		{
-			if(((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig)) && _physicalInterface->autoResend())
+			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Removing physical device's wake up flag.");
 				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
@@ -1832,7 +1818,7 @@ void BidCoSPeer::setValuePending(bool value)
 		HomegearDevice::ReceiveModes::Enum rxModes = getRXModes();
 		if(value)
 		{
-			if(((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig)) && _physicalInterface->autoResend())
+			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Setting physical device's wake up flag.");
 				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
@@ -1840,7 +1826,7 @@ void BidCoSPeer::setValuePending(bool value)
 		}
 		else
 		{
-			if(((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig)) && _physicalInterface->autoResend())
+			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Removing physical device's wake up flag.");
 				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
@@ -2154,15 +2140,6 @@ void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi, ui
 		}
 		if(std::get<2>(_bestInterfaceCurrent).empty() || std::get<1>(_bestInterfaceCurrent) == 0 || std::get<1>(_bestInterfaceCurrent) > rssi)
 		{
-			if(aesEnabled())
-			{
-				std::shared_ptr<IBidCoSInterface> interface(GD::physicalInterfaces.at(interfaceID));
-				if(!interface->aesSupported() || _aesKeyIndex != (signed)_physicalInterface->currentRFKeyIndex() || interface->rfKey() != _physicalInterface->rfKey() || interface->currentRFKeyIndex() != _physicalInterface->currentRFKeyIndex())
-				{
-					if(GD::bl->debugLevel >= 5) GD::out.printDebug("Debug: Not setting interface of peer " + std::to_string(_peerID) + " to " + interfaceID + ", because of conflicting AES settings.");
-					return;
-				}
-			}
 			_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID);
 		}
 		if(std::get<2>(_bestInterfaceLast) == interfaceID) _bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID); //Update message counter and rssi
@@ -2318,7 +2295,6 @@ PVariable BidCoSPeer::getValueFromDevice(PParameter& parameter, int32_t channel,
 		pendingBidCoSQueues->remove(BidCoSQueueType::GETVALUE, parameter->id, channel);
 		pendingBidCoSQueues->push(queue);
 
-		if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
 		//Assign the queue managers queue to "queue".
 		queue = central->enqueuePendingQueues(_address);
 
@@ -2499,7 +2475,6 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 		if(queue && !queue->isEmpty() && queue->getQueueType() == BidCoSQueueType::GETVALUE)
 		{
 			//Handle get value response
-			//We need to stop the resend thread as packet sending might take a while.
 			//Popping is not possible at this point, because otherwise another packet might be queued before the response is sent.
 			std::shared_ptr<BidCoSPacket> queuePacket;
 			if(queue->front()->getType() == QueueEntryType::PACKET)
@@ -2509,8 +2484,8 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 			}
 			if(!queue->isEmpty() && queue->front()->getType() == QueueEntryType::MESSAGE)
 			{
-				if(queue->front()->getMessage()->typeIsEqual(packet)) queue->stopResendThread();
-				else if(queuePacket) queue->pushFront(queuePacket);
+				//Requeue getValue packet if message type doesn't match received packet
+				if(!queue->front()->getMessage()->typeIsEqual(packet) && queuePacket) queue->pushFront(queuePacket);
 			}
 		}
 		if(pendingBidCoSQueues && !pendingBidCoSQueues->empty() && packet->senderAddress() == _address)
@@ -2607,7 +2582,6 @@ PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, i
 		pendingBidCoSQueues->push(queue);
 		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
 		{
-			if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12; //Probably always true
 			central->enqueuePendingQueues(_address);
 		}
 		else
@@ -2808,18 +2782,10 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				if(!parameter->rpcParameter) continue;
 				if(i->first == "AES_ACTIVE")
 				{
-					if(i->second->booleanValue)
+					if(i->second->booleanValue && !aesEnabled())
 					{
-						if(!_physicalInterface->aesSupported())
-						{
-							GD::out.printWarning("Warning: Tried to set AES_ACTIVE on peer " + std::to_string(_peerID) + ", but AES is not supported by peer's physical interface.");
-							continue;
-						}
-						if(!aesEnabled())
-						{
-							GD::out.printDebug("Debug: AES is enabled now for peer " + std::to_string(_peerID) + ".");
-							aesActivated = true;
-						}
+						GD::out.printDebug("Debug: AES is enabled now for peer " + std::to_string(_peerID) + ".");
+						aesActivated = true;
 					}
 				}
 				parameter->rpcParameter->convertToPacket(i->second, value);
@@ -3342,25 +3308,6 @@ PVariable BidCoSPeer::setInterface(BaseLib::PRpcClientInfo clientInfo, std::stri
 			return Variable::createError(-5, "Unknown physical interface.");
 		}
 		std::shared_ptr<IBidCoSInterface> interface = interfaceID.empty() ? GD::defaultPhysicalInterface : GD::physicalInterfaces.at(interfaceID);
-		if(aesEnabled())
-		{
-			if(!interface->aesSupported())
-			{
-				return Variable::createError(-100, "Can't set physical interface, because AES is enabled for this peer and the new physical interface doesn't support AES. Please disable AES first.");
-			}
-			else if(_aesKeyIndex != (signed)_physicalInterface->currentRFKeyIndex())
-			{
-				return Variable::createError(-101, "Can't set physical interface, because the peer's AES key needs to be updated to the current one first. Please make sure, there are no pending configuration packets, before executing this method.");
-			}
-			else if(interface->rfKey() != _physicalInterface->rfKey())
-			{
-				return Variable::createError(-102, "Can't set physical interface, because the AES keys of the old and the new interface don't match. You need to disable AES first.");
-			}
-			else if(interface->currentRFKeyIndex() != _physicalInterface->currentRFKeyIndex())
-			{
-				return Variable::createError(-103, "Can't set physical interface, because the AES key indexes of the old and new interface don't match. You need to disable AES first.");
-			}
-		}
 		if(configCentral.find(0) != configCentral.end() && configCentral.at(0).find("ROAMING") != configCentral.at(0).end() && configCentral.at(0).at("ROAMING").data.size() > 0 && configCentral.at(0).at("ROAMING").data.at(0) == 1) return Variable::createError(-104, "Can't set physical interface, because ROAMING is enabled. Please disable ROAMING to manually select the interface.");
 		setPhysicalInterfaceID(interfaceID);
 		return PVariable(new Variable(VariableType::tVoid));
@@ -3609,7 +3556,6 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		pendingBidCoSQueues->push(queue);
 		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
 		{
-			if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
 			bool result = false;
 			central->enqueuePendingQueues(_address, wait, &result);
 			if(!result)
@@ -3623,7 +3569,6 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 			std::shared_ptr<BidCoSPacket> lastPacket = central->getReceivedPacket(_address);
 			if(lastPacket && BaseLib::HelperFunctions::getTime() - lastPacket->timeReceived() < 150)
 			{
-				if(HomeMaticCentral::isDimmer(_deviceType) || HomeMaticCentral::isSwitch(_deviceType)) queue->retries = 12;
 				bool result = false;
 				central->enqueuePendingQueues(_address, wait, &result);
 				if(!result) return Variable::createError(-100, "No answer from device.");

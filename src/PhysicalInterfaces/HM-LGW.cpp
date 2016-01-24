@@ -260,7 +260,13 @@ void HM_LGW::addPeer(PeerInfo peerInfo)
 		if(peerInfo.address == 0) return;
 		_peersMutex.lock();
 		_peers[peerInfo.address] = peerInfo;
-		if(_initComplete) sendPeer(peerInfo);
+
+		if(_initComplete)
+		{
+			int64_t id;
+			std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, AddPeerQueueEntryType::add, BaseLib::HelperFunctions::getTime()));
+			enqueue(0, entry, id);
+		}
 	}
     catch(const std::exception& ex)
     {
@@ -302,6 +308,120 @@ void HM_LGW::addPeers(std::vector<PeerInfo>& peerInfos)
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _peersMutex.unlock();
+}
+
+void HM_LGW::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
+{
+	try
+	{
+		std::shared_ptr<AddPeerQueueEntry> queueEntry;
+		queueEntry = std::dynamic_pointer_cast<AddPeerQueueEntry>(entry);
+		if(!queueEntry) return;
+		if(!_initComplete) return;
+		if(queueEntry->type == AddPeerQueueEntryType::remove)
+		{
+			for(int32_t i = 0; i < 40; i++)
+			{
+				std::vector<uint8_t> responsePacket;
+				std::vector<char> requestPacket;
+				std::vector<char> payload{ 1, 7 };
+				payload.push_back(queueEntry->address >> 16);
+				payload.push_back((queueEntry->address >> 8) & 0xFF);
+				payload.push_back(queueEntry->address & 0xFF);
+				buildPacket(requestPacket, payload);
+				_packetIndex++;
+				getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
+				if(responsePacket.size() >= 13  && responsePacket.at(6) == 7) break;
+				else if(responsePacket.size() == 9 && responsePacket.at(6) == 8)
+				{
+					//Operation pending
+					std::this_thread::sleep_for(std::chrono::milliseconds(50));
+					continue;
+				}
+				if(i == 2)
+				{
+					_out.printError("Error: Could not remove peer with address 0x" + _bl->hf.getHexString(queueEntry->address, 6));
+					_peersMutex.unlock();
+					return;
+				}
+			}
+		}
+		else if(queueEntry->type == AddPeerQueueEntryType::wakeUp)
+		{
+			for(int32_t j = 0; j < 40; j++)
+			{
+				std::vector<uint8_t> responsePacket;
+				std::vector<char> requestPacket;
+				std::vector<char> payload{ 1, 6 };
+				payload.push_back(queueEntry->peerInfo.address >> 16);
+				payload.push_back((queueEntry->peerInfo.address >> 8) & 0xFF);
+				payload.push_back(queueEntry->peerInfo.address & 0xFF);
+				payload.push_back(queueEntry->peerInfo.keyIndex);
+				payload.push_back((char)(queueEntry->peerInfo.wakeUp)); //CCU2 sets this for wake up, too. No idea, what the meaning is.
+				payload.push_back((char)(queueEntry->peerInfo.wakeUp)); //This actually enables the sending of the wake up packet
+				buildPacket(requestPacket, payload);
+				_packetIndex++;
+				getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
+				if(responsePacket.size() >= 21  && responsePacket.at(6) == 7) break;
+				else if(responsePacket.size() == 9 && responsePacket.at(6) == 8)
+				{
+					//Operation pending
+					std::this_thread::sleep_for(std::chrono::milliseconds(50));
+					continue;
+				}
+				if(j == 2)
+				{
+					_out.printError("Error: Could not add peer with address 0x" + _bl->hf.getHexString(queueEntry->peerInfo.address, 6));
+					return;
+				}
+			}
+		}
+		else if(queueEntry->type == AddPeerQueueEntryType::aes)
+		{
+			if(queueEntry->peerInfo.aesChannels.find(queueEntry->channel) == queueEntry->peerInfo.aesChannels.end()) return;
+			for(int32_t j = 0; j < 40; j++)
+			{
+				std::vector<uint8_t> responsePacket;
+				std::vector<char> requestPacket;
+				std::vector<char> payload{ 1 };
+				if(queueEntry->peerInfo.aesChannels.at(queueEntry->channel)) payload.push_back(9);
+				else payload.push_back(0xA);
+				payload.push_back(queueEntry->peerInfo.address >> 16);
+				payload.push_back((queueEntry->peerInfo.address >> 8) & 0xFF);
+				payload.push_back(queueEntry->peerInfo.address & 0xFF);
+				payload.push_back(0);
+				payload.push_back(queueEntry->channel);
+				buildPacket(requestPacket, payload);
+				_packetIndex++;
+				getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
+				if(responsePacket.size() >= 9  && responsePacket.at(6) == 1) break;
+				else if(responsePacket.size() == 9 && responsePacket.at(6) == 8)
+				{
+					//Operation pending
+					std::this_thread::sleep_for(std::chrono::milliseconds(50));
+					continue;
+				}
+				if(j == 2)
+				{
+					_out.printError("Error: Could not set AES for peer with address 0x" + _bl->hf.getHexString(queueEntry->peerInfo.address, 6));
+					return;
+				}
+			}
+		}
+		else sendPeer(queueEntry->peerInfo);
+	}
+    catch(const std::exception& ex)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+	}
 }
 
 void HM_LGW::sendPeers()
@@ -579,34 +699,12 @@ void HM_LGW::setAES(PeerInfo peerInfo, int32_t channel)
 			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 		}
 		_peersMutex.unlock();
-		if(peerInfo.aesChannels.find(channel) == peerInfo.aesChannels.end()) return;
-		for(int32_t j = 0; j < 40; j++)
+
+		if(_initComplete)
 		{
-			std::vector<uint8_t> responsePacket;
-			std::vector<char> requestPacket;
-			std::vector<char> payload{ 1 };
-			if(peerInfo.aesChannels.at(channel)) payload.push_back(9);
-			else payload.push_back(0xA);
-			payload.push_back(peerInfo.address >> 16);
-			payload.push_back((peerInfo.address >> 8) & 0xFF);
-			payload.push_back(peerInfo.address & 0xFF);
-			payload.push_back(0);
-			payload.push_back(channel);
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
-			if(responsePacket.size() >= 9  && responsePacket.at(6) == 1) break;
-			else if(responsePacket.size() == 9 && responsePacket.at(6) == 8)
-			{
-				//Operation pending
-				std::this_thread::sleep_for(std::chrono::milliseconds(50));
-				continue;
-			}
-			if(j == 2)
-			{
-				_out.printError("Error: Could not set AES for peer with address 0x" + _bl->hf.getHexString(peerInfo.address, 6));
-				return;
-			}
+			int64_t id;
+			std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, channel, AddPeerQueueEntryType::aes, BaseLib::HelperFunctions::getTime()));
+			enqueue(0, entry, id);
 		}
 	}
     catch(const std::exception& ex)
@@ -646,32 +744,12 @@ void HM_LGW::setWakeUp(PeerInfo peerInfo)
 			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 		}
 		_peersMutex.unlock();
-		for(int32_t j = 0; j < 40; j++)
+
+		if(_initComplete)
 		{
-			std::vector<uint8_t> responsePacket;
-			std::vector<char> requestPacket;
-			std::vector<char> payload{ 1, 6 };
-			payload.push_back(peerInfo.address >> 16);
-			payload.push_back((peerInfo.address >> 8) & 0xFF);
-			payload.push_back(peerInfo.address & 0xFF);
-			payload.push_back(peerInfo.keyIndex);
-			payload.push_back((char)peerInfo.wakeUp); //CCU2 sets this for wake up, too. No idea, what the meaning is.
-			payload.push_back((char)peerInfo.wakeUp); //This actually enables the sending of the wake up packet
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
-			if(responsePacket.size() >= 21  && responsePacket.at(6) == 7) break;
-			else if(responsePacket.size() == 9 && responsePacket.at(6) == 8)
-			{
-				//Operation pending
-				std::this_thread::sleep_for(std::chrono::milliseconds(50));
-				continue;
-			}
-			if(j == 2)
-			{
-				_out.printError("Error: Could not add peer with address 0x" + _bl->hf.getHexString(peerInfo.address, 6));
-				return;
-			}
+			int64_t id;
+			std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, AddPeerQueueEntryType::wakeUp, BaseLib::HelperFunctions::getTime()));
+			enqueue(0, entry, id);
 		}
 	}
     catch(const std::exception& ex)
@@ -699,33 +777,12 @@ void HM_LGW::removePeer(int32_t address)
 			return;
 		}
 		_peers.erase(address);
+
 		if(_initComplete)
 		{
-			for(int32_t i = 0; i < 40; i++)
-			{
-				std::vector<uint8_t> responsePacket;
-				std::vector<char> requestPacket;
-				std::vector<char> payload{ 1, 7 };
-				payload.push_back(address >> 16);
-				payload.push_back((address >> 8) & 0xFF);
-				payload.push_back(address & 0xFF);
-				buildPacket(requestPacket, payload);
-				_packetIndex++;
-				getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
-				if(responsePacket.size() >= 13  && responsePacket.at(6) == 7) break;
-				else if(responsePacket.size() == 9 && responsePacket.at(6) == 8)
-				{
-					//Operation pending
-					std::this_thread::sleep_for(std::chrono::milliseconds(50));
-					continue;
-				}
-				if(i == 2)
-				{
-					_out.printError("Error: Could not remove peer with address 0x" + _bl->hf.getHexString(address, 6));
-					_peersMutex.unlock();
-					return;
-				}
-			}
+			int64_t id;
+			std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(address, AddPeerQueueEntryType::remove, BaseLib::HelperFunctions::getTime()));
+			enqueue(0, entry, id);
 		}
 	}
     catch(const std::exception& ex)
@@ -752,13 +809,6 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 			_out.printWarning("Warning: Packet was nullptr.");
 			return;
 		}
-		_lastAction = BaseLib::HelperFunctions::getTime();
-
-		if(!_initComplete)
-    	{
-    		_out.printWarning("Warning: !!!Not!!! sending (Port " + _settings->port + "), because the init sequence is not completed: " + packet->hexString());
-    		return;
-    	}
 
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(!bidCoSPacket) return;
@@ -794,7 +844,13 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 					return;
 				}
 			}
+		}
 
+		if(!isOpen())
+		{
+			if(!_initComplete) _out.printWarning(std::string("Warning: !!!Not!!! sending packet, because init sequence is not complete: ") + bidCoSPacket->hexString());
+			else _out.printWarning(std::string("Warning: !!!Not!!! sending packet, because device is not connected or opened: ") + bidCoSPacket->hexString());
+			return;
 		}
 
 		std::vector<char> packetBytes = bidCoSPacket->byteArraySigned();
@@ -1487,7 +1543,7 @@ void HM_LGW::startListening()
 			_out.printError("Error: Cannot start listening, because rfKey is not specified.");
 			return;
 		}
-		aesInit();
+		if(!aesInit()) return;
 		_socket = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
 		_socket->setReadTimeout(1000000);
 		_socketKeepAlive = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl, _settings->host, _settings->portKeepAlive, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
@@ -1500,6 +1556,7 @@ void HM_LGW::startListening()
 		else GD::bl->threadManager.start(_listenThreadKeepAlive, true, &HM_LGW::listenKeepAlive, this);
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
 		else GD::bl->threadManager.start(_initThread, true, &HM_LGW::doInit, this);
+		startQueue(0, 0, SCHED_OTHER);
 		IPhysicalInterface::startListening();
 	}
     catch(const std::exception& ex)
@@ -1557,6 +1614,7 @@ void HM_LGW::stopListening()
 {
 	try
 	{
+		stopQueue(0);
 		_stopCallbackThread = true;
 		GD::bl->threadManager.join(_initThread);
 		GD::bl->threadManager.join(_listenThread);

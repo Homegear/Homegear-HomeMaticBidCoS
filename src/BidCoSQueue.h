@@ -68,7 +68,6 @@ protected:
 	std::shared_ptr<BidCoSPacket> _packet;
 public:
 	bool stealthy = false;
-	bool forceResend= false;
 
 	BidCoSQueueEntry() {}
 	virtual ~BidCoSQueueEntry() {}
@@ -93,11 +92,6 @@ class BidCoSQueue
         std::shared_ptr<PendingBidCoSQueues> _pendingQueues;
         std::mutex _queueMutex;
         BidCoSQueueType _queueType;
-        bool _stopResendThread = false;
-        std::mutex _resendThreadMutex;
-        std::thread _resendThread;
-        int32_t _resendCounter = 0;
-        uint32_t _resendThreadId = 0;
         bool _stopPopWaitThread = false;
         uint32_t _popWaitThreadId = 0;
         std::thread _popWaitThread;
@@ -112,13 +106,10 @@ class BidCoSQueue
         void (HomeMaticCentral::*_queueProcessed)() = nullptr;
         void pushPendingQueue();
         void sleepAndPushPendingQueue();
-        void resend(uint32_t threadId, bool burst);
-        void startResendThread(bool force);
         void popWaitThread(uint32_t threadId, uint32_t waitingTime);
         void stopPopWaitThread();
         void nextQueueEntry();
     public:
-        uint32_t retries = 4;
         uint32_t id = 0;
         uint32_t pendingQueueID = 0;
         std::shared_ptr<int64_t> lastAction;
@@ -134,9 +125,9 @@ class BidCoSQueue
         std::string parameterName;
         int32_t channel = -1;
 
-        void push(std::shared_ptr<BidCoSMessage> message, bool forceResend = false);
-        void pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy = false, bool popBeforePushing = false, bool forceResend = false);
-        void push(std::shared_ptr<BidCoSPacket> packet, bool forceResend = false, bool stealthy = false);
+        void push(std::shared_ptr<BidCoSMessage> message);
+        void pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy = false, bool popBeforePushing = false);
+        void push(std::shared_ptr<BidCoSPacket> packet, bool stealthy = false);
         void push(std::shared_ptr<PendingBidCoSQueues>& pendingBidCoSQueues);
         void push(std::shared_ptr<BidCoSQueue> pendingBidCoSQueue, bool popImmediately, bool clearPendingQueues);
         BidCoSQueueEntry* front() { return &_queue.front(); }
@@ -153,7 +144,6 @@ class BidCoSQueue
         void dispose();
         void serialize(std::vector<uint8_t>& encodedData);
         void unserialize(std::shared_ptr<std::vector<char>> serializedData, uint32_t position = 0);
-        void stopResendThread();
 
         BidCoSQueue();
         BidCoSQueue(std::shared_ptr<IBidCoSInterface> physicalDevice);

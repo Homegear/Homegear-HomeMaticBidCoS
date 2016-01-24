@@ -60,11 +60,8 @@ class HM_CFG_LAN  : public IBidCoSInterface
         virtual ~HM_CFG_LAN();
         void startListening();
         void stopListening();
-        void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
+        virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
         virtual bool isOpen() { return _initComplete && _socket->connected(); }
-        virtual bool aesSupported() { return true; }
-        virtual bool autoResend() { return true; }
-        virtual bool needsPeers() { return true; }
         virtual bool firmwareUpdatesSupported() { return false; }
 
         virtual void addPeer(PeerInfo peerInfo);
@@ -75,21 +72,17 @@ class HM_CFG_LAN  : public IBidCoSInterface
         virtual void sendPeers();
         virtual std::string getPeerInfoPacket(PeerInfo& peerInfo);
     protected:
-        std::mutex _peersMutex;
-        std::map<int32_t, PeerInfo> _peers;
         std::string _hostname;
         std::string _port;
         std::unique_ptr<BaseLib::SocketOperations> _socket;
         std::mutex _sendMutex;
         int64_t _initStarted = 0;
-        bool _initComplete = false;
         std::list<std::vector<char>> _initCommandQueue;
         int32_t _lastKeepAlive = 0;
         int32_t _lastKeepAliveResponse = 0;
         int32_t _lastTimePacket = 0;
         std::vector<char> _keepAlivePacket = { 'K', '\r', '\n' };
         int64_t _startUpTime = 0;
-        int32_t _myAddress = 0x1C6940;
 
         //AES stuff
         bool _aesInitialized = false;

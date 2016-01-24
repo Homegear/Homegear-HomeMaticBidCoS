@@ -31,7 +31,6 @@
 #define CUL_H
 
 #include "IBidCoSInterface.h"
-#include "AesHandshake.h"
 
 #include <thread>
 #include <iostream>
@@ -55,46 +54,17 @@ namespace BidCoS
 
 class BidCoSPacket;
 
-class Cul : public IBidCoSInterface, public BaseLib::ITimedQueue
+class Cul : public IBidCoSInterface
 {
     public:
 		Cul(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
         virtual ~Cul();
         void startListening();
         void stopListening();
-        void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
         virtual void setup(int32_t userID, int32_t groupID);
         void enableUpdateMode();
         void disableUpdateMode();
-
-        virtual bool aesSupported() { return true; }
-        virtual bool autoResend() { return true; }
-        virtual bool needsPeers() { return true; }
-        virtual void addPeer(PeerInfo peerInfo);
-        virtual void addPeers(std::vector<PeerInfo>& peerInfos);
-        virtual void setWakeUp(PeerInfo peerInfo) { addPeer(peerInfo); }
-        virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
-        virtual void removePeer(int32_t address);
     protected:
-        class QueueEntry : public BaseLib::ITimedQueueEntry
-		{
-		public:
-			QueueEntry() {}
-			QueueEntry(int64_t sendingTime, std::shared_ptr<BidCoSPacket> packet) : ITimedQueueEntry(sendingTime) { this->packet = packet; }
-			virtual ~QueueEntry() {}
-
-			std::shared_ptr<BidCoSPacket> packet;
-		};
-
-        BaseLib::Obj* _bl = nullptr;
-        int64_t _lastAesHandshakeGc = 0;
-        std::shared_ptr<AesHandshake> _aesHandshake;
-        std::mutex _queueIdsMutex;
-        std::map<int32_t, std::set<int64_t>> _queueIds;
-        std::mutex _peersMutex;
-        std::map<int32_t, PeerInfo> _peers;
-        int32_t _myAddress = 0x1C6940;
-
         struct termios _termios;
 
         void openDevice();
@@ -103,9 +73,7 @@ class Cul : public IBidCoSInterface, public BaseLib::ITimedQueue
         void writeToDevice(std::string, bool);
         std::string readFromDevice();
         void listen();
-
-        void processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);
-        void queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t sendingTime = 0);
+        void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);
 };
 
 }

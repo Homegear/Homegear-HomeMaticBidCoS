@@ -944,7 +944,11 @@ void TICC1100::initDevice()
 		_out.printDebug("Debug: CC1100: Setting GPIO edge");
 		setGPIOEdge(1, GPIOEdge::BOTH);
 		openGPIO(1, true);
-		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1) throw(BaseLib::Exception("Couldn't listen to rf device, because the gpio pointer is not valid: " + _settings->device));
+		if(!_gpioDescriptors[1] || _gpioDescriptors[1]->descriptor == -1)
+		{
+			_out.printError("Error: Couldn't listen to rf device, because the GPIO descriptor is not valid: " + _settings->device);
+			return;
+		}
 		if(gpioDefined(2)) //Enable high gain mode
 		{
 			openGPIO(2, false);

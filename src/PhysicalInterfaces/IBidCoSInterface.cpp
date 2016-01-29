@@ -228,7 +228,6 @@ void IBidCoSInterface::startListening()
 {
 	try
 	{
-		stopListening();
 		IPhysicalInterface::startListening();
 		startQueue(0, 45, SCHED_FIFO);
 	}

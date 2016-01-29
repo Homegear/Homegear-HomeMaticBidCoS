@@ -81,7 +81,6 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 			return;
 		}
 		std::string packetString = packet->hexString();
-		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
 		writeToDevice("As" + packet->hexString() + "\n", true);
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}

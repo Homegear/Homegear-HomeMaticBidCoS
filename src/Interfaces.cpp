@@ -64,15 +64,9 @@ void Interfaces::create()
 			else if((*i)->type == "cuno") device.reset(new CUNO(*i));
 	#ifdef SPIINTERFACES
 			else if((*i)->type == "cc1100") device.reset(new TICC1100(*i));
-	#ifdef BIDCOSTICC1101
-			else if((*i)->type == "devtest") device.reset(new TICC1101(*i));
-	#endif
 	#endif
 			else if((*i)->type == "hmcfglan") device.reset(new HM_CFG_LAN(*i));
 			else if((*i)->type == "hmlgw") device.reset(new HM_LGW(*i));
-	#ifdef BIDCOSRTLSDRLAN
-			else if(settings->type == "rtlsdrlan") device.reset(new RTLSDR_LAN(*i));
-	#endif
 			else GD::out.printError("Error: Unsupported physical device type: " + (*i)->type);
 			if(device)
 			{

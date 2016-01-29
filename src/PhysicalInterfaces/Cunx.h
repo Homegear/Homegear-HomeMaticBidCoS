@@ -35,11 +35,11 @@
 namespace BidCoS
 {
 
-class CUNO  : public IBidCoSInterface
+class Cunx  : public IBidCoSInterface
 {
     public:
-		CUNO(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
-        virtual ~CUNO();
+		Cunx(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
+        virtual ~Cunx();
         void startListening();
         void stopListening();
         void enableUpdateMode();

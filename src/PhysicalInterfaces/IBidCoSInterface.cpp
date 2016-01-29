@@ -382,7 +382,7 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 								std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
 								std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
 
-								if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 300)
+								if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 595)
 								{
 									requeue = true;
 									for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
@@ -472,7 +472,7 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 			}
 			else
 			{
-				if(knowsPeer && (packet->controlByte() & 0x20))
+				if(knowsPeer && packet->destinationAddress() == _myAddress && (packet->controlByte() & 0x20))
 				{
 					std::vector<uint8_t> payload { 0 };
 					uint8_t controlByte = 0x80;
@@ -596,8 +596,19 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 		forceSendPacket(bidCoSPacket);
 		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 		_aesHandshake->setMFrame(bidCoSPacket);
-		queuePacket(bidCoSPacket, packet->timeSending() + 200);
-		queuePacket(bidCoSPacket, packet->timeSending() + 400);
+		if(!_updateMode && bidCoSPacket->messageType() != 0x11)
+		{
+			if(bidCoSPacket->controlByte() & 0x10)
+			{
+				queuePacket(bidCoSPacket, packet->timeSending() + 560);
+				queuePacket(bidCoSPacket, packet->timeSending() + 1120);
+			}
+			else
+			{
+				queuePacket(bidCoSPacket, packet->timeSending() + 200);
+				queuePacket(bidCoSPacket, packet->timeSending() + 400);
+			}
+		}
 	}
 	catch(const std::exception& ex)
     {

@@ -171,6 +171,7 @@ protected:
 	virtual void loadVariables();
 	virtual void saveVariables();
 	void setUpBidCoSMessages();
+	uint8_t getMessageCounter();
 
 	std::shared_ptr<BidCoSPeer> createPeer(int32_t address, int32_t firmwareVersion, BaseLib::Systems::LogicalDeviceType deviceType, std::string serialNumber, int32_t remoteChannel, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet = std::shared_ptr<BidCoSPacket>(), bool save = true);
     std::shared_ptr<BidCoSPeer> createTeam(int32_t address, BaseLib::Systems::LogicalDeviceType deviceType, std::string serialNumber);

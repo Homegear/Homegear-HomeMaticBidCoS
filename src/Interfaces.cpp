@@ -32,7 +32,7 @@
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 #include "PhysicalInterfaces/COC.h"
 #include "PhysicalInterfaces/Cul.h"
-#include "PhysicalInterfaces/CUNO.h"
+#include "PhysicalInterfaces/Cunx.h"
 #include "PhysicalInterfaces/TICC1100.h"
 #include "PhysicalInterfaces/HM-CFG-LAN.h"
 #include "PhysicalInterfaces/HM-LGW.h"
@@ -61,7 +61,7 @@ void Interfaces::create()
 			GD::out.printDebug("Debug: Creating physical device. Type defined in homematicbidcos.conf is: " + (*i)->type);
 			if((*i)->type == "cul") device.reset(new Cul(*i));
 			else if((*i)->type == "coc") device.reset(new COC(*i));
-			else if((*i)->type == "cuno") device.reset(new CUNO(*i));
+			else if((*i)->type == "cunx") device.reset(new Cunx(*i));
 	#ifdef SPIINTERFACES
 			else if((*i)->type == "cc1100") device.reset(new TICC1100(*i));
 	#endif

@@ -27,18 +27,18 @@
  * files in the program, then also delete it here.
  */
 
-#include "CUNO.h"
 #include "../BidCoSPacket.h"
 #include "homegear-base/BaseLib.h"
 #include "../GD.h"
+#include "Cunx.h"
 
 namespace BidCoS
 {
 
-CUNO::CUNO(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings)
+Cunx::Cunx(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings)
 {
 	_out.init(GD::bl);
-	_out.setPrefix(GD::out.getPrefix() + "CUNO \"" + settings->id + "\": ");
+	_out.setPrefix(GD::out.getPrefix() + "CUNX \"" + settings->id + "\": ");
 
 	signal(SIGPIPE, SIG_IGN);
 
@@ -53,7 +53,7 @@ CUNO::CUNO(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings
 	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, _rfKey, _oldRfKey, _currentRfKeyIndex));
 }
 
-CUNO::~CUNO()
+Cunx::~Cunx()
 {
 	try
 	{
@@ -74,7 +74,7 @@ CUNO::~CUNO()
     }
 }
 
-void CUNO::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
+void Cunx::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
@@ -97,7 +97,7 @@ void CUNO::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 	}
 }
 
-void CUNO::enableUpdateMode()
+void Cunx::enableUpdateMode()
 {
 	try
 	{
@@ -118,7 +118,7 @@ void CUNO::enableUpdateMode()
     }
 }
 
-void CUNO::disableUpdateMode()
+void Cunx::disableUpdateMode()
 {
 	try
 	{
@@ -139,7 +139,7 @@ void CUNO::disableUpdateMode()
     }
 }
 
-void CUNO::send(std::string data)
+void Cunx::send(std::string data)
 {
 	try
     {
@@ -175,7 +175,7 @@ void CUNO::send(std::string data)
     _sendMutex.unlock();
 }
 
-void CUNO::startListening()
+void Cunx::startListening()
 {
 	try
 	{
@@ -194,10 +194,10 @@ void CUNO::startListening()
 		IBidCoSInterface::startListening();
 		_socket = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
 		_socket->setAutoConnect(false);
-		_out.printDebug("Connecting to CUNO with hostname " + _settings->host + " on port " + _settings->port + "...");
+		_out.printDebug("Connecting to CUNX with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_stopped = false;
-		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &CUNO::listen, this);
-		else GD::bl->threadManager.start(_listenThread, true, &CUNO::listen, this);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Cunx::listen, this);
+		else GD::bl->threadManager.start(_listenThread, true, &Cunx::listen, this);
 	}
     catch(const std::exception& ex)
     {
@@ -213,15 +213,15 @@ void CUNO::startListening()
     }
 }
 
-void CUNO::reconnect()
+void Cunx::reconnect()
 {
 	try
 	{
 		_socket->close();
-		_out.printDebug("Connecting to CUNO device with hostname " + _settings->host + " on port " + _settings->port + "...");
+		_out.printDebug("Connecting to CUNX device with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_socket->open();
 		send("X21\nAr\n");
-		_out.printInfo("Connected to CUNO device with hostname " + _settings->host + " on port " + _settings->port + ".");
+		_out.printInfo("Connected to CUNX device with hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
 	}
     catch(const std::exception& ex)
@@ -238,7 +238,7 @@ void CUNO::reconnect()
     }
 }
 
-void CUNO::stopListening()
+void Cunx::stopListening()
 {
 	try
 	{
@@ -265,7 +265,7 @@ void CUNO::stopListening()
     }
 }
 
-void CUNO::listen()
+void Cunx::listen()
 {
     try
     {
@@ -279,7 +279,7 @@ void CUNO::listen()
         	{
         		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         		if(_stopCallbackThread) return;
-        		if(_stopped) _out.printWarning("Warning: Connection to CUNO closed. Trying to reconnect...");
+        		if(_stopped) _out.printWarning("Warning: Connection to CUNX closed. Trying to reconnect...");
         		reconnect();
         		continue;
         	}
@@ -294,7 +294,7 @@ void CUNO::listen()
 						data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
 						if(data.size() > 1000000)
 						{
-							_out.printError("Could not read from CUNO: Too much data.");
+							_out.printError("Could not read from CUNX: Too much data.");
 							break;
 						}
 					}
@@ -322,7 +322,7 @@ void CUNO::listen()
 
         	if(_bl->debugLevel >= 6)
         	{
-        		_out.printDebug("Debug: Packet received from CUNO. Raw data:");
+        		_out.printDebug("Debug: Packet received from CUNX. Raw data:");
         		_out.printBinary(data);
         	}
 
@@ -345,7 +345,7 @@ void CUNO::listen()
     }
 }
 
-void CUNO::processData(std::vector<uint8_t>& data)
+void Cunx::processData(std::vector<uint8_t>& data)
 {
 	try
 	{
@@ -357,14 +357,14 @@ void CUNO::processData(std::vector<uint8_t>& data)
 		std::string packetHex;
 		while(std::getline(stringStream, packetHex))
 		{
-			if(packetHex.size() > 21) //21 is minimal packet length (=10 Byte + CUNO "A")
+			if(packetHex.size() > 21) //21 is minimal packet length (=10 Byte + CUNX "A")
         	{
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
 				processReceivedPacket(packet);
         	}
         	else if(!packetHex.empty())
         	{
-        		if(packetHex == "LOVF\n") _out.printWarning("Warning: CUNO with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
+        		if(packetHex == "LOVF\n") _out.printWarning("Warning: CUNX with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
         		else if(packetHex == "A") continue;
         		else _out.printWarning("Warning: Too short packet received: " + packetHex);
         	}

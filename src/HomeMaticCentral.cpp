@@ -743,7 +743,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 	{
 		if(_disposing) return false;
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
-		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->timeReceived() + 10000) GD::out.printError("Error: Packet was processed more than 10 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
+		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->timeReceived() + 5000) GD::out.printError("Error: Packet was processed more than 5 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
 		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->timeReceived()) << " HomeMatic BidCoS packet received (" << senderID << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
 		if(!bidCoSPacket) return false;
 
@@ -774,10 +774,16 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 			return false;
 		}
 		std::shared_ptr<BidCoSPeer> peer(getPeer(bidCoSPacket->senderAddress()));
-		if(peer && bidCoSPacket->messageType() != 0x02 && bidCoSPacket->messageType() != 0x03) peer->checkForBestInterface(senderID, bidCoSPacket->rssiDevice(), bidCoSPacket->messageCounter()); //Ignore ACK and AES handshake packets.
+		if(peer && bidCoSPacket->messageType() != 0x02 && bidCoSPacket->messageType() != 0x03)
+		{
+			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + packet->hexString() + " is now passed to checkForBestInterface.");
+			peer->checkForBestInterface(senderID, bidCoSPacket->rssiDevice(), bidCoSPacket->messageCounter()); //Ignore ACK and AES handshake packets.
+			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): checkForBestInterface finished.");
+		}
 		std::shared_ptr<IBidCoSInterface> physicalInterface = getPhysicalInterface(bidCoSPacket->senderAddress());
 		if(physicalInterface->getID() != senderID) return true;
 		bool handled = false;
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + packet->hexString() + " is now passed to _receivedPackets.set.");
 		if(_receivedPackets.set(bidCoSPacket->senderAddress(), bidCoSPacket, bidCoSPacket->timeReceived())) handled = true;
 		else
 		{
@@ -794,6 +800,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 				}
 			}
 		}
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): _receivedPackets.set finished.");
 		if(!peer) return false;
 		std::shared_ptr<BidCoSPeer> team;
 		if(peer->hasTeam() && bidCoSPacket->senderAddress() == peer->getTeamRemoteAddress()) team = getPeer(peer->getTeamRemoteSerialNumber());
@@ -809,7 +816,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 				return true; //Packet is handled by queue. Don't check if queue is empty!
 			}
 		}
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog: Packet " + packet->hexString() + " is now passed to the peer.");
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + packet->hexString() + " is now passed to the peer.");
 		if(team)
 		{
 			team->packetReceived(bidCoSPacket);

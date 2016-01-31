@@ -196,7 +196,21 @@ void IBidCoSInterface::removePeer(int32_t address)
 	try
 	{
 		std::lock_guard<std::mutex> peersGuard(_peersMutex);
-		if(_peers.find(address) != _peers.end()) _peers.erase(address);
+		if(_peers.find(address) != _peers.end())
+		{
+			_peers.erase(address);
+			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+			std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(address);
+
+			if(idIterator != _queueIds.end())
+			{
+				for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+				{
+					removeQueueEntry(0, *queueId);
+				}
+				_queueIds.erase(idIterator);
+			}
+		}
 	}
     catch(const std::exception& ex)
     {

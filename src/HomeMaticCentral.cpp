@@ -2099,9 +2099,9 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 						requestReceived = true;
 						break;
 					}
-					else GD::out.printWarning("Warning: Update request received, but serial number (" + serialNumber + ") does not match.");
+					else GD::out.printWarning("Warning: Update request received, but serial number does not match. Serial number in update packet: " + serialNumber + ". Expected serial number: " + peer->getSerialNumber());
 				}
-				else GD::out.printWarning("Warning: Received packet is no update request: " + receivedPacket->hexString());
+				else if(receivedPacket->timeReceived() > time) GD::out.printWarning("Warning: Received packet is no update request: " + receivedPacket->hexString());
 				std::this_thread::sleep_for(std::chrono::milliseconds(50));
 				waitIndex++;
 			}

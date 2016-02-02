@@ -2367,7 +2367,12 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 		if(!packet) return;
 		if(_disposing) return;
 		if(packet->senderAddress() != _address && (!hasTeam() || packet->senderAddress() != _team.address || packet->destinationAddress() == getCentral()->getAddress())) return;
-		if(packet->destinationAddress() != getCentral()->getAddress() && aesEnabled()) return;
+		if(packet->destinationAddress() != getCentral()->getAddress() && aesEnabled())
+		{
+			if(packet->destinationAddress() == 0) _bl->out.printInfo("Info: Ignoring broadcast packet from peer " + std::to_string(_peerID) + ", because AES handshakes are enabled for this peer and AES handshakes are not possible for broadcast packets.");
+			else _bl->out.printInfo("Info: Ignoring broadcast packet from peer " + std::to_string(_peerID) + " to other peer, because AES handshakes are enabled for this peer.");
+			return;
+		}
 		if(!_rpcDevice) return;
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		if(!central) return;

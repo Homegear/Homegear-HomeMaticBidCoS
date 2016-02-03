@@ -501,6 +501,20 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 		{
 			try
 			{
+				// {{{ Remove packet from queue id map
+				{
+					std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+					std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
+					if(idIterator != _queueIds.end())
+					{
+						for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+						{
+							removeQueueEntry(0, *queueId);
+						}
+						_queueIds.erase(idIterator);
+					}
+				}
+				// }}}
 				std::lock_guard<std::mutex> peersGuard(_peersMutex);
 				std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(packet->senderAddress());
 				if(peerIterator != _peers.end() && peerIterator->second.wakeUp)
@@ -524,7 +538,24 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 			}
 		}
-		else raisePacketReceived(packet);
+		else
+		{
+			// {{{ Remove packet from queue id map
+			{
+				std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+				std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
+				if(idIterator != _queueIds.end())
+				{
+					for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+					{
+						removeQueueEntry(0, *queueId);
+					}
+					_queueIds.erase(idIterator);
+				}
+			}
+			// }}}
+			raisePacketReceived(packet);
+		}
 		if(_bl->hf.getTime() - _lastAesHandshakeGc > 30000)
 		{
 			_lastAesHandshakeGc = _bl->hf.getTime();
@@ -561,6 +592,22 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 		}
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(!bidCoSPacket) return;
+
+		// {{{ Remove packet from queue id map
+		{
+			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
+			std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(bidCoSPacket->senderAddress());
+			if(idIterator != _queueIds.end())
+			{
+				for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
+				{
+					removeQueueEntry(0, *queueId);
+				}
+				_queueIds.erase(idIterator);
+			}
+		}
+		// }}}
+
 		if(_updateMode && !bidCoSPacket->isUpdatePacket())
 		{
 			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ", because update mode is enabled.");

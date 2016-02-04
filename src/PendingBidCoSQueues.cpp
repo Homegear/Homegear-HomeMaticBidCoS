@@ -99,7 +99,8 @@ void PendingBidCoSQueues::unserialize(std::shared_ptr<std::vector<char>> seriali
 				parameters->integers.push_back(decoder.decodeInteger(*serializedData, position));
 				parameters->integers.push_back(decoder.decodeInteger(*serializedData, position) * 1000);
 				queue->callbackParameter = parameters;
-				queue->queueEmptyCallback = delegate<void (std::shared_ptr<CallbackFunctionParameter>)>::from_method<BidCoSPeer, &BidCoSPeer::addVariableToResetCallback>(peer);
+				using std::placeholders::_1;
+				queue->queueEmptyCallback = std::bind(&BidCoSPeer::addVariableToResetCallback, peer, _1);
 			}
 			queue->pendingQueueID = _currentID++;
 			_queues.push_back(queue);

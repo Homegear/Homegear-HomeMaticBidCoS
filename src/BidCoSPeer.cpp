@@ -333,51 +333,59 @@ BidCoSPeer::BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, ui
 void BidCoSPeer::worker()
 {
 	if(_disposing) return;
-	std::vector<uint32_t> positionsToDelete;
-	std::vector<std::shared_ptr<VariableToReset>> variablesToReset;
-	int32_t index;
+	std::vector<std::pair<int32_t, std::string>> positionsToDelete;
+	std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>> variablesToReset;
 	int64_t time;
 	try
 	{
 		time = BaseLib::HelperFunctions::getTime();
 		if(!_variablesToReset.empty())
 		{
-			index = 0;
 			_variablesToResetMutex.lock();
-			for(std::vector<std::shared_ptr<VariableToReset>>::iterator i = _variablesToReset.begin(); i != _variablesToReset.end(); ++i)
+			for(std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>>::iterator i = _variablesToReset.begin(); i != _variablesToReset.end(); ++i)
 			{
-				if((*i)->resetTime + 3000 <= time)
+				for(std::map<std::string, std::shared_ptr<VariableToReset>>::iterator j = i->second.begin(); j != i->second.end(); ++j)
 				{
-					variablesToReset.push_back(*i);
-					positionsToDelete.push_back(index);
+					if(j->second->resetTime <= time)
+					{
+						variablesToReset[i->first][j->first] = j->second;
+						positionsToDelete.push_back(std::pair<int32_t, std::string>(i->first, j->first));
+					}
 				}
-				index++;
 			}
 			_variablesToResetMutex.unlock();
-			for(std::vector<std::shared_ptr<VariableToReset>>::iterator i = variablesToReset.begin(); i != variablesToReset.end(); ++i)
+			for(std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>>::iterator i = variablesToReset.begin(); i != variablesToReset.end(); ++i)
 			{
-				if((*i)->isDominoEvent)
+				for(std::map<std::string, std::shared_ptr<VariableToReset>>::iterator j = i->second.begin(); j != i->second.end(); ++j)
 				{
-					BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral.at((*i)->channel).at((*i)->key);
-					parameter->data = (*i)->data;
-					if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
-					else saveParameter(0, ParameterGroup::Type::Enum::variables, (*i)->channel, (*i)->key, parameter->data);
-					std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string> {(*i)->key});
-					std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable> { valuesCentral.at((*i)->channel).at((*i)->key).rpcParameter->convertFromPacket((*i)->data) });
-					GD::out.printInfo("Info: Domino event: " + (*i)->key + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string((*i)->channel) + " was reset.");
-					raiseRPCEvent(_peerID, (*i)->channel, _serialNumber + ":" + std::to_string((*i)->channel), valueKeys, rpcValues);
-				}
-				else
-				{
-					PVariable rpcValue = valuesCentral.at((*i)->channel).at((*i)->key).rpcParameter->convertFromPacket((*i)->data);
-					setValue(nullptr, (*i)->channel, (*i)->key, rpcValue, false);
+					if(j->second->isDominoEvent)
+					{
+						BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral.at(j->second->channel).at(j->second->key);
+						parameter->data = j->second->data;
+						if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
+						else saveParameter(0, ParameterGroup::Type::Enum::variables, j->second->channel, j->second->key, parameter->data);
+						std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string> {j->second->key});
+						std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable> { valuesCentral.at(j->second->channel).at(j->second->key).rpcParameter->convertFromPacket(j->second->data) });
+						GD::out.printInfo("Info: Domino event: " + j->second->key + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string(j->second->channel) + " was reset.");
+						raiseRPCEvent(_peerID, j->second->channel, _serialNumber + ":" + std::to_string(j->second->channel), valueKeys, rpcValues);
+					}
+					else
+					{
+						BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral.at(j->second->channel).at(j->second->key);
+						if(parameter->data != j->second->data)
+						{
+							GD::out.printInfo("Info: Resetting " + j->second->key + " on channel " + std::to_string(j->second->channel) + '.');
+							PVariable rpcValue = parameter->rpcParameter->convertFromPacket(j->second->data);
+							setValue(nullptr, j->second->channel, j->second->key, rpcValue, false);
+						}
+					}
 				}
 			}
 			_variablesToResetMutex.lock();
-			for(std::vector<uint32_t>::reverse_iterator i = positionsToDelete.rbegin(); i != positionsToDelete.rend(); ++i)
+			for(std::vector<std::pair<int32_t, std::string>>::reverse_iterator i = positionsToDelete.rbegin(); i != positionsToDelete.rend(); ++i)
 			{
-				std::vector<std::shared_ptr<VariableToReset>>::iterator element = _variablesToReset.begin() + *i;
-				if(element < _variablesToReset.end()) _variablesToReset.erase(element);
+				_variablesToReset[i->first].erase(i->second);
+				if(_variablesToReset[i->first].empty()) _variablesToReset.erase(i->first);
 			}
 			_variablesToResetMutex.unlock();
 			positionsToDelete.clear();
@@ -1068,14 +1076,17 @@ void BidCoSPeer::serializeVariablesToReset(std::vector<uint8_t>& encodedData)
 		BaseLib::BinaryEncoder encoder(_bl);
 		_variablesToResetMutex.lock();
 		encoder.encodeInteger(encodedData, _variablesToReset.size());
-		for(std::vector<std::shared_ptr<VariableToReset>>::iterator i = _variablesToReset.begin(); i != _variablesToReset.end(); ++i)
+		for(std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>>::iterator i = _variablesToReset.begin(); i != _variablesToReset.end(); ++i)
 		{
-			encoder.encodeInteger(encodedData, (*i)->channel);
-			encoder.encodeString(encodedData, (*i)->key);
-			encoder.encodeInteger(encodedData, (*i)->data.size());
-			encodedData.insert(encodedData.end(), (*i)->data.begin(), (*i)->data.end());
-			encoder.encodeInteger(encodedData, (*i)->resetTime / 1000);
-			encoder.encodeBoolean(encodedData, (*i)->isDominoEvent);
+			for(std::map<std::string, std::shared_ptr<VariableToReset>>::iterator j = i->second.begin(); j != i->second.end(); ++j)
+			{
+				encoder.encodeInteger(encodedData, j->second->channel);
+				encoder.encodeString(encodedData, j->second->key);
+				encoder.encodeInteger(encodedData, j->second->data.size());
+				encodedData.insert(encodedData.end(), j->second->data.begin(), j->second->data.end());
+				encoder.encodeInteger(encodedData, j->second->resetTime / 1000);
+				encoder.encodeBoolean(encodedData, j->second->isDominoEvent);
+			}
 		}
 	}
 	catch(const std::exception& ex)
@@ -1116,7 +1127,7 @@ void BidCoSPeer::unserializeVariablesToReset(std::shared_ptr<std::vector<char>> 
 			try
 			{
 				_variablesToResetMutex.lock();
-				_variablesToReset.push_back(variable);
+				_variablesToReset[variable->channel][variable->key] = variable;
 			}
 			catch(const std::exception& ex)
 			{
@@ -2074,13 +2085,16 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
 			if(!_variablesToReset.empty())
 			{
 				_variablesToResetMutex.lock();
-				for(std::vector<std::shared_ptr<VariableToReset>>::iterator k = _variablesToReset.begin(); k != _variablesToReset.end(); ++k)
+				for(std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>>::iterator k = _variablesToReset.begin(); k != _variablesToReset.end(); ++k)
 				{
-					if((*k)->channel == channel && (*k)->key == parameter->id)
+					for(std::map<std::string, std::shared_ptr<VariableToReset>>::iterator l = k->second.begin(); l != k->second.end(); ++l)
 					{
-						GD::out.printDebug("Debug: Deleting element " + parameter->id + " from _variablesToReset. Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frameID);
-						_variablesToReset.erase(k);
-						break; //The key should only be once in the vector, so breaking is ok and we can't continue as the iterator is invalidated.
+						if(l->second->channel == channel && l->second->key == parameter->id)
+						{
+							GD::out.printDebug("Debug: Deleting element " + parameter->id + " from _variablesToReset. Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frameID);
+							_variablesToReset.erase(k);
+							break; //The key should only be once in the vector, so breaking is ok and we can't continue as the iterator is invalidated.
+						}
 					}
 				}
 				_variablesToResetMutex.unlock();
@@ -2097,7 +2111,7 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
 			variable->key = parameter->id;
 			variable->isDominoEvent = true;
 			_variablesToResetMutex.lock();
-			_variablesToReset.push_back(variable);
+			_variablesToReset[variable->channel][variable->key] = variable;
 			_variablesToResetMutex.unlock();
 			GD::out.printDebug("Debug: " + parameter->id + " will be reset in " + std::to_string((variable->resetTime - time) / 1000) + "s.", 5);
 		}
@@ -2415,6 +2429,25 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 					if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
 					else saveParameter(0, ParameterGroup::Type::Enum::variables, *j, i->first, parameter->data);
 					if(_bl->debugLevel >= 4) GD::out.printInfo("Info: " + i->first + " on channel " + std::to_string(*j) + " of HomeMatic BidCoS peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + " was set to 0x" + BaseLib::HelperFunctions::getHexString(i->second.value) + ".");
+
+					/// {{{ Remove parameter from _variablesToReset
+						_variablesToResetMutex.lock();
+						std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>>::iterator resetIterator1 = _variablesToReset.find(*j);
+						if(resetIterator1 != _variablesToReset.end())
+						{
+							std::map<std::string, std::shared_ptr<VariableToReset>>::iterator resetIterator2 = resetIterator1->second.find(i->first);
+							if(resetIterator2 != resetIterator1->second.end())
+							{
+								if(resetIterator2->second->data == parameter->data)
+								{
+									if(GD::bl->debugLevel >= 5) GD::out.printDebug("Debug: Deleting element from _variablesToReset. Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frame->id, 5);
+									resetIterator1->second.erase(resetIterator2);
+									if(resetIterator1->second.empty()) _variablesToReset.erase(resetIterator1);
+								}
+							}
+						}
+						_variablesToResetMutex.unlock();
+					/// }}}
 
 					if(parameter->rpcParameter)
 					{
@@ -3280,15 +3313,16 @@ void BidCoSPeer::addVariableToResetCallback(std::shared_ptr<CallbackFunctionPara
 		if(parameters->integers.size() != 3) return;
 		if(parameters->strings.size() != 1) return;
 		GD::out.printMessage("addVariableToResetCallback invoked for parameter " + parameters->strings.at(0) + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ".", 5);
-		GD::out.printInfo("Parameter " + parameters->strings.at(0) + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + " will be reset at " + BaseLib::HelperFunctions::getTimeString(parameters->integers.at(2)) + ".");
+		int64_t timeToReset = BaseLib::HelperFunctions::getTime() + parameters->integers.at(2);
+		GD::out.printInfo("Parameter " + parameters->strings.at(0) + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + " will be reset at " + BaseLib::HelperFunctions::getTimeString(timeToReset) + ".");
 		std::shared_ptr<VariableToReset> variable(new VariableToReset);
 		variable->channel = parameters->integers.at(0);
 		int32_t integerValue = parameters->integers.at(1);
 		_bl->hf.memcpyBigEndian(variable->data, integerValue);
-		variable->resetTime = parameters->integers.at(2);
+		variable->resetTime = timeToReset;
 		variable->key = parameters->strings.at(0);
 		_variablesToResetMutex.lock();
-		_variablesToReset.push_back(variable);
+		_variablesToReset[variable->channel][variable->key] = variable;
 		_variablesToResetMutex.unlock();
 	}
 	catch(const std::exception& ex)
@@ -3508,31 +3542,32 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 					GD::out.printError("Error: Can't set \"ON_TIME\" for " + rpcParameter->physical->groupId + ". Currently \"ON_TIME\" is only supported for \"STATE\" of type \"boolean\" or \"LEVEL\" of type \"float\". Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frame->id);
 					continue;
 				}
-				if(!_variablesToReset.empty())
-				{
-					_variablesToResetMutex.lock();
-					for(std::vector<std::shared_ptr<VariableToReset>>::iterator i = _variablesToReset.begin(); i != _variablesToReset.end(); ++i)
-					{
-						if((*i)->channel == channel && (*i)->key == rpcParameter->physical->groupId)
-						{
-							GD::out.printMessage("Debug: Deleting element from _variablesToReset. Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frame->id, 5);
-							_variablesToReset.erase(i);
-							break; //The key should only be once in the vector, so breaking is ok and we can't continue as the iterator is invalidated.
-						}
-					}
-					_variablesToResetMutex.unlock();
-				}
 				if((rpcParameter->physical->groupId == "STATE" && !value->booleanValue) || (rpcParameter->physical->groupId == "LEVEL" && value->floatValue == 0) || additionalParameter->data.empty() || additionalParameter->data.at(0) == 0) continue;
 				std::shared_ptr<CallbackFunctionParameter> parameters(new CallbackFunctionParameter());
 				parameters->integers.push_back(channel);
 				parameters->integers.push_back(0); //false = off
-				int64_t time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-				parameters->integers.push_back(time + std::lround(additionalParameter->rpcParameter->convertFromPacket(additionalParameter->data)->floatValue * 1000));
+				parameters->integers.push_back(std::lround(additionalParameter->rpcParameter->convertFromPacket(additionalParameter->data)->floatValue * 1000));
 				parameters->strings.push_back(rpcParameter->physical->groupId);
 				queue->callbackParameter = parameters;
-				queue->queueEmptyCallback = delegate<void (std::shared_ptr<CallbackFunctionParameter>)>::from_method<BidCoSPeer, &BidCoSPeer::addVariableToResetCallback>(this);
+				using std::placeholders::_1;
+				queue->queueEmptyCallback = std::bind(&BidCoSPeer::addVariableToResetCallback, this, _1);
 			}
 		}
+
+		_variablesToResetMutex.lock();
+		std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>>::iterator resetIterator1 = _variablesToReset.find(channel);
+		if(resetIterator1 != _variablesToReset.end())
+		{
+			std::map<std::string, std::shared_ptr<VariableToReset>>::iterator resetIterator2 = resetIterator1->second.find(valueKey);
+			if(resetIterator2 != resetIterator1->second.end())
+			{
+				if(GD::bl->debugLevel >= 5) GD::bl->out.printDebug("Debug: Deleting element from _variablesToReset. Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frame->id, 5);
+				resetIterator1->second.erase(resetIterator2);
+				if(resetIterator1->second.empty()) _variablesToReset.erase(resetIterator1);
+			}
+		}
+		_variablesToResetMutex.unlock();
+
 		if(!rpcParameter->setPackets.front()->autoReset.empty())
 		{
 			for(std::vector<std::string>::iterator j = rpcParameter->setPackets.front()->autoReset.begin(); j != rpcParameter->setPackets.front()->autoReset.end(); ++j)

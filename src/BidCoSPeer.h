@@ -32,7 +32,6 @@
 
 #include "homegear-base/BaseLib.h"
 #include "BidCoSDeviceTypes.h"
-#include "delegate.hpp"
 #include "BidCoSPacket.h"
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 
@@ -244,7 +243,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
     protected:
         uint32_t _lastRSSIDevice = 0;
         std::mutex _variablesToResetMutex;
-        std::vector<std::shared_ptr<VariableToReset>> _variablesToReset;
+        std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>> _variablesToReset;
         std::shared_ptr<IBidCoSInterface> _physicalInterface;
 
         //In table variables:

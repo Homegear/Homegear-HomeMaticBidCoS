@@ -30,7 +30,6 @@
 #ifndef BIDCOSQUEUE_H
 #define BIDCOSQUEUE_H
 
-#include "delegate.hpp"
 #include "homegear-base/BaseLib.h"
 #include "BidCoSPacket.h"
 #include "PhysicalInterfaces/IBidCoSInterface.h"
@@ -116,7 +115,7 @@ class BidCoSQueue
         bool noSending = false;
         std::shared_ptr<BidCoSPeer> peer;
         std::shared_ptr<CallbackFunctionParameter> callbackParameter;
-        delegate<void (std::shared_ptr<CallbackFunctionParameter>)> queueEmptyCallback;
+        std::function<void(std::shared_ptr<CallbackFunctionParameter>)> queueEmptyCallback;
         BidCoSQueueType getQueueType() { return _queueType; }
         std::list<BidCoSQueueEntry>* getQueue() { return &_queue; }
         void setQueueType(BidCoSQueueType queueType) {  _queueType = queueType; }

@@ -742,6 +742,8 @@ void HomeMaticCentral::worker()
     }
 }
 
+bool deleteThis = false;
+
 bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<BaseLib::Systems::Packet> packet)
 {
 	try
@@ -787,6 +789,19 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 		}
 		std::shared_ptr<IBidCoSInterface> physicalInterface = getPhysicalInterface(bidCoSPacket->senderAddress());
 		if(physicalInterface->getID() != senderID) return true;
+
+		// {{{ Handle wrong ACKs
+			if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
+			{
+				std::shared_ptr<BidCoSPacket> sentPacket(_sentPackets.get(packet->senderAddress()));
+				if(sentPacket && sentPacket->messageCounter() != bidCoSPacket->messageCounter())
+				{
+					_bl->out.printInfo("Info: Ignoring ACK with wrong message counter.");
+					return true;
+				}
+			}
+		// }}}
+
 		bool handled = false;
 		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + packet->hexString() + " is now passed to _receivedPackets.set.");
 		if(_receivedPackets.set(bidCoSPacket->senderAddress(), bidCoSPacket, bidCoSPacket->timeReceived())) handled = true;

@@ -54,8 +54,6 @@ class BidCoSMessage
         BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>));
         virtual ~BidCoSMessage();
 
-        int32_t getControlByte() { return _controlByte; }
-        void setControlByte(int32_t controlByte) { _controlByte = controlByte; }
         int32_t getMessageType() { return _messageType; }
         void setMessageType(int32_t messageType) { _messageType = messageType; }
         int32_t getMessageAccess() { return _access; }
@@ -64,20 +62,15 @@ class BidCoSMessage
         void setMessageAccessPairing(int32_t accessPairing) { _accessPairing = accessPairing; }
         void invokeMessageHandler(std::shared_ptr<BidCoSPacket> packet);
         bool checkAccess(std::shared_ptr<BidCoSPacket> packet, std::shared_ptr<BidCoSQueue> queue);
-        std::vector<std::pair<uint32_t, int32_t>>* getSubtypes() { return &_subtypes; }
-        void addSubtype(int32_t subtypePosition, int32_t subtype) { _subtypes.push_back(std::pair<uint32_t, int32_t>(subtypePosition, subtype)); };
-        uint32_t subtypeCount() { return _subtypes.size(); }
         void setMessageCounter(std::shared_ptr<BidCoSPacket> packet);
         bool typeIsEqual(std::shared_ptr<BidCoSPacket> packet);
         bool typeIsEqual(std::shared_ptr<BidCoSMessage> message, std::shared_ptr<BidCoSPacket> packet);
         bool typeIsEqual(std::shared_ptr<BidCoSMessage> message);
-        bool typeIsEqual(int32_t messageType, std::vector<std::pair<uint32_t, int32_t>>* subtypes);
+        bool typeIsEqual(int32_t messageType);
     protected:
         int32_t _messageType = -1;
-        int32_t _controlByte = 0;
         int32_t _access = 0;
         int32_t _accessPairing = 0;
-        std::vector<std::pair<uint32_t, int32_t>> _subtypes;
         void (HomeMaticCentral::*_messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>) = nullptr;
     private:
 };

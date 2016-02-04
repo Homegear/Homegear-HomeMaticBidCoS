@@ -71,17 +71,12 @@ void BidCoSMessage::invokeMessageHandler(std::shared_ptr<BidCoSPacket> packet)
 	}
 }
 
-bool BidCoSMessage::typeIsEqual(int32_t messageType, std::vector<std::pair<uint32_t, int32_t> >* subtypes)
+bool BidCoSMessage::typeIsEqual(int32_t messageType)
 {
 	try
 	{
 		if(_messageType == -1) return true; //Match any
 		if(_messageType != messageType) return false;
-		if(subtypes->size() != _subtypes.size()) return false;
-		for(uint32_t i = 0; i < subtypes->size(); i++)
-		{
-			if(subtypes->at(i).first != _subtypes.at(i).first || subtypes->at(i).second != _subtypes.at(i).second) return false;
-		}
 		return true;
 	}
 	catch(const std::exception& ex)
@@ -99,19 +94,11 @@ bool BidCoSMessage::typeIsEqual(int32_t messageType, std::vector<std::pair<uint3
 	return false;
 }
 
-
 bool BidCoSMessage::typeIsEqual(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
 		if(_messageType != packet->messageType()) return false;
-		std::vector<uint8_t>* payload = packet->payload();
-		if(_subtypes.empty()) return true;
-		for(std::vector<std::pair<uint32_t, int32_t>>::const_iterator i = _subtypes.begin(); i != _subtypes.end(); ++i)
-		{
-			if(i->first >= payload->size()) return false;
-			if(payload->at(i->first) != i->second) return false;
-		}
 		return true;
 	}
 	catch(const std::exception& ex)
@@ -134,13 +121,6 @@ bool BidCoSMessage::typeIsEqual(std::shared_ptr<BidCoSMessage> message)
 	try
 	{
 		if(_messageType != message->getMessageType()) return false;
-		if(_subtypes.empty()) return true;
-		if(message->subtypeCount() != _subtypes.size()) return false;
-		std::vector<std::pair<uint32_t, int32_t> >* subtypes = message->getSubtypes();
-		for(uint32_t i = 0; i < _subtypes.size(); i++)
-		{
-			if(subtypes->at(i).first != _subtypes.at(i).first || subtypes->at(i).second != _subtypes.at(i).second) return false;
-		}
 		return true;
 	}
 	catch(const std::exception& ex)
@@ -163,14 +143,6 @@ bool BidCoSMessage::typeIsEqual(std::shared_ptr<BidCoSMessage> message, std::sha
 	try
 	{
 		if(message->getMessageType() != packet->messageType()) return false;
-		std::vector<std::pair<uint32_t, int32_t>>* subtypes = message->getSubtypes();
-		std::vector<uint8_t>* payload = packet->payload();
-		if(subtypes == nullptr || subtypes->size() == 0) return true;
-		for(std::vector<std::pair<uint32_t, int32_t> >::const_iterator i = subtypes->begin(); i != subtypes->end(); ++i)
-		{
-			if(i->first >= payload->size()) return false;
-			if(payload->at(i->first) != i->second) return false;
-		}
 		return true;
 	}
 	catch(const std::exception& ex)

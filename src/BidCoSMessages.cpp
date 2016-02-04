@@ -57,20 +57,11 @@ std::shared_ptr<BidCoSMessage> BidCoSMessages::find(std::shared_ptr<BidCoSPacket
 	try
 	{
 		if(!packet) return std::shared_ptr<BidCoSMessage>();
-		int32_t subtypeMax = -1;
-		std::shared_ptr<BidCoSMessage>* elementToReturn = nullptr;
 		for(uint32_t i = 0; i < _messages.size(); i++)
 		{
-			if(_messages[i]->typeIsEqual(packet))
-			{
-				if((signed)_messages[i]->subtypeCount() > subtypeMax)
-				{
-					elementToReturn = &_messages[i];
-					subtypeMax = _messages[i]->subtypeCount();
-				}
-			}
+			if(_messages[i]->typeIsEqual(packet)) return _messages[i];
 		}
-		if(elementToReturn == nullptr) return std::shared_ptr<BidCoSMessage>(); else return *elementToReturn;
+		return std::shared_ptr<BidCoSMessage>();
 	}
 	catch(const std::exception& ex)
 	{
@@ -87,13 +78,13 @@ std::shared_ptr<BidCoSMessage> BidCoSMessages::find(std::shared_ptr<BidCoSPacket
 	return std::shared_ptr<BidCoSMessage>();
 }
 
-std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t messageType, std::vector<std::pair<uint32_t, int32_t>> subtypes)
+std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t messageType)
 {
 	try
 	{
 		for(uint32_t i = 0; i < _messages.size(); i++)
 		{
-			if(_messages[i]->typeIsEqual(messageType, &subtypes)) return _messages[i];
+			if(_messages[i]->typeIsEqual(messageType)) return _messages[i];
 		}
 	}
 	catch(const std::exception& ex)

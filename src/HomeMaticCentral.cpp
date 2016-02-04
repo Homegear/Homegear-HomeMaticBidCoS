@@ -2378,7 +2378,7 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 		payload.push_back(0);
 		std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 		pendingQueue->push(configPacket);
-		pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		pendingQueue->push(_messages->find(0x02));
 
 		peer->pendingBidCoSQueues->push(pendingQueue);
 		peer->serviceMessages->setConfigPending(true);
@@ -2468,7 +2468,7 @@ void HomeMaticCentral::addHomegearFeaturesRemote(std::shared_ptr<BidCoSPeer> pee
 			payload.push_back(0);
 			std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 			pendingQueue->push(configPacket);
-			pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			pendingQueue->push(_messages->find(0x02));
 			peer->pendingBidCoSQueues->push(pendingQueue);
 			peer->serviceMessages->setConfigPending(true);
 
@@ -2493,7 +2493,7 @@ void HomeMaticCentral::addHomegearFeaturesRemote(std::shared_ptr<BidCoSPeer> pee
 				payload.push_back(0);
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 				pendingQueue->push(configPacket);
-				pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				pendingQueue->push(_messages->find(0x02));
 				peer->pendingBidCoSQueues->push(pendingQueue);
 				peer->serviceMessages->setConfigPending(true);
 
@@ -2579,7 +2579,7 @@ void HomeMaticCentral::addHomegearFeaturesSwitch(std::shared_ptr<BidCoSPeer> pee
 			payload.push_back(0);
 			std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 			pendingQueue->push(configPacket);
-			pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			pendingQueue->push(_messages->find(0x02));
 			peer->pendingBidCoSQueues->push(pendingQueue);
 			peer->serviceMessages->setConfigPending(true);
 		}
@@ -2601,7 +2601,7 @@ void HomeMaticCentral::addHomegearFeaturesSwitch(std::shared_ptr<BidCoSPeer> pee
 				payload.push_back(0);
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 				pendingQueue->push(configPacket);
-				pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				pendingQueue->push(_messages->find(0x02));
 				peer->pendingBidCoSQueues->push(pendingQueue);
 				peer->serviceMessages->setConfigPending(true);
 			}
@@ -2679,7 +2679,7 @@ void HomeMaticCentral::addHomegearFeaturesHMCCRTDN(std::shared_ptr<BidCoSPeer> p
 		payload.push_back(0);
 		std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 		pendingQueue->push(configPacket);
-		pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		pendingQueue->push(_messages->find(0x02));
 		peer->pendingBidCoSQueues->push(pendingQueue);
 		peer->serviceMessages->setConfigPending(true);
 
@@ -2847,7 +2847,7 @@ void HomeMaticCentral::reset(uint64_t id, bool defer)
 		payload.push_back(0x00);
 		std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x11, _address, peer->getAddress(), payload));
 		pendingQueue->push(configPacket);
-		pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		pendingQueue->push(_messages->find(0x02));
 
 		if(defer)
 		{
@@ -2896,7 +2896,7 @@ void HomeMaticCentral::unpair(uint64_t id, bool defer)
 		payload.push_back(0);
 		std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x01, _address, peer->getAddress(), payload));
 		pendingQueue->push(configPacket);
-		pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		pendingQueue->push(_messages->find(0x02));
 		payload.clear();
 
 		//CONFIG_WRITE_INDEX
@@ -2912,7 +2912,7 @@ void HomeMaticCentral::unpair(uint64_t id, bool defer)
 		payload.push_back(0);
 		configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 		pendingQueue->push(configPacket);
-		pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		pendingQueue->push(_messages->find(0x02));
 		payload.clear();
 
 		//END_CONFIG
@@ -2920,7 +2920,7 @@ void HomeMaticCentral::unpair(uint64_t id, bool defer)
 		payload.push_back(0x06);
 		configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, peer->getAddress(), payload));
 		pendingQueue->push(configPacket);
-		pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		pendingQueue->push(_messages->find(0x02));
 		payload.clear();
 
 		if(defer)
@@ -3010,7 +3010,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			payload.push_back(0);
 			std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, packet->senderAddress(), payload));
 			queue->push(configPacket);
-			queue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			queue->push(_messages->find(0x02));
 			payload.clear();
 
 			//CONFIG_WRITE_INDEX
@@ -3034,7 +3034,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			payload.push_back(_address & 0xFF);
 			configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, packet->senderAddress(), payload));
 			queue->push(configPacket);
-			queue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			queue->push(_messages->find(0x02));
 			payload.clear();
 
 			//END_CONFIG
@@ -3042,7 +3042,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			payload.push_back(0x06);
 			configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, packet->senderAddress(), payload));
 			queue->push(configPacket);
-			queue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			queue->push(_messages->find(0x02));
 			payload.clear();
 
 			//Don't check for rxModes here! All rxModes are allowed.
@@ -3069,7 +3069,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 							payload.push_back(k->first);
 							configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, packet->senderAddress(), payload));
 							pendingQueue->push(configPacket);
-							pendingQueue->push(_messages->find(0x10, std::vector<std::pair<uint32_t, int32_t>>()));
+							pendingQueue->push(_messages->find(0x10));
 							payload.clear();
 							peer->pendingBidCoSQueues->push(pendingQueue);
 							peer->serviceMessages->setConfigPending(true);
@@ -3084,7 +3084,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 						payload.push_back(0x03);
 						configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, packet->senderAddress(), payload));
 						pendingQueue->push(configPacket);
-						pendingQueue->push(_messages->find(0x10, std::vector<std::pair<uint32_t, int32_t>>()));
+						pendingQueue->push(_messages->find(0x10));
 						payload.clear();
 						peer->pendingBidCoSQueues->push(pendingQueue);
 						peer->serviceMessages->setConfigPending(true);
@@ -3201,7 +3201,7 @@ void HomeMaticCentral::sendRequestConfig(int32_t address, uint8_t localChannel, 
 		payload.push_back(list);
 		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA0, 0x01, _address, address, payload));
 		pendingQueue->push(packet);
-		pendingQueue->push(_messages->find(0x10, std::vector<std::pair<uint32_t, int32_t>>()));
+		pendingQueue->push(_messages->find(0x10));
 		payload.clear();
 
 		peer->pendingBidCoSQueues->push(pendingQueue);
@@ -4117,7 +4117,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 				payload.push_back(0);
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x01, _address, sender->getAddress(), payload));
 				pendingQueue->push(configPacket);
-				pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				pendingQueue->push(_messages->find(0x02));
 				configByte = 0xA0;
 			}
 
@@ -4132,7 +4132,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			payload.push_back(0);
 			std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x01, _address, sender->getAddress(), payload));
 			pendingQueue->push(configPacket);
-			pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			pendingQueue->push(_messages->find(0x02));
 
 			sender->pendingBidCoSQueues->push(pendingQueue);
 			sender->serviceMessages->setConfigPending(true);
@@ -4213,7 +4213,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 					payload.push_back(0);
 					std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x01, _address, receiver->getAddress(), payload));
 					pendingQueue->push(configPacket);
-					pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+					pendingQueue->push(_messages->find(0x02));
 					configByte = 0xA0;
 				}
 			}
@@ -4229,7 +4229,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			payload.push_back(0);
 			std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x01, _address, receiver->getAddress(), payload));
 			pendingQueue->push(configPacket);
-			pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			pendingQueue->push(_messages->find(0x02));
 
 			receiver->pendingBidCoSQueues->push(pendingQueue);
 			receiver->serviceMessages->setConfigPending(true);
@@ -4371,7 +4371,7 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 			payload.push_back(0);
 			std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x01, _address, sender->getAddress(), payload));
 			pendingQueue->push(configPacket);
-			pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			pendingQueue->push(_messages->find(0x02));
 
 			sender->pendingBidCoSQueues->push(pendingQueue);
 			sender->serviceMessages->setConfigPending(true);
@@ -4411,7 +4411,7 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 			payload.push_back(0);
 			std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(getMessageCounter(), configByte, 0x01, _address, receiver->getAddress(), payload));
 			pendingQueue->push(configPacket);
-			pendingQueue->push(_messages->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			pendingQueue->push(_messages->find(0x02));
 
 			receiver->pendingBidCoSQueues->push(pendingQueue);
 			receiver->serviceMessages->setConfigPending(true);
@@ -4684,7 +4684,7 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(peer->getMessageCounter(), configByte, 0x01, _address, peer->getAddress(), payload));
 			peer->setMessageCounter(peer->getMessageCounter() + 1);
 			queue->push(packet);
-			queue->push(getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+			queue->push(getMessages()->find(0x02));
 			configByte = 0xA0;
 		}
 
@@ -4699,7 +4699,7 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(peer->getMessageCounter(), configByte, 0x01, _address, peer->getAddress(), payload));
 		peer->setMessageCounter(peer->getMessageCounter() + 1);
 		queue->push(packet);
-		queue->push(getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(getMessages()->find(0x02));
 
 		peer->pendingBidCoSQueues->push(queue);
 		peer->serviceMessages->setConfigPending(true);

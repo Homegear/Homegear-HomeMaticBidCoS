@@ -112,13 +112,7 @@ void BidCoSQueue::serialize(std::vector<uint8_t>& encodedData)
 				uint8_t dummy = 0;
 				encoder.encodeByte(encodedData, dummy);
 				encoder.encodeByte(encodedData, message->getMessageType());
-				std::vector<std::pair<uint32_t, int32_t>>* subtypes = message->getSubtypes();
-				encoder.encodeByte(encodedData, subtypes->size());
-				for(std::vector<std::pair<uint32_t, int32_t>>::iterator j = subtypes->begin(); j != subtypes->end(); ++j)
-				{
-					encoder.encodeByte(encodedData, j->first);
-					encoder.encodeByte(encodedData, j->second);
-				}
+				encoder.encodeByte(encodedData, 0); //Dummy
 			}
 			encoder.encodeString(encodedData, parameterName);
 			encoder.encodeInteger(encodedData, channel);
@@ -171,14 +165,9 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 			{
 				decoder.decodeByte(*serializedData, position);
 				int32_t messageType = decoder.decodeByte(*serializedData, position);
-				uint32_t subtypeSize = decoder.decodeByte(*serializedData, position);
-				std::vector<std::pair<uint32_t, int32_t>> subtypes;
-				for(uint32_t j = 0; j < subtypeSize; j++)
-				{
-					subtypes.push_back(std::pair<uint32_t, int32_t>(decoder.decodeByte(*serializedData, position), decoder.decodeByte(*serializedData, position)));
-				}
+				decoder.decodeByte(*serializedData, position); //Dummy
 				std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
-				if(central) entry->setMessage(central->getMessages()->find(messageType, subtypes), false);
+				if(central) entry->setMessage(central->getMessages()->find(messageType), false);
 			}
 			parameterName = decoder.decodeString(*serializedData, position);
 			channel = decoder.decodeInteger(*serializedData, position);
@@ -812,7 +801,7 @@ void BidCoSQueue::pop()
 		if(GD::bl->debugLevel >= 5 && !_queue.empty())
 		{
 			if(_queue.front().getType() == QueueEntryType::PACKET && _queue.front().getPacket()) GD::out.printDebug("Packet now at front of queue: " + _queue.front().getPacket()->hexString());
-			else if(_queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()) GD::out.printDebug("Message now at front: Message type: 0x" + BaseLib::HelperFunctions::getHexString(_queue.front().getMessage()->getMessageType()) + " Control byte: 0x" + BaseLib::HelperFunctions::getHexString(_queue.front().getMessage()->getControlByte()));
+			else if(_queue.front().getType() == QueueEntryType::MESSAGE && _queue.front().getMessage()) GD::out.printDebug("Message now at front: Message type: 0x" + BaseLib::HelperFunctions::getHexString(_queue.front().getMessage()->getMessageType()));
 		}
 		_queueMutex.unlock();
 		nextQueueEntry();

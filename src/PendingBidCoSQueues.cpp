@@ -435,15 +435,7 @@ void PendingBidCoSQueues::getInfoString(std::ostringstream& stringStream)
 					std::shared_ptr<BidCoSMessage> message = k->getMessage();
 					if(message)
 					{
-						stringStream << "Type: " << GD::bl->hf.getHexString(message->getMessageType(), 2) << " Control byte: " << GD::bl->hf.getHexString(message->getControlByte(), 2);
-						if(!message->getSubtypes()->empty())
-						{
-							stringStream << " Subtypes: ";
-							for(std::vector<std::pair<uint32_t, int32_t>>::iterator m = message->getSubtypes()->begin(); m != message->getSubtypes()->end(); ++m)
-							{
-								stringStream << "Index " << m->first << ": " << GD::bl->hf.getHexString(m->second, 2) << "; ";
-							}
-						}
+						stringStream << "Type: " << GD::bl->hf.getHexString(message->getMessageType(), 2);
 						stringStream << std::endl;
 					}
 					else

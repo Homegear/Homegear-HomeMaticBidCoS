@@ -45,7 +45,7 @@ class BidCoSMessages
         virtual ~BidCoSMessages() {}
         void add(std::shared_ptr<BidCoSMessage> message);
         std::shared_ptr<BidCoSMessage> find(std::shared_ptr<BidCoSPacket> packet);
-        std::shared_ptr<BidCoSMessage> find(int32_t messageType, std::vector<std::pair<uint32_t, int32_t> > subtypes);
+        std::shared_ptr<BidCoSMessage> find(int32_t messageType);
     protected:
     private:
         std::vector<std::shared_ptr<BidCoSMessage>> _messages;

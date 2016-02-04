@@ -1542,7 +1542,7 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 		payload.push_back(_aesKeyIndex * 2);
 		std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, 0xA0, 0x04, central->getAddress(), _address, payload));
 		queue->push(configPacket);
-		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02));
 		payload.clear();
 		setMessageCounter(_messageCounter + 1);
 
@@ -1550,7 +1550,7 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 		payload.push_back((_aesKeyIndex * 2) + 1);
 		configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x04, central->getAddress(), _address, payload));
 		queue->push(configPacket);
-		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02));
 		setMessageCounter(_messageCounter + 1);
 
 		pendingBidCoSQueues->push(queue);
@@ -2513,7 +2513,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 					std::vector<uint8_t> payload;
 					std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(packet->messageCounter(), 0xA1, 0x12, central->getAddress(), _address, payload));
 					queue->push(configPacket);
-					queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+					queue->push(central->getMessages()->find(0x02));
 
 					central->enqueuePackets(_address, queue, true);
 				}
@@ -2584,7 +2584,7 @@ PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, i
 		queue->noSending = true;
 		queue->push(packet);
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
-		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02));
 		pendingBidCoSQueues->push(queue);
 		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
 		{
@@ -2851,7 +2851,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				firstPacket = false;
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, controlByte, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 
@@ -2870,7 +2870,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 						{
 							configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 							queue->push(configPacket);
-							queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+							queue->push(central->getMessages()->find(0x02));
 							payload.clear();
 							setMessageCounter(_messageCounter + 1);
 							payload.push_back(channel);
@@ -2882,7 +2882,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				{
 					configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 					queue->push(configPacket);
-					queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+					queue->push(central->getMessages()->find(0x02));
 					payload.clear();
 					setMessageCounter(_messageCounter + 1);
 				}
@@ -2893,7 +2893,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				payload.push_back(0x06);
 				configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 			}
@@ -3017,7 +3017,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				firstPacket = false;
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, controlByte, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 
@@ -3036,7 +3036,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 						{
 							configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 							queue->push(configPacket);
-							queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+							queue->push(central->getMessages()->find(0x02));
 							payload.clear();
 							setMessageCounter(_messageCounter + 1);
 							payload.push_back(channel);
@@ -3048,7 +3048,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				{
 					configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 					queue->push(configPacket);
-					queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+					queue->push(central->getMessages()->find(0x02));
 					payload.clear();
 					setMessageCounter(_messageCounter + 1);
 				}
@@ -3059,7 +3059,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				payload.push_back(0x06);
 				configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, 0xA0, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
-				queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+				queue->push(central->getMessages()->find(0x02));
 				payload.clear();
 				setMessageCounter(_messageCounter + 1);
 			}
@@ -3478,7 +3478,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 						if(j < blocks - 1)
 						{
 							queue->push(packet);
-							queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+							queue->push(central->getMessages()->find(0x02));
 							setMessageCounter(_messageCounter + 1);
 							packet = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->getAddress(), _address, payload));
 						}
@@ -3558,7 +3558,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		}
 		setMessageCounter(_messageCounter + 1);
 		queue->push(packet);
-		queue->push(central->getMessages()->find(0x02, std::vector<std::pair<uint32_t, int32_t>>()));
+		queue->push(central->getMessages()->find(0x02));
 		pendingBidCoSQueues->push(queue);
 		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
 		{

@@ -3549,8 +3549,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 				parameters->integers.push_back(std::lround(additionalParameter->rpcParameter->convertFromPacket(additionalParameter->data)->floatValue * 1000));
 				parameters->strings.push_back(rpcParameter->physical->groupId);
 				queue->callbackParameter = parameters;
-				using std::placeholders::_1;
-				queue->queueEmptyCallback = std::bind(&BidCoSPeer::addVariableToResetCallback, this, _1);
+				queue->queueEmptyCallback = std::bind(&BidCoSPeer::addVariableToResetCallback, this, std::placeholders::_1);
 			}
 		}
 

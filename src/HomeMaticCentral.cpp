@@ -780,6 +780,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 			}
 			return false;
 		}
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Getting peer for packet " + packet->hexString() + ".");
 		std::shared_ptr<BidCoSPeer> peer(getPeer(bidCoSPacket->senderAddress()));
 		if(peer && bidCoSPacket->messageType() != 0x02 && bidCoSPacket->messageType() != 0x03)
 		{

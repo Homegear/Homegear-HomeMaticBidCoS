@@ -371,12 +371,12 @@ void BidCoSPeer::worker()
 					}
 					else
 					{
-						BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral.at(j->second->channel).at(j->second->key);
-						if(parameter->data != j->second->data)
+						if(!_disposing && !deleting && _lastPing < time) //Check that _lastPing wasn't set in putParamset after locking the mutex
 						{
-							GD::out.printInfo("Info: Resetting " + j->second->key + " on channel " + std::to_string(j->second->channel) + '.');
-							PVariable rpcValue = parameter->rpcParameter->convertFromPacket(j->second->data);
-							setValue(nullptr, j->second->channel, j->second->key, rpcValue, false);
+							std::lock_guard<std::mutex> pingGuard(_pingThreadMutex);
+							_lastPing = time; //Set here to avoid race condition between worker thread and ping thread
+							_bl->threadManager.join(_pingThread);
+							_bl->threadManager.start(_pingThread, false, &BidCoSPeer::pingThread, this);
 						}
 					}
 				}
@@ -398,14 +398,13 @@ void BidCoSPeer::worker()
 			{
 				if(time - _lastPing > 600000 && ((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)))
 				{
-					_pingThreadMutex.lock();
 					if(!_disposing && !deleting && _lastPing < time) //Check that _lastPing wasn't set in putParamset after locking the mutex
 					{
+						std::lock_guard<std::mutex> pingGuard(_pingThreadMutex);
 						_lastPing = time; //Set here to avoid race condition between worker thread and ping thread
 						_bl->threadManager.join(_pingThread);
 						_bl->threadManager.start(_pingThread, false, &BidCoSPeer::pingThread, this);
 					}
-					_pingThreadMutex.unlock();
 				}
 			}
 			else
@@ -423,14 +422,13 @@ void BidCoSPeer::worker()
 						int64_t timeSinceLastPacket = time - ((int64_t)_lastPacketReceived * 1000);
 						if(timeSinceLastPacket > 0 && timeSinceLastPacket >= pollingInterval)
 						{
-							_pingThreadMutex.lock();
 							if(!_disposing && !deleting && _lastPing < time) //Check that _lastPing wasn't set in putParamset after locking the mutex
 							{
+								std::lock_guard<std::mutex> pingGuard(_pingThreadMutex);
 								_lastPing = time; //Set here to avoid race condition between worker thread and ping thread
 								_bl->threadManager.join(_pingThread);
 								_bl->threadManager.start(_pingThread, false, &BidCoSPeer::pingThread, this);
 							}
-							_pingThreadMutex.unlock();
 						}
 					}
 				}
@@ -725,6 +723,8 @@ bool BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
 			}
 			return true;
 		}
+
+		if(!(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) && !(getRXModes() & HomegearDevice::ReceiveModes::Enum::always)) return true;
 
 		//No get value frames
 		std::vector<uint8_t> payload;

@@ -76,7 +76,6 @@ void HmCcTc::loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<B
 	try
 	{
 		BidCoSPeer::loadVariables(device, rows);
-		_databaseMutex.lock();
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
 		{
 			_variableDatabaseIDs[row->second.at(2)->intValue] = row->second.at(0)->intValue;
@@ -99,7 +98,6 @@ void HmCcTc::loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<B
 				break;
 			}
 		}
-		_databaseMutex.unlock();
 		setDeviceType(BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, (uint32_t)DeviceType::HMCCTC));
 		startDutyCycle(calculateLastDutyCycleEvent());
 	}

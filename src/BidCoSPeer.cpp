@@ -822,9 +822,9 @@ void BidCoSPeer::addPeer(int32_t channel, std::shared_ptr<BaseLib::Systems::Basi
 
 std::shared_ptr<BaseLib::Systems::BasicPeer> BidCoSPeer::getVirtualPeer(int32_t channel)
 {
-	_peersMutex.lock();
 	try
 	{
+		std::lock_guard<std::mutex> peersGuard(_peersMutex);
 		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
 		{
 			if((*i)->isVirtual) return *i;
@@ -842,23 +842,21 @@ std::shared_ptr<BaseLib::Systems::BasicPeer> BidCoSPeer::getVirtualPeer(int32_t 
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-    _peersMutex.unlock();
 	return std::shared_ptr<BaseLib::Systems::BasicPeer>();
 }
 
 void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChannel)
 {
-	_peersMutex.lock();
 	try
 	{
+		std::lock_guard<std::mutex> peersGuard(_peersMutex);
 		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
 		{
 			if((*i)->address == address && (*i)->channel == remoteChannel)
 			{
 				_peers[channel].erase(i);
-				_peersMutex.unlock();
+				peersGuard.~lock_guard();
 				if(linksCentral[channel].find(address) != linksCentral[channel].end() && linksCentral[channel][address].find(remoteChannel) != linksCentral[channel][address].end()) linksCentral[channel][address].erase(linksCentral[channel][address].find(remoteChannel));
-				_databaseMutex.lock();
 				BaseLib::Database::DataRow data;
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(_peerID)));
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn((int32_t)ParameterGroup::Type::Enum::link)));
@@ -866,12 +864,10 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(address)));
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(remoteChannel)));
 				_bl->db->deletePeerParameter(_peerID, data);
-				_databaseMutex.unlock();
 				savePeers();
 				return;
 			}
 		}
-		_peersMutex.unlock();
 		return;
 	}
 	catch(const std::exception& ex)
@@ -886,8 +882,6 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-    _peersMutex.unlock();
-    _databaseMutex.unlock();
 }
 
 void BidCoSPeer::save(bool savePeer, bool variables, bool centralConfig)
@@ -1327,7 +1321,6 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::ICentral* device, std::shared_p
 	{
 		if(!rows) rows = _bl->db->getPeerVariables(_peerID);
 		Peer::loadVariables(device, rows);
-		_databaseMutex.lock();
 		for(BaseLib::Database::DataTable::iterator row = rows->begin(); row != rows->end(); ++row)
 		{
 			_variableDatabaseIDs[row->second.at(2)->intValue] = row->second.at(0)->intValue;
@@ -1412,7 +1405,6 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::ICentral* device, std::shared_p
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-	_databaseMutex.unlock();
 }
 
 bool BidCoSPeer::load(BaseLib::Systems::ICentral* device)

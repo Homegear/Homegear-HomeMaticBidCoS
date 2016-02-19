@@ -669,8 +669,8 @@ std::vector<uint8_t> TICC1100::readRegisters(Registers::Enum startAddress, uint8
 			readwrite(data);
 			if(!(data.at(0) & StatusBitmasks::Enum::CHIP_RDYn)) break;
 			data.clear();
-			data.at(0) = (uint8_t)(startAddress  | RegisterBitmasks::Enum::READ_BURST);
-			for(uint32_t i = 0; i < count; i++) data.push_back(0);
+			data.push_back((uint8_t)(startAddress  | RegisterBitmasks::Enum::READ_BURST));
+			data.resize(count + 1, 0);
 			usleep(20);
 		}
 		return data;

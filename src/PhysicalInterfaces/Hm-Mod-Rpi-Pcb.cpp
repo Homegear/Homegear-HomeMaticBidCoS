@@ -1676,41 +1676,47 @@ void Hm_Mod_Rpi_Pcb::listen()
 			try
 			{
 				if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
-				timeval timeout;
-				timeout.tv_sec = 5;
-				timeout.tv_usec = 0;
-				fd_set readFileDescriptor;
-				FD_ZERO(&readFileDescriptor);
-				GD::bl->fileDescriptorManager.lock();
-				FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
-				GD::bl->fileDescriptorManager.unlock();
-
-				result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
-				if(result == 0) continue;
-				else if(result == -1)
+				do
 				{
-					if(errno == EINTR) continue;
-					_out.printWarning("Warning: Connection closed. Trying to reconnect...");
-					_stopped = true;
-					continue;
-				}
+					if(_fileDescriptor->descriptor == -1) break;
+					timeval timeout;
+					timeout.tv_sec = 5;
+					timeout.tv_usec = 0;
+					fd_set readFileDescriptor;
+					FD_ZERO(&readFileDescriptor);
+					GD::bl->fileDescriptorManager.lock();
+					FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
+					GD::bl->fileDescriptorManager.unlock();
 
-				bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
-				if(bytesRead <= 0) //read returns 0, when connection is disrupted.
-				{
-					_out.printWarning("Warning: Connection closed. Trying to reconnect...");
-					_stopped = true;
-					continue;
-				}
+					result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
+					if(result == 0) continue;
+					else if(result == -1)
+					{
+						if(errno == EINTR) continue;
+						_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+						_stopped = true;
+						continue;
+					}
 
-				if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
-				data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
-				if(data.size() > 1000000)
-				{
-					_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
-					data.clear();
-					continue;
+					bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
+					if(bytesRead <= 0) //read returns 0, when connection is disrupted.
+					{
+						_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+						_stopped = true;
+						continue;
+					}
+
+					if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
+					data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
+					std::cerr << "Moin " << BaseLib::HelperFunctions::getHexString(data) << std::endl;
+					if(data.size() > 1000000)
+					{
+						_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
+						data.clear();
+						break;
+					}
 				}
+				while(bytesRead == (signed)buffer.size());
 			}
 			catch(const BaseLib::SocketTimeOutException& ex)
 			{

@@ -36,6 +36,7 @@
 #include "PhysicalInterfaces/TICC1100.h"
 #include "PhysicalInterfaces/HM-CFG-LAN.h"
 #include "PhysicalInterfaces/HM-LGW.h"
+#include "PhysicalInterfaces/Hm-Mod-Rpi-Pcb.h"
 
 namespace BidCoS
 {
@@ -67,6 +68,7 @@ void Interfaces::create()
 	#endif
 			else if((*i)->type == "hmcfglan") device.reset(new HM_CFG_LAN(*i));
 			else if((*i)->type == "hmlgw") device.reset(new HM_LGW(*i));
+			else if((*i)->type == "hm-mod-rpi-pcb") device.reset(new Hm_Mod_Rpi_Pcb(*i));
 			else GD::out.printError("Error: Unsupported physical device type: " + (*i)->type);
 			if(device)
 			{

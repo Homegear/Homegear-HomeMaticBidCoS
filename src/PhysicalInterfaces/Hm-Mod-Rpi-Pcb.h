@@ -63,7 +63,8 @@ class Hm_Mod_Rpi_Pcb  : public IBidCoSInterface
         void startListening();
         void stopListening();
         virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
-        virtual bool isOpen() { return _initComplete && _fileDescriptor->descriptor != -1; }
+        //virtual bool isOpen() { return _initComplete && _fileDescriptor->descriptor != -1; }
+        virtual bool isOpen() { return _fileDescriptor->descriptor != -1; }
 
         virtual void addPeer(PeerInfo peerInfo);
         virtual void addPeers(std::vector<PeerInfo>& peerInfos);

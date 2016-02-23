@@ -68,6 +68,32 @@ Hm_Mod_Rpi_Pcb::~Hm_Mod_Rpi_Pcb()
     }
 }
 
+void Hm_Mod_Rpi_Pcb::setup(int32_t userID, int32_t groupID)
+{
+	try
+	{
+		_out.printDebug("Debug: HM-MOD_RPI_PCB: Setting device permissions");
+		setDevicePermission(userID, groupID);
+		_out.printDebug("Debug: MOD_RPI_PCB: Exporting GPIO");
+		exportGPIO(1);
+		_out.printDebug("Debug: MOD_RPI_PCB: Setting GPIO permissions");
+		setGPIOPermission(1, userID, groupID, false);
+		setGPIODirection(1, BaseLib::Systems::IPhysicalInterface::GPIODirection::Enum::OUT);
+	}
+    catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+
 void Hm_Mod_Rpi_Pcb::enableUpdateMode()
 {
 	try
@@ -183,7 +209,7 @@ void Hm_Mod_Rpi_Pcb::openDevice()
 			lockfileStream >> processID;
 			if(getpid() != processID && kill(processID, 0) == 0)
 			{
-				_out.printCritical("CUL device is in use: " + _settings->device);
+				_out.printCritical("Device is in use: " + _settings->device);
 				return;
 			}
 			unlink(_lockfile.c_str());
@@ -200,7 +226,7 @@ void Hm_Mod_Rpi_Pcb::openDevice()
 		_fileDescriptor = _bl->fileDescriptorManager.add(open(_settings->device.c_str(), O_RDWR | O_NOCTTY));
 		if(_fileDescriptor->descriptor == -1)
 		{
-			_out.printCritical("Couldn't open CUL device \"" + _settings->device + "\": " + strerror(errno));
+			_out.printCritical("Couldn't open device \"" + _settings->device + "\": " + strerror(errno));
 			return;
 		}
 
@@ -268,7 +294,7 @@ void Hm_Mod_Rpi_Pcb::setupDevice()
 		{
 			if(fcntl(_fileDescriptor->descriptor, F_SETFL, flags | O_NONBLOCK) == -1)
 			{
-				_out.printError("Couldn't set CUL device to non blocking mode: " + _settings->device);
+				_out.printError("Couldn't set device to non blocking mode: " + _settings->device);
 			}
 		}
 	}
@@ -1084,40 +1110,49 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		_myAddress = GD::family->getCentral()->getAddress();
 
 		if(_stopped) return;
-		//BidCoS-over-LAN" packet
-		std::shared_ptr<Request> request(new Request(0, 0));
-		_requestsMutex.lock();
-		_requests[0] = request;
-		_requestsMutex.unlock();
-		std::unique_lock<std::mutex> lock(request->mutex);
-		_initStarted = true;
-		if(!request->conditionVariable.wait_for(lock, std::chrono::milliseconds(30000), [&] { return request->mutexReady; }))
-		{
-			_out.printError("Error: No init packet received.");
-			_stopped = true;
-			return;
-		}
-		lock.unlock();
-		std::string packetString(request->response.begin(), request->response.end());
-		_requestsMutex.lock();
-		_requests.erase(0);
-		_requestsMutex.unlock();
-		std::vector<std::string> parts = BaseLib::HelperFunctions::splitAll(packetString, ',');
-		if(parts.size() != 2 || parts.at(0).size() != 3 || parts.at(0).at(0) != 'S' || parts.at(1).size() < 15 || parts.at(1).compare(0, 15, "BidCoS-over-LAN") != 0)
-		{
-			_stopped = true;
-			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please double check the setting \"lanKey\" in homematicbidcos.conf. The key is most probably wrong. Stopping listening.");
-			return;
-		}
-		uint8_t packetIndex = (_math.getNumber(parts.at(0).at(1)) << 4) + _math.getNumber(parts.at(0).at(2));
-		std::vector<char> response = { '>', _bl->hf.getHexChar(packetIndex >> 4), _bl->hf.getHexChar(packetIndex & 0xF), ',', '0', '0', '0', '0', '\r', '\n' };
-		send(response);
 
-		//I think the gateway needs a moment here, the module, too?
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		// {{{ Reset
+			setGPIO(1, false);
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			setGPIO(1, true);
+		// }}}
 
-		//There are two paths depending if GW sends a "Co_CPU_BL" or not.
-		bool cpuBLPacket = false;
+		// {{{ Wait for Co_CPU_BL packet
+			std::shared_ptr<Request> request(new Request(0, 0));
+			_requestsMutex.lock();
+			_requests[0] = request;
+			_requestsMutex.unlock();
+			std::unique_lock<std::mutex> lock(request->mutex);
+			_initStarted = true;
+			if(!request->conditionVariable.wait_for(lock, std::chrono::milliseconds(30000), [&] { return request->mutexReady; }))
+			{
+				_out.printError("Error: No init packet received.");
+				_stopped = true;
+				return;
+			}
+			lock.unlock();
+			std::string packetString(request->response.begin(), request->response.end());
+			_requestsMutex.lock();
+			_requests.erase(0);
+			_requestsMutex.unlock();
+			if(request->response.size() != 17)
+			{
+				_stopped = true;
+				_out.printError("Error: First packet has wrong size. Stopping listening.");
+				return;
+			}
+			packetString.clear();
+			packetString.insert(packetString.end(), request->response.begin() + 6, request->response.end() - 2);
+			if(packetString != "Co_CPU_BL")
+			{
+				_stopped = true;
+				_out.printError("Error: First packet does not contain \"Co_CPU_BL\". Stopping listening.");
+				return;
+			}
+
+			//The LXCCU waits for 5.5 seconds
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		// }}}
 
 		//1st packet
 		if(_stopped) return;
@@ -1127,17 +1162,7 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		buildPacket(requestPacket, payload);
 		_packetIndex++;
 		getResponse(requestPacket, responsePacket, 0, 0, 0);
-		if(responsePacket.size() == 17)
-		{
-			packetString.clear();
-			packetString.insert(packetString.end(), responsePacket.begin() + 6, responsePacket.end() - 2);
-			if(packetString == "Co_CPU_BL")
-			{
-				_out.printDebug("Debug: Co_CPU_BL packet received.");
-				cpuBLPacket = true;
-			}
-		}
-		else if(responsePacket.size() == 18)
+		if(responsePacket.size() == 18)
 		{
 			packetString.clear();
 			packetString.insert(packetString.end(), responsePacket.begin() + 6, responsePacket.end() - 2);
@@ -1157,66 +1182,32 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		}
 
 		//2nd packet
-		if(cpuBLPacket)
-		{
-			for(int32_t i = 0; i < 3; i++)
-			{
-				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-				if(_stopped) return;
-				responsePacket.clear();
-				requestPacket.clear();
-				buildPacket(requestPacket, payload);
-				_packetIndex++;
-				getResponse(requestPacket, responsePacket, 0, 0, 0);
-				if(responsePacket.size() == 18)
-				{
-					packetString.clear();
-					packetString.insert(packetString.end(), responsePacket.begin() + 6, responsePacket.end() - 2);
-					if(packetString == "Co_CPU_App")
-					{
-						_out.printDebug("Debug: Co_CPU_App packet received.");
-						break;
-					}
-					else
-					{
-						_out.printError("Error: Unknown packet received in response to init packet. Reconnecting...");
-						_stopped = true;
-						return;
-					}
-				}
-				else if(responsePacket.size() == 17)
-				{
-					packetString.clear();
-					packetString.insert(packetString.end(), responsePacket.begin() + 6, responsePacket.end() - 2);
-					if(packetString == "Co_CPU_BL")
-					{
-						_out.printDebug("Debug: Co_CPU_BL packet received a second time.");
-						cpuBLPacket = true;
-						continue;
-					}
-					else
-					{
-						_out.printError("Error: Unknown packet received in response to init packet. Reconnecting...");
-						_stopped = true;
-						return;
-					}
-				}
-				else
-				{
-					_out.printError("Error: Unknown packet received in response to init packet. Reconnecting...");
-					_stopped = true;
-					return;
-				}
-			}
-		}
-
-		//3rd packet
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
 		payload.clear();
+		payload.reserve(2);
 		payload.push_back(0);
 		payload.push_back(2);
+		buildPacket(requestPacket, payload);
+		_packetIndex++;
+		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
+		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
+		{
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			_stopped = true;
+			return;
+		}
+
+		//3th packet
+		if(_stopped) return;
+		responsePacket.clear();
+		requestPacket.clear();
+		payload.clear();
+		payload.reserve(3);
+		payload.push_back(0);
+		payload.push_back(0xA);
+		payload.push_back(0);
 		buildPacket(requestPacket, payload);
 		_packetIndex++;
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
@@ -1232,45 +1223,7 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		responsePacket.clear();
 		requestPacket.clear();
 		payload.clear();
-		payload.push_back(0);
-		payload.push_back(0xA);
-		payload.push_back(0);
-		buildPacket(requestPacket, payload);
-		_packetIndex++;
-		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-			_stopped = true;
-			return;
-		}
-
-		//5th packet
-		if(cpuBLPacket)
-		{
-			if(_stopped) return;
-			responsePacket.clear();
-			requestPacket.clear();
-			payload.clear();
-			payload.push_back(0);
-			payload.push_back(0xA);
-			payload.push_back(0);
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-				_stopped = true;
-				return;
-			}
-		}
-
-		//6th packet
-		if(_stopped) return;
-		responsePacket.clear();
-		requestPacket.clear();
-		payload.clear();
+		payload.reserve(3);
 		payload.push_back(0);
 		payload.push_back(9);
 		payload.push_back(0);
@@ -1284,46 +1237,7 @@ void Hm_Mod_Rpi_Pcb::doInit()
 			return;
 		}
 
-		//7th packet
-		if(cpuBLPacket)
-		{
-			if(_stopped) return;
-			responsePacket.clear();
-			requestPacket.clear();
-			payload.clear();
-			payload.push_back(0);
-			payload.push_back(9);
-			payload.push_back(0);
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-				_stopped = true;
-				return;
-			}
-
-			//8th packet
-			if(_stopped) return;
-			responsePacket.clear();
-			requestPacket.clear();
-			payload.clear();
-			payload.push_back(0);
-			payload.push_back(0xA);
-			payload.push_back(0);
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-				_stopped = true;
-				return;
-			}
-		}
-
-		//9th packet
+		//5th packet
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
@@ -1349,32 +1263,12 @@ void Hm_Mod_Rpi_Pcb::doInit()
 			return;
 		}
 
-		//10th packet
-		if(cpuBLPacket)
-		{
-			if(_stopped) return;
-			responsePacket.clear();
-			requestPacket.clear();
-			payload.clear();
-			payload.push_back(0);
-			payload.push_back(9);
-			payload.push_back(0);
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-				_stopped = true;
-				return;
-			}
-		}
-
-		//11th packet
+		//6th packet
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
 		payload.clear();
+		payload.reserve(2 + 16 + 1);
 		payload.push_back(1);
 		payload.push_back(3);
 		if(_rfKey.empty())
@@ -1396,13 +1290,14 @@ void Hm_Mod_Rpi_Pcb::doInit()
 			return;
 		}
 
-		//12th packet
+		//7th packet
 		if(_currentRfKeyIndex > 1 && !_oldRfKey.empty())
 		{
 			if(_stopped) return;
 			responsePacket.clear();
 			requestPacket.clear();
 			payload.clear();
+			payload.reserve(2 + 16 + 1);
 			payload.push_back(1);
 			payload.push_back(0xF);
 			payload.insert(payload.end(), _oldRfKey.begin(), _oldRfKey.end());
@@ -1418,7 +1313,7 @@ void Hm_Mod_Rpi_Pcb::doInit()
 			}
 		}
 
-		//13th packet
+		//8th packet
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
@@ -1431,62 +1326,6 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		buildPacket(requestPacket, payload);
 		_packetIndex++;
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
-		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-			_stopped = true;
-			return;
-		}
-
-		if(!cpuBLPacket)
-		{
-			//Packet with message counter 7
-			if(_stopped) return;
-			responsePacket.clear();
-			requestPacket.clear();
-			payload.clear();
-			payload.push_back(0);
-			payload.push_back(0xA);
-			payload.push_back(0);
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-				_stopped = true;
-				return;
-			}
-
-			//Packet with message counter 8
-			if(_stopped) return;
-			responsePacket.clear();
-			requestPacket.clear();
-			payload.clear();
-			payload.push_back(0);
-			payload.push_back(9);
-			payload.push_back(0);
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
-			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
-				_stopped = true;
-				return;
-			}
-		}
-
-		//Disable update mode
-		if(_stopped) return;
-		responsePacket.clear();
-		requestPacket.clear();
-		payload.clear();
-		payload.push_back(0);
-		payload.push_back(6);
-		buildPacket(requestPacket, payload);
-		_packetIndex++;
-		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
 			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
@@ -1708,7 +1547,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 
 					if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
 					data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
-					std::cerr << "Moin " << BaseLib::HelperFunctions::getHexString(data) << std::endl;
+					std::cout << "Moin packet received from HM-MOD-RPI-PCB " << BaseLib::HelperFunctions::getHexString(data) << std::endl;
 					if(data.size() > 1000000)
 					{
 						_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
@@ -1857,18 +1696,6 @@ void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
 				_requestsMutex.unlock();
 				if(packet.at(3) == request->getResponseControlByte() && packet.at(5) == request->getResponseType())
 				{
-					request->response = packet;
-					{
-						std::lock_guard<std::mutex> lock(request->mutex);
-						request->mutexReady = true;
-					}
-					request->conditionVariable.notify_one();
-					return;
-				}
-				//E. g.: FD0004000004001938
-				else if(packet.size() == 9 && packet.at(6) == 0 && packet.at(5) == 4 && packet.at(3) == 0)
-				{
-					_out.printError("Error: Something is wrong with your HM-MOD-RPI-PCB. You probably need to replace it. Check if it works with a CCU.");
 					request->response = packet;
 					{
 						std::lock_guard<std::mutex> lock(request->mutex);

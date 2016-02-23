@@ -27,43 +27,32 @@
  * files in the program, then also delete it here.
  */
 
-#include "HM-LGW.h"
+#include "Hm-Mod-Rpi-Pcb.h"
 #include "../GD.h"
 
 namespace BidCoS
 {
-HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings)
+Hm_Mod_Rpi_Pcb::Hm_Mod_Rpi_Pcb(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings)
 {
 	_out.init(GD::bl);
-	_out.setPrefix(GD::out.getPrefix() + "HM-LGW \"" + settings->id + "\": ");
+	_out.setPrefix(GD::out.getPrefix() + "HM-MOD-RPI-PCB \"" + settings->id + "\": ");
 
 	signal(SIGPIPE, SIG_IGN);
 
-	_socket = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl));
-	_socketKeepAlive = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl));
-
 	if(!settings)
 	{
-		_out.printCritical("Critical: Error initializing HM-LGW. Settings pointer is empty.");
-		return;
-	}
-
-	if(settings->lanKey.empty())
-	{
-		_out.printError("Error: No security key specified in homematicbidcos.conf.");
+		_out.printCritical("Critical: Error initializing HM-MOD-RPI-PCB. Settings pointer is empty.");
 		return;
 	}
 }
 
-HM_LGW::~HM_LGW()
+Hm_Mod_Rpi_Pcb::~Hm_Mod_Rpi_Pcb()
 {
 	try
 	{
 		_stopCallbackThread = true;
 		GD::bl->threadManager.join(_initThread);
 		GD::bl->threadManager.join(_listenThread);
-		GD::bl->threadManager.join(_listenThreadKeepAlive);
-		aesCleanup();
 	}
     catch(const std::exception& ex)
     {
@@ -79,7 +68,7 @@ HM_LGW::~HM_LGW()
     }
 }
 
-void HM_LGW::enableUpdateMode()
+void Hm_Mod_Rpi_Pcb::enableUpdateMode()
 {
 	try
 	{
@@ -151,43 +140,12 @@ void HM_LGW::enableUpdateMode()
     }
 }
 
-void HM_LGW::disableUpdateMode()
+void Hm_Mod_Rpi_Pcb::disableUpdateMode()
 {
 	try
 	{
 		if(!_initComplete || _stopped) return;
-		/*for(int32_t j = 0; j < 40; j++)
-		{
-			std::vector<uint8_t> responsePacket;
-			std::vector<char> requestPacket;
-			std::vector<char> payload{ 0, 6 };
-			buildPacket(requestPacket, payload);
-			_packetIndex++;
-			getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-			if(responsePacket.size() >= 9  && responsePacket.at(6) == 1)
-			{
-				_out.printInfo("Info: Update mode disabled.");
-				break;
-			}
-			else if(responsePacket.size() == 9 && responsePacket.at(6) == 8)
-			{
-				//Operation pending
-				std::this_thread::sleep_for(std::chrono::milliseconds(50));
-				continue;
-			}
-			if(j == 2)
-			{
-				_out.printError("Error: Could not disable update mode (2).");
-				return;
-			}
-		}*/
-		//Reconnect
-		_stopped = true;
-		for(int32_t i = 0; i < 120; i++)
-		{
-			if(!_stopped && _initComplete) break;
-			std::this_thread::sleep_for(std::chrono::milliseconds(500));
-		}
+		reconnect();
 		_updateMode = false;
 	}
     catch(const std::exception& ex)
@@ -204,7 +162,131 @@ void HM_LGW::disableUpdateMode()
     }
 }
 
-void HM_LGW::addPeer(PeerInfo peerInfo)
+void Hm_Mod_Rpi_Pcb::openDevice()
+{
+	try
+	{
+		if(_fileDescriptor->descriptor > -1) closeDevice();
+
+		_lockfile = "/var/lock" + _settings->device.substr(_settings->device.find_last_of('/')) + ".lock";
+		int lockfileDescriptor = open(_lockfile.c_str(), O_WRONLY | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+		if(lockfileDescriptor == -1)
+		{
+			if(errno != EEXIST)
+			{
+				_out.printCritical("Couldn't create lockfile " + _lockfile + ": " + strerror(errno));
+				return;
+			}
+
+			int processID = 0;
+			std::ifstream lockfileStream(_lockfile.c_str());
+			lockfileStream >> processID;
+			if(getpid() != processID && kill(processID, 0) == 0)
+			{
+				_out.printCritical("CUL device is in use: " + _settings->device);
+				return;
+			}
+			unlink(_lockfile.c_str());
+			lockfileDescriptor = open(_lockfile.c_str(), O_WRONLY | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+			if(lockfileDescriptor == -1)
+			{
+				_out.printCritical("Couldn't create lockfile " + _lockfile + ": " + strerror(errno));
+				return;
+			}
+		}
+		dprintf(lockfileDescriptor, "%10i", getpid());
+		close(lockfileDescriptor);
+
+		_fileDescriptor = _bl->fileDescriptorManager.add(open(_settings->device.c_str(), O_RDWR | O_NOCTTY));
+		if(_fileDescriptor->descriptor == -1)
+		{
+			_out.printCritical("Couldn't open CUL device \"" + _settings->device + "\": " + strerror(errno));
+			return;
+		}
+
+		setupDevice();
+	}
+	catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+
+void Hm_Mod_Rpi_Pcb::closeDevice()
+{
+	try
+	{
+		_bl->fileDescriptorManager.close(_fileDescriptor);
+		unlink(_lockfile.c_str());
+	}
+    catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+
+void Hm_Mod_Rpi_Pcb::setupDevice()
+{
+	try
+	{
+		if(_fileDescriptor->descriptor == -1) return;
+		memset(&_termios, 0, sizeof(termios));
+
+		_termios.c_cflag = B115200 | CS8 | CREAD;
+		_termios.c_iflag = 0;
+		_termios.c_oflag = 0;
+		_termios.c_lflag = 0;
+		_termios.c_cc[VMIN] = 1;
+		_termios.c_cc[VTIME] = 0;
+
+		cfsetispeed(&_termios, B115200);
+		cfsetospeed(&_termios, B115200);
+
+		if(tcflush(_fileDescriptor->descriptor, TCIFLUSH) == -1) _out.printError("Couldn't flush device " + _settings->device);
+		if(tcsetattr(_fileDescriptor->descriptor, TCSANOW, &_termios) == -1) _out.printError("Couldn't set flush device settings: " + _settings->device);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
+		int flags = fcntl(_fileDescriptor->descriptor, F_GETFL);
+		if(!(flags & O_NONBLOCK))
+		{
+			if(fcntl(_fileDescriptor->descriptor, F_SETFL, flags | O_NONBLOCK) == -1)
+			{
+				_out.printError("Couldn't set CUL device to non blocking mode: " + _settings->device);
+			}
+		}
+	}
+	catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+
+void Hm_Mod_Rpi_Pcb::addPeer(PeerInfo peerInfo)
 {
 	try
 	{
@@ -234,7 +316,7 @@ void HM_LGW::addPeer(PeerInfo peerInfo)
     _peersMutex.unlock();
 }
 
-void HM_LGW::addPeers(std::vector<PeerInfo>& peerInfos)
+void Hm_Mod_Rpi_Pcb::addPeers(std::vector<PeerInfo>& peerInfos)
 {
 	try
 	{
@@ -261,7 +343,7 @@ void HM_LGW::addPeers(std::vector<PeerInfo>& peerInfos)
     _peersMutex.unlock();
 }
 
-void HM_LGW::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
+void Hm_Mod_Rpi_Pcb::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry)
 {
 	try
 	{
@@ -375,7 +457,7 @@ void HM_LGW::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLi
 	}
 }
 
-void HM_LGW::sendPeers()
+void Hm_Mod_Rpi_Pcb::sendPeers()
 {
 	try
 	{
@@ -402,22 +484,11 @@ void HM_LGW::sendPeers()
     _peersMutex.unlock();
 
     //There is no duty cycle => tested with version 1.1.3
-    /*std::thead t1(&HM_LGW::dutyCycleTest, this, 0x123456);
+    /*std::thead t1(&Hm_Mod_Rpi_Pcb::dutyCycleTest, this, 0x123456);
 	t1.detach();*/
 }
 
-void HM_LGW::dutyCycleTest(int32_t destinationAddress)
-{
-	for(int32_t i = 0; i < 1000000; i++)
-    {
-    	std::vector<uint8_t> payload { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xE, 0xF };
-		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(i, 0x80, 0x10, _myAddress, destinationAddress, payload));
-		sendPacket(packet);
-		usleep(10000);
-    }
-}
-
-void HM_LGW::sendPeer(PeerInfo& peerInfo)
+void Hm_Mod_Rpi_Pcb::sendPeer(PeerInfo& peerInfo)
 {
 	try
 	{
@@ -627,7 +698,7 @@ void HM_LGW::sendPeer(PeerInfo& peerInfo)
     }
 }
 
-void HM_LGW::setAES(PeerInfo peerInfo, int32_t channel)
+void Hm_Mod_Rpi_Pcb::setAES(PeerInfo peerInfo, int32_t channel)
 {
 	try
 	{
@@ -672,7 +743,7 @@ void HM_LGW::setAES(PeerInfo peerInfo, int32_t channel)
     }
 }
 
-void HM_LGW::setWakeUp(PeerInfo peerInfo)
+void Hm_Mod_Rpi_Pcb::setWakeUp(PeerInfo peerInfo)
 {
 	try
 	{
@@ -717,7 +788,7 @@ void HM_LGW::setWakeUp(PeerInfo peerInfo)
     }
 }
 
-void HM_LGW::removePeer(int32_t address)
+void Hm_Mod_Rpi_Pcb::removePeer(int32_t address)
 {
 	try
 	{
@@ -751,7 +822,7 @@ void HM_LGW::removePeer(int32_t address)
     _peersMutex.unlock();
 }
 
-void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
+void Hm_Mod_Rpi_Pcb::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 {
 	try
 	{
@@ -868,7 +939,7 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 			}
 			if(j == 2)
 			{
-				_out.printInfo("Info: No response from HM-LGW to packet " + _bl->hf.getHexString(packetBytes));
+				_out.printInfo("Info: No response from HM-MOD-RPI-PCB to packet " + _bl->hf.getHexString(packetBytes));
 				return;
 			}
 		}
@@ -889,7 +960,7 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
     }
 }
 
-void HM_LGW::getResponse(const std::vector<char>& packet, std::vector<uint8_t>& response, uint8_t messageCounter, uint8_t responseControlByte, uint8_t responseType)
+void Hm_Mod_Rpi_Pcb::getResponse(const std::vector<char>& packet, std::vector<uint8_t>& response, uint8_t messageCounter, uint8_t responseControlByte, uint8_t responseType)
 {
 	try
     {
@@ -900,7 +971,7 @@ void HM_LGW::getResponse(const std::vector<char>& packet, std::vector<uint8_t>& 
 		_requests[messageCounter] = request;
 		_requestsMutex.unlock();
 		std::unique_lock<std::mutex> lock(request->mutex);
-		send(packet, false);
+		send(packet);
 		if(!request->conditionVariable.wait_for(lock, std::chrono::milliseconds(10000), [&] { return request->mutexReady; }))
 		{
 			_out.printError("Error: No response received to packet: " + _bl->hf.getHexString(packet));
@@ -928,13 +999,13 @@ void HM_LGW::getResponse(const std::vector<char>& packet, std::vector<uint8_t>& 
     }
 }
 
-void HM_LGW::send(std::string hexString, bool raw)
+void Hm_Mod_Rpi_Pcb::send(std::string hexString)
 {
 	try
     {
 		if(hexString.empty()) return;
 		std::vector<char> data(&hexString.at(0), &hexString.at(0) + hexString.size());
-		send(data, raw);
+		send(data);
 	}
 	catch(const std::exception& ex)
     {
@@ -950,15 +1021,12 @@ void HM_LGW::send(std::string hexString, bool raw)
     }
 }
 
-void HM_LGW::send(const std::vector<char>& data, bool raw)
+void Hm_Mod_Rpi_Pcb::send(const std::vector<char>& data)
 {
     try
     {
     	if(data.size() < 3) return; //Otherwise error in printInfo
-    	std::vector<char> encryptedData;
-    	if(!raw) encryptedData = encrypt(data);
-    	_sendMutex.lock();
-    	if(!_socket->connected() || _stopped)
+    	if(!_fileDescriptor->descriptor == -1 || _stopped)
     	{
     		_out.printWarning("Warning: !!!Not!!! sending (Port " + _settings->port + "): " + _bl->hf.getHexString(data));
     		_sendMutex.unlock();
@@ -968,9 +1036,18 @@ void HM_LGW::send(const std::vector<char>& data, bool raw)
         {
             _out.printDebug("Debug: Sending (Port " + _settings->port + "): " + _bl->hf.getHexString(data));
         }
-    	(!raw) ? _socket->proofwrite(encryptedData) : _socket->proofwrite(data);
-    	 _sendMutex.unlock();
-    	 return;
+    	int32_t totallySentBytes = 0;
+		std::lock_guard<std::mutex> sendGuard(_sendMutex);
+		while (totallySentBytes < (signed)data.size())
+		{
+			int32_t sentBytes = ::send(_fileDescriptor->descriptor, &data.at(0) + totallySentBytes, data.size() - totallySentBytes, MSG_NOSIGNAL);
+			if(sentBytes <= 0)
+			{
+				GD::out.printError("Could not send data to client: " + std::to_string(_fileDescriptor->descriptor));
+				break;
+			}
+			totallySentBytes += sentBytes;
+		}
     }
     catch(const BaseLib::SocketOperationException& ex)
     {
@@ -989,52 +1066,9 @@ void HM_LGW::send(const std::vector<char>& data, bool raw)
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _stopped = true;
-    _sendMutex.unlock();
 }
 
-void HM_LGW::sendKeepAlive(std::vector<char>& data, bool raw)
-{
-    try
-    {
-    	if(data.size() < 3) return; //Otherwise error in printInfo
-    	std::vector<char> encryptedData;
-    	if(!raw) encryptedData = encryptKeepAlive(data);
-    	_sendMutexKeepAlive.lock();
-    	if(!_socketKeepAlive->connected() || _stopped)
-    	{
-    		_out.printWarning("Warning: !!!Not!!! sending (Port " + _settings->portKeepAlive + "): " + std::string(&data.at(0), data.size() - 2));
-    		_sendMutexKeepAlive.unlock();
-    		return;
-    	}
-    	if(_bl->debugLevel >= 5)
-        {
-            _out.printDebug(std::string("Debug: Sending (Port " + _settings->portKeepAlive + "): ") + std::string(&data.at(0), data.size() - 2));
-        }
-    	(!raw) ? _socketKeepAlive->proofwrite(encryptedData) : _socketKeepAlive->proofwrite(data);
-    	 _sendMutexKeepAlive.unlock();
-    	 return;
-    }
-    catch(const BaseLib::SocketOperationException& ex)
-    {
-    	_out.printError(ex.what());
-    }
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    _stopped = true;
-    _sendMutexKeepAlive.unlock();
-}
-
-void HM_LGW::doInit()
+void Hm_Mod_Rpi_Pcb::doInit()
 {
 	try
 	{
@@ -1077,14 +1111,9 @@ void HM_LGW::doInit()
 		}
 		uint8_t packetIndex = (_math.getNumber(parts.at(0).at(1)) << 4) + _math.getNumber(parts.at(0).at(2));
 		std::vector<char> response = { '>', _bl->hf.getHexChar(packetIndex >> 4), _bl->hf.getHexChar(packetIndex & 0xF), ',', '0', '0', '0', '0', '\r', '\n' };
-		send(response, false);
+		send(response);
 
-		while(!_initCompleteKeepAlive && !_stopCallbackThread && !_stopped)
-    	{
-    		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    	}
-
-		//I think the gateway needs a moment here
+		//I think the gateway needs a moment here, the module, too?
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 		//There are two paths depending if GW sends a "Co_CPU_BL" or not.
@@ -1485,7 +1514,7 @@ void HM_LGW::doInit()
     _stopped = true;
 }
 
-void HM_LGW::startListening()
+void Hm_Mod_Rpi_Pcb::startListening()
 {
 	try
 	{
@@ -1495,19 +1524,14 @@ void HM_LGW::startListening()
 			_out.printError("Error: Cannot start listening, because rfKey is not specified.");
 			return;
 		}
-		if(!aesInit()) return;
-		_socket = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
-		_socket->setReadTimeout(1000000);
-		_socketKeepAlive = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl, _settings->host, _settings->portKeepAlive, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
-		_socketKeepAlive->setReadTimeout(1000000);
-		_out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
+		openDevice();
+		if(_fileDescriptor->descriptor == -1) return;
+		_out.printDebug("Connecting to HM-MOD-RPI-PCB with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_stopped = false;
-		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::listen, this);
-		else GD::bl->threadManager.start(_listenThread, true, &HM_LGW::listen, this);
-		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThreadKeepAlive, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::listenKeepAlive, this);
-		else GD::bl->threadManager.start(_listenThreadKeepAlive, true, &HM_LGW::listenKeepAlive, this);
-		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
-		else GD::bl->threadManager.start(_initThread, true, &HM_LGW::doInit, this);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Hm_Mod_Rpi_Pcb::listen, this);
+		else GD::bl->threadManager.start(_listenThread, true, &Hm_Mod_Rpi_Pcb::listen, this);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Hm_Mod_Rpi_Pcb::doInit, this);
+		else GD::bl->threadManager.start(_initThread, true, &Hm_Mod_Rpi_Pcb::doInit, this);
 		startQueue(0, 0, SCHED_OTHER);
 		IPhysicalInterface::startListening();
 	}
@@ -1525,28 +1549,23 @@ void HM_LGW::startListening()
     }
 }
 
-void HM_LGW::reconnect()
+void Hm_Mod_Rpi_Pcb::reconnect()
 {
 	try
 	{
-		_socket->close();
-		_socketKeepAlive->close();
+		closeDevice();
 		GD::bl->threadManager.join(_initThread);
-		aesInit();
 		_requestsMutex.lock();
 		_requests.clear();
 		_requestsMutex.unlock();
 		_initStarted = false;
 		_initComplete = false;
-		_initCompleteKeepAlive = false;
-		_firstPacket = true;
-		_out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
-		_socket->open();
-		_socketKeepAlive->open();
-		_out.printInfo("Connected to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + ".");
+		_out.printDebug("Connecting to HM-MOD-RPI-PCB with hostname " + _settings->host + " on port " + _settings->port + "...");
+		openDevice();
+		_out.printInfo("Connected to HM-MOD-RPI-PCB with hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
-		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
-		else GD::bl->threadManager.start(_initThread, true, &HM_LGW::doInit, this);
+		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Hm_Mod_Rpi_Pcb::doInit, this);
+		else GD::bl->threadManager.start(_initThread, true, &Hm_Mod_Rpi_Pcb::doInit, this);
 	}
     catch(const std::exception& ex)
     {
@@ -1562,7 +1581,7 @@ void HM_LGW::reconnect()
     }
 }
 
-void HM_LGW::stopListening()
+void Hm_Mod_Rpi_Pcb::stopListening()
 {
 	try
 	{
@@ -1570,21 +1589,14 @@ void HM_LGW::stopListening()
 		_stopCallbackThread = true;
 		GD::bl->threadManager.join(_initThread);
 		GD::bl->threadManager.join(_listenThread);
-		GD::bl->threadManager.join(_listenThreadKeepAlive);
 		_stopCallbackThread = false;
-		_socket->close();
-		_socketKeepAlive->close();
-		aesCleanup();
 		_stopped = true;
-		_sendMutex.unlock(); //In case it is deadlocked - shouldn't happen of course
-		_sendMutexKeepAlive.unlock();
+		closeDevice();
 		_requestsMutex.lock();
 		_requests.clear();
 		_requestsMutex.unlock();
 		_initStarted = false;
 		_initComplete = false;
-		_initCompleteKeepAlive = false;
-		_firstPacket = true;
 		IPhysicalInterface::stopListening();
 	}
 	catch(const std::exception& ex)
@@ -1601,262 +1613,7 @@ void HM_LGW::stopListening()
     }
 }
 
-bool HM_LGW::aesInit()
-{
-	aesCleanup();
-
-	if(_settings->lanKey.empty())
-	{
-		_out.printError("Error: No AES key specified in homematicbidcos.conf for communication with your HM-LGW.");
-		return false;
-	}
-
-	gcry_error_t result;
-	gcry_md_hd_t md5Handle = nullptr;
-	if((result = gcry_md_open(&md5Handle, GCRY_MD_MD5, 0)) != GPG_ERR_NO_ERROR)
-	{
-		_out.printError("Could not initialize MD5 handle: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-	gcry_md_write(md5Handle, _settings->lanKey.c_str(), _settings->lanKey.size());
-	gcry_md_final(md5Handle);
-	uint8_t* digest = gcry_md_read(md5Handle, GCRY_MD_MD5);
-	if(!digest)
-	{
-		_out.printError("Could not generate MD5 of lanKey: " + _bl->hf.getGCRYPTError(result));
-		gcry_md_close(md5Handle);
-		return false;
-	}
-	if(gcry_md_get_algo_dlen(GCRY_MD_MD5) != 16) _out.printError("Could not generate MD5 of lanKey: Wront digest size.");
-	_key.clear();
-	_key.insert(_key.begin(), digest, digest + 16);
-	gcry_md_close(md5Handle);
-
-	if((result = gcry_cipher_open(&_encryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
-	{
-		_encryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for encryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-	if(!_encryptHandle)
-	{
-		_out.printError("Error cypher handle for encryption is nullptr.");
-		return false;
-	}
-	if((result = gcry_cipher_setkey(_encryptHandle, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
-	{
-		aesCleanup();
-		_out.printError("Error: Could not set key for encryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-
-	if((result = gcry_cipher_open(&_decryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
-	{
-		_decryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for decryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-	if(!_decryptHandle)
-	{
-		_out.printError("Error cypher handle for decryption is nullptr.");
-		return false;
-	}
-	if((result = gcry_cipher_setkey(_decryptHandle, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
-	{
-		aesCleanup();
-		_out.printError("Error: Could not set key for decryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-
-	if((result = gcry_cipher_open(&_encryptHandleKeepAlive, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
-	{
-		_encryptHandleKeepAlive = nullptr;
-		_out.printError("Error initializing cypher handle for keep alive encryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-	if(!_encryptHandleKeepAlive)
-	{
-		_out.printError("Error cypher handle for keep alive encryption is nullptr.");
-		return false;
-	}
-	if((result = gcry_cipher_setkey(_encryptHandleKeepAlive, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
-	{
-		aesCleanup();
-		_out.printError("Error: Could not set key for keep alive encryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-
-	if((result = gcry_cipher_open(&_decryptHandleKeepAlive, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
-	{
-		_decryptHandleKeepAlive = nullptr;
-		_out.printError("Error initializing cypher handle for keep alive decryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-	if(!_decryptHandleKeepAlive)
-	{
-		_out.printError("Error cypher handle for keep alive decryption is nullptr.");
-		return false;
-	}
-	if((result = gcry_cipher_setkey(_decryptHandleKeepAlive, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
-	{
-		aesCleanup();
-		_out.printError("Error: Could not set key for keep alive decryption: " + _bl->hf.getGCRYPTError(result));
-		return false;
-	}
-
-	_aesInitialized = true;
-	_aesExchangeComplete = false;
-	_aesExchangeKeepAliveComplete = false;
-	return true;
-}
-
-void HM_LGW::aesCleanup()
-{
-	if(!_aesInitialized) return;
-	_aesInitialized = false;
-	if(_decryptHandle) gcry_cipher_close(_decryptHandle);
-	if(_encryptHandle) gcry_cipher_close(_encryptHandle);
-	if(_decryptHandleKeepAlive) gcry_cipher_close(_decryptHandleKeepAlive);
-	if(_encryptHandleKeepAlive) gcry_cipher_close(_encryptHandleKeepAlive);
-	_decryptHandle = nullptr;
-	_encryptHandle = nullptr;
-	_decryptHandleKeepAlive = nullptr;
-	_encryptHandleKeepAlive = nullptr;
-	_myIV.clear();
-	_remoteIV.clear();
-	_myIVKeepAlive.clear();
-	_remoteIVKeepAlive.clear();
-	_aesExchangeComplete = false;
-	_aesExchangeKeepAliveComplete = false;
-}
-
-std::vector<char> HM_LGW::encrypt(const std::vector<char>& data)
-{
-	std::vector<char> encryptedData(data.size());
-	if(!_encryptHandle) return encryptedData;
-
-	gcry_error_t result;
-	if((result = gcry_cipher_encrypt(_encryptHandle, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
-	{
-		GD::out.printError("Error encrypting data: " + _bl->hf.getGCRYPTError(result));
-		_stopCallbackThread = true;
-		return std::vector<char>();
-	}
-	return encryptedData;
-}
-
-std::vector<uint8_t> HM_LGW::decrypt(std::vector<uint8_t>& data)
-{
-	std::vector<uint8_t> decryptedData(data.size());
-	if(!_decryptHandle) return decryptedData;
-	gcry_error_t result;
-	if((result = gcry_cipher_decrypt(_decryptHandle, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
-	{
-		GD::out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
-		_stopCallbackThread = true;
-		return std::vector<uint8_t>();
-	}
-	return decryptedData;
-}
-
-std::vector<char> HM_LGW::encryptKeepAlive(std::vector<char>& data)
-{
-	std::vector<char> encryptedData(data.size());
-	if(!_encryptHandleKeepAlive) return encryptedData;
-	gcry_error_t result;
-	if((result = gcry_cipher_encrypt(_encryptHandleKeepAlive, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
-	{
-		GD::out.printError("Error encrypting keep alive data: " + _bl->hf.getGCRYPTError(result));
-		_stopCallbackThread = true;
-		return std::vector<char>();
-	}
-	return encryptedData;
-}
-
-std::vector<uint8_t> HM_LGW::decryptKeepAlive(std::vector<uint8_t>& data)
-{
-	std::vector<uint8_t> decryptedData(data.size());
-	if(!_decryptHandleKeepAlive) return decryptedData;
-	gcry_error_t result;
-	if((result = gcry_cipher_decrypt(_decryptHandleKeepAlive, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
-	{
-		GD::out.printError("Error decrypting keep alive data: " + _bl->hf.getGCRYPTError(result));
-		_stopCallbackThread = true;
-		return std::vector<uint8_t>();
-	}
-	return decryptedData;
-}
-
-void HM_LGW::sendKeepAlivePacket1()
-{
-	try
-    {
-		if(!_initComplete) return;
-		if(BaseLib::HelperFunctions::getTimeSeconds() - _lastKeepAlive1 >= 5)
-		{
-			if(_lastKeepAliveResponse1 < _lastKeepAlive1)
-			{
-				_lastKeepAliveResponse1 = _lastKeepAlive1;
-				_stopped = true;
-				return;
-			}
-
-			_lastKeepAlive1 = BaseLib::HelperFunctions::getTimeSeconds();
-			std::vector<char> packet;
-			std::vector<char> payload{ 0, 8 };
-			buildPacket(packet, payload);
-			_packetIndex++;
-			send(packet, false);
-		}
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void HM_LGW::sendKeepAlivePacket2()
-{
-	try
-    {
-		if(!_initCompleteKeepAlive) return;
-		if(BaseLib::HelperFunctions::getTimeSeconds() - _lastKeepAlive2 >= 10)
-		{
-			if(_lastKeepAliveResponse2 < _lastKeepAlive2)
-			{
-				_lastKeepAliveResponse2 = _lastKeepAlive2;
-				_stopped = true;
-				return;
-			}
-
-			_lastKeepAlive2 = BaseLib::HelperFunctions::getTimeSeconds();
-			std::vector<char> packet = { 'K', _bl->hf.getHexChar(_packetIndexKeepAlive >> 4), _bl->hf.getHexChar(_packetIndexKeepAlive & 0xF), '\r', '\n' };
-			sendKeepAlive(packet, false);
-		}
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void HM_LGW::sendTimePacket()
+void Hm_Mod_Rpi_Pcb::sendTimePacket()
 {
 	try
     {
@@ -1874,7 +1631,7 @@ void HM_LGW::sendTimePacket()
 		std::vector<char> packet;
 		buildPacket(packet, payload);
 		_packetIndex++;
-		send(packet, false);
+		send(packet);
 		_lastTimePacket = BaseLib::HelperFunctions::getTimeSeconds();
 	}
     catch(const std::exception& ex)
@@ -1891,7 +1648,7 @@ void HM_LGW::sendTimePacket()
     }
 }
 
-void HM_LGW::listen()
+void Hm_Mod_Rpi_Pcb::listen()
 {
     try
     {
@@ -1900,12 +1657,10 @@ void HM_LGW::listen()
     		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     	}
 
-    	uint32_t receivedBytes = 0;
-    	int32_t bufferMax = 2048;
-		std::vector<char> buffer(bufferMax);
+    	int32_t result = 0;
+    	int32_t bytesRead = 0;
+		std::vector<char> buffer(2048);
 		_lastTimePacket = BaseLib::HelperFunctions::getTimeSeconds();
-		_lastKeepAlive1 = BaseLib::HelperFunctions::getTimeSeconds();
-		_lastKeepAliveResponse1 = _lastKeepAlive1;
 
 		std::vector<uint8_t> data;
         while(!_stopCallbackThread)
@@ -1920,21 +1675,42 @@ void HM_LGW::listen()
         	}
 			try
 			{
-				do
+				if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
+				timeval timeout;
+				timeout.tv_sec = 5;
+				timeout.tv_usec = 0;
+				fd_set readFileDescriptor;
+				FD_ZERO(&readFileDescriptor);
+				GD::bl->fileDescriptorManager.lock();
+				FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
+				GD::bl->fileDescriptorManager.unlock();
+
+				result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
+				if(result == 0) continue;
+				else if(result == -1)
 				{
-					if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
-					else sendKeepAlivePacket1();
-					receivedBytes = _socket->proofread(&buffer[0], bufferMax);
-					if(receivedBytes > 0)
-					{
-						data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
-						if(data.size() > 1000000)
-						{
-							_out.printError("Could not read from HM-LGW: Too much data.");
-							break;
-						}
-					}
-				} while(receivedBytes == (unsigned)bufferMax);
+					if(errno == EINTR) continue;
+					_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+					_stopped = true;
+					continue;
+				}
+
+				bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
+				if(bytesRead <= 0) //read returns 0, when connection is disrupted.
+				{
+					_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+					_stopped = true;
+					continue;
+				}
+
+				if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
+				data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
+				if(data.size() > 1000000)
+				{
+					_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
+					data.clear();
+					continue;
+				}
 			}
 			catch(const BaseLib::SocketTimeOutException& ex)
 			{
@@ -1991,326 +1767,7 @@ void HM_LGW::listen()
     }
 }
 
-void HM_LGW::listenKeepAlive()
-{
-	try
-    {
-		while(!_initStarted && !_stopCallbackThread)
-    	{
-    		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-    	}
-
-    	uint32_t receivedBytes = 0;
-    	int32_t bufferMax = 2048;
-		std::vector<char> buffer(bufferMax);
-		_lastKeepAlive2 = BaseLib::HelperFunctions::getTimeSeconds();
-		_lastKeepAliveResponse2 = _lastKeepAlive2;
-
-        while(!_stopCallbackThread)
-        {
-        	if(_stopped)
-        	{
-        		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        		if(_stopCallbackThread) return;
-        		continue;
-        	}
-        	std::vector<uint8_t> data;
-			try
-			{
-				do
-				{
-					receivedBytes = _socketKeepAlive->proofread(&buffer[0], bufferMax);
-					if(receivedBytes > 0)
-					{
-						data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
-						if(data.size() > 1000000)
-						{
-							_out.printError("Could not read from HM-LGW: Too much data.");
-							break;
-						}
-					}
-				} while(receivedBytes == (unsigned)bufferMax);
-			}
-			catch(const BaseLib::SocketTimeOutException& ex)
-			{
-				if(data.empty())
-				{
-					if(_socketKeepAlive->connected()) sendKeepAlivePacket2();
-					continue;
-				}
-			}
-			catch(const BaseLib::SocketClosedException& ex)
-			{
-				_stopped = true;
-				_out.printWarning("Warning: " + ex.what());
-				continue;
-			}
-			catch(const BaseLib::SocketOperationException& ex)
-			{
-				_stopped = true;
-				_out.printError("Error: " + ex.what());
-				continue;
-			}
-			if(data.empty() || data.size() > 1000000) continue;
-
-        	if(_bl->debugLevel >= 6)
-        	{
-        		_out.printDebug("Debug: Packet received on port " + _settings->portKeepAlive + ". Raw data:");
-        		_out.printBinary(data);
-        	}
-
-        	processDataKeepAlive(data);
-        }
-    }
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-bool HM_LGW::aesKeyExchange(std::vector<uint8_t>& data)
-{
-	try
-	{
-		std::string hex((char*)&data.at(0), data.size());
-		if(_bl->debugLevel >= 5)
-		{
-			std::string temp = hex;
-			_bl->hf.stringReplace(temp, "\r\n", "\\r\\n");
-			_out.printDebug(std::string("Debug: AES key exchange packet received on port " + _settings->port + ": " + temp));
-		}
-		int32_t startPos = hex.find('\n');
-		if(startPos == (signed)std::string::npos)
-		{
-			_out.printError("Error: Error communicating with HM-LGW. Initial handshake packet has wrong format.");
-			return false;
-		}
-		startPos += 5;
-		int32_t length = hex.find('\n', startPos);
-		if(length == (signed)std::string::npos)
-		{
-			_out.printError("Error: Error communicating with HM-LGW. Initial handshake packet has wrong format.");
-			return false;
-		}
-		length = length - startPos - 1;
-		if(length <= 30)
-		{
-			_out.printError("Error: Error communicating with HM-LGW. Initial handshake packet has wrong format.");
-			return false;
-		}
-		if(data.at(startPos - 4) == 'V' && data.at(startPos - 1) == ',')
-		{
-			uint8_t packetIndex = (_math.getNumber(data.at(startPos - 3)) << 4) + _math.getNumber(data.at(startPos - 2));
-			packetIndex++;
-			if(length != 32)
-			{
-				_stopCallbackThread = true;
-				_out.printError("Error: Error communicating with HM-LGW. Received IV has wrong size.");
-				return false;
-			}
-			_remoteIV.clear();
-			std::string ivHex((char*)&data.at(startPos), length);
-			_remoteIV = _bl->hf.getUBinary(ivHex);
-			if(_remoteIV.size() != 16)
-			{
-				_stopCallbackThread = true;
-				_out.printError("Error: Error communicating with HM-LGW. Received IV is not in hexadecimal format.");
-				return false;
-			}
-			if(_bl->debugLevel >= 5) _out.printDebug("HM-LGW IV is: " + _bl->hf.getHexString(_remoteIV));
-
-			gcry_error_t result;
-			if((result = gcry_cipher_setiv(_encryptHandle, &_remoteIV.at(0), _remoteIV.size())) != GPG_ERR_NO_ERROR)
-			{
-				_stopCallbackThread = true;
-				aesCleanup();
-				_out.printError("Error: Could not set IV for encryption: " + _bl->hf.getGCRYPTError(result));
-				return false;
-			}
-
-			std::vector<char> response = { 'V', _bl->hf.getHexChar(packetIndex >> 4), _bl->hf.getHexChar(packetIndex & 0xF), ',' };
-			std::random_device rd;
-			std::default_random_engine generator(rd());
-			std::uniform_int_distribution<int32_t> distribution(0, 15);
-			_myIV.clear();
-			for(int32_t i = 0; i < 32; i++)
-			{
-				int32_t nibble = distribution(generator);
-				if((i % 2) == 0)
-				{
-					_myIV.push_back(nibble << 4);
-				}
-				else
-				{
-					_myIV.at(i / 2) |= nibble;
-				}
-				response.push_back(_bl->hf.getHexChar(nibble));
-			}
-			response.push_back(0x0D);
-			response.push_back(0x0A);
-
-			if(_bl->debugLevel >= 5) _out.printDebug("Homegear IV is: " + _bl->hf.getHexString(_myIV));
-
-			if((result = gcry_cipher_setiv(_decryptHandle, &_myIV.at(0), _myIV.size())) != GPG_ERR_NO_ERROR)
-			{
-				_stopCallbackThread = true;
-				aesCleanup();
-				_out.printError("Error: Could not set IV for decryption: " + _bl->hf.getGCRYPTError(result));
-				return false;
-			}
-
-			send(response, true);
-			_aesExchangeComplete = true;
-			return true;
-		}
-		else if(_remoteIV.empty())
-		{
-			_stopCallbackThread = true;
-			_out.printError("Error: Error communicating with HM-LGW. No IV was send from HM-LGW.");
-			return false;
-		}
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    return false;
-}
-
-bool HM_LGW::aesKeyExchangeKeepAlive(std::vector<uint8_t>& data)
-{
-	try
-	{
-		std::string hex((char*)&data.at(0), data.size());
-		if(_bl->debugLevel >= 5)
-		{
-			std::string temp = hex;
-			_bl->hf.stringReplace(temp, "\r\n", "\\r\\n");
-			_out.printDebug(std::string("Debug: AES key exchange packet received on port " + _settings->portKeepAlive + ": " + temp));
-		}
-		int32_t startPos = hex.find('\n');
-		if(startPos == (signed)std::string::npos)
-		{
-			_out.printError("Error: Error communicating with HM-LGW. Initial handshake packet has wrong format.");
-			return false;
-		}
-		startPos += 5;
-		int32_t length = hex.find('\n', startPos);
-		if(length == (signed)std::string::npos)
-		{
-			_out.printError("Error: Error communicating with HM-LGW. Initial handshake packet has wrong format.");
-			return false;
-		}
-		length = length - startPos - 1;
-		if(length <= 30)
-		{
-			_out.printError("Error: Error communicating with HM-LGW. Initial handshake packet has wrong format.");
-			return false;
-		}
-		if(data.at(startPos - 4) == 'V' && data.at(startPos - 1) == ',')
-		{
-			_packetIndexKeepAlive = (_math.getNumber(data.at(startPos - 3)) << 4) + _math.getNumber(data.at(startPos - 2));
-			_packetIndexKeepAlive++;
-			if(length != 32)
-			{
-				_stopCallbackThread = true;
-				_out.printError("Error: Error communicating with HM-LGW. Received IV has wrong size.");
-				return false;
-			}
-			_remoteIVKeepAlive.clear();
-			std::string ivHex((char*)&data.at(startPos), length);
-			_remoteIVKeepAlive = _bl->hf.getUBinary(ivHex);
-			if(_remoteIVKeepAlive.size() != 16)
-			{
-				_stopCallbackThread = true;
-				_out.printError("Error: Error communicating with HM-LGW. Received IV is not in hexadecimal format.");
-				return false;
-			}
-			if(_bl->debugLevel >= 5) _out.printDebug("HM-LGW IV for keep alive packets is: " + _bl->hf.getHexString(_remoteIVKeepAlive));
-
-			gcry_error_t result;
-			if((result = gcry_cipher_setiv(_encryptHandleKeepAlive, &_remoteIVKeepAlive.at(0), _remoteIVKeepAlive.size())) != GPG_ERR_NO_ERROR)
-			{
-				_stopCallbackThread = true;
-				aesCleanup();
-				_out.printError("Error: Could not set IV for keep alive encryption: " + _bl->hf.getGCRYPTError(result));
-				return false;
-			}
-
-			std::vector<char> response = { 'V', _bl->hf.getHexChar(_packetIndexKeepAlive >> 4), _bl->hf.getHexChar(_packetIndexKeepAlive & 0xF), ',' };
-			std::random_device rd;
-			std::default_random_engine generator(rd());
-			std::uniform_int_distribution<int32_t> distribution(0, 15);
-			_myIVKeepAlive.clear();
-			for(int32_t i = 0; i < 32; i++)
-			{
-				int32_t nibble = distribution(generator);
-				if((i % 2) == 0)
-				{
-					_myIVKeepAlive.push_back(nibble << 4);
-				}
-				else
-				{
-					_myIVKeepAlive.at(i / 2) |= nibble;
-				}
-				response.push_back(_bl->hf.getHexChar(nibble));
-			}
-			response.push_back(0x0D);
-			response.push_back(0x0A);
-
-			if(_bl->debugLevel >= 5) _out.printDebug("Homegear IV for keep alive packets is: " + _bl->hf.getHexString(_myIVKeepAlive));
-
-			if((result = gcry_cipher_setiv(_decryptHandleKeepAlive, &_myIVKeepAlive.at(0), _myIVKeepAlive.size())) != GPG_ERR_NO_ERROR)
-			{
-				_stopCallbackThread = true;
-				aesCleanup();
-				_out.printError("Error: Could not set IV for keep alive decryption: " + _bl->hf.getGCRYPTError(result));
-				return false;
-			}
-
-			sendKeepAlive(response, true);
-			_aesExchangeKeepAliveComplete = true;
-			return true;
-		}
-		else if(_remoteIVKeepAlive.empty())
-		{
-			_stopCallbackThread = true;
-			_out.printError("Error: Error communicating with HM-LGW. No IV was send from HM-LGW.");
-			return false;
-		}
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    return false;
-}
-
-void HM_LGW::buildPacket(std::vector<char>& packet, const std::vector<char>& payload)
+void Hm_Mod_Rpi_Pcb::buildPacket(std::vector<char>& packet, const std::vector<char>& payload)
 {
 	try
 	{
@@ -2341,7 +1798,7 @@ void HM_LGW::buildPacket(std::vector<char>& packet, const std::vector<char>& pay
     }
 }
 
-void HM_LGW::escapePacket(const std::vector<char>& unescapedPacket, std::vector<char>& escapedPacket)
+void Hm_Mod_Rpi_Pcb::escapePacket(const std::vector<char>& unescapedPacket, std::vector<char>& escapedPacket)
 {
 	try
 	{
@@ -2372,27 +1829,21 @@ void HM_LGW::escapePacket(const std::vector<char>& unescapedPacket, std::vector<
     }
 }
 
-void HM_LGW::processPacket(std::vector<uint8_t>& packet)
+void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
 {
 	try
 	{
-		_out.printDebug(std::string("Debug: Packet received from HM-LGW on port " + _settings->port + ": " + _bl->hf.getHexString(packet)));
+		_out.printDebug(std::string("Debug: Packet received from HM-MOD-RPI-PCB on port " + _settings->port + ": " + _bl->hf.getHexString(packet)));
 		if(packet.size() < 8) return;
 		uint16_t crc = _crc.calculate(packet, true);
 		if((packet.at(packet.size() - 2) != (crc >> 8) || packet.at(packet.size() - 1) != (crc & 0xFF)))
 		{
-			if(_firstPacket)
-			{
-				_firstPacket = false;
-				return;
-			}
-			_out.printError("Error: CRC failed on packet received from HM-LGW on port " + _settings->port + ": " + _bl->hf.getHexString(packet));
+			_out.printError("Error: CRC failed on packet received from HM-MOD-RPI-PCB on port " + _settings->port + ": " + _bl->hf.getHexString(packet));
 			_stopped = true;
 			return;
 		}
 		else
 		{
-			_firstPacket = false;
 			_requestsMutex.lock();
 			if(_requests.find(packet.at(4)) != _requests.end())
 			{
@@ -2411,7 +1862,7 @@ void HM_LGW::processPacket(std::vector<uint8_t>& packet)
 				//E. g.: FD0004000004001938
 				else if(packet.size() == 9 && packet.at(6) == 0 && packet.at(5) == 4 && packet.at(3) == 0)
 				{
-					_out.printError("Error: Something is wrong with your HM-LGW. You probably need to replace it. Check if it works with a CCU.");
+					_out.printError("Error: Something is wrong with your HM-MOD-RPI-PCB. You probably need to replace it. Check if it works with a CCU.");
 					request->response = packet;
 					{
 						std::lock_guard<std::mutex> lock(request->mutex);
@@ -2439,49 +1890,20 @@ void HM_LGW::processPacket(std::vector<uint8_t>& packet)
     }
 }
 
-void HM_LGW::processData(std::vector<uint8_t>& data)
+void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
 {
 	try
 	{
-		if(data.empty()) return;
-		if(!_aesExchangeComplete)
+		if(data.size() < 8) //8 is minimum size fd
 		{
-			aesKeyExchange(data);
-			return;
-		}
-		std::vector<uint8_t> decryptedData = decrypt(data);
-		if(decryptedData.size() < 8) //8 is minimum size fd
-		{
-			_out.printWarning("Warning: Too small packet received on port " + _settings->port + ": " + _bl->hf.getHexString(decryptedData));
-			return;
-		}
-		if(!_initComplete && _packetIndex == 0 && decryptedData.at(0) == 'S')
-		{
-			std::string packetString((char*)&decryptedData.at(0), decryptedData.size());
-			if(_bl->debugLevel >= 5)
-			{
-				std::string temp = packetString;
-				_bl->hf.stringReplace(temp, "\r\n", "\\r\\n");
-				_out.printDebug(std::string("Debug: Packet received on port " + _settings->port + ": " + temp));
-			}
-			_requestsMutex.lock();
-			if(_requests.find(0) != _requests.end())
-			{
-				_requests.at(0)->response = decryptedData;
-				{
-					std::lock_guard<std::mutex> lock(_requests.at(0)->mutex);
-					_requests.at(0)->mutexReady = true;
-				}
-				_requests.at(0)->conditionVariable.notify_one();
-			}
-			_requestsMutex.unlock();
+			_out.printWarning("Warning: Too small packet received on port " + _settings->port + ": " + _bl->hf.getHexString(data));
 			return;
 		}
 
 		std::vector<uint8_t> packet;
 		if(!_packetBuffer.empty()) packet = _packetBuffer;
 		bool escapeByte = false;
-		for(std::vector<uint8_t>::iterator i = decryptedData.begin(); i != decryptedData.end(); ++i)
+		for(std::vector<uint8_t>::iterator i = data.begin(); i != data.end(); ++i)
 		{
 			if(!packet.empty() && *i == 0xfd)
 			{
@@ -2522,90 +1944,12 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
     }
 }
 
-void HM_LGW::processDataKeepAlive(std::vector<uint8_t>& data)
-{
-	try
-	{
-		if(data.empty()) return;
-		std::string packets;
-		if(!_aesExchangeKeepAliveComplete)
-		{
-			aesKeyExchangeKeepAlive(data);
-			return;
-		}
-		std::vector<uint8_t> decryptedData = decryptKeepAlive(data);
-		if(decryptedData.empty()) return;
-		packets.insert(packets.end(), decryptedData.begin(), decryptedData.end());
-
-		std::istringstream stringStream(packets);
-		std::string packet;
-		while(std::getline(stringStream, packet))
-		{
-			if(_bl->debugLevel >= 5) _out.printDebug(std::string("Debug: Packet received on port " + _settings->portKeepAlive + ": " + packet));
-			if(_initCompleteKeepAlive) parsePacketKeepAlive(packet); else processInitKeepAlive(packet);
-		}
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void HM_LGW::processInitKeepAlive(std::string& packet)
+void Hm_Mod_Rpi_Pcb::parsePacket(std::vector<uint8_t>& packet)
 {
 	try
 	{
 		if(packet.empty()) return;
-		std::vector<std::string> parts = BaseLib::HelperFunctions::splitAll(packet, ',');
-		if(parts.size() != 2 || parts.at(0).size() != 3 || parts.at(0).at(0) != 'S' || parts.at(1).size() < 6 || parts.at(1).compare(0, 6, "SysCom") != 0)
-		{
-			_stopCallbackThread = true;
-			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please check your AES key in homematicbidcos.conf. Stopping listening.");
-			return;
-		}
-
-		std::vector<char> response = { '>', _bl->hf.getHexChar(_packetIndexKeepAlive >> 4), _bl->hf.getHexChar(_packetIndexKeepAlive & 0xF), ',', '0', '0', '0', '0', '\r', '\n' };
-		sendKeepAlive(response, false);
-		response = std::vector<char>{ 'L', '0', '0', ',', '0', '2', ',', '0', '0', 'F', 'F', ',', '0', '0', '\r', '\n'};
-		sendKeepAlive(response, false);
-		_lastKeepAlive2 = BaseLib::HelperFunctions::getTimeSeconds() - 20;
-		_lastKeepAliveResponse2 = _lastKeepAlive2;
-		_packetIndexKeepAlive = 0;
-		_initCompleteKeepAlive = true;
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
-{
-	try
-	{
-		if(packet.empty()) return;
-		if(packet.at(5) == 4 && packet.at(3) == 0 && packet.size() == 10 && packet.at(6) == 2 && packet.at(7) == 0)
-		{
-			if(_bl->debugLevel >= 5) _out.printDebug("Debug: Keep alive response received on port " + _settings->port + ".");
-			_lastKeepAliveResponse1 = BaseLib::HelperFunctions::getTimeSeconds();
-		}
-		else if((packet.at(5) == 5 || (packet.at(5) == 4 && packet.at(6) != 7)) && packet.at(3) == 1 && packet.size() >= 20)
+		if((packet.at(5) == 5 || (packet.at(5) == 4 && packet.at(6) != 7)) && packet.at(3) == 1 && packet.size() >= 20)
 		{
 			std::vector<uint8_t> binaryPacket({(uint8_t)(packet.size() - 11)});
 			binaryPacket.insert(binaryPacket.end(), packet.begin() + 9, packet.end() - 2);
@@ -2657,37 +2001,6 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 				std::this_thread::sleep_for(std::chrono::milliseconds(30));
 				raisePacketReceived(ok);
 			}
-		}
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void HM_LGW::parsePacketKeepAlive(std::string& packet)
-{
-	try
-	{
-		if(packet.empty()) return;
-		if(packet.at(0) == '>'  && (packet.at(1) == 'K' || packet.at(1) == 'L') && packet.size() == 5)
-		{
-			if(_bl->debugLevel >= 5) _out.printDebug("Debug: Keep alive response received on port " + _settings->portKeepAlive + ".");
-			std::string index = packet.substr(2, 2);
-			if(BaseLib::Math::getNumber(index, true) == _packetIndexKeepAlive)
-			{
-				_lastKeepAliveResponse2 = BaseLib::HelperFunctions::getTimeSeconds();
-				_packetIndexKeepAlive++;
-			}
-			if(packet.at(1) == 'L') sendKeepAlivePacket2();
 		}
 	}
     catch(const std::exception& ex)

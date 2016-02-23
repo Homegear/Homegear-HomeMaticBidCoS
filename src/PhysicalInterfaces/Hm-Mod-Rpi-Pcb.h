@@ -27,8 +27,8 @@
  * files in the program, then also delete it here.
  */
 
-#ifndef HM_LGW_H
-#define HM_LGW_H
+#ifndef HM_MOD_RPI_PCB_H
+#define HM_MOD_RPI_PCB_H
 
 #include "../BidCoSPacket.h"
 #include "IBidCoSInterface.h"
@@ -55,15 +55,15 @@
 namespace BidCoS
 {
 
-class HM_LGW  : public IBidCoSInterface
+class Hm_Mod_Rpi_Pcb  : public IBidCoSInterface
 {
     public:
-        HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
-        virtual ~HM_LGW();
+        Hm_Mod_Rpi_Pcb(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
+        virtual ~Hm_Mod_Rpi_Pcb();
         void startListening();
         void stopListening();
         virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
-        virtual bool isOpen() { return _initComplete && _socket->connected(); }
+        virtual bool isOpen() { return _initComplete && _fileDescriptor->descriptor != -1; }
 
         virtual void addPeer(PeerInfo peerInfo);
         virtual void addPeers(std::vector<PeerInfo>& peerInfos);
@@ -114,78 +114,40 @@ class HM_LGW  : public IBidCoSInterface
         	uint8_t _responseType;
         };
 
+        struct termios _termios;
+
         BaseLib::Math _math;
-        std::thread _listenThreadKeepAlive;
         std::thread _initThread;
-        std::string _hostname;
-        std::string _port;
-        std::unique_ptr<BaseLib::SocketOperations> _socket;
-        std::unique_ptr<BaseLib::SocketOperations> _socketKeepAlive;
+
         std::mutex _getResponseMutex;
         std::mutex _requestsMutex;
         std::map<uint8_t, std::shared_ptr<Request>> _requests;
         std::mutex _sendMutex;
-        std::mutex _sendMutexKeepAlive;
         bool _initStarted = false;
-        bool _firstPacket = true;
-        bool _initCompleteKeepAlive = false;
-        int32_t _lastKeepAlive1 = 0;
-        int32_t _lastKeepAliveResponse1 = 0;
-        int32_t _lastKeepAlive2 = 0;
-        int32_t _lastKeepAliveResponse2 = 0;
         int32_t _lastTimePacket = 0;
         int64_t _startUpTime = 0;
         std::vector<uint8_t> _packetBuffer;
         uint8_t _packetIndex = 0;
-        uint8_t _packetIndexKeepAlive = 0;
         CRC16 _crc;
 
-        //AES stuff
-        bool _aesInitialized = false;
-        bool _aesExchangeComplete = false;
-        bool _aesExchangeKeepAliveComplete = false;
-        std::vector<uint8_t> _key;
-		std::vector<uint8_t> _remoteIV;
-		std::vector<uint8_t> _myIV;
-        gcry_cipher_hd_t _encryptHandle = nullptr;
-        gcry_cipher_hd_t _decryptHandle = nullptr;
-        std::vector<uint8_t> _remoteIVKeepAlive;
-		std::vector<uint8_t> _myIVKeepAlive;
-        gcry_cipher_hd_t _encryptHandleKeepAlive = nullptr;
-        gcry_cipher_hd_t _decryptHandleKeepAlive = nullptr;
-
-        std::vector<char> encrypt(const std::vector<char>& data);
-        std::vector<uint8_t> decrypt(std::vector<uint8_t>& data);
-        std::vector<char> encryptKeepAlive(std::vector<char>& data);
-        std::vector<uint8_t> decryptKeepAlive(std::vector<uint8_t>& data);
-        bool aesKeyExchange(std::vector<uint8_t>& data);
-        bool aesKeyExchangeKeepAlive(std::vector<uint8_t>& data);
-        bool aesInit();
-        void aesCleanup();
-        //End AES stuff
+        void openDevice();
+        void closeDevice();
+        void setupDevice();
 
         void reconnect();
         void doInit();
         void sendPeers();
         void sendPeer(PeerInfo& peerInfo);
         void processData(std::vector<uint8_t>& data);
-        void processDataKeepAlive(std::vector<uint8_t>& data);
         void processPacket(std::vector<uint8_t>& packet);
-        void processInitKeepAlive(std::string& packet);
         void parsePacket(std::vector<uint8_t>& packet);
-        void parsePacketKeepAlive(std::string& packet);
         void buildPacket(std::vector<char>& packet, const std::vector<char>& payload);
         void escapePacket(const std::vector<char>& unescapedPacket, std::vector<char>& escapedPacket);
         void getResponse(const std::vector<char>& packet, std::vector<uint8_t>& response, uint8_t messageCounter, uint8_t responseControlByte, uint8_t responseType);
-        void send(std::string hexString, bool raw = false);
-        void send(const std::vector<char>& data, bool raw);
-        void sendKeepAlive(std::vector<char>& data, bool raw);
-        void sendKeepAlivePacket1();
-        void sendKeepAlivePacket2();
+        void send(std::string hexString);
+        void send(const std::vector<char>& data);
         void sendTimePacket();
-        void dutyCycleTest(int32_t destinationAddress);
         void listen();
-        void listenKeepAlive();
         void getFileDescriptor(bool& timedout);
         std::shared_ptr<BaseLib::FileDescriptor> getConnection(std::string& hostname, const std::string& port, std::string& ipAddress);
         virtual void processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLib::ITimedQueueEntry>& entry);

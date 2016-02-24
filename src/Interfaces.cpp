@@ -54,7 +54,6 @@ void Interfaces::create()
 {
 	try
 	{
-
 		for(std::vector<std::shared_ptr<Systems::PhysicalInterfaceSettings>>::iterator i = _physicalInterfaceSettings.begin(); i != _physicalInterfaceSettings.end(); ++i)
 		{
 			std::shared_ptr<IBidCoSInterface> device;

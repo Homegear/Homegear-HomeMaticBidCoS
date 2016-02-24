@@ -193,7 +193,7 @@ void COC::startListening()
 		if(!_socket) _socket = GD::bl->serialDeviceManager.create(_settings->device, 38400, O_RDWR | O_NOCTTY | O_NDELAY, true, 45);
 		if(!_socket) return;
 		_eventHandlerSelf = _socket->addEventHandler(this);
-		_socket->openDevice();
+		_socket->openDevice(false, false);
 		if(gpioDefined(2))
 		{
 			openGPIO(2, false);

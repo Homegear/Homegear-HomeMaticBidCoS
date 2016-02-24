@@ -74,9 +74,9 @@ void Hm_Mod_Rpi_Pcb::setup(int32_t userID, int32_t groupID)
 	{
 		_out.printDebug("Debug: HM-MOD_RPI_PCB: Setting device permissions");
 		setDevicePermission(userID, groupID);
-		_out.printDebug("Debug: MOD_RPI_PCB: Exporting GPIO");
+		_out.printDebug("Debug: HM-MOD_RPI_PCB: Exporting GPIO");
 		exportGPIO(1);
-		_out.printDebug("Debug: MOD_RPI_PCB: Setting GPIO permissions");
+		_out.printDebug("Debug: HM-MOD_RPI_PCB: Setting GPIO permissions");
 		setGPIOPermission(1, userID, groupID, false);
 		setGPIODirection(1, BaseLib::Systems::IPhysicalInterface::GPIODirection::Enum::OUT);
 	}
@@ -223,7 +223,7 @@ void Hm_Mod_Rpi_Pcb::openDevice()
 		dprintf(lockfileDescriptor, "%10i", getpid());
 		close(lockfileDescriptor);
 
-		_fileDescriptor = _bl->fileDescriptorManager.add(open(_settings->device.c_str(), O_RDWR | O_NOCTTY));
+		_fileDescriptor = _bl->fileDescriptorManager.add(open(_settings->device.c_str(), O_RDWR | O_NOCTTY | O_NDELAY));
 		if(_fileDescriptor->descriptor == -1)
 		{
 			_out.printCritical("Couldn't open device \"" + _settings->device + "\": " + strerror(errno));
@@ -274,7 +274,7 @@ void Hm_Mod_Rpi_Pcb::setupDevice()
 		if(_fileDescriptor->descriptor == -1) return;
 		memset(&_termios, 0, sizeof(termios));
 
-		_termios.c_cflag = B115200 | CS8 | CREAD;
+		_termios.c_cflag = B115200 | CS8 | CREAD | PARENB;
 		_termios.c_iflag = 0;
 		_termios.c_oflag = 0;
 		_termios.c_lflag = 0;
@@ -914,7 +914,7 @@ void Hm_Mod_Rpi_Pcb::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet
 			payload.push_back(2);
 			payload.push_back(0);
 			payload.push_back(0);
-			if(_settings->sendFix) payload.push_back(0);
+			payload.push_back(0);
 			payload.insert(payload.end(), packetBytes.begin() + 1, packetBytes.end());
 			buildPacket(requestPacket, payload);
 			_packetIndex++;
@@ -1066,14 +1066,15 @@ void Hm_Mod_Rpi_Pcb::send(const std::vector<char>& data)
 		std::lock_guard<std::mutex> sendGuard(_sendMutex);
 		while (totallySentBytes < (signed)data.size())
 		{
-			int32_t sentBytes = ::send(_fileDescriptor->descriptor, &data.at(0) + totallySentBytes, data.size() - totallySentBytes, MSG_NOSIGNAL);
+			int32_t sentBytes = ::write(_fileDescriptor->descriptor, &data.at(0) + totallySentBytes, data.size() - totallySentBytes);
 			if(sentBytes <= 0)
 			{
-				GD::out.printError("Could not send data to client: " + std::to_string(_fileDescriptor->descriptor));
+				GD::out.printError("Could not send data to client (" + std::to_string(_fileDescriptor->descriptor) + ")" + (sentBytes == -1 ? ": " + std::string(strerror(errno)) : ""));
 				break;
 			}
 			totallySentBytes += sentBytes;
 		}
+		return;
     }
     catch(const BaseLib::SocketOperationException& ex)
     {
@@ -1112,11 +1113,18 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		if(_stopped) return;
 
 		// {{{ Reset
+		try
+		{
 			openGPIO(1, false);
 			setGPIO(1, false);
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			setGPIO(1, true);
 			closeGPIO(1);
+		}
+		catch(BaseLib::Exception& ex)
+		{
+			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+		}
 		// }}}
 
 		// {{{ Wait for Co_CPU_BL packet
@@ -1510,7 +1518,7 @@ void Hm_Mod_Rpi_Pcb::listen()
         	{
         		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         		if(_stopCallbackThread) return;
-        		_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+        		_out.printWarning("Warning: Connection closed (1). Trying to reconnect...");
         		reconnect();
         		continue;
         	}
@@ -1534,7 +1542,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 					else if(result == -1)
 					{
 						if(errno == EINTR) continue;
-						_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+						_out.printWarning("Warning: Connection closed (2). Trying to reconnect...");
 						_stopped = true;
 						continue;
 					}
@@ -1542,7 +1550,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 					bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
 					if(bytesRead <= 0) //read returns 0, when connection is disrupted.
 					{
-						_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+						_out.printWarning("Warning: Connection closed (3). Trying to reconnect...");
 						_stopped = true;
 						continue;
 					}
@@ -1685,8 +1693,7 @@ void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
 		uint16_t crc = _crc.calculate(packet, true);
 		if((packet.at(packet.size() - 2) != (crc >> 8) || packet.at(packet.size() - 1) != (crc & 0xFF)))
 		{
-			_out.printError("Error: CRC failed on packet received from HM-MOD-RPI-PCB on port " + _settings->port + ": " + _bl->hf.getHexString(packet));
-			_stopped = true;
+			_out.printError("Error: CRC (" + BaseLib::HelperFunctions::getHexString(crc, 4) + ") failed on packet received from HM-MOD-RPI-PCB on port " + _settings->port + ": " + _bl->hf.getHexString(packet));
 			return;
 		}
 		else

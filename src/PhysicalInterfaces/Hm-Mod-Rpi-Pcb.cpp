@@ -1112,9 +1112,11 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		if(_stopped) return;
 
 		// {{{ Reset
+			openGPIO(1, false);
 			setGPIO(1, false);
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			setGPIO(1, true);
+			closeGPIO(1);
 		// }}}
 
 		// {{{ Wait for Co_CPU_BL packet

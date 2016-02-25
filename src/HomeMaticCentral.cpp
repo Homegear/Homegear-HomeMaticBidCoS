@@ -1609,11 +1609,11 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			else
 			{
 				std::shared_ptr<BidCoSPeer> peer = getPeer(peerID);
-				if(!peer->firmwareUpdateAvailable())
+				/*if(!peer->firmwareUpdateAvailable())
 				{
 					stringStream << "Peer is up to date." << std::endl;
 					return stringStream.str();
-				}
+				}*/
 				ids.push_back(peerID);
 				result = updateFirmware(nullptr, ids, manually);
 			}
@@ -1987,7 +1987,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 			return;
 		}
 		int32_t firmwareVersion = peer->getNewFirmwareVersion();
-		if(peer->getFirmwareVersion() >= firmwareVersion)
+		/*if(peer->getFirmwareVersion() >= firmwareVersion)
 		{
 			_bl->deviceUpdateInfo.results[id].first = 0;
 			_bl->deviceUpdateInfo.results[id].second = "Already up to date.";
@@ -1995,7 +1995,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 			_updateMutex.unlock();
 			_updateMode = false;
 			return;
-		}
+		}*/
 		std::string oldVersionString = peer->getFirmwareVersionString(peer->getFirmwareVersion());
 		std::string versionString = peer->getFirmwareVersionString(firmwareVersion);
 
@@ -2080,7 +2080,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 						responseReceived = true;
 						break;
 					}
-					else GD::out.printWarning("Warning: No ACK received in response to bootloader packet. Received packet was: " + receivedPacket->hexString());
+					else if(receivedPacket) GD::out.printWarning("Warning: No ACK received in response to bootloader packet. Received packet was: " + receivedPacket->hexString());
 					std::this_thread::sleep_for(std::chrono::milliseconds(20));
 					waitIndex++;
 				}

@@ -1054,13 +1054,13 @@ void Hm_Mod_Rpi_Pcb::send(const std::vector<char>& data)
     	if(data.size() < 3) return; //Otherwise error in printInfo
     	if(!_fileDescriptor->descriptor == -1 || _stopped)
     	{
-    		_out.printWarning("Warning: !!!Not!!! sending (Port " + _settings->port + "): " + _bl->hf.getHexString(data));
+    		_out.printWarning("Warning: !!!Not!!! sending: " + _bl->hf.getHexString(data));
     		_sendMutex.unlock();
     		return;
     	}
     	if(_bl->debugLevel >= 5)
         {
-            _out.printDebug("Debug: Sending (Port " + _settings->port + "): " + _bl->hf.getHexString(data));
+            _out.printDebug("Debug: Sending: " + _bl->hf.getHexString(data));
         }
     	int32_t totallySentBytes = 0;
 		std::lock_guard<std::mutex> sendGuard(_sendMutex);
@@ -1375,7 +1375,7 @@ void Hm_Mod_Rpi_Pcb::startListening()
 		}
 		openDevice();
 		if(_fileDescriptor->descriptor == -1) return;
-		_out.printDebug("Connecting to HM-MOD-RPI-PCB with hostname " + _settings->host + " on port " + _settings->port + "...");
+		_out.printDebug("Connecting to HM-MOD-RPI-PCB...");
 		_stopped = false;
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Hm_Mod_Rpi_Pcb::listen, this);
 		else GD::bl->threadManager.start(_listenThread, true, &Hm_Mod_Rpi_Pcb::listen, this);
@@ -1409,9 +1409,9 @@ void Hm_Mod_Rpi_Pcb::reconnect()
 		_requestsMutex.unlock();
 		_initStarted = false;
 		_initComplete = false;
-		_out.printDebug("Connecting to HM-MOD-RPI-PCB with hostname " + _settings->host + " on port " + _settings->port + "...");
+		_out.printDebug("Connecting to HM-MOD-RPI-PCB...");
 		openDevice();
-		_out.printInfo("Connected to HM-MOD-RPI-PCB with hostname " + _settings->host + " on port " + _settings->port + ".");
+		_out.printInfo("Connected to HM-MOD-RPI-PCB.");
 		_stopped = false;
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Hm_Mod_Rpi_Pcb::doInit, this);
 		else GD::bl->threadManager.start(_initThread, true, &Hm_Mod_Rpi_Pcb::doInit, this);
@@ -1586,7 +1586,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 				continue;
 			}
 
-			if(_bl->debugLevel >= 6) _out.printDebug("Debug: Packet received on port " + _settings->port + ". Raw data: " + BaseLib::HelperFunctions::getHexString(data));
+			if(_bl->debugLevel >= 6) _out.printDebug("Debug: Packet received. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 
 			if(data.empty()) continue;
 			if(data.size() > 100000)
@@ -1681,12 +1681,12 @@ void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
 {
 	try
 	{
-		_out.printDebug(std::string("Debug: Packet received from HM-MOD-RPI-PCB on port " + _settings->port + ": " + _bl->hf.getHexString(packet)));
+		_out.printDebug(std::string("Debug: Packet received from HM-MOD-RPI-PCB: " + _bl->hf.getHexString(packet)));
 		if(packet.size() < 8) return;
 		uint16_t crc = _crc.calculate(packet, true);
 		if((packet.at(packet.size() - 2) != (crc >> 8) || packet.at(packet.size() - 1) != (crc & 0xFF)))
 		{
-			_out.printError("Error: CRC (" + BaseLib::HelperFunctions::getHexString(crc, 4) + ") failed on packet received from HM-MOD-RPI-PCB on port " + _settings->port + ": " + _bl->hf.getHexString(packet));
+			_out.printError("Error: CRC (" + BaseLib::HelperFunctions::getHexString(crc, 4) + ") failed on packet received from HM-MOD-RPI-PCB: " + _bl->hf.getHexString(packet));
 			return;
 		}
 		else
@@ -1755,7 +1755,6 @@ void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
 		int32_t size = (packet.size() > 5) ? (((int32_t)packet.at(1)) << 8) + packet.at(2) + 5 : 0;
 		if(size < 0) size = 0;
 		if(size > 0 && size < 8) _out.printWarning("Warning: Too small packet received: " + _bl->hf.getHexString(data));
-		else if(size > 255) _out.printWarning("Warning: Too large packet received: " + _bl->hf.getHexString(data));
 		else if(packet.size() < 8 || packet.size() < (unsigned)size) _packetBuffer = packet;
 		else
 		{

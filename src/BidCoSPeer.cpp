@@ -3219,7 +3219,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				rpcParameter->convertToPacket(value, parameter->data);
 				if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
 				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameter->data);
-				GD::out.printInfo("Info: Setting valve state of HM-CC-VD with id " + std::to_string(_peerID) + " to " + std::to_string(value->integerValue / 2) + "%.");
+				GD::out.printInfo("Info: Setting valve state of HM-CC-VD with id " + std::to_string(_peerID) + " to " + std::to_string(value->integerValue) + "%.");
 				return true;
 			}
 		}

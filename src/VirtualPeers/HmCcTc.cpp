@@ -365,7 +365,7 @@ void HmCcTc::sendDutyCyclePacket(uint8_t messageCounter, int64_t sendingTime)
 		if(sendingTime < 0) sendingTime = 2000000;
 		if(_stopDutyCycleThread) return;
 		int32_t address = getNextDutyCycleDeviceAddress();
-		GD::out.printDebug("Debug: HomeMatic BidCoS peer " + std::to_string(_peerID) + ": Next HM-CC-VD is 0x" + BaseLib::HelperFunctions::getHexString(_address));
+		GD::out.printDebug("Debug: HomeMatic BidCoS peer " + std::to_string(_peerID) + ": Next HM-CC-VD is 0x" + BaseLib::HelperFunctions::getHexString(address));
 		if(address < 1)
 		{
 			GD::out.printDebug("Debug: Not sending duty cycle packet, because no valve drives are paired to me.");
@@ -460,32 +460,24 @@ int32_t HmCcTc::getNextDutyCycleDeviceAddress()
 {
 	try
 	{
-		_peersMutex.lock();
-		if(_peers.size() == 0)
+		std::lock_guard<std::mutex> peersGuard(_peersMutex);
+		if(_peers.find(2) == _peers.end() || _peers.at(2).empty()) return -1;
+		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers.at(2).begin(); i != _peers.at(2).end(); ++i)
 		{
-			_peersMutex.unlock();
-			return -1;
-		}
-		int i = 0;
-		std::unordered_map<int32_t, std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>>::iterator j = (_currentDutyCycleDeviceAddress == -1) ? _peers.begin() : _peers.find(_currentDutyCycleDeviceAddress);
-		if(j == _peers.end()) //_currentDutyCycleDeviceAddress does not exist anymore in peers
-		{
-			j = _peers.begin();
-		}
-		while(i <= (signed)_peers.size()) //<= because it might be there is only one HM-CC-VD
-		{
-			j++;
-			if(j == _peers.end())
+			if(_currentDutyCycleDeviceAddress == -1)
 			{
-				j = _peers.begin();
+				_currentDutyCycleDeviceAddress = (*i)->address;
+				break;
 			}
-			if(!j->second.empty())
+			else if((*i)->address == _currentDutyCycleDeviceAddress)
 			{
-				_currentDutyCycleDeviceAddress = j->first;
-				_peersMutex.unlock();
-				return _currentDutyCycleDeviceAddress;
+				i++;
+				if(i == _peers.at(2).end()) _currentDutyCycleDeviceAddress = _peers.at(2).at(0)->address;
+				else _currentDutyCycleDeviceAddress = (*i)->address;
+				break;
 			}
 		}
+		return _currentDutyCycleDeviceAddress;
 	}
     catch(const std::exception& ex)
     {
@@ -499,7 +491,6 @@ int32_t HmCcTc::getNextDutyCycleDeviceAddress()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-	_peersMutex.unlock();
 	return -1;
 }
 

@@ -1928,7 +1928,7 @@ void HM_LGW::listen()
 					if(receivedBytes > 0)
 					{
 						data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
-						if(data.size() > 1000000)
+						if(data.size() > 100000)
 						{
 							_out.printError("Could not read from HM-LGW: Too much data.");
 							break;
@@ -1965,7 +1965,7 @@ void HM_LGW::listen()
         	}
 
 			if(data.empty()) continue;
-			if(data.size() > 1000000)
+			if(data.size() > 100000)
 			{
 				data.clear();
 				continue;
@@ -2501,7 +2501,11 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
 			}
 			else packet.push_back(*i);
 		}
-		if(packet.size() < 8) _packetBuffer = packet;
+		int32_t size = (packet.size() > 5) ? (((int32_t)packet.at(1)) << 8) + packet.at(2) + 5 : 0;
+		if(size < 0) size = 0;
+		if(size > 0 && size < 8) _out.printWarning("Warning: Too small packet received on port " + _settings->port + ": " + _bl->hf.getHexString(data));
+		else if(size > 255) _out.printWarning("Warning: Too large packet received: " + _bl->hf.getHexString(data));
+		else if(packet.size() < 8 || packet.size() < (unsigned)size) _packetBuffer = packet;
 		else
 		{
 			processPacket(packet);

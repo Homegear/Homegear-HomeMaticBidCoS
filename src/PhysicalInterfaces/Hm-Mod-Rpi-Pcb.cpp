@@ -1525,47 +1525,44 @@ void Hm_Mod_Rpi_Pcb::listen()
 			try
 			{
 				if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
-				do
+
+				if(_fileDescriptor->descriptor == -1) break;
+				timeval timeout;
+				timeout.tv_sec = 5;
+				timeout.tv_usec = 0;
+				fd_set readFileDescriptor;
+				FD_ZERO(&readFileDescriptor);
+				GD::bl->fileDescriptorManager.lock();
+				FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
+				GD::bl->fileDescriptorManager.unlock();
+
+				result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
+				if(result == 0) continue;
+				else if(result == -1)
 				{
-					if(_fileDescriptor->descriptor == -1) break;
-					timeval timeout;
-					timeout.tv_sec = 5;
-					timeout.tv_usec = 0;
-					fd_set readFileDescriptor;
-					FD_ZERO(&readFileDescriptor);
-					GD::bl->fileDescriptorManager.lock();
-					FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
-					GD::bl->fileDescriptorManager.unlock();
-
-					result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
-					if(result == 0) continue;
-					else if(result == -1)
-					{
-						if(errno == EINTR) continue;
-						_out.printWarning("Warning: Connection closed (2). Trying to reconnect...");
-						_stopped = true;
-						continue;
-					}
-
-					bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
-					if(bytesRead <= 0) //read returns 0, when connection is disrupted.
-					{
-						_out.printWarning("Warning: Connection closed (3). Trying to reconnect...");
-						_stopped = true;
-						continue;
-					}
-
-					if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
-					data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
-					std::cout << "Moin packet received from HM-MOD-RPI-PCB " << BaseLib::HelperFunctions::getHexString(data) << std::endl;
-					if(data.size() > 1000000)
-					{
-						_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
-						data.clear();
-						break;
-					}
+					if(errno == EINTR) continue;
+					_out.printWarning("Warning: Connection closed (2). Trying to reconnect...");
+					_stopped = true;
+					continue;
 				}
-				while(bytesRead == (signed)buffer.size());
+
+				bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
+				if(bytesRead <= 0) //read returns 0, when connection is disrupted.
+				{
+					_out.printWarning("Warning: Connection closed (3). Trying to reconnect...");
+					_stopped = true;
+					continue;
+				}
+
+				if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
+				data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
+
+				if(data.size() > 100000)
+				{
+					_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
+					data.clear();
+					break;
+				}
 			}
 			catch(const BaseLib::SocketTimeOutException& ex)
 			{
@@ -1589,14 +1586,10 @@ void Hm_Mod_Rpi_Pcb::listen()
 				continue;
 			}
 
-			if(_bl->debugLevel >= 6)
-        	{
-        		_out.printDebug("Debug: Packet received on port " + _settings->port + ". Raw data:");
-        		_out.printBinary(data);
-        	}
+			if(_bl->debugLevel >= 6) _out.printDebug("Debug: Packet received on port " + _settings->port + ". Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 
 			if(data.empty()) continue;
-			if(data.size() > 1000000)
+			if(data.size() > 100000)
 			{
 				data.clear();
 				continue;
@@ -1736,12 +1729,6 @@ void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
 {
 	try
 	{
-		if(data.size() < 8) //8 is minimum size fd
-		{
-			_out.printWarning("Warning: Too small packet received on port " + _settings->port + ": " + _bl->hf.getHexString(data));
-			return;
-		}
-
 		std::vector<uint8_t> packet;
 		if(!_packetBuffer.empty()) packet = _packetBuffer;
 		bool escapeByte = false;
@@ -1765,7 +1752,11 @@ void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
 			}
 			else packet.push_back(*i);
 		}
-		if(packet.size() < 8) _packetBuffer = packet;
+		int32_t size = (packet.size() > 5) ? (((int32_t)packet.at(1)) << 8) + packet.at(2) + 5 : 0;
+		if(size < 0) size = 0;
+		if(size > 0 && size < 8) _out.printWarning("Warning: Too small packet received: " + _bl->hf.getHexString(data));
+		else if(size > 255) _out.printWarning("Warning: Too large packet received: " + _bl->hf.getHexString(data));
+		else if(packet.size() < 8 || packet.size() < (unsigned)size) _packetBuffer = packet;
 		else
 		{
 			processPacket(packet);

@@ -2479,29 +2479,24 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
 		}
 
 		std::vector<uint8_t> packet;
-		bool escapeByte = false;
-		if(!_packetBuffer.empty())
-		{
-			packet = _packetBuffer;
-			if(packet.back() == 0xfc) escapeByte = true;
-		}
+		if(!_packetBuffer.empty()) packet = _packetBuffer;
 		for(std::vector<uint8_t>::iterator i = decryptedData.begin(); i != decryptedData.end(); ++i)
 		{
 			if(!packet.empty() && *i == 0xfd)
 			{
 				processPacket(packet);
 				packet.clear();
-				escapeByte = false;
+				_escapeByte = false;
 			}
 			if(*i == 0xfc)
 			{
-				escapeByte = true;
+				_escapeByte = true;
 				continue;
 			}
-			if(escapeByte)
+			if(_escapeByte)
 			{
 				packet.push_back(*i | 0x80);
-				escapeByte = false;
+				_escapeByte = false;
 			}
 			else packet.push_back(*i);
 		}
@@ -2514,6 +2509,7 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
 		{
 			processPacket(packet);
 			_packetBuffer.clear();
+			_escapeByte = false;
 		}
 	}
     catch(const std::exception& ex)

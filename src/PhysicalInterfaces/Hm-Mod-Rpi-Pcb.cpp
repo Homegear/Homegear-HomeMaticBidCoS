@@ -1730,8 +1730,12 @@ void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
 	try
 	{
 		std::vector<uint8_t> packet;
-		if(!_packetBuffer.empty()) packet = _packetBuffer;
 		bool escapeByte = false;
+		if(!_packetBuffer.empty())
+		{
+			packet = _packetBuffer;
+			if(packet.back() == 0xfc) escapeByte = true;
+		}
 		for(std::vector<uint8_t>::iterator i = data.begin(); i != data.end(); ++i)
 		{
 			if(!packet.empty() && *i == 0xfd)

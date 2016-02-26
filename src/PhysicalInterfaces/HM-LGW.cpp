@@ -2479,8 +2479,12 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
 		}
 
 		std::vector<uint8_t> packet;
-		if(!_packetBuffer.empty()) packet = _packetBuffer;
 		bool escapeByte = false;
+		if(!_packetBuffer.empty())
+		{
+			packet = _packetBuffer;
+			if(packet.back() == 0xfc) escapeByte = true;
+		}
 		for(std::vector<uint8_t>::iterator i = decryptedData.begin(); i != decryptedData.end(); ++i)
 		{
 			if(!packet.empty() && *i == 0xfd)

@@ -274,7 +274,7 @@ void Hm_Mod_Rpi_Pcb::setupDevice()
 		if(_fileDescriptor->descriptor == -1) return;
 		memset(&_termios, 0, sizeof(termios));
 
-		_termios.c_cflag = B115200 | CS8 | CREAD | PARENB;
+		_termios.c_cflag = B115200 | CS8 | CREAD;
 		_termios.c_iflag = 0;
 		_termios.c_oflag = 0;
 		_termios.c_lflag = 0;
@@ -1755,6 +1755,7 @@ void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
 		int32_t size = (packet.size() > 5) ? (((int32_t)packet.at(1)) << 8) + packet.at(2) + 5 : 0;
 		if(size < 0) size = 0;
 		if(size > 0 && size < 8) _out.printWarning("Warning: Too small packet received: " + _bl->hf.getHexString(data));
+		else if(size > 255) _out.printWarning("Warning: Too large packet received: " + _bl->hf.getHexString(data));
 		else if(packet.size() < 8 || packet.size() < (unsigned)size) _packetBuffer = packet;
 		else
 		{

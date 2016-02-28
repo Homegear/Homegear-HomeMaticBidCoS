@@ -2117,7 +2117,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 					}
 					else GD::out.printWarning("Warning: Update request received, but serial number does not match. Serial number in update packet: " + serialNumber + ". Expected serial number: " + peer->getSerialNumber());
 				}
-				else if(receivedPacket->timeReceived() > time) GD::out.printWarning("Warning: Received packet is no update request: " + receivedPacket->hexString());
+				else if(receivedPacket->timeReceived() > time && receivedPacket->messageType() != 0x02) GD::out.printWarning("Warning: Received packet is no update request: " + receivedPacket->hexString());
 				std::this_thread::sleep_for(std::chrono::milliseconds(50));
 				waitIndex++;
 			}
@@ -5078,7 +5078,7 @@ PVariable HomeMaticCentral::updateFirmware(BaseLib::PRpcClientInfo clientInfo, s
 			return Variable::createError(-32500, "Central is disposing.");
 		}
 		_bl->threadManager.join(_updateFirmwareThread);
-		_bl->threadManager.start(_updateFirmwareThread, false, &HomeMaticCentral::updateFirmwares, this, ids, manual);
+		_bl->threadManager.start(_updateFirmwareThread, false, &HomeMaticCentral::updateFirmwares, this, ids);
 		_updateFirmwareThreadMutex.unlock();
 		return PVariable(new Variable(true));
 	}

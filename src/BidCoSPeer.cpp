@@ -2448,7 +2448,13 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 						{
 							if(parameter->rpcParameter->logical->type == ILogical::Type::Enum::tEnum)
 							{
-								serviceMessages->set(i->first, i->second.value.at(0), *j);
+								LogicalEnumeration* logical = (LogicalEnumeration*)parameter->rpcParameter->logical.get();
+								int32_t value = i->second.value.at(0);
+								if(value >= 0 && (unsigned)value < logical->values.size() && logical->values.at(value).id == "LOWBAT")
+								{
+									serviceMessages->set("LOWBAT", true);
+								}
+								serviceMessages->set(i->first, value, *j);
 							}
 							else if(parameter->rpcParameter->logical->type == ILogical::Type::Enum::tBoolean)
 							{

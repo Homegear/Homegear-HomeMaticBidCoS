@@ -96,8 +96,8 @@ public:
 	std::shared_ptr<BidCoSQueue> enqueuePendingQueues(int32_t deviceAddress, bool wait = false, bool* result = nullptr);
 	std::string getUniqueSerialNumber(std::string seedPrefix, uint32_t seedNumber);
 	uint64_t getPeerIdFromSerial(std::string serialNumber) { std::shared_ptr<BidCoSPeer> peer = getPeer(serialNumber); if(peer) return peer->getID(); else return 0; }
-	void updateFirmwares(std::vector<uint64_t> ids, bool manual);
-	void updateFirmware(uint64_t id, bool manual);
+	void updateFirmwares(std::vector<uint64_t> ids);
+	void updateFirmware(uint64_t id);
 	void addPeersToVirtualDevices();
 	void addHomegearFeatures(std::shared_ptr<BidCoSPeer> peer, int32_t channel, bool pushPendingBidCoSQueues);
 	void addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> peer, int32_t channel, bool pushPendingBidCoSQueues);

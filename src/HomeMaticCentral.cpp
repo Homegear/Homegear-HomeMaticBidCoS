@@ -1889,7 +1889,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
     return "Error executing command. See log file for more details.\n";
 }
 
-void HomeMaticCentral::updateFirmwares(std::vector<uint64_t> ids, bool manual)
+void HomeMaticCentral::updateFirmwares(std::vector<uint64_t> ids)
 {
 	try
 	{
@@ -1902,7 +1902,7 @@ void HomeMaticCentral::updateFirmwares(std::vector<uint64_t> ids, bool manual)
 			_bl->deviceUpdateInfo.currentDeviceProgress = 0;
 			_bl->deviceUpdateInfo.currentUpdate++;
 			_bl->deviceUpdateInfo.currentDevice = *i;
-			updateFirmware(*i, manual);
+			updateFirmware(*i);
 		}
 	}
 	catch(const std::exception& ex)
@@ -1921,7 +1921,7 @@ void HomeMaticCentral::updateFirmwares(std::vector<uint64_t> ids, bool manual)
 	_bl->deviceUpdateInfo.updateMutex.unlock();
 }
 
-void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
+void HomeMaticCentral::updateFirmware(uint64_t id)
 {
 	std::shared_ptr<IBidCoSInterface> physicalInterface;
 	std::string oldPhysicalInterfaceID;
@@ -2061,16 +2061,16 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 		std::shared_ptr<BidCoSPacket> receivedPacket;
 		if(peer->getPhysicalInterfaceID() != physicalInterface->getID()) peer->setPhysicalInterfaceID(physicalInterface->getID());
 
-		if(!manual)
-		{
-			bool responseReceived = false;
-			for(int32_t retries = 0; retries < 10; retries++)
-			{
+		//if(!manual)
+		//{
+			//bool responseReceived = false;
+			//for(int32_t retries = 0; retries < 10; retries++)
+			//{
 				std::vector<uint8_t> payload({0xCA});
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0x30, 0x11, _address, peer->getAddress(), payload, true));
-				int64_t time = BaseLib::HelperFunctions::getTime();
+				//int64_t time = BaseLib::HelperFunctions::getTime();
 				physicalInterface->sendPacket(packet);
-				waitIndex = 0;
+				/*waitIndex = 0;
 				while(waitIndex < 100) //Wait, wait, wait. The WOR preamble alone needs 360ms with the CUL! And AES handshakes need time, too.
 				{
 					receivedPacket = _receivedPackets.get(peer->getAddress());
@@ -2084,9 +2084,9 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 					std::this_thread::sleep_for(std::chrono::milliseconds(20));
 					waitIndex++;
 				}
-				if(responseReceived) break;
-			}
-			if(!responseReceived)
+				if(responseReceived) break;*/
+			//}
+			/*if(!responseReceived)
 			{
 				peer->setPhysicalInterfaceID(oldPhysicalInterfaceID);
 				_updateMutex.unlock();
@@ -2095,8 +2095,8 @@ void HomeMaticCentral::updateFirmware(uint64_t id, bool manual)
 				_bl->deviceUpdateInfo.results[id].second = "Device did not respond to enter-bootloader packet.";
 				GD::out.printWarning("Warning: Device did not enter bootloader.");
 				return;
-			}
-		}
+			}*/
+		//}
 
 		int32_t retries = 0;
 		for(retries = 0; retries < 10; retries++)

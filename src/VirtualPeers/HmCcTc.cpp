@@ -124,7 +124,7 @@ void HmCcTc::saveVariables()
 		saveVariable(1004, _valveState);
 		saveVariable(1005, _newValveState);
 		saveVariable(1006, _lastDutyCycleEvent);
-		saveVariable(1007, (int32_t)_dutyCycleMessageCounter);
+		saveVariable(1007, (int64_t)_dutyCycleMessageCounter);
 	}
 	catch(const std::exception& ex)
     {
@@ -151,7 +151,7 @@ int64_t HmCcTc::calculateLastDutyCycleEvent()
 	try
 	{
 		if(_lastDutyCycleEvent < 0) _lastDutyCycleEvent = 0;
-		int64_t now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		int64_t now = BaseLib::HelperFunctions::getTime();
 		if(now - _lastDutyCycleEvent > 1800000000) return -1; //Duty cycle is out of sync anyway so don't bother to calculate
 		int64_t nextDutyCycleEvent = _lastDutyCycleEvent;
 		int64_t lastDutyCycleEvent = _lastDutyCycleEvent;
@@ -190,6 +190,7 @@ void HmCcTc::setValveState(int32_t valveState)
 		_newValveState = valveState;
 		if(_newValveState > 255) _newValveState = 255;
 		if(_newValveState < 0) _newValveState = 0;
+		saveVariable(1005, _newValveState);
 	}
     catch(const std::exception& ex)
     {
@@ -284,6 +285,7 @@ void HmCcTc::dutyCycleThread(int64_t lastDutyCycleEvent)
 				cycleLength = calculateCycleLength(_dutyCycleMessageCounter);
 				_dutyCycleMessageCounter++;
 				saveVariable(1006, _lastDutyCycleEvent);
+				saveVariable(1007, _dutyCycleMessageCounter);
 
 				_dutyCycleCounter = 0;
 			}
@@ -410,6 +412,7 @@ void HmCcTc::sendDutyCyclePacket(uint8_t messageCounter, int64_t sendingTime)
 		_valveState = _newValveState;
 		int64_t timePassed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() - timePoint;
 		GD::out.printDebug("Debug: HomeMatic BidCoS peer " + std::to_string(_peerID) + ": Sending took " + std::to_string(timePassed) + "ms.");
+		saveVariable(1004, _valveState);
 	}
     catch(const std::exception& ex)
     {
@@ -477,6 +480,7 @@ int32_t HmCcTc::getNextDutyCycleDeviceAddress()
 				break;
 			}
 		}
+		saveVariable(1000, _currentDutyCycleDeviceAddress);
 		return _currentDutyCycleDeviceAddress;
 	}
     catch(const std::exception& ex)

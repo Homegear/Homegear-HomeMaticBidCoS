@@ -151,7 +151,7 @@ int64_t HmCcTc::calculateLastDutyCycleEvent()
 	try
 	{
 		if(_lastDutyCycleEvent < 0) _lastDutyCycleEvent = 0;
-		int64_t now = BaseLib::HelperFunctions::getTime();
+		int64_t now = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		if(now - _lastDutyCycleEvent > 1800000000) return -1; //Duty cycle is out of sync anyway so don't bother to calculate
 		int64_t nextDutyCycleEvent = _lastDutyCycleEvent;
 		int64_t lastDutyCycleEvent = _lastDutyCycleEvent;
@@ -285,7 +285,7 @@ void HmCcTc::dutyCycleThread(int64_t lastDutyCycleEvent)
 				cycleLength = calculateCycleLength(_dutyCycleMessageCounter);
 				_dutyCycleMessageCounter++;
 				saveVariable(1006, _lastDutyCycleEvent);
-				saveVariable(1007, _dutyCycleMessageCounter);
+				saveVariable(1007, (int64_t)_dutyCycleMessageCounter);
 
 				_dutyCycleCounter = 0;
 			}

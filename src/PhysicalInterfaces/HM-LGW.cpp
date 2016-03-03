@@ -817,7 +817,7 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 			payload.push_back(2);
 			payload.push_back(0);
 			payload.push_back(0);
-			if(_settings->sendFix) payload.push_back(0);
+			payload.push_back((bidCoSPacket->controlByte() & 0x10) ? 1 : 0);
 			payload.insert(payload.end(), packetBytes.begin() + 1, packetBytes.end());
 			buildPacket(requestPacket, payload);
 			_packetIndex++;

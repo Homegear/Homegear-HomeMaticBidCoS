@@ -30,6 +30,7 @@
 #ifndef CRC16_H
 #define CRC16_H
 
+#include <cstdint>
 #include <vector>
 #include <map>
 

@@ -220,9 +220,9 @@ void Cunx::reconnect()
 		_socket->close();
 		_out.printDebug("Connecting to CUNX device with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_socket->open();
+		_stopped = false;
 		send("X21\nAr\n");
 		_out.printInfo("Connected to CUNX device with hostname " + _settings->host + " on port " + _settings->port + ".");
-		_stopped = false;
 	}
     catch(const std::exception& ex)
     {
@@ -275,18 +275,12 @@ void Cunx::listen()
 
         while(!_stopCallbackThread)
         {
-        	std::cerr << "Moin1" << std::endl;
         	if(_stopped || !_socket->connected())
         	{
-        		std::cerr << "Moin2" << std::endl;
         		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        		std::cerr << "Moin3" << std::endl;
         		if(_stopCallbackThread) return;
-        		std::cerr << "Moin4" << std::endl;
         		if(_stopped) _out.printWarning("Warning: Connection to CUNX closed. Trying to reconnect...");
-        		std::cerr << "Moin5" << std::endl;
         		reconnect();
-        		std::cerr << "Moin6" << std::endl;
         		continue;
         	}
         	std::vector<uint8_t> data;
@@ -315,7 +309,6 @@ void Cunx::listen()
 				_stopped = true;
 				_out.printWarning("Warning: " + ex.what());
 				std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-				std::cerr << "Moin0" << std::endl;
 				continue;
 			}
 			catch(const BaseLib::SocketOperationException& ex)

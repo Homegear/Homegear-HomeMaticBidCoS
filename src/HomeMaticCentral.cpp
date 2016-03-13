@@ -2277,6 +2277,32 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
     std::this_thread::sleep_for(std::chrono::milliseconds(7000));
 }
 
+int32_t HomeMaticCentral::getUniqueAddress(int32_t seed)
+{
+	try
+	{
+		uint32_t i = 0;
+		while((_peers.find(seed) != _peers.end()) && i++ < 200000)
+		{
+			seed += 9345;
+			if(seed > 16777215) seed -= 16777216;
+		}
+	}
+	catch(const std::exception& ex)
+    {
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+	return seed;
+}
+
 std::string HomeMaticCentral::getUniqueSerialNumber(std::string seedPrefix, uint32_t seedNumber)
 {
 	try
@@ -2323,12 +2349,12 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 		if(hmcctcId != 0) tc = getPeer(hmcctcId);
 		if(!tc)
 		{
-			//int32_t hmcctcAddress = getUniqueAddress((0x39 << 16) + (peer->getAddress() & 0xFF00) + (peer->getAddress() & 0xFF));
-			if(peer->hasPeers(1) && !peer->getPeer(1, _address)) return; //Already linked to a HM-CC-TC
+			int32_t hmcctcAddress = getUniqueAddress((0x39 << 16) + (peer->getAddress() & 0xFF00) + (peer->getAddress() & 0xFF));
+			if(peer->hasPeers(1) && !peer->getPeer(1, hmcctcAddress)) return; //Already linked to a HM-CC-TC
 			std::string temp = peer->getSerialNumber().substr(3);
 			std::string serialNumber = getUniqueSerialNumber("VCD", BaseLib::Math::getNumber(temp));
 			tc.reset(new HmCcTc(_deviceId, this));
-			tc->setAddress(_address);
+			tc->setAddress(hmcctcAddress);
 			tc->setFirmwareVersion(0x10);
 			tc->setDeviceType(BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, (uint32_t)DeviceType::HMCCTC));
 			tc->setSerialNumber(serialNumber);

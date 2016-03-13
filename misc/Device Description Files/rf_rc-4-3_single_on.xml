@@ -394,6 +394,7 @@
 		<variables id="remote_ch_values--1">
 			<parameter id="PRESS_SHORT">
 				<properties>
+					<writeable>false</writeable>
 					<control>BUTTON.SHORT</control>
 				</properties>
 				<logicalAction/>
@@ -411,6 +412,7 @@
 			</parameter>
 			<parameter id="PRESS_LONG">
 				<properties>
+					<writeable>false</writeable>
 					<control>BUTTON.LONG</control>
 				</properties>
 				<logicalAction/>

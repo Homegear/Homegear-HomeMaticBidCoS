@@ -667,7 +667,7 @@ std::string BidCoSPeer::handleCliCommand(std::string command)
 			{
 				for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator j = i->second.begin(); j != i->second.end(); ++j)
 				{
-					stringStream << "Channel: " << i->first << "\tAddress: 0x" << std::hex << (*j)->address << "\tRemote channel: " << std::dec << (*j)->channel << "\tSerial number: " << (*j)->serialNumber << std::endl << std::dec;
+					stringStream << "Channel: " << i->first << "\tAddress: 0x" << std::hex << (*j)->address << "\tRemote channel: " << std::dec << (*j)->channel << "\tSerial number: " << (*j)->serialNumber << "\tVirtual: " << ((*j)->isVirtual ? "True" : "False") << std::endl << std::dec;
 				}
 			}
 			_peersMutex.unlock();

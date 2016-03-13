@@ -446,6 +446,7 @@
 		<variables id="remote_ch_values--1">
 			<parameter id="PRESS_SHORT">
 				<properties>
+					<writeable>false</writeable>
 					<control>BTN_SHORT_ONLY.SHORT</control>
 				</properties>
 				<logicalAction/>

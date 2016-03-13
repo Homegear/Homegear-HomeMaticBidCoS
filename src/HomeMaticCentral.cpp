@@ -232,13 +232,14 @@ void HomeMaticCentral::loadPeers()
 			int32_t peerId = row->second.at(0)->intValue;
 			GD::out.printMessage("Loading peer " + std::to_string(peerId));
 			int32_t address = row->second.at(2)->intValue;
+			std::string serialNumber = row->second.at(3)->textValue;
 			std::shared_ptr<BidCoSPeer> peer;
-			if(address == _address)
+			if(serialNumber.substr(0, 3) == "VCD")
 			{
-				if(row->second.at(4)->intValue == (uint32_t)DeviceType::HMCCTC) peer.reset(new HmCcTc(peerId, address, row->second.at(3)->textValue, _deviceId, this));
+				if(row->second.at(4)->intValue == (uint32_t)DeviceType::HMCCTC) peer.reset(new HmCcTc(peerId, address, serialNumber, _deviceId, this));
 				else
 				{
-					GD::out.printError("Error: Unknown virtual peer: 0x" + BaseLib::HelperFunctions::getHexString(row->second.at(4)->intValue));
+					GD::out.printError("Error: Unknown virtual HM-CC-TC: 0x" + BaseLib::HelperFunctions::getHexString(row->second.at(4)->intValue));
 					continue;
 				}
 			}

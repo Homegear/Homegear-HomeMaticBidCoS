@@ -2404,6 +2404,7 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 		hmcctc->address = tc->getAddress();
 		hmcctc->serialNumber = tc->getSerialNumber();
 		hmcctc->channel = 2;
+		hmcctc->isSender = true;
 		hmcctc->isVirtual = true;
 		peer->addPeer(1, hmcctc);
 
@@ -4120,6 +4121,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		senderPeer->channel = senderChannelIndex;
 		senderPeer->id = sender->getID();
 		senderPeer->serialNumber = sender->getSerialNumber();
+		senderPeer->isSender = true;
 		senderPeer->linkDescription = description;
 		senderPeer->linkName = name;
 

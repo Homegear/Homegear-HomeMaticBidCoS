@@ -89,7 +89,7 @@ void BidCoSPeer::initializeLinkConfig(int32_t channel, int32_t remoteAddress, in
 	{
 		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
 		if(functionIterator == _rpcDevice->functions.end())	return;
-		PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(ParameterGroup::Type::link);
+		PParameterGroup parameterGroup = getParameterSet(channel, ParameterGroup::Type::link);
 		if(!parameterGroup || parameterGroup->parameters.empty()) return;
 		_bl->db->createSavepointAsynchronous(savePointname);
 		//This line creates an empty link config. This is essential as the link config must exist, even if it is empty.
@@ -130,7 +130,7 @@ void BidCoSPeer::applyConfigFunction(int32_t channel, int32_t peerAddress, int32
 	{
 		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
 		if(functionIterator == _rpcDevice->functions.end()) return;
-		PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(ParameterGroup::Type::link);
+		PParameterGroup parameterGroup = getParameterSet(channel, ParameterGroup::Type::link);
 		if(!parameterGroup || parameterGroup->parameters.empty()) return;
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		if(!central) return; //Shouldn't happen
@@ -2024,9 +2024,7 @@ void BidCoSPeer::getValuesFromPacket(std::shared_ptr<BidCoSPacket> packet, std::
 						else endChannel = startChannel;
 						for(int32_t l = startChannel; l <= endChannel; l++)
 						{
-							Functions::iterator functionIterator = _rpcDevice->functions.find(l);
-							if(functionIterator == _rpcDevice->functions.end()) continue;
-							PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(currentFrameValues.parameterSetType);
+							PParameterGroup parameterGroup = getParameterSet(l, currentFrameValues.parameterSetType);
 							if(!parameterGroup || parameterGroup->parameters.find((*k)->id) == parameterGroup->parameters.end()) continue;
 							currentFrameValues.paramsetChannels.push_back(l);
 							currentFrameValues.values[(*k)->id].channels.push_back(l);
@@ -2037,9 +2035,7 @@ void BidCoSPeer::getValuesFromPacket(std::shared_ptr<BidCoSPacket> packet, std::
 					{
 						for(std::list<uint32_t>::const_iterator l = currentFrameValues.paramsetChannels.begin(); l != currentFrameValues.paramsetChannels.end(); ++l)
 						{
-							Functions::iterator functionIterator = _rpcDevice->functions.find(*l);
-							if(functionIterator == _rpcDevice->functions.end()) continue;
-							PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(currentFrameValues.parameterSetType);
+							PParameterGroup parameterGroup = getParameterSet(*l, currentFrameValues.parameterSetType);
 							if(!parameterGroup || parameterGroup->parameters.find((*k)->id) == parameterGroup->parameters.end()) continue;
 							currentFrameValues.values[(*k)->id].channels.push_back(*l);
 							setValues = true;
@@ -2091,7 +2087,9 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
 				}
 				_variablesToResetMutex.unlock();
 			}
-			PParameter delayParameter = _rpcDevice->functions.at(channel)->getParameterGroup(ParameterGroup::Type::Enum::variables)->parameters.at((*j)->delayedAutoReset.first);
+			PParameterGroup parameterGroup = getParameterSet(channel, ParameterGroup::Type::Enum::variables);
+			if(!parameterGroup) continue;
+			PParameter delayParameter = parameterGroup->parameters.at((*j)->delayedAutoReset.first);
 			if(!delayParameter) continue;
 			int64_t delay = delayParameter->convertFromPacket(valuesCentral[channel][(*j)->delayedAutoReset.first].data)->integerValue;
 			if(delay < 0) continue; //0 is allowed. When 0 the parameter will be reset immediately
@@ -2343,11 +2341,35 @@ PParameterGroup BidCoSPeer::getParameterSet(int32_t channel, ParameterGroup::Typ
 	try
 	{
 		PFunction rpcFunction = _rpcDevice->functions.at(channel);
-		PParameterGroup parameterGroup = rpcFunction->getParameterGroup(type);
-		if(!parameterGroup || parameterGroup->parameters.empty())
+		PParameterGroup parameterGroup;
+		if(rpcFunction->parameterGroupSelector && !rpcFunction->alternativeFunctions.empty())
 		{
-			GD::out.printDebug("Debug: Parameter set of type " + std::to_string(type) + " not found for channel " + std::to_string(channel));
-			return PParameterGroup();
+			BaseLib::Systems::RPCConfigurationParameter& parameter = configCentral[channel][rpcFunction->parameterGroupSelector->id];
+			if(!parameter.rpcParameter) parameterGroup = rpcFunction->getParameterGroup(type);
+			else
+			{
+				int32_t index = parameter.rpcParameter->logical->type == BaseLib::DeviceDescription::ILogical::Type::Enum::tBoolean ? (int32_t)parameter.rpcParameter->convertFromPacket(parameter.data, false)->booleanValue : parameter.rpcParameter->convertFromPacket(parameter.data, false)->integerValue;
+				if(index > 0)
+				{
+					index--;
+					if((unsigned)index >= rpcFunction->alternativeFunctions.size()) index = rpcFunction->alternativeFunctions.size() - 1;
+					parameterGroup = rpcFunction->alternativeFunctions.at(index)->getParameterGroup(type);
+					if(!parameterGroup)
+					{
+						GD::out.printWarning("Parameter set of type " + std::to_string(type) + " not found in alternative config for channel " + std::to_string(channel));
+						return PParameterGroup();
+					}
+				} else parameterGroup = rpcFunction->getParameterGroup(type);
+			}
+		}
+		else
+		{
+			parameterGroup = rpcFunction->getParameterGroup(type);
+			if(!parameterGroup)
+			{
+				GD::out.printWarning("Parameter set of type " + std::to_string(type) + " not found for channel " + std::to_string(channel));
+				return PParameterGroup();
+			}
 		}
 		return parameterGroup;
 	}
@@ -2483,7 +2505,9 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 					}
 					for(std::list<uint32_t>::const_iterator i = a->paramsetChannels.begin(); i != a->paramsetChannels.end(); ++i)
 					{
-						PParameter rpcParameter(_rpcDevice->functions.at(*i)->getParameterGroup(a->parameterSetType)->parameters.at("SENDERADDRESS"));
+						PParameterGroup parameterGroup = getParameterSet(*i, a->parameterSetType);
+						if(!parameterGroup) continue;
+						PParameter rpcParameter(parameterGroup->parameters.at("SENDERADDRESS"));
 						if(rpcParameter)
 						{
 							BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral[*i]["SENDERADDRESS"];
@@ -2504,7 +2528,9 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 				{
 					if(packet->messageType() == 0x02 && aesEnabled(*j) && !packet->validAesAck()) continue;
 					if(std::find(i->second.channels.begin(), i->second.channels.end(), *j) == i->second.channels.end()) continue;
-					handleDominoEvent(_rpcDevice->functions.at(*j)->getParameterGroup(a->parameterSetType)->parameters.at(i->first), a->frameID, *j);
+					PParameterGroup parameterGroup = getParameterSet(*j, a->parameterSetType);
+					if(!parameterGroup) continue;
+					handleDominoEvent(parameterGroup->parameters.at(i->first), a->frameID, *j);
 				}
 			}
 		}
@@ -2731,7 +2757,7 @@ PVariable BidCoSPeer::getParamsetDescription(BaseLib::PRpcClientInfo clientInfo,
 		if(channel < 0) channel = 0;
 		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
 		if(functionIterator == _rpcDevice->functions.end()) return Variable::createError(-2, "Unknown channel");
-		PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(type);
+		PParameterGroup parameterGroup = getParameterSet(channel, type);
 		if(!parameterGroup) return Variable::createError(-3, "Unknown parameter set");
 		if(type == ParameterGroup::Type::link && remoteID > 0)
 		{
@@ -2766,7 +2792,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
 		if(functionIterator == _rpcDevice->functions.end()) return Variable::createError(-2, "Unknown channel");
 		if(type == ParameterGroup::Type::none) type = ParameterGroup::Type::link;
-		PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(type);
+		PParameterGroup parameterGroup = getParameterSet(channel, type);
 		if(!parameterGroup) return Variable::createError(-3, "Unknown parameter set");
 		if(variables->structValue->empty()) return PVariable(new Variable(VariableType::tVoid));
 
@@ -3134,7 +3160,7 @@ PVariable BidCoSPeer::getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
 		if(functionIterator == _rpcDevice->functions.end()) return Variable::createError(-2, "Unknown channel");
 		if(type == ParameterGroup::Type::none) type = ParameterGroup::Type::link;
-		PParameterGroup parameterGroup = functionIterator->second->getParameterGroup(type);
+		PParameterGroup parameterGroup = getParameterSet(channel, type);
 		if(!parameterGroup) return Variable::createError(-3, "Unknown parameter set");
 		PVariable variables(new Variable(VariableType::tStruct));
 

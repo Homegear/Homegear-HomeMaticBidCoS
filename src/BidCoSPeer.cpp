@@ -2027,7 +2027,7 @@ void BidCoSPeer::getValuesFromPacket(std::shared_ptr<BidCoSPacket> packet, std::
 							PParameterGroup parameterGroup = getParameterSet(l, currentFrameValues.parameterSetType);
 							if(!parameterGroup || parameterGroup->parameters.find((*k)->id) == parameterGroup->parameters.end()) continue;
 							currentFrameValues.paramsetChannels.push_back(l);
-							currentFrameValues.values[(*k)->id].channels.push_back(l);
+							currentFrameValues.values[(*k)->id].channels.insert(l);
 							setValues = true;
 						}
 					}
@@ -2037,7 +2037,7 @@ void BidCoSPeer::getValuesFromPacket(std::shared_ptr<BidCoSPacket> packet, std::
 						{
 							PParameterGroup parameterGroup = getParameterSet(*l, currentFrameValues.parameterSetType);
 							if(!parameterGroup || parameterGroup->parameters.find((*k)->id) == parameterGroup->parameters.end()) continue;
-							currentFrameValues.values[(*k)->id].channels.push_back(*l);
+							currentFrameValues.values[(*k)->id].channels.insert(*l);
 							setValues = true;
 						}
 					}
@@ -3166,7 +3166,7 @@ PVariable BidCoSPeer::getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 
 		for(Parameters::iterator i = parameterGroup->parameters.begin(); i != parameterGroup->parameters.end(); ++i)
 		{
-			if(i->second->id.empty() || !i->second->visible) continue;
+			if(!i->second || i->second->id.empty() || !i->second->visible) continue;
 			if(!i->second->visible && !i->second->service && !i->second->internal && !i->second->transform)
 			{
 				GD::out.printDebug("Debug: Omitting parameter " + i->second->id + " because of it's ui flag.");

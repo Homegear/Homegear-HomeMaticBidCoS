@@ -73,7 +73,7 @@ public:
 class FrameValue
 {
 public:
-	std::list<uint32_t> channels;
+	std::set<uint32_t> channels;
 	std::vector<uint8_t> value;
 };
 

@@ -219,10 +219,6 @@
 					<index>10.0</index>
 					<parameterId>SIM_COUNTER</parameterId>
 				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>COUNTER</parameterId>
-				</element>
 			</binaryPayload>
 		</packet>
 		<packet id="KEY_SIM_SHORT">
@@ -243,10 +239,6 @@
 				<element>
 					<index>10.0</index>
 					<parameterId>SIM_COUNTER</parameterId>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>COUNTER</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>

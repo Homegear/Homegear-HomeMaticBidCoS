@@ -1547,7 +1547,6 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 		{
 			uint64_t peerID = 0;
 			bool all = false;
-			bool manually = false;
 
 			std::stringstream stream(command);
 			std::string element;
@@ -1570,21 +1569,15 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 						if(peerID == 0) return "Invalid id.\n";
 					}
 				}
-				else if(index == 2 + offset)
-				{
-					manually = BaseLib::Math::getNumber(element, false);
-				}
 				index++;
 			}
 			if(index == 1 + offset)
 			{
 				stringStream << "Description: This command updates one or all peers to the newest firmware version available in \"" << _bl->settings.firmwarePath() << "\"." << std::endl;
 				stringStream << "Usage: peers update PEERID" << std::endl;
-				stringStream << "       peers update PEERID MANUALLY" << std::endl;
 				stringStream << "       peers update all" << std::endl << std::endl;
 				stringStream << "Parameters:" << std::endl;
 				stringStream << "  PEERID:\tThe id of the peer to update. Example: 513" << std::endl;
-				stringStream << "  MANUALLY:\tIf \"1\" you need to enable the update mode on the device manually within 50 seconds after executing this command." << std::endl;
 				return stringStream.str();
 			}
 
@@ -1616,7 +1609,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					return stringStream.str();
 				}
 				ids.push_back(peerID);
-				result = updateFirmware(nullptr, ids, manually);
+				result = updateFirmware(nullptr, ids, false);
 			}
 			if(!result) stringStream << "Unknown error." << std::endl;
 			else if(result->errorStruct) stringStream << result->structValue->at("faultString")->stringValue << std::endl;
@@ -2114,7 +2107,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 		//}
 
 		int32_t retries = 0;
-		for(retries = 0; retries < 10; retries++)
+		for(retries = 0; retries < 2; retries++)
 		{
 			int64_t time = BaseLib::HelperFunctions::getTime();
 			bool requestReceived = false;
@@ -2177,7 +2170,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			physicalInterface->disableUpdateMode();
 			std::this_thread::sleep_for(std::chrono::milliseconds(4000));
 		}
-		if(retries == 10 || !receivedPacket)
+		if(retries == 2 || !receivedPacket)
 		{
 			peer->setPhysicalInterfaceID(oldPhysicalInterfaceID);
 			_updateMutex.unlock();

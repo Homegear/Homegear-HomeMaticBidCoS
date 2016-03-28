@@ -136,7 +136,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         std::shared_ptr<PendingBidCoSQueues> pendingBidCoSQueues;
         bool peerInfoPacketsEnabled = true;
 
-        void worker();
+        virtual void worker();
         virtual std::string handleCliCommand(std::string command);
         void initializeLinkConfig(int32_t channel, int32_t address, int32_t remoteChannel, bool useConfigFunction);
         void applyConfigFunction(int32_t channel, int32_t address, int32_t remoteChannel);

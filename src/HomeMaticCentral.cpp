@@ -1679,6 +1679,8 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					stringStream << "      FILTERVALUE: empty" << std::endl;
 					stringStream << "  UNREACH: List all unreachable peers." << std::endl;
 					stringStream << "      FILTERVALUE: empty" << std::endl;
+					stringStream << "  LOWBAT: Lists all peers with low battery." << std::endl;
+					stringStream << "      FILTERVALUE: empty" << std::endl;
 					return stringStream.str();
 				}
 
@@ -1698,6 +1700,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				const int32_t firmwareWidth = 8;
 				const int32_t configPendingWidth = 14;
 				const int32_t unreachWidth = 7;
+				const int32_t lowbatWidth = 7;
 				std::string nameHeader("Name");
 				nameHeader.resize(nameWidth, ' ');
 				std::string typeStringHeader("Type String");
@@ -1711,9 +1714,10 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					<< typeStringHeader << bar
 					<< std::setw(firmwareWidth) << "Firmware" << bar
 					<< std::setw(configPendingWidth) << "Config Pending" << bar
-					<< std::setw(unreachWidth) << "Unreach"
+					<< std::setw(unreachWidth) << "Unreach" << bar
+					<< std::setw(unreachWidth) << "Low Bat"
 					<< std::endl;
-				stringStream << "────────────┼───────────────────────────┼──────────┼───────────────┼──────┼───────────────────────────┼──────────┼────────────────┼────────" << std::endl;
+				stringStream << "────────────┼───────────────────────────┼──────────┼───────────────┼──────┼───────────────────────────┼──────────┼────────────────┼─────────┼────────" << std::endl;
 				stringStream << std::setfill(' ')
 					<< std::setw(idWidth) << " " << bar
 					<< std::setw(nameWidth) << " " << bar
@@ -1723,7 +1727,8 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					<< std::setw(typeWidth2) << " " << bar
 					<< std::setw(firmwareWidth) << " " << bar
 					<< std::setw(configPendingWidth) << " " << bar
-					<< std::setw(unreachWidth) << " "
+					<< std::setw(unreachWidth) << " " << bar
+					<< std::setw(lowbatWidth) << " "
 					<< std::endl;
 				_peersMutex.lock();
 				for(std::map<uint64_t, std::shared_ptr<BaseLib::Systems::Peer>>::iterator i = _peersById.begin(); i != _peersById.end(); ++i)
@@ -1767,6 +1772,13 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 							if(!i->second->serviceMessages->getUnreach()) continue;
 						}
 					}
+					else if(filterType == "lowbat")
+					{
+						if(i->second->serviceMessages)
+						{
+							if(!i->second->serviceMessages->getLowbat()) continue;
+						}
+					}
 
 					uint64_t currentID = i->second->getID();
 					std::string idString = (currentID > 999999) ? "0x" + BaseLib::HelperFunctions::getHexString(currentID, 8) : std::to_string(currentID);
@@ -1805,13 +1817,15 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					{
 						std::string configPending(i->second->serviceMessages->getConfigPending() ? "Yes" : "No");
 						std::string unreachable(i->second->serviceMessages->getUnreach() ? "Yes" : "No");
+						std::string lowbat(i->second->serviceMessages->getLowbat() ? "Yes" : "No");
 						stringStream << std::setfill(' ') << std::setw(configPendingWidth) << configPending << bar;
-						stringStream << std::setfill(' ') << std::setw(unreachWidth) << unreachable;
+						stringStream << std::setfill(' ') << std::setw(unreachWidth) << unreachable << bar;
+						stringStream << std::setfill(' ') << std::setw(lowbatWidth) << lowbat;
 					}
 					stringStream << std::endl << std::dec;
 				}
 				_peersMutex.unlock();
-				stringStream << "────────────┴───────────────────────────┴──────────┴───────────────┴──────┴───────────────────────────┴──────────┴────────────────┴────────" << std::endl;
+				stringStream << "────────────┴───────────────────────────┴──────────┴───────────────┴──────┴───────────────────────────┴──────────┴────────────────┴─────────┴────────" << std::endl;
 				if(firmwareUpdates) stringStream << std::endl << "*: Firmware update available." << std::endl;
 
 				return stringStream.str();

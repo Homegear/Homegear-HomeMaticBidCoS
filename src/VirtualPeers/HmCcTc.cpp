@@ -36,16 +36,42 @@ namespace BidCoS
 
 HmCcTc::HmCcTc(uint32_t parentID, IPeerEventSink* eventHandler) : BidCoSPeer(parentID, eventHandler)
 {
+	init();
 	startDutyCycle(-1); //Peer is newly created
 }
 
 HmCcTc::HmCcTc(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, IPeerEventSink* eventHandler) : BidCoSPeer(id, address, serialNumber, parentID, eventHandler)
 {
+	init();
 }
 
 HmCcTc::~HmCcTc()
 {
 	dispose();
+}
+
+void HmCcTc::init()
+{
+	try
+	{
+		if(!_rpcDevice) return;
+		_rpcDevice->receiveModes = BaseLib::DeviceDescription::HomegearDevice::ReceiveModes::Enum::always;
+		_rpcDevice->timeout = 0;
+		serviceMessages->endUnreach();
+	}
+	catch(const std::exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+
 }
 
 void HmCcTc::dispose()
@@ -69,6 +95,10 @@ void HmCcTc::dispose()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
+}
+
+void HmCcTc::worker()
+{
 }
 
 void HmCcTc::loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<BaseLib::Database::DataTable>& rows)

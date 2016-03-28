@@ -64,6 +64,9 @@ class HmCcTc : public BidCoSPeer
         std::thread _sendDutyCyclePacketThread;
         uint8_t _dutyCycleMessageCounter = 0;
 
+        void init();
+        void worker();
+
         virtual void loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<BaseLib::Database::DataTable>& rows);
         virtual void saveVariables();
 
@@ -77,6 +80,21 @@ class HmCcTc : public BidCoSPeer
         void startDutyCycle(int64_t lastDutyCycleEvent);
         void dutyCycleThread(int64_t lastDutyCycleEvent);
         void setDecalcification();
+
+        /**
+         * {@inheritDoc}
+         */
+        virtual PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool onlyPushing = false) { return Variable::createError(-32601, "Method not implemented by this virtual device."); }
+
+        /**
+         * {@inheritDoc}
+         */
+        virtual PVariable setInterface(BaseLib::PRpcClientInfo clientInfo, std::string interfaceID) { return Variable::createError(-32601, "Method not implemented by this virtual device."); }
+
+        /**
+         * {@inheritDoc}
+         */
+        virtual PVariable setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t channel, std::string valueKey, PVariable value, bool wait) { return Variable::createError(-32601, "Method not implemented by this virtual device."); }
 };
 }
 #endif

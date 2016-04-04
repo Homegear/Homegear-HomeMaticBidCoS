@@ -2072,6 +2072,7 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
 			if((*j)->delayedAutoReset.first.empty()) continue;
 			if(!_variablesToReset.empty())
 			{
+				bool breakLoop = false;
 				_variablesToResetMutex.lock();
 				for(std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>>::iterator k = _variablesToReset.begin(); k != _variablesToReset.end(); ++k)
 				{
@@ -2081,9 +2082,11 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
 						{
 							GD::out.printDebug("Debug: Deleting element " + parameter->id + " from _variablesToReset. Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frameID);
 							_variablesToReset.erase(k);
+							breakLoop = true;
 							break; //The key should only be once in the vector, so breaking is ok and we can't continue as the iterator is invalidated.
 						}
 					}
+					if(breakLoop) break;
 				}
 				_variablesToResetMutex.unlock();
 			}

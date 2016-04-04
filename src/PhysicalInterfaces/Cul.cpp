@@ -47,6 +47,7 @@ Cul::Cul(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) 
 	}
 
 	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, _rfKey, _oldRfKey, _currentRfKeyIndex));
+	memset(&_termios, 0, sizeof(termios));
 }
 
 Cul::~Cul()

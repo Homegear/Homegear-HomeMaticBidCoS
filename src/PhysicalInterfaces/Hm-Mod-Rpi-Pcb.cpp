@@ -39,6 +39,8 @@ Hm_Mod_Rpi_Pcb::Hm_Mod_Rpi_Pcb(std::shared_ptr<BaseLib::Systems::PhysicalInterfa
 
 	signal(SIGPIPE, SIG_IGN);
 
+	memset(&_termios, 0, sizeof(termios));
+
 	if(!settings)
 	{
 		_out.printCritical("Critical: Error initializing HM-MOD-RPI-PCB. Settings pointer is empty.");
@@ -1052,7 +1054,7 @@ void Hm_Mod_Rpi_Pcb::send(const std::vector<char>& data)
     try
     {
     	if(data.size() < 3) return; //Otherwise error in printInfo
-    	if(!_fileDescriptor->descriptor == -1 || _stopped)
+    	if(_fileDescriptor->descriptor == -1 || _stopped)
     	{
     		_out.printWarning("Warning: !!!Not!!! sending: " + _bl->hf.getHexString(data));
     		_sendMutex.unlock();

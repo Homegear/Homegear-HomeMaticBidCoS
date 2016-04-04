@@ -495,7 +495,8 @@ int32_t HmCcTc::getNextDutyCycleDeviceAddress()
 	{
 		std::lock_guard<std::mutex> peersGuard(_peersMutex);
 		if(_peers.find(2) == _peers.end() || _peers.at(2).empty()) return -1;
-		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers.at(2).begin(); i != _peers.at(2).end(); ++i)
+		std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>& channel2Peers = _peers.at(2);
+		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = channel2Peers.begin(); i != channel2Peers.end(); ++i)
 		{
 			if(_currentDutyCycleDeviceAddress == -1)
 			{
@@ -505,7 +506,7 @@ int32_t HmCcTc::getNextDutyCycleDeviceAddress()
 			else if((*i)->address == _currentDutyCycleDeviceAddress)
 			{
 				i++;
-				if(i == _peers.at(2).end()) _currentDutyCycleDeviceAddress = _peers.at(2).at(0)->address;
+				if(i == channel2Peers.end()) _currentDutyCycleDeviceAddress = channel2Peers.at(0)->address;
 				else _currentDutyCycleDeviceAddress = (*i)->address;
 				break;
 			}

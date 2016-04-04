@@ -2461,7 +2461,8 @@ void HomeMaticCentral::addHomegearFeaturesRemote(std::shared_ptr<BidCoSPeer> pee
 		Functions functions;
 		if(channel == -1)
 		{
-			for(Functions::iterator i = peer->getRpcDevice()->functions.begin(); i != peer->getRpcDevice()->functions.end(); ++i)
+			std::shared_ptr<HomegearDevice> rpcDevice = peer->getRpcDevice();
+			for(Functions::iterator i = rpcDevice->functions.begin(); i != rpcDevice->functions.end(); ++i)
 			{
 				if(!peer->hasPeers(i->first) || peer->getPeer(i->first, _address))
 				{
@@ -2581,7 +2582,8 @@ void HomeMaticCentral::addHomegearFeaturesSwitch(std::shared_ptr<BidCoSPeer> pee
 		Functions functions;
 		if(channel == -1)
 		{
-			for(Functions::iterator i = peer->getRpcDevice()->functions.begin(); i != peer->getRpcDevice()->functions.end(); ++i)
+			std::shared_ptr<HomegearDevice> rpcDevice = peer->getRpcDevice();
+			for(Functions::iterator i = rpcDevice->functions.begin(); i != rpcDevice->functions.end(); ++i)
 			{
 				//Covers the case, that channel numbering is not continuous. A little overdoing, probably.
 				functions[i->first] = i->second;
@@ -3899,7 +3901,8 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
 					raiseRPCNewDevices(deviceDescriptions);
 					GD::out.printMessage("Added peer 0x" + BaseLib::HelperFunctions::getHexString(queue->peer->getAddress()) + ".");
-					for(Functions::iterator i = queue->peer->getRpcDevice()->functions.begin(); i != queue->peer->getRpcDevice()->functions.end(); ++i)
+					std::shared_ptr<HomegearDevice> rpcDevice = queue->peer->getRpcDevice();
+					for(Functions::iterator i = rpcDevice->functions.begin(); i != rpcDevice->functions.end(); ++i)
 					{
 						if(i->second->encryptionEnabledByDefault)
 						{
@@ -4101,10 +4104,12 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		if(!receiver) return Variable::createError(-2, "Receiver device not found.");
 		if(senderChannelIndex < 0) senderChannelIndex = 0;
 		if(receiverChannelIndex < 0) receiverChannelIndex = 0;
-		Functions::iterator senderFunctionIterator = sender->getRpcDevice()->functions.find(senderChannelIndex);
-		if(senderFunctionIterator == sender->getRpcDevice()->functions.end()) return Variable::createError(-2, "Sender channel not found.");
-		Functions::iterator receiverFunctionIterator = receiver->getRpcDevice()->functions.find(receiverChannelIndex);
-		if(receiverFunctionIterator == receiver->getRpcDevice()->functions.end()) return Variable::createError(-2, "Receiver channel not found.");
+		std::shared_ptr<HomegearDevice> senderRpcDevice = sender->getRpcDevice();
+		std::shared_ptr<HomegearDevice> receiverRpcDevice = receiver->getRpcDevice();
+		Functions::iterator senderFunctionIterator = senderRpcDevice->functions.find(senderChannelIndex);
+		if(senderFunctionIterator == senderRpcDevice->functions.end()) return Variable::createError(-2, "Sender channel not found.");
+		Functions::iterator receiverFunctionIterator = receiverRpcDevice->functions.find(receiverChannelIndex);
+		if(receiverFunctionIterator == receiverRpcDevice->functions.end()) return Variable::createError(-2, "Receiver channel not found.");
 		PFunction senderFunction = senderFunctionIterator->second;
 		PFunction receiverFunction = receiverFunctionIterator->second;
 		if(senderFunction->linkSenderFunctionTypes.size() == 0 || receiverFunction->linkReceiverFunctionTypes.size() == 0) return Variable::createError(-6, "Link not supported.");
@@ -4397,8 +4402,10 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 		if(receiverChannelIndex < 0) receiverChannelIndex = 0;
 		std::string senderSerialNumber = sender->getSerialNumber();
 		std::string receiverSerialNumber = receiver->getSerialNumber();
-		if(sender->getRpcDevice()->functions.find(senderChannelIndex) == sender->getRpcDevice()->functions.end()) return Variable::createError(-2, "Sender channel not found.");
-		if(receiver->getRpcDevice()->functions.find(receiverChannelIndex) == receiver->getRpcDevice()->functions.end()) return Variable::createError(-2, "Receiver channel not found.");
+		std::shared_ptr<HomegearDevice> senderRpcDevice = sender->getRpcDevice();
+		std::shared_ptr<HomegearDevice> receiverRpcDevice = receiver->getRpcDevice();
+		if(senderRpcDevice->functions.find(senderChannelIndex) == senderRpcDevice->functions.end()) return Variable::createError(-2, "Sender channel not found.");
+		if(receiverRpcDevice->functions.find(receiverChannelIndex) == receiverRpcDevice->functions.end()) return Variable::createError(-2, "Receiver channel not found.");
 		if(!sender->getPeer(senderChannelIndex, receiver->getAddress()) && !receiver->getPeer(receiverChannelIndex, sender->getAddress())) return Variable::createError(-6, "Devices are not paired to each other.");
 
 		sender->removePeer(senderChannelIndex, receiver->getAddress(), receiverChannelIndex);
@@ -4681,8 +4688,9 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 				return PVariable(new Variable(VariableType::tVoid));
 			}
 			int32_t newChannel = -1;
+			std::shared_ptr<HomegearDevice> rpcDevice = peer->getRpcDevice();
 			//Get first channel which has a team
-			for(Functions::iterator i = peer->getRpcDevice()->functions.begin(); i != peer->getRpcDevice()->functions.end(); ++i)
+			for(Functions::iterator i = rpcDevice->functions.begin(); i != rpcDevice->functions.end(); ++i)
 			{
 				if(i->second->hasGroup)
 				{
@@ -4698,8 +4706,9 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		{
 			if(channel < 0) channel = 0;
 
-			Functions::iterator functionIteratorPeer = peer->getRpcDevice()->functions.find(channel);
-			if(functionIteratorPeer == peer->getRpcDevice()->functions.end()) return Variable::createError(-2, "Unknown channel.");
+			std::shared_ptr<HomegearDevice> rpcDevice = peer->getRpcDevice();
+			Functions::iterator functionIteratorPeer = rpcDevice->functions.find(channel);
+			if(functionIteratorPeer == rpcDevice->functions.end()) return Variable::createError(-2, "Unknown channel.");
 			if(!functionIteratorPeer->second->hasGroup) return Variable::createError(-6, "Channel does not support groups.");
 
 			//Don't create team if not existent!
@@ -4710,8 +4719,9 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 				//Peer already is member of this team
 				return PVariable(new Variable(VariableType::tVoid));
 			}
-			Functions::iterator functionIteratorTeam = team->getRpcDevice()->functions.find(teamChannel);
-			if(functionIteratorTeam == team->getRpcDevice()->functions.end()) return Variable::createError(-2, "Unknown group channel.");
+			std::shared_ptr<HomegearDevice> teamRpcDevice = team->getRpcDevice();
+			Functions::iterator functionIteratorTeam = teamRpcDevice->functions.find(teamChannel);
+			if(functionIteratorTeam == teamRpcDevice->functions.end()) return Variable::createError(-2, "Unknown group channel.");
 			if(functionIteratorTeam->second->groupId != functionIteratorPeer->second->groupId) return Variable::createError(-6, "Peer channel is not compatible to group channel.");
 
 			addPeerToTeam(peer, channel, teamChannel, team->getSerialNumber());

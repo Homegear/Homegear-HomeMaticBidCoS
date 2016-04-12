@@ -66,7 +66,7 @@ class HmCcTc : public BidCoSPeer
 
         void init();
         void worker();
-
+        virtual bool load(BaseLib::Systems::ICentral* device);
         virtual void loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<BaseLib::Database::DataTable>& rows);
         virtual void saveVariables();
 

@@ -57,7 +57,6 @@ void HmCcTc::init()
 		if(!_rpcDevice) return;
 		_rpcDevice->receiveModes = BaseLib::DeviceDescription::HomegearDevice::ReceiveModes::Enum::always;
 		_rpcDevice->timeout = 0;
-		serviceMessages->endUnreach();
 	}
 	catch(const std::exception& ex)
     {
@@ -99,6 +98,28 @@ void HmCcTc::dispose()
 
 void HmCcTc::worker()
 {
+}
+
+bool HmCcTc::load(BaseLib::Systems::ICentral* device)
+{
+	try
+	{
+		BidCoSPeer::load(device);
+		serviceMessages->endUnreach();
+	}
+	catch(const std::exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+    return false;
 }
 
 void HmCcTc::loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<BaseLib::Database::DataTable>& rows)

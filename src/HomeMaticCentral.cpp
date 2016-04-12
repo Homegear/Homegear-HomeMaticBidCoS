@@ -2078,6 +2078,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0x30, 0x11, _address, peer->getAddress(), payload, true));
 				//int64_t time = BaseLib::HelperFunctions::getTime();
 				physicalInterface->sendPacket(packet);
+				_sentPackets.set(packet->destinationAddress(), packet);
 				/*waitIndex = 0;
 				while(waitIndex < 100) //Wait, wait, wait. The WOR preamble alone needs 360ms with the CUL! And AES handshakes need time, too.
 				{
@@ -2144,6 +2145,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(0x42, 0, 0xCB, 0, peer->getAddress(), payload, true));
 			std::this_thread::sleep_for(std::chrono::milliseconds(50));
 			physicalInterface->sendPacket(packet);
+			_sentPackets.set(packet->destinationAddress(), packet);
 
 			GD::out.printInfo("Info: Enabling update mode.");
 			physicalInterface->enableUpdateMode();
@@ -2151,6 +2153,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			packet = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(0x43, 0x20, 0xCB, 0, peer->getAddress(), payload, true));
 			physicalInterface->sendPacket(packet);
+			_sentPackets.set(packet->destinationAddress(), packet);
 
 			requestReceived = false;
 			waitIndex = 0;
@@ -2218,6 +2221,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 					uint8_t controlByte = (pos < (signed)i->size()) ? 0 : 0x20;
 					std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(messageCounter, controlByte, 0xCA, 0, peer->getAddress(), payload, true));
 					physicalInterface->sendPacket(packet);
+					_sentPackets.set(packet->destinationAddress(), packet);
 					std::this_thread::sleep_for(std::chrono::milliseconds(55));
 				}
 				waitIndex = 0;

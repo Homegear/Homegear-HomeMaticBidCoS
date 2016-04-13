@@ -2182,6 +2182,7 @@ void BidCoSPeer::setRSSIDevice(uint8_t rssi)
 			std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable>());
 			rpcValues->push_back(parameter->rpcParameter->convertFromPacket(parameter->data));
 
+			raiseEvent(_peerID, 0, valueKeys, rpcValues);
 			raiseRPCEvent(_peerID, 0, _serialNumber + ":0", valueKeys, rpcValues);
 		}
 	}

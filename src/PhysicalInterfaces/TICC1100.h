@@ -203,6 +203,7 @@ public:
 	virtual void setWakeUp(PeerInfo peerInfo) { addPeer(peerInfo); }
 	virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
 	virtual void removePeer(int32_t address);
+	virtual void sendTest();
 protected:
 	std::vector<uint8_t> _config;
 	std::vector<uint8_t> _patable;

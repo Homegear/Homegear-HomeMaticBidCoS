@@ -236,7 +236,11 @@ void HomeMaticCentral::loadPeers()
 			std::shared_ptr<BidCoSPeer> peer;
 			if(serialNumber.substr(0, 3) == "VCD")
 			{
-				if(row->second.at(4)->intValue == (uint32_t)DeviceType::HMCCTC) peer.reset(new HmCcTc(peerId, address, serialNumber, _deviceId, this));
+				if(row->second.at(4)->intValue == (uint32_t)DeviceType::HMCCTC)
+				{
+					GD::out.printMessage("Peer is virtual.");
+					peer.reset(new HmCcTc(peerId, address, serialNumber, _deviceId, this));
+				}
 				else
 				{
 					GD::out.printError("Error: Unknown virtual HM-CC-TC: 0x" + BaseLib::HelperFunctions::getHexString(row->second.at(4)->intValue));

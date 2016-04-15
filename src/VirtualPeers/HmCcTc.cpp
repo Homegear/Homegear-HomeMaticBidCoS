@@ -106,6 +106,7 @@ bool HmCcTc::load(BaseLib::Systems::ICentral* device)
 	{
 		BidCoSPeer::load(device);
 		serviceMessages->endUnreach();
+		return true;
 	}
 	catch(const std::exception& ex)
     {

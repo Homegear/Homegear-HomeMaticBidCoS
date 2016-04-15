@@ -474,6 +474,50 @@ void TICC1100::setupDevice()
     }
 }
 
+void TICC1100::sendTest()
+{
+	try
+	{
+		if(_fileDescriptor->descriptor == -1 || _gpioDescriptors[1]->descriptor == -1 || _stopped) return;
+		std::vector<uint8_t> encodedPacket;
+		for(int32_t i = 0; i < 200; i++)
+		{
+			encodedPacket.push_back(0x55);
+		}
+
+		while(true)
+		{
+			_sendingPending = true;
+			_txMutex.lock();
+			_sendingPending = false;
+			if(_stopCallbackThread || _fileDescriptor->descriptor == -1 || _gpioDescriptors[1]->descriptor == -1 || _stopped)
+			{
+				_txMutex.unlock();
+				return;
+			}
+			_sending = true;
+
+			sendCommandStrobe(CommandStrobes::Enum::SIDLE);
+			sendCommandStrobe(CommandStrobes::Enum::SFTX);
+			writeRegisters(Registers::Enum::FIFO, encodedPacket);
+			sendCommandStrobe(CommandStrobes::Enum::STX);
+			_out.printDebug("Debug: Sending test data");
+		}
+	}
+	catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+
 void TICC1100::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 {
 	try

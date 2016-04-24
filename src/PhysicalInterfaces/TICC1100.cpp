@@ -501,7 +501,7 @@ void TICC1100::sendTest()
 			sendCommandStrobe(CommandStrobes::Enum::SFTX);
 			writeRegisters(Registers::Enum::FIFO, encodedPacket);
 			sendCommandStrobe(CommandStrobes::Enum::STX);
-			_out.printDebug("Debug: Sending test data");
+			_out.printDebug("Debug: Sending test data...");
 		}
 	}
 	catch(const std::exception& ex)

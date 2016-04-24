@@ -1195,6 +1195,18 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			stringStream << "unselect (u)\t\tUnselect this device" << std::endl;
 			return stringStream.str();
 		}
+#ifdef SPIINTERFACES
+		else if(command == "test")
+		{
+			std::shared_ptr<TICC1100> device(std::dynamic_pointer_cast<TICC1100>(GD::defaultPhysicalInterface));
+			if(device)
+			{
+				device->sendTest();
+				return "Sending test packets...";
+			}
+			return "Default interface if not of type TICC1100.";
+		}
+#endif
 		if(command.compare(0, 10, "pairing on") == 0 || command.compare(0, 3, "pon") == 0)
 		{
 			int32_t duration = 60;

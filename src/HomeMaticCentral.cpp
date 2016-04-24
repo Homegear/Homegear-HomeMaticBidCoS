@@ -32,6 +32,7 @@
 #include "homegear-base/BaseLib.h"
 #include "GD.h"
 #include "VirtualPeers/HmCcTc.h"
+#include "PhysicalInterfaces/TICC1100.h"
 
 namespace BidCoS
 {

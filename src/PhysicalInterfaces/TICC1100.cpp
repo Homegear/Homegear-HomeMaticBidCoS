@@ -474,7 +474,7 @@ void TICC1100::setupDevice()
     }
 }
 
-void TICC1100::sendTest()
+/*void TICC1100::sendTest()
 {
 	try
 	{
@@ -516,7 +516,7 @@ void TICC1100::sendTest()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-}
+}*/
 
 void TICC1100::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 {

@@ -30,8 +30,6 @@
 #ifndef HOMEMATICCENTRAL_H_
 #define HOMEMATICCENTRAL_H_
 
-#include "../config.h"
-
 #include "homegear-base/BaseLib.h"
 #include "BidCoSQueue.h"
 #include "BidCoSPeer.h"

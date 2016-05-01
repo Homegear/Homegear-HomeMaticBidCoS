@@ -329,6 +329,12 @@ std::string Cul::readFromDevice()
 				closeDevice();
 				return "";
 			}
+			else if(packet.size() > 50)
+			{
+				_out.printError("Too large packet received. Assuming CUL error. I'm closing and reopening device.");
+				closeDevice();
+				return "";
+			}
 		}
 		return packet;
 	}

@@ -2119,7 +2119,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			while(waitIndex < 1000)
 			{
 				receivedPacket = _receivedPackets.get(peer->getAddress());
-				if(receivedPacket && receivedPacket->timeReceived() > time && receivedPacket->payload()->size() > 1 && receivedPacket->payload()->at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->controlByte() == 0 && receivedPacket->messageType() == 0x10)
+				if(receivedPacket && receivedPacket->timeReceived() > time && receivedPacket->payload()->size() > 1 && receivedPacket->payload()->at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->messageType() == 0x10)
 				{
 					std::string serialNumber((char*)&receivedPacket->payload()->at(1), receivedPacket->payload()->size() - 1);
 					if(serialNumber == peer->getSerialNumber())

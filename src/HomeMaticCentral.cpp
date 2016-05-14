@@ -2111,10 +2111,11 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			}*/
 		//}
 
+		int64_t time = BaseLib::HelperFunctions::getTime();
+		GD::out.printInfo("Info: Now waiting for update request from peer " + std::to_string(peer->getID()) + ".");
 		int32_t retries = 0;
 		for(retries = 0; retries < 2; retries++)
 		{
-			int64_t time = BaseLib::HelperFunctions::getTime();
 			bool requestReceived = false;
 			while(waitIndex < 1000)
 			{

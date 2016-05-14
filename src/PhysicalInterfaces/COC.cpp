@@ -270,7 +270,7 @@ void COC::lineReceived(const std::string& data)
 			if(data.substr(0, stackPrefix.size()) != stackPrefix || data.at(stackPrefix.size()) == '*') return;
 			else packetHex = data.substr(stackPrefix.size());
 		}
-		if(packetHex.size() > 21) //21 is minimal packet length (=10 Byte + COC "A")
+		if(packetHex.size() > 21) //21 is minimal packet length (=10 Byte + COC "A" + "\n")
 		{
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
 			processReceivedPacket(packet);

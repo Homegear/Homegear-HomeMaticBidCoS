@@ -180,6 +180,8 @@ void Cul::openDevice()
 		//std::string chmod("chmod 666 " + _lockfile);
 		//system(chmod.c_str());
 
+		_firstPacket = true;
+
 		_fileDescriptor = _bl->fileDescriptorManager.add(open(_settings->device.c_str(), O_RDWR | O_NOCTTY));
 		if(_fileDescriptor->descriptor == -1)
 		{
@@ -329,12 +331,6 @@ std::string Cul::readFromDevice()
 				closeDevice();
 				return "";
 			}
-			else if(packet.size() > 50)
-			{
-				_out.printError("Too large packet received. Assuming CUL error. I'm closing and reopening device.");
-				closeDevice();
-				return "";
-			}
 		}
 		return packet;
 	}
@@ -473,7 +469,16 @@ void Cul::listen()
         		continue;
         	}
         	std::string packetHex = readFromDevice();
-        	if(packetHex.size() > 21) //21 is minimal packet length (=10 bytes + CUL "A")
+        	if(packetHex.size() > 50)
+			{
+        		if(_firstPacket) _firstPacket = false;
+				else
+				{
+					_out.printError("Error: Too large packet received. Assuming CUL error. I'm closing and reopening device: " + packetHex);
+					closeDevice();
+        		}
+			}
+        	else if(packetHex.size() >= 21) //21 is minimal packet length (=10 bytes + CUL "A")
         	{
         		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
 				processReceivedPacket(packet);
@@ -482,7 +487,15 @@ void Cul::listen()
         	{
         		if(packetHex == "LOVF\n") _out.printWarning("Warning: CUL with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
         		else if(packetHex == "A") continue;
-        		else _out.printWarning("Warning: Too short packet received: " + packetHex);
+        		else
+        		{
+        			if(_firstPacket) _firstPacket = false;
+        			else
+        			{
+						_out.printError("Error: Too small packet received. Assuming CUL error. I'm closing and reopening device: " + packetHex);
+						closeDevice();
+        			}
+        		}
         	}
         }
     }

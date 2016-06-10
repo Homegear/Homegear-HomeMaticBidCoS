@@ -1093,6 +1093,9 @@ void TICC1100::mainThread()
 					_txMutex.unlock(); //Make sure _txMutex is unlocked
 
 					initDevice();
+					closeGPIO(1);
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					openGPIO(1, true);
 					_stopped = false;
 					continue;
 				}
@@ -1149,7 +1152,13 @@ void TICC1100::mainThread()
 
 								packet.reset(new BidCoSPacket(decodedData, true, BaseLib::HelperFunctions::getTime()));
 							}
-							else _out.printWarning("Warning: Too small packet received: " + BaseLib::HelperFunctions::getHexString(encodedData));
+							else if(!_firstPacket)
+							{
+								_out.printWarning("Warning: Too small packet received: " + BaseLib::HelperFunctions::getHexString(encodedData));
+								closeDevice();
+								_txMutex.unlock();
+								continue;
+							}
 						}
 						else _out.printDebug("Debug: BidCoS packet received, but CRC failed.");
 						if(!_sendingPending)

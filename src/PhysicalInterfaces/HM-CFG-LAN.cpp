@@ -27,6 +27,7 @@
  * files in the program, then also delete it here.
  */
 
+#include <random>
 #include "HM-CFG-LAN.h"
 #include "../GD.h"
 

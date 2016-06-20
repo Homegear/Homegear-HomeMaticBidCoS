@@ -33,6 +33,8 @@
 #include "AesHandshake.h"
 #include "homegear-base/BaseLib.h"
 
+#include <random>
+
 namespace BidCoS {
 
 class IBidCoSInterface : public BaseLib::Systems::IPhysicalInterface, public BaseLib::ITimedQueue

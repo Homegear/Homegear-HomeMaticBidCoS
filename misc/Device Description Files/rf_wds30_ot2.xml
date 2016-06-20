@@ -1,8 +1,12 @@
-<homegearDevice version="3">
+<homegearDevice version="5">
 	<supportedDevices>
 		<device id="HM-WDS30-OT2-SM">
 			<description>HM-WDS30-OT2-SM</description>
 			<typeNumber>0xA8</typeNumber>
+		</device>
+		<device id="HM-WDS30-OT2-SM-2">
+			<description>HM-WDS30-OT2-SM-2</description>
+			<typeNumber>0x102</typeNumber>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -209,53 +213,9 @@
 				</logicalBoolean>
 				<physicalInteger groupId="">
 					<index>24.0</index>
-					<size>1.0</size>
+					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="PAIRED_TO_CENTRAL">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalBoolean/>
-				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
-					<index>2.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_1">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
-					<index>10.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_2">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
-					<index>11.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_3">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
-					<index>12.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">
@@ -339,6 +299,26 @@
 				</properties>
 				<logicalInteger/>
 				<physicalInteger groupId="RSSI_PEER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DEVICE_IN_BOOTLOADER">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DEVICE_IN_BOOTLOADER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="UPDATE_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UPDATE_PENDING">
 					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>

@@ -4,6 +4,97 @@ FIRMWAREDIR=/tmp/HomegearTemp
 
 rm -f $SCRIPTDIR/0000.*
 
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/hm-ou-cfm-tw_update_V1_2_160418.tgz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_2_160418.tgz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_2_160418.eq3 $SCRIPTDIR/0000.000000FA.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_2_160418.tgz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "12" > $SCRIPTDIR/0000.000000FA.version
+	[ $? -ne 0 ] && exit 1
+fi
+
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-ES-TX-WM_update_V1_1_160318.tgz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/HM-ES-TX-WM_update_V1_1_160318.tgz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/HM-ES-TX-WM_update_V1_1_160318.eq3 $SCRIPTDIR/0000.000000DE.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/HM-ES-TX-WM_update_V1_1_160318.tgz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "11" > $SCRIPTDIR/0000.000000DE.version
+	[ $? -ne 0 ] && exit 1
+fi
+
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-LC-Dim1PWM-CV_update_V2_9_0005_150730.tar.gz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/HM-LC-Dim1PWM-CV_update_V2_9_0005_150730.tar.gz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/HM-LC-Dim1PWM-CV_update_V2_9_0005_150730.eq3 $SCRIPTDIR/0000.00000067.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/HM-LC-Dim1PWM-CV_update_V2_9_0005_150730.tar.gz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "29" > $SCRIPTDIR/0000.00000067.version
+	[ $? -ne 0 ] && exit 1
+fi
+
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-LC-Dim1L-Pl-3_update_V2_9_0007_150803.tar.gz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/HM-LC-Dim1L-Pl-3_update_V2_9_0007_150803.tar.gz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/HM-LC-Dim1L-Pl-3_update_V2_9_0007_150803.eq3 $SCRIPTDIR/0000.000000B3.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/HM-LC-Dim1L-Pl-3_update_V2_9_0007_150803.tar.gz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "29" > $SCRIPTDIR/0000.000000B3.version
+	[ $? -ne 0 ] && exit 1
+fi
+
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-LC-Dim1TPBU-FM_update_V2_9_0005_150730.tar.gz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/HM-LC-Dim1TPBU-FM_update_V2_9_0005_150730.tar.gz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/HM-LC-Dim1TPBU-FM_update_V2_9_0005_150730.eq3 $SCRIPTDIR/0000.00000068.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/HM-LC-Dim1TPBU-FM_update_V2_9_0005_150730.tar.gz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "29" > $SCRIPTDIR/0000.00000068.version
+	[ $? -ne 0 ] && exit 1
+fi
+
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-LC-Dim1T-Pl-3_update_V2_9_0005_150730.tar.gz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/HM-LC-Dim1T-Pl-3_update_V2_9_0005_150730.tar.gz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/HM-LC-Dim1T-Pl-3_update_V2_9_0005_150730.eq3 $SCRIPTDIR/0000.000000B4.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/HM-LC-Dim1T-Pl-3_update_V2_9_0005_150730.tar.gz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "29" > $SCRIPTDIR/0000.000000B4.version
+	[ $? -ne 0 ] && exit 1
+fi
+
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/hm-mod-re-8_update_V1_2_150911.tgz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/hm-mod-re-8_update_V1_2_150911.tgz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/hm-mod-re-8_update_V1_2_150911.eq3 $SCRIPTDIR/0000.000000BE.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/hm-mod-re-8_update_V1_2_150911.tgz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "29" > $SCRIPTDIR/0000.000000BE.version
+	[ $? -ne 0 ] && exit 1
+fi
+
 wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-LC-Sw1PBU-FM_update_V2_8_2_150713.tgz
 if [ $? -eq 0 ]; then
 	tar -zxf $FIRMWAREDIR/HM-LC-Sw1PBU-FM_update_V2_8_2_150713.tgz -C $FIRMWAREDIR

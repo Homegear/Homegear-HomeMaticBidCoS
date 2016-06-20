@@ -1,13 +1,15 @@
-<homegearDevice version="12">
+<homegearDevice version="4">
 	<supportedDevices>
-		<device id="HM-OU-CFM-Pl">
-			<description>radio chime with light flash</description>
-			<typeNumber>0x75</typeNumber>
+		<device id="HM-OU-CFM-TW">
+			<description>Wireless MP3 chime module with memory for battery operation</description>
+			<typeNumber>0xFA</typeNumber>
 			<minFirmwareVersion>0x10</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
+		<receiveMode>wakeOnRadio</receiveMode>
 		<encryption>true</encryption>
+		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
 		<function channel="0" type="MAINTENANCE">
@@ -249,9 +251,9 @@
 					<unit>min</unit>
 				</properties>
 				<logicalInteger>
-					<minimumValue>10</minimumValue>
+					<minimumValue>360</minimumValue>
 					<maximumValue>1440</maximumValue>
-					<defaultValue>60</defaultValue>
+					<defaultValue>360</defaultValue>
 				</logicalInteger>
 				<physicalInteger groupId="">
 					<operationType>store</operationType>
@@ -1988,43 +1990,43 @@
 					<casts>
 						<optionInteger>
 							<value>
-								<physical>200</physical>
+								<physical>10</physical>
 								<logical>10</logical>
 							</value>
 							<value>
-								<physical>235</physical>
+								<physical>162</physical>
 								<logical>9</logical>
 							</value>
 							<value>
-								<physical>241</physical>
+								<physical>190</physical>
 								<logical>8</logical>
 							</value>
 							<value>
-								<physical>244</physical>
+								<physical>207</physical>
 								<logical>7</logical>
 							</value>
 							<value>
-								<physical>246</physical>
+								<physical>218</physical>
 								<logical>6</logical>
 							</value>
 							<value>
-								<physical>249</physical>
+								<physical>227</physical>
 								<logical>5</logical>
 							</value>
 							<value>
-								<physical>250</physical>
+								<physical>234</physical>
 								<logical>4</logical>
 							</value>
 							<value>
-								<physical>252</physical>
+								<physical>240</physical>
 								<logical>3</logical>
 							</value>
 							<value>
-								<physical>253</physical>
+								<physical>246</physical>
 								<logical>2</logical>
 							</value>
 							<value>
-								<physical>254</physical>
+								<physical>250</physical>
 								<logical>1</logical>
 							</value>
 							<value>
@@ -2113,6 +2115,7 @@
 			<scenario id="default">
 				<parameter id="LCD_LEVEL_INTERP">1</parameter>
 				<parameter id="LCD_SYMBOL">2</parameter>
+				<parameter id="PEER_NEEDS_BURST">true</parameter>
 			</scenario>
 		</linkParameters>
 		<linkParameters id="signal_mled_ch_link--1">
@@ -2707,6 +2710,38 @@
 								<physical>50</physical>
 								<logical>6</logical>
 							</value>
+							<value>
+								<physical>65</physical>
+								<logical>7</logical>
+							</value>
+							<value>
+								<physical>66</physical>
+								<logical>8</logical>
+							</value>
+							<value>
+								<physical>81</physical>
+								<logical>9</logical>
+							</value>
+							<value>
+								<physical>82</physical>
+								<logical>10</logical>
+							</value>
+							<value>
+								<physical>97</physical>
+								<logical>11</logical>
+							</value>
+							<value>
+								<physical>98</physical>
+								<logical>12</logical>
+							</value>
+							<value>
+								<physical>113</physical>
+								<logical>13</logical>
+							</value>
+							<value>
+								<physical>114</physical>
+								<logical>14</logical>
+							</value>
 						</optionInteger>
 					</casts>
 				</properties>
@@ -2739,6 +2774,38 @@
 					<value>
 						<id>ORANGE_LONG</id>
 						<index>6</index>
+					</value>
+					<value>
+						<id>BLUE_SHORT</id>
+						<index>7</index>
+					</value>
+					<value>
+						<id>BLUE_LONG</id>
+						<index>8</index>
+					</value>
+					<value>
+						<id>VIOLET_SHORT</id>
+						<index>9</index>
+					</value>
+					<value>
+						<id>VIOLET_LONG</id>
+						<index>10</index>
+					</value>
+					<value>
+						<id>CYAN_SHORT</id>
+						<index>11</index>
+					</value>
+					<value>
+						<id>CYAN_LONG</id>
+						<index>12</index>
+					</value>
+					<value>
+						<id>WHITE_SHORT</id>
+						<index>13</index>
+					</value>
+					<value>
+						<id>WHITE_LONG</id>
+						<index>14</index>
 					</value>
 				</logicalEnumeration>
 				<physicalInteger groupId="">
@@ -3364,6 +3431,38 @@
 								<physical>50</physical>
 								<logical>6</logical>
 							</value>
+							<value>
+								<physical>65</physical>
+								<logical>7</logical>
+							</value>
+							<value>
+								<physical>66</physical>
+								<logical>8</logical>
+							</value>
+							<value>
+								<physical>81</physical>
+								<logical>9</logical>
+							</value>
+							<value>
+								<physical>82</physical>
+								<logical>10</logical>
+							</value>
+							<value>
+								<physical>97</physical>
+								<logical>11</logical>
+							</value>
+							<value>
+								<physical>98</physical>
+								<logical>12</logical>
+							</value>
+							<value>
+								<physical>113</physical>
+								<logical>13</logical>
+							</value>
+							<value>
+								<physical>114</physical>
+								<logical>14</logical>
+							</value>
 						</optionInteger>
 					</casts>
 				</properties>
@@ -3397,9 +3496,41 @@
 						<id>ORANGE_LONG</id>
 						<index>6</index>
 					</value>
+					<value>
+						<id>BLUE_SHORT</id>
+						<index>7</index>
+					</value>
+					<value>
+						<id>BLUE_LONG</id>
+						<index>8</index>
+					</value>
+					<value>
+						<id>VIOLET_SHORT</id>
+						<index>9</index>
+					</value>
+					<value>
+						<id>VIOLET_LONG</id>
+						<index>10</index>
+					</value>
+					<value>
+						<id>CYAN_SHORT</id>
+						<index>11</index>
+					</value>
+					<value>
+						<id>CYAN_LONG</id>
+						<index>12</index>
+					</value>
+					<value>
+						<id>WHITE_SHORT</id>
+						<index>13</index>
+					</value>
+					<value>
+						<id>WHITE_LONG</id>
+						<index>14</index>
+					</value>
 				</logicalEnumeration>
 				<physicalInteger groupId="">
-					<index>164.0</index>
+					<index>36.0</index>
 					<size>1.0</size>
 					<list>3</list>
 					<operationType>config</operationType>
@@ -3444,6 +3575,7 @@
 			<scenario id="default">
 				<parameter id="LCD_LEVEL_INTERP">1</parameter>
 				<parameter id="LCD_SYMBOL">2</parameter>
+				<parameter id="PEER_NEEDS_BURST">true</parameter>
 			</scenario>
 		</linkParameters>
 	</parameterGroups>

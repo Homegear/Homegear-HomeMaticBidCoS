@@ -1,4 +1,4 @@
-<homegearDevice version="15">
+<homegearDevice version="16">
 	<supportedDevices>
 		<device id="HM-Sec-SC">
 			<description>HM Shutter Contact</description>
@@ -151,50 +151,6 @@
 					<size>1.0</size>
 					<list>0</list>
 					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="PAIRED_TO_CENTRAL">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalBoolean/>
-				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
-					<index>2.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_1">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
-					<index>10.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_2">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
-					<index>11.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_3">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
-					<index>12.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">
@@ -582,8 +538,12 @@
 				<parameter id="SHORT_COND_VALUE_LO">50</parameter>
 				<parameter id="SHORT_CT_OFF">0</parameter>
 				<parameter id="SHORT_CT_OFFDELAY">0</parameter>
+				<parameter id="SHORT_CT_OFFDELAY_SIRARM">2</parameter>
+				<parameter id="SHORT_CT_OFF_SIRARM">2</parameter>
 				<parameter id="SHORT_CT_ON">2</parameter>
 				<parameter id="SHORT_CT_ONDELAY">2</parameter>
+				<parameter id="SHORT_CT_ONDELAY_SIRARM">0</parameter>
+				<parameter id="SHORT_CT_ON_SIRARM">0</parameter>
 				<parameter id="SHORT_CT_RAMPOFF">0</parameter>
 				<parameter id="SHORT_CT_RAMPON">2</parameter>
 				<parameter id="SHORT_JT_OFF">1</parameter>

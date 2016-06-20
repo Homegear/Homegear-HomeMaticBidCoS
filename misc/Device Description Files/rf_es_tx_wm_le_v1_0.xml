@@ -1,15 +1,16 @@
-<homegearDevice version="7">
+<homegearDevice version="1">
 	<supportedDevices>
-		<device id="HM-RC-Dis-H-x-EU">
-			<description>HM Remote Control with Displays</description>
-			<typeNumber>0xE1</typeNumber>
+		<device id="HM-ES-TX-WM">
+			<description>Wireless sender for power meter sensor</description>
+			<typeNumber>0xDE</typeNumber>
+			<maxFirmwareVersion>0x10</maxFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
 		<receiveMode>config</receiveMode>
 		<receiveMode>wakeUp</receiveMode>
-		<receiveMode>lazyConfig</receiveMode>
 		<encryption>true</encryption>
+		<timeout>600</timeout>
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
@@ -20,154 +21,122 @@
 			<configParameters>remote_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="KEY" channelCount="20">
-			<properties>
-				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
-				<defaultGroupedLinkScenarioElementId1>B</defaultGroupedLinkScenarioElementId1>
-				<defaultGroupedLinkScenarioElementId2>A</defaultGroupedLinkScenarioElementId2>
-				<linkSenderFunctionTypes>
-					<type>KEYMATIC</type>
-					<type>REMOTECONTROL_RECEIVER</type>
-					<type>SWITCH</type>
-					<type>WINMATIC</type>
-				</linkSenderFunctionTypes>
-			</properties>
-			<configParameters>remote4dis_ch_master--1</configParameters>
-			<variables>remote4dis_ch_values--1</variables>
-			<linkParameters>remote4dis_ch_link--1</linkParameters>
+		<function channel="1" type="POWERMETER_IGL">
+			<properties/>
+			<configParameters>powermeter_igl_ch_master--1</configParameters>
+			<variables>power_ch_values--1</variables>
 		</function>
 	</functions>
 	<packets>
-		<packet id="KEY_EVENT_LONG">
+		<packet id="GAS_POWER_EVENT">
 			<direction>toCentral</direction>
-			<type>0x40</type>
-			<channelIndex>9:0.6</channelIndex>
+			<type>0x54</type>
+			<channel>1</channel>
 			<binaryPayload>
-				<element>
-					<index>9.6</index>
-					<size>0.1</size>
-					<constValueInteger>1</constValueInteger>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>COUNTER</parameterId>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>TEST_COUNTER</parameterId>
-				</element>
-			</binaryPayload>
-		</packet>
-		<packet id="KEY_EVENT_LONG_BIDI">
-			<direction>toCentral</direction>
-			<type>0x40</type>
-			<channelIndex>9:0.6</channelIndex>
-			<binaryPayload>
-				<element>
-					<index>1.5</index>
-					<size>0.1</size>
-					<constValueInteger>1</constValueInteger>
-				</element>
-				<element>
-					<index>9.6</index>
-					<size>0.1</size>
-					<constValueInteger>1</constValueInteger>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>COUNTER</parameterId>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>TEST_COUNTER</parameterId>
-				</element>
-			</binaryPayload>
-		</packet>
-		<packet id="KEY_EVENT_SHORT">
-			<direction>toCentral</direction>
-			<type>0x40</type>
-			<channelIndex>9:0.6</channelIndex>
-			<binaryPayload>
-				<element>
-					<index>9.6</index>
-					<size>0.1</size>
-					<constValueInteger>0</constValueInteger>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>COUNTER</parameterId>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>TEST_COUNTER</parameterId>
-				</element>
-			</binaryPayload>
-		</packet>
-		<packet id="KEY_SIM_LONG">
-			<direction>toCentral</direction>
-			<type>0x40</type>
-			<channelIndex>9:0.6</channelIndex>
-			<binaryPayload>
-				<element>
-					<index>9.6</index>
-					<size>0.1</size>
-					<constValueInteger>1</constValueInteger>
-				</element>
 				<element>
 					<index>9.7</index>
 					<size>0.1</size>
-					<constValueInteger>0</constValueInteger>
+					<parameterId>BOOT</parameterId>
 				</element>
 				<element>
-					<index>10.0</index>
-					<parameterId>SIM_COUNTER</parameterId>
+					<index>9.0</index>
+					<size>3.7</size>
+					<parameterId>GAS_ENERGY_COUNTER</parameterId>
+				</element>
+				<element>
+					<index>13.0</index>
+					<size>3.0</size>
+					<parameterId>GAS_POWER</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>
-		<packet id="KEY_SIM_SHORT">
+		<packet id="GAS_POWER_EVENT_CYCLIC">
 			<direction>toCentral</direction>
-			<type>0x40</type>
-			<channelIndex>9:0.6</channelIndex>
+			<type>0x53</type>
+			<channel>1</channel>
 			<binaryPayload>
-				<element>
-					<index>9.6</index>
-					<size>0.1</size>
-					<constValueInteger>0</constValueInteger>
-				</element>
 				<element>
 					<index>9.7</index>
 					<size>0.1</size>
-					<constValueInteger>0</constValueInteger>
+					<parameterId>BOOT</parameterId>
 				</element>
 				<element>
-					<index>10.0</index>
-					<parameterId>SIM_COUNTER</parameterId>
+					<index>9.0</index>
+					<size>3.7</size>
+					<parameterId>GAS_ENERGY_COUNTER</parameterId>
+				</element>
+				<element>
+					<index>13.0</index>
+					<size>3.0</size>
+					<parameterId>GAS_POWER</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="INFO_LEVEL">
+			<direction>toCentral</direction>
+			<type>0x10</type>
+			<subtype>0x6</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<parameterId>STATE</parameterId>
+				</element>
+				<element>
+					<index>12.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="POWER_EVENT">
+			<direction>toCentral</direction>
+			<type>0x5F</type>
+			<channel>1</channel>
+			<binaryPayload>
+				<element>
+					<index>9.7</index>
+					<size>0.1</size>
+					<parameterId>BOOT</parameterId>
+				</element>
+				<element>
+					<index>9.0</index>
+					<size>2.7</size>
+					<parameterId>ENERGY_COUNTER</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>3.0</size>
+					<parameterId>POWER</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="POWER_EVENT_CYCLIC">
+			<direction>toCentral</direction>
+			<type>0x5E</type>
+			<channel>1</channel>
+			<binaryPayload>
+				<element>
+					<index>9.7</index>
+					<size>0.1</size>
+					<parameterId>BOOT</parameterId>
+				</element>
+				<element>
+					<index>9.0</index>
+					<size>2.7</size>
+					<parameterId>ENERGY_COUNTER</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<size>3.0</size>
+					<parameterId>POWER</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="remote4dis_ch_master--1">
-			<parameter id="TEXT1">
-				<properties/>
-				<logicalString/>
-				<physicalString groupId="">
-					<index>54.0</index>
-					<size>12.0</size>
-					<list>1</list>
-					<operationType>configString</operationType>
-				</physicalString>
-			</parameter>
-			<parameter id="TEXT2">
-				<properties/>
-				<logicalString/>
-				<physicalString groupId="">
-					<index>70.0</index>
-					<size>12.0</size>
-					<list>1</list>
-					<operationType>configString</operationType>
-				</physicalString>
-			</parameter>
+		<configParameters id="powermeter_igl_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -184,6 +153,132 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="METER_TYPE">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>1</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>255</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>3</defaultValue>
+					<value>
+						<id>GAS-SENSOR</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>IR-SENSOR</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>LED-SENSOR</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>UNKOWN</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="">
+					<index>149.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="METER_CONSTANT_IR">
+				<properties>
+					<unit>U./kWh</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>65536</maximumValue>
+					<defaultValue>100</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<index>150.0</index>
+					<size>2.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="METER_SENSIBILITY_IR">
+				<properties>
+					<signed>true</signed>
+					<unit>%</unit>
+					<casts>
+						<integerIntegerScale>
+							<operation>multiplication</operation>
+							<factor>1.287879</factor>
+							<offset>99</offset>
+						</integerIntegerScale>
+					</casts>
+				</properties>
+				<logicalInteger>
+					<minimumValue>-99</minimumValue>
+					<maximumValue>99</maximumValue>
+					<defaultValue>0</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<index>156.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="METER_CONSTANT_GAS">
+				<properties>
+					<unit>m3/Imp.</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1000.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.001000</minimumValue>
+					<maximumValue>65.536000</maximumValue>
+					<defaultValue>0.010000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="">
+					<index>152.0</index>
+					<size>2.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="METER_CONSTANT_LED">
+				<properties>
+					<unit>Imp./kWh</unit>
+				</properties>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>65536</maximumValue>
+					<defaultValue>10000</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<index>154.0</index>
+					<size>2.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
 		</configParameters>
 		<configParameters id="remote_dev_master--0">
 			<parameter id="LOCAL_RESET_DISABLE">
@@ -193,68 +288,6 @@
 				</logicalBoolean>
 				<physicalInteger groupId="">
 					<index>24.0</index>
-					<size>0.1</size>
-					<list>0</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="STANDBY_TIME">
-				<properties>
-					<unit>s</unit>
-				</properties>
-				<logicalInteger>
-					<minimumValue>1</minimumValue>
-					<maximumValue>120</maximumValue>
-					<defaultValue>5</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<index>14.0</index>
-					<size>1.0</size>
-					<list>0</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="LANGUAGE">
-				<properties/>
-				<logicalEnumeration>
-					<defaultValue>1</defaultValue>
-					<value>
-						<id>ENGLISH</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>GERMAN</id>
-						<index>1</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="">
-					<index>7.0</index>
-					<size>1.0</size>
-					<list>0</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="WAKEUP_DEFAULT_CHANNEL">
-				<properties/>
-				<logicalInteger>
-					<minimumValue>0</minimumValue>
-					<maximumValue>20</maximumValue>
-					<defaultValue>0</defaultValue>
-				</logicalInteger>
-				<physicalInteger groupId="">
-					<index>32.0</index>
-					<size>1.0</size>
-					<list>0</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="WAKEUP_BEHAVIOUR">
-				<properties/>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<index>33.0</index>
 					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
@@ -386,155 +419,148 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="remote4dis_ch_values--1">
-			<parameter id="PRESS_SHORT">
-				<properties>
-					<writeable>false</writeable>
-					<control>BUTTON.SHORT</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="COUNTER">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="KEY_SIM_SHORT">
-						<type>set</type>
-					</packet>
-					<packet id="KEY_EVENT_SHORT">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="PRESS_LONG">
-				<properties>
-					<writeable>false</writeable>
-					<control>BUTTON.LONG</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="COUNTER">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="KEY_SIM_LONG">
-						<type>set</type>
-					</packet>
-					<packet id="KEY_EVENT_LONG">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="PRESS_LONG_RELEASE">
+		<variables id="power_ch_values--1">
+			<parameter id="BOOT">
 				<properties>
 					<writeable>false</writeable>
 					<internal>true</internal>
+					<control>POWERMETER_IGL.BOOT</control>
 				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="COUNTER">
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="BOOT">
+					<size>0.1</size>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
-					<packet id="KEY_EVENT_LONG_BIDI">
+					<packet id="GAS_POWER_EVENT_CYCLIC">
+						<type>event</type>
+					</packet>
+					<packet id="GAS_POWER_EVENT">
+						<type>event</type>
+					</packet>
+					<packet id="POWER_EVENT_CYCLIC">
+						<type>event</type>
+					</packet>
+					<packet id="POWER_EVENT">
 						<type>event</type>
 					</packet>
 				</packets>
 			</parameter>
-			<parameter id="PRESS_CONT">
+			<parameter id="GAS_ENERGY_COUNTER">
 				<properties>
 					<writeable>false</writeable>
-					<internal>true</internal>
+					<control>POWERMETER_IGL.GAS_ENERGY_COUNTER</control>
+					<unit>m3</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1000.000000</factor>
+						</decimalIntegerScale>
+					</casts>
 				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="COUNTER">
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>2147483.647000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="GAS_ENERGY_COUNTER">
+					<size>3.7</size>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
-					<packet id="KEY_EVENT_LONG">
+					<packet id="GAS_POWER_EVENT_CYCLIC">
+						<type>event</type>
+					</packet>
+					<packet id="GAS_POWER_EVENT">
 						<type>event</type>
 					</packet>
 				</packets>
 			</parameter>
-			<parameter id="INSTALL_TEST">
+			<parameter id="GAS_POWER">
 				<properties>
 					<writeable>false</writeable>
-					<internal>true</internal>
+					<control>POWERMETER_IGL.GAS_POWER</control>
+					<unit>m3</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1000.000000</factor>
+						</decimalIntegerScale>
+					</casts>
 				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="TEST_COUNTER">
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>16777.215000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="GAS_POWER">
+					<size>3.0</size>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
-					<packet id="KEY_EVENT_SHORT">
+					<packet id="GAS_POWER_EVENT_CYCLIC">
 						<type>event</type>
 					</packet>
-					<packet id="KEY_EVENT_LONG">
+					<packet id="GAS_POWER_EVENT">
 						<type>event</type>
 					</packet>
 				</packets>
 			</parameter>
-			<parameter id="TEST_COUNTER">
+			<parameter id="ENERGY_COUNTER">
 				<properties>
 					<writeable>false</writeable>
+					<control>POWERMETER_IGL.ENERGY_COUNTER</control>
+					<unit>Wh</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+					</casts>
 				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="TEST_COUNTER">
-					<size>1.0</size>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>838860.700000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ENERGY_COUNTER">
+					<size>2.7</size>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
-					<packet id="KEY_EVENT_SHORT">
+					<packet id="POWER_EVENT_CYCLIC">
 						<type>event</type>
 					</packet>
-					<packet id="KEY_EVENT_LONG">
+					<packet id="POWER_EVENT">
 						<type>event</type>
 					</packet>
 				</packets>
 			</parameter>
-			<parameter id="SIM_COUNTER">
+			<parameter id="POWER">
 				<properties>
 					<writeable>false</writeable>
+					<control>POWERMETER_IGL.POWER</control>
+					<unit>W</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>100.000000</factor>
+						</decimalIntegerScale>
+					</casts>
 				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="SIM_COUNTER">
-					<size>1.0</size>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>167772.150000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="POWER">
+					<size>3.0</size>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
-					<packet id="KEY_SIM_SHORT">
+					<packet id="POWER_EVENT_CYCLIC">
 						<type>event</type>
 					</packet>
-					<packet id="KEY_SIM_LONG">
+					<packet id="POWER_EVENT">
 						<type>event</type>
 					</packet>
 				</packets>
 			</parameter>
 		</variables>
-		<linkParameters id="remote4dis_ch_link--1">
-			<parameter id="PEER_NEEDS_BURST">
-				<properties/>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<index>1.0</index>
-					<size>0.1</size>
-					<list>4</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="EXPECT_AES">
-				<properties/>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-					<setToValueOnPairing>false</setToValueOnPairing>
-				</logicalBoolean>
-				<physicalInteger groupId="">
-					<index>1.7</index>
-					<size>0.1</size>
-					<list>4</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-		</linkParameters>
 	</parameterGroups>
 </homegearDevice>
 

@@ -1,4 +1,4 @@
-<homegearDevice version="9">
+<homegearDevice version="10">
 	<supportedDevices>
 		<device id="HM-Sec-MDIR">
 			<description>HM radio-controlled motion detector</description>
@@ -126,50 +126,6 @@
 					<size>1.0</size>
 					<list>0</list>
 					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="PAIRED_TO_CENTRAL">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalBoolean/>
-				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
-					<index>2.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_1">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
-					<index>10.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_2">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
-					<index>11.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_3">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
-					<index>12.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">
@@ -568,10 +524,20 @@
 				<parameter id="LONG_ACTION_TYPE">0</parameter>
 				<parameter id="SHORT_ACTION_TYPE">1</parameter>
 				<parameter id="SHORT_COND_VALUE_LO">255</parameter>
+				<parameter id="SHORT_COND_VALUE_LO_SIRPAN">255</parameter>
+				<parameter id="SHORT_COND_VALUE_LO_SIRSEN">255</parameter>
 				<parameter id="SHORT_CT_OFF">2</parameter>
 				<parameter id="SHORT_CT_OFFDELAY">2</parameter>
+				<parameter id="SHORT_CT_OFFDELAY_SIRPAN">2</parameter>
+				<parameter id="SHORT_CT_OFFDELAY_SIRSEN">2</parameter>
+				<parameter id="SHORT_CT_OFF_SIRPAN">2</parameter>
+				<parameter id="SHORT_CT_OFF_SIRSEN">2</parameter>
 				<parameter id="SHORT_CT_ON">2</parameter>
 				<parameter id="SHORT_CT_ONDELAY">2</parameter>
+				<parameter id="SHORT_CT_ONDELAY_SIRPAN">2</parameter>
+				<parameter id="SHORT_CT_ONDELAY_SIRSEN">2</parameter>
+				<parameter id="SHORT_CT_ON_SIRPAN">2</parameter>
+				<parameter id="SHORT_CT_ON_SIRSEN">2</parameter>
 				<parameter id="SHORT_CT_RAMPOFF">2</parameter>
 				<parameter id="SHORT_CT_RAMPON">2</parameter>
 				<parameter id="SHORT_DIM_MAX_LEVEL">100</parameter>

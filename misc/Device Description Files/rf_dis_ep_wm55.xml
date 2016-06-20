@@ -1,12 +1,14 @@
-<homegearDevice version="2">
+<homegearDevice version="9">
 	<supportedDevices>
-		<device id="HM-RC-2-PBU-FM">
-			<description>HM Wireless Sender 2-channel for brand switch systems, flush mount</description>
-			<typeNumber>0xE0</typeNumber>
+		<device id="HM-Dis-EP-WM55">
+			<description>HM Wireless Status Display with push button for 55mm frames</description>
+			<typeNumber>0xFB</typeNumber>
 		</device>
 	</supportedDevices>
 	<properties>
+		<receiveMode>wakeOnRadio</receiveMode>
 		<encryption>true</encryption>
+		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
 		<function channel="0" type="MAINTENANCE">
@@ -16,9 +18,8 @@
 			<configParameters>remote_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="KEY">
+		<function channel="1" type="KEY" channelCount="2">
 			<properties>
-				<dynamicChannelCount>23:1.0</dynamicChannelCount>
 				<grouped>true</grouped>
 				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
 				<defaultGroupedLinkScenarioElementId1>B</defaultGroupedLinkScenarioElementId1>
@@ -33,6 +34,19 @@
 			<configParameters>remote_ch_master--1</configParameters>
 			<variables>remote_ch_values--1</variables>
 			<linkParameters>remote_ch_link--1</linkParameters>
+		</function>
+		<function channel="3" type="KEY">
+			<properties>
+				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
+			</properties>
+			<configParameters>remotestatus_ch_master--3</configParameters>
+			<variables>remotestatus_ch_values--3</variables>
+		</function>
+		<function channel="4" type="KEY" channelCount="5">
+			<properties>
+				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
+			</properties>
+			<configParameters>remotestatus_ch_master--4</configParameters>
 		</function>
 	</functions>
 	<packets>
@@ -146,28 +160,6 @@
 	</packets>
 	<parameterGroups>
 		<configParameters id="remote_ch_master--1">
-			<parameter id="LONG_PRESS_TIME">
-				<properties>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10.000000</factor>
-							<offset>-0.300000</offset>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.300000</minimumValue>
-					<maximumValue>1.800000</maximumValue>
-					<defaultValue>0.400000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="">
-					<index>4.4</index>
-					<size>0.4</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -184,13 +176,44 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="TEXTLINE_1">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>54.0</index>
+					<size>12.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="TEXTLINE_2">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>70.0</index>
+					<size>12.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
 		</configParameters>
 		<configParameters id="remote_dev_master--0">
-			<parameter id="DEVICE_LED_MODE">
+			<parameter id="LOCAL_RESET_DISABLE">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<index>24.0</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POWER_SUPPLY">
 				<properties>
 					<casts>
-						<integerIntegerMap>
-							<direction>both</direction>
+						<optionInteger>
 							<value>
 								<physical>0</physical>
 								<logical>0</logical>
@@ -199,34 +222,58 @@
 								<physical>1</physical>
 								<logical>1</logical>
 							</value>
-						</integerIntegerMap>
+						</optionInteger>
 					</casts>
 				</properties>
 				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
+					<defaultValue>1</defaultValue>
 					<value>
-						<id>OFF</id>
+						<id>MAINS_POWERED</id>
 						<index>0</index>
 					</value>
 					<value>
-						<id>ON</id>
+						<id>BATTERY_POWERED</id>
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
 				<physicalInteger groupId="">
-					<index>5.6</index>
-					<size>0.2</size>
+					<index>8.0</index>
+					<size>1.0</size>
 					<list>0</list>
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
-			<parameter id="LOCAL_RESET_DISABLE">
+			<parameter id="WAKEUP_BEHAVIOUR_STATUS_SIGNALIZATION_CONFIRMATION">
 				<properties/>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
 				<physicalInteger groupId="">
-					<index>24.0</index>
+					<index>33.0</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="WAKEUP_BEHAVIOUR_STATUS_MSG_CONFIRMATION">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<index>33.1</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DISPLAY_INVERTING">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="">
+					<index>5.6</index>
 					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
@@ -260,12 +307,68 @@
 					<unit>min</unit>
 				</properties>
 				<logicalInteger>
-					<minimumValue>10</minimumValue>
+					<minimumValue>360</minimumValue>
 					<maximumValue>1440</maximumValue>
-					<defaultValue>60</defaultValue>
+					<defaultValue>360</defaultValue>
 				</logicalInteger>
 				<physicalInteger groupId="">
 					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="remotestatus_ch_master--3">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="remotestatus_ch_master--4">
+			<parameter id="TEXTLINE_1">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>54.0</index>
+					<size>12.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="TEXTLINE_2">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>70.0</index>
+					<size>12.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
 		</configParameters>
@@ -297,6 +400,16 @@
 				</properties>
 				<logicalBoolean/>
 				<physicalInteger groupId="CONFIG_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
 					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
@@ -458,41 +571,18 @@
 					</packet>
 				</packets>
 			</parameter>
-			<parameter id="TEST_COUNTER">
+		</variables>
+		<variables id="remotestatus_ch_values--3">
+			<parameter id="SUBMIT">
 				<properties>
-					<writeable>false</writeable>
+					<readable>false</readable>
+					<control>NONE</control>
+					<casts>
+						<hexStringByteArray/>
+					</casts>
 				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="TEST_COUNTER">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="KEY_EVENT_SHORT">
-						<type>event</type>
-					</packet>
-					<packet id="KEY_EVENT_LONG">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="SIM_COUNTER">
-				<properties>
-					<writeable>false</writeable>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="SIM_COUNTER">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="KEY_SIM_SHORT">
-						<type>event</type>
-					</packet>
-					<packet id="KEY_SIM_LONG">
-						<type>event</type>
-					</packet>
-				</packets>
+				<logicalString/>
+				<physicalString groupId="SUBMIT_VALUE"/>
 			</parameter>
 		</variables>
 		<linkParameters id="remote_ch_link--1">

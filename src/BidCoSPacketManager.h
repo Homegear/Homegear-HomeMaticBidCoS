@@ -30,7 +30,7 @@
 #ifndef BIDCOSPACKETMANAGER_H_
 #define BIDCOSPACKETMANAGER_H_
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "BidCoSPacket.h"
 
 #include <iostream>

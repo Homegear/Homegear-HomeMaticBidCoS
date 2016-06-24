@@ -30,7 +30,7 @@
 #ifndef FACTORY_H
 #define FACTORY_H
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "BidCoS.h"
 
 class BidCoSFactory : BaseLib::Systems::SystemFactory

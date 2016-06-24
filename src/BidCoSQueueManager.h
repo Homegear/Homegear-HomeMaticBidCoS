@@ -30,7 +30,7 @@
 #ifndef BIDCOSQUEUEMANAGER_H_
 #define BIDCOSQUEUEMANAGER_H_
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "BidCoSQueue.h"
 #include "BidCoSPeer.h"
 

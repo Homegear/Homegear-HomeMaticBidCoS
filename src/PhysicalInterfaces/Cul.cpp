@@ -28,7 +28,7 @@
  */
 
 #include "../BidCoSPacket.h"
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "../GD.h"
 #include "Cul.h"
 

@@ -31,7 +31,7 @@
 #include "BidCoSMessage.h"
 #include "PendingBidCoSQueues.h"
 #include "HomeMaticCentral.h"
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "GD.h"
 
 #include <memory>

@@ -31,7 +31,7 @@
 #include "HomeMaticCentral.h"
 #include "Interfaces.h"
 #include "BidCoSDeviceTypes.h"
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "GD.h"
 
 namespace BidCoS

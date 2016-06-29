@@ -30,7 +30,7 @@
 #ifndef AESHANDSHAKE_H
 #define AESHANDSHAKE_H
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 
 #include <gcrypt.h>
 

@@ -1,8 +1,9 @@
-<homegearDevice version="20">
+<homegearDevice version="30">
 	<supportedDevices>
 		<device id="HM-ES-TX-WM">
 			<description>Wireless sender for power meter sensor</description>
 			<typeNumber>0xDE</typeNumber>
+			<minFirmwareVersion>0x11</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -17,13 +18,18 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>remote_dev_master--0</configParameters>
+			<configParameters>powermeter_iec_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="POWERMETER_IGL">
+		<function channel="1" type="POWERMETER_IEC1">
 			<properties/>
-			<configParameters>powermeter_igl_ch_master--1</configParameters>
+			<configParameters>powermeter_iec_ch1_master--1</configParameters>
 			<variables>power_ch_values--1</variables>
+		</function>
+		<function channel="2" type="POWERMETER_IEC2">
+			<properties/>
+			<configParameters>powermeter_iec_ch2_master--2</configParameters>
+			<variables>power_ch_values--2</variables>
 		</function>
 	</functions>
 	<packets>
@@ -68,6 +74,100 @@
 					<index>13.0</index>
 					<size>3.0</size>
 					<parameterId>GAS_POWER</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="IEC_POWER_EVENT">
+			<direction>toCentral</direction>
+			<type>0x61</type>
+			<channelIndex>9:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.6</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+				<element>
+					<index>10.4</index>
+					<size>0.4</size>
+					<parameterId>ENERGY_TARIFF</parameterId>
+				</element>
+				<element>
+					<index>10.0</index>
+					<size>0.1</size>
+					<parameterId>ENERGY_UNIT</parameterId>
+				</element>
+				<element>
+					<index>11.0</index>
+					<size>5.0</size>
+					<parameterId>IEC_ENERGY_COUNTER</parameterId>
+				</element>
+				<element>
+					<index>16.4</index>
+					<size>0.4</size>
+					<parameterId>POWER_TARIFF</parameterId>
+				</element>
+				<element>
+					<index>16.3</index>
+					<size>0.1</size>
+					<parameterId>POWER_SIGN</parameterId>
+				</element>
+				<element>
+					<index>16.0</index>
+					<size>0.1</size>
+					<parameterId>POWER_UNIT</parameterId>
+				</element>
+				<element>
+					<index>17.0</index>
+					<size>4.0</size>
+					<parameterId>IEC_POWER</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="IEC_POWER_EVENT_CYCLIC">
+			<direction>toCentral</direction>
+			<type>0x60</type>
+			<channelIndex>9:0.6</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>9.6</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
+				<element>
+					<index>10.4</index>
+					<size>0.4</size>
+					<parameterId>ENERGY_TARIFF</parameterId>
+				</element>
+				<element>
+					<index>10.0</index>
+					<size>0.1</size>
+					<parameterId>ENERGY_UNIT</parameterId>
+				</element>
+				<element>
+					<index>11.0</index>
+					<size>5.0</size>
+					<parameterId>IEC_ENERGY_COUNTER</parameterId>
+				</element>
+				<element>
+					<index>16.4</index>
+					<size>0.4</size>
+					<parameterId>POWER_TARIFF</parameterId>
+				</element>
+				<element>
+					<index>16.3</index>
+					<size>0.1</size>
+					<parameterId>POWER_SIGN</parameterId>
+				</element>
+				<element>
+					<index>16.0</index>
+					<size>0.1</size>
+					<parameterId>POWER_UNIT</parameterId>
+				</element>
+				<element>
+					<index>17.0</index>
+					<size>4.0</size>
+					<parameterId>IEC_POWER</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>
@@ -135,7 +235,7 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="powermeter_igl_ch_master--1">
+		<configParameters id="powermeter_iec_ch1_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -148,6 +248,30 @@
 				</logicalBoolean>
 				<physicalInteger groupId="AES_ACTIVE">
 					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TX_THRESHOLD_POWER">
+				<properties>
+					<unit>W</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>100.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.010000</minimumValue>
+					<maximumValue>160000.000000</maximumValue>
+					<defaultValue>100.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="">
+					<index>124.0</index>
+					<size>3.0</size>
 					<list>1</list>
 					<operationType>config</operationType>
 				</physicalInteger>
@@ -169,14 +293,18 @@
 								<logical>2</logical>
 							</value>
 							<value>
-								<physical>255</physical>
+								<physical>8</physical>
 								<logical>3</logical>
+							</value>
+							<value>
+								<physical>255</physical>
+								<logical>4</logical>
 							</value>
 						</optionInteger>
 					</casts>
 				</properties>
 				<logicalEnumeration>
-					<defaultValue>3</defaultValue>
+					<defaultValue>4</defaultValue>
 					<value>
 						<id>GAS-SENSOR</id>
 						<index>0</index>
@@ -190,8 +318,12 @@
 						<index>2</index>
 					</value>
 					<value>
-						<id>UNKOWN</id>
+						<id>IEC-SENSOR</id>
 						<index>3</index>
+					</value>
+					<value>
+						<id>UNKOWN</id>
+						<index>4</index>
 					</value>
 				</logicalEnumeration>
 				<physicalInteger groupId="">
@@ -278,8 +410,147 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="POWER_STRING">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>54.0</index>
+					<size>16.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="ENERGY_COUNTER_STRING">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>70.0</index>
+					<size>16.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
 		</configParameters>
-		<configParameters id="remote_dev_master--0">
+		<configParameters id="powermeter_iec_ch2_master--2">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TX_THRESHOLD_POWER">
+				<properties>
+					<unit>W</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>100.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.010000</minimumValue>
+					<maximumValue>160000.000000</maximumValue>
+					<defaultValue>100.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="">
+					<index>124.0</index>
+					<size>3.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="METER_TYPE">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>1</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>8</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>255</physical>
+								<logical>4</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>4</defaultValue>
+					<value>
+						<id>GAS-SENSOR</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>IR-SENSOR</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>LED-SENSOR</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>IEC-SENSOR</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>UNKOWN</id>
+						<index>4</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="">
+					<index>149.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POWER_STRING">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>54.0</index>
+					<size>16.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
+			<parameter id="ENERGY_COUNTER_STRING">
+				<properties/>
+				<logicalString/>
+				<physicalString groupId="">
+					<index>70.0</index>
+					<size>16.0</size>
+					<list>1</list>
+					<operationType>configString</operationType>
+				</physicalString>
+			</parameter>
+		</configParameters>
+		<configParameters id="powermeter_iec_dev_master--0">
 			<parameter id="LOCAL_RESET_DISABLE">
 				<properties/>
 				<logicalBoolean>
@@ -292,48 +563,222 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
-			<parameter id="PAIRED_TO_CENTRAL">
+			<parameter id="BAUDRATE">
 				<properties>
-					<visible>false</visible>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>4</logical>
+							</value>
+							<value>
+								<physical>5</physical>
+								<logical>5</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>6</logical>
+							</value>
+						</optionInteger>
+					</casts>
 				</properties>
-				<logicalBoolean/>
-				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
-					<index>2.0</index>
+				<logicalEnumeration>
+					<defaultValue>5</defaultValue>
+					<value>
+						<id>300 Bd</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>600 Bd</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>1200 Bd</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>2400 Bd</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>4800 Bd</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>9600 Bd</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>19200 Bd</id>
+						<index>6</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="">
+					<index>35.0</index>
+					<size>1.0</size>
 					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_1">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
-					<index>10.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
+					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_2">
+			<parameter id="SERIAL_FORMAT">
 				<properties>
-					<visible>false</visible>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
 				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
-					<index>11.0</index>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>1_7D_1P_E_1S</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>1_7D_1P_E_2S</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>1_8D_0P_N_1S</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>1_8D_1P_E_1S</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="">
+					<index>36.0</index>
+					<size>1.0</size>
 					<list>0</list>
-					<operationType>internal</operationType>
+					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_3">
+			<parameter id="METER_POWERMODE">
 				<properties>
-					<visible>false</visible>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+						</optionInteger>
+					</casts>
 				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
-					<index>12.0</index>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>MAINS_POWERED</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>BATTERY_POWERED</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="">
+					<index>37.0</index>
+					<size>1.0</size>
 					<list>0</list>
-					<operationType>internal</operationType>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="METER_PROTOCOLMODE">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>3</defaultValue>
+					<value>
+						<id>PROTOKOLL_MODE_A</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>PROTOKOLL_MODE_B</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>PROTOKOLL_MODE_C</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>PROTOKOLL_MODE_D</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="">
+					<index>38.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SAMPLES_PER_CYCLE">
+				<properties/>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>4</defaultValue>
+				</logicalInteger>
+				<physicalInteger groupId="">
+					<index>39.0</index>
+					<size>1.0</size>
+					<list>0</list>
+					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">
@@ -467,7 +912,7 @@
 				<properties>
 					<writeable>false</writeable>
 					<internal>true</internal>
-					<control>POWERMETER_IGL.BOOT</control>
+					<control>POWERMETER_IEC1.BOOT</control>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
@@ -494,7 +939,7 @@
 			<parameter id="GAS_ENERGY_COUNTER">
 				<properties>
 					<writeable>false</writeable>
-					<control>POWERMETER_IGL.GAS_ENERGY_COUNTER</control>
+					<control>POWERMETER_IEC1.GAS_ENERGY_COUNTER</control>
 					<unit>m3</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -522,7 +967,7 @@
 			<parameter id="GAS_POWER">
 				<properties>
 					<writeable>false</writeable>
-					<control>POWERMETER_IGL.GAS_POWER</control>
+					<control>POWERMETER_IEC1.GAS_POWER</control>
 					<unit>m3</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -550,7 +995,7 @@
 			<parameter id="ENERGY_COUNTER">
 				<properties>
 					<writeable>false</writeable>
-					<control>POWERMETER_IGL.ENERGY_COUNTER</control>
+					<control>POWERMETER_IEC1.ENERGY_COUNTER</control>
 					<unit>Wh</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -578,7 +1023,7 @@
 			<parameter id="POWER">
 				<properties>
 					<writeable>false</writeable>
-					<control>POWERMETER_IGL.POWER</control>
+					<control>POWERMETER_IEC1.POWER</control>
 					<unit>W</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -599,6 +1044,120 @@
 						<type>event</type>
 					</packet>
 					<packet id="POWER_EVENT">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="IEC_ENERGY_COUNTER">
+				<properties>
+					<writeable>false</writeable>
+					<control>POWERMETER_IEC1.IEC_ENERGY_COUNTER</control>
+					<unit>kWh</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10000.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>109951162.777500</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="IEC_ENERGY_COUNTER">
+					<size>5.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="IEC_POWER_EVENT_CYCLIC">
+						<type>event</type>
+					</packet>
+					<packet id="IEC_POWER_EVENT">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="IEC_POWER">
+				<properties>
+					<writeable>false</writeable>
+					<control>POWERMETER_IEC1.IEC_POWER</control>
+					<unit>W</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>100.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>42949672.950000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="IEC_POWER">
+					<size>4.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="IEC_POWER_EVENT_CYCLIC">
+						<type>event</type>
+					</packet>
+					<packet id="IEC_POWER_EVENT">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="power_ch_values--2">
+			<parameter id="IEC_ENERGY_COUNTER">
+				<properties>
+					<writeable>false</writeable>
+					<control>POWERMETER_IEC2.IEC_ENERGY_COUNTER</control>
+					<unit>kWh</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10000.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>109951162.777500</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="IEC_ENERGY_COUNTER">
+					<size>5.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="IEC_POWER_EVENT_CYCLIC">
+						<type>event</type>
+					</packet>
+					<packet id="IEC_POWER_EVENT">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="IEC_POWER">
+				<properties>
+					<writeable>false</writeable>
+					<control>POWERMETER_IEC2.IEC_POWER</control>
+					<unit>W</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>100.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>42949672.950000</maximumValue>
+				</logicalDecimal>
+				<physicalInteger groupId="IEC_POWER">
+					<size>4.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="IEC_POWER_EVENT_CYCLIC">
+						<type>event</type>
+					</packet>
+					<packet id="IEC_POWER_EVENT">
 						<type>event</type>
 					</packet>
 				</packets>

@@ -30,7 +30,7 @@
 #ifndef BIDCOSQUEUE_H
 #define BIDCOSQUEUE_H
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "BidCoSPacket.h"
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 

@@ -30,7 +30,7 @@
 #ifndef BIDCOSPEER_H
 #define BIDCOSPEER_H
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "BidCoSDeviceTypes.h"
 #include "BidCoSPacket.h"
 #include "PhysicalInterfaces/IBidCoSInterface.h"

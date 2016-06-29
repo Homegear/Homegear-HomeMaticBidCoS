@@ -1,4 +1,4 @@
-<homegearDevice version="6">
+<homegearDevice version="7">
 	<supportedDevices>
 		<device id="HM-LC-Sw1-Pl-3">
 			<description>radio-controlled socket adapter switch actuator 1-channel</description>
@@ -99,6 +99,11 @@
 			<description>Wireless Switch Actuator 1-channel with clamp terminal,  plug adapter</description>
 			<typeNumber>0xEF</typeNumber>
 			<minFirmwareVersion>0x24</minFirmwareVersion>
+		</device>
+		<device id="HM-LC-Sw1-PCB">
+			<description>radio-controlled switch actuator 1-channel, PCB</description>
+			<typeNumber>0x103</typeNumber>
+			<minFirmwareVersion>0x25</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -396,50 +401,6 @@
 					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="PAIRED_TO_CENTRAL">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalBoolean/>
-				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
-					<index>2.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_1">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
-					<index>10.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_2">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
-					<index>11.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_3">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
-					<index>12.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">

@@ -28,7 +28,7 @@
  */
 
 #include "BidCoSQueueManager.h"
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "GD.h"
 
 namespace BidCoS

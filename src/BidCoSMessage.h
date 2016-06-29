@@ -30,7 +30,7 @@
 #ifndef BIDCOSMESSAGE_H
 #define BIDCOSMESSAGE_H
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 #include "BidCoSPacket.h"
 
 #include <iostream>

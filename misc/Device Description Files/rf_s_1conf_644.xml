@@ -1,4 +1,4 @@
-<homegearDevice version="7">
+<homegearDevice version="9">
 	<supportedDevices>
 		<device id="HM-LC-Sw1PBU-FM">
 			<description>radio-controlled switch actuator 1-channel (flush-mount)</description>
@@ -291,50 +291,6 @@
 					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="PAIRED_TO_CENTRAL">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalBoolean/>
-				<physicalBoolean groupId="PAIRED_TO_CENTRAL">
-					<index>2.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_1">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_1">
-					<index>10.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_2">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_2">
-					<index>11.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="CENTRAL_ADDRESS_BYTE_3">
-				<properties>
-					<visible>false</visible>
-				</properties>
-				<logicalInteger/>
-				<physicalInteger groupId="CENTRAL_ADDRESS_BYTE_3">
-					<index>12.0</index>
-					<list>0</list>
-					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
 			<parameter id="ROAMING">

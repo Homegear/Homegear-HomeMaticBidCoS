@@ -30,7 +30,7 @@
 #ifndef INTERFACES_H_
 #define INTERFACES_H_
 
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
 
 namespace BidCoS
 {

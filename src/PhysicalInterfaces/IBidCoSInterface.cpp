@@ -492,6 +492,7 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 					uint8_t controlByte = 0x80;
 					if((packet->controlByte() & 2) && wakeUp && packet->messageType() != 0) controlByte |= 1;
 					std::shared_ptr<BidCoSPacket> ackPacket(new BidCoSPacket(packet->messageCounter(), controlByte, 0x02, _myAddress, packet->senderAddress(), payload));
+					std::cerr << "Queuing ACK packet" << std::endl;
 					queuePacket(ackPacket);
 				}
 				raisePacketReceived(packet);
@@ -654,6 +655,7 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 			return;
 		}
 
+		std::cerr << "Sending packet " << bidCoSPacket->hexString() << std::endl;
 		forceSendPacket(bidCoSPacket);
 		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 		_aesHandshake->setMFrame(bidCoSPacket);

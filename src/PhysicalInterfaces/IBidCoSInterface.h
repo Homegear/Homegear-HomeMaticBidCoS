@@ -31,7 +31,9 @@
 #define IBIDCOSINTERFACE_H_
 
 #include "AesHandshake.h"
-#include "homegear-base/BaseLib.h"
+#include <homegear-base/BaseLib.h>
+
+#include <random>
 
 namespace BidCoS {
 

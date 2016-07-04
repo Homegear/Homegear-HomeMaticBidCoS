@@ -2022,10 +2022,6 @@ void BidCoSPeer::getValuesFromPacket(std::shared_ptr<BidCoSPacket> packet, std::
 							endChannel = _rpcDevice->functions.rbegin()->first;
 						}
 						else endChannel = startChannel;
-						for(BaseLib::DeviceDescription::Functions::iterator i = _rpcDevice->functions.begin(); i != _rpcDevice->functions.end(); ++i)
-						{
-							std::cerr << startChannel << ' ' << endChannel << ' ' << i->first << ' ' << (i->second ? i->second->type : "") << std::endl;
-						}
 						for(int32_t l = startChannel; l <= endChannel; l++)
 						{
 							PParameterGroup parameterGroup = getParameterSet(l, currentFrameValues.parameterSetType);

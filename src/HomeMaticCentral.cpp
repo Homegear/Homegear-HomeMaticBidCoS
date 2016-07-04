@@ -759,6 +759,10 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->timeReceived()) << " HomeMatic BidCoS packet received (" << senderID << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
 		if(!bidCoSPacket) return false;
 
+		//0E4A80024C4943FD2207 0103C84400
+		std::vector<uint8_t> payload({ 0x01, 0x03, 0xC8, 0x44, 0x00 });
+		bidCoSPacket.reset(new BidCoSPacket(0x4A, 0x80, 0x02, 0x4C4943, _address, payload ));
+
 		// {{{ Intercept packet
 		/*if(bidCoSPacket->senderAddress() == 0x19A4E0 && bidCoSPacket->messageType() == 0x41)
 		{

@@ -42,7 +42,7 @@ Cunx::Cunx(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings
 
 	signal(SIGPIPE, SIG_IGN);
 
-	_socket = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl));
+	_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
 
 	if(settings->listenThreadPriority == -1)
 	{
@@ -192,7 +192,7 @@ void Cunx::startListening()
 		_aesHandshake->setMyAddress(_myAddress);
 
 		IBidCoSInterface::startListening();
-		_socket = std::unique_ptr<BaseLib::SocketOperations>(new BaseLib::SocketOperations(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
+		_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
 		_socket->setAutoConnect(false);
 		_out.printDebug("Connecting to CUNX with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_stopped = false;

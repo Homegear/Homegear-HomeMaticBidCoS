@@ -74,7 +74,7 @@ class HM_CFG_LAN  : public IBidCoSInterface
     protected:
         std::string _hostname;
         std::string _port;
-        std::unique_ptr<BaseLib::SocketOperations> _socket;
+        std::unique_ptr<BaseLib::TcpSocket> _socket;
         std::mutex _sendMutex;
         int64_t _initStarted = 0;
         std::list<std::vector<char>> _initCommandQueue;

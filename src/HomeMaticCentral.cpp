@@ -1169,16 +1169,18 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 	try
 	{
 		std::ostringstream stringStream;
+		std::vector<std::string> arguments;
+		bool showHelp = false;
 		if(_currentPeer)
 		{
-			if(command == "unselect" || command == "u")
+			if(BaseLib::HelperFunctions::checkCliCommand(command, "unselect", "u", "", 0, arguments, showHelp))
 			{
 				_currentPeer.reset();
 				return "Peer unselected.\n";
 			}
 			return _currentPeer->handleCliCommand(command);
 		}
-		else if(command == "help" || command == "h")
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "help", "h", "", 0, arguments, showHelp))
 		{
 			stringStream << "List of commands (shortcut in brackets):" << std::endl << std::endl;
 			stringStream << "For more information about the individual command type: COMMAND help" << std::endl << std::endl;
@@ -1195,66 +1197,32 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			stringStream << "unselect (u)\t\tUnselect this device" << std::endl;
 			return stringStream.str();
 		}
-		else if(command.compare(0, 10, "pairing on") == 0 || command.compare(0, 3, "pon") == 0)
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "pairing on", "pon", "", 0, arguments, showHelp))
 		{
-			int32_t duration = 60;
-
-			std::stringstream stream(command);
-			std::string element;
-			int32_t offset = (command.at(1) == 'o') ? 0 : 1;
-			int32_t index = 0;
-			while(std::getline(stream, element, ' '))
+			if(showHelp)
 			{
-				if(index < 1 + offset)
-				{
-					index++;
-					continue;
-				}
-				else if(index == 1 + offset)
-				{
-					if(element == "help")
-					{
-						stringStream << "Description: This command enables pairing mode." << std::endl;
-						stringStream << "Usage: pairing on [DURATION]" << std::endl << std::endl;
-						stringStream << "Parameters:" << std::endl;
-						stringStream << "  DURATION:\tOptional duration in seconds to stay in pairing mode." << std::endl;
-						return stringStream.str();
-					}
-					duration = BaseLib::Math::getNumber(element, false);
-					if(duration < 5 || duration > 3600) return "Invalid duration. Duration has to be greater than 5 and less than 3600.\n";
-				}
-				index++;
+				stringStream << "Description: This command enables pairing mode." << std::endl;
+				stringStream << "Usage: pairing on [DURATION]" << std::endl << std::endl;
+				stringStream << "Parameters:" << std::endl;
+				stringStream << "  DURATION:\tOptional duration in seconds to stay in pairing mode." << std::endl;
+				return stringStream.str();
 			}
+			int32_t duration = arguments.size() > 0 ? BaseLib::Math::getNumber(arguments.at(0)) : 60;
+			if(duration < 5 || duration > 3600) return "Invalid duration. Duration has to be greater than 5 and less than 3600.\n";
 
 			setInstallMode(nullptr, true, duration, false);
-			stringStream << "Pairing mode enabled." << std::endl;
+			stringStream << "Pairing mode enabled for " + std::to_string(duration) + " seconds." << std::endl;
 			return stringStream.str();
 		}
-		else if(command.compare(0, 11, "pairing off") == 0 || command.compare(0, 3, "pof") == 0)
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "pairing off", "pof", "", 0, arguments, showHelp))
 		{
-			std::stringstream stream(command);
-			std::string element;
-			int32_t offset = (command.at(1) == 'o') ? 0 : 1;
-			int32_t index = 0;
-			while(std::getline(stream, element, ' '))
+			if(showHelp)
 			{
-				if(index < 1 + offset)
-				{
-					index++;
-					continue;
-				}
-				else if(index == 1 + offset)
-				{
-					if(element == "help")
-					{
-						stringStream << "Description: This command disables pairing mode." << std::endl;
-						stringStream << "Usage: pairing off" << std::endl << std::endl;
-						stringStream << "Parameters:" << std::endl;
-						stringStream << "  There are no parameters." << std::endl;
-						return stringStream.str();
-					}
-				}
-				index++;
+				stringStream << "Description: This command disables pairing mode." << std::endl;
+				stringStream << "Usage: pairing off" << std::endl << std::endl;
+				stringStream << "Parameters:" << std::endl;
+				stringStream << "  There are no parameters." << std::endl;
+				return stringStream.str();
 			}
 
 			setInstallMode(nullptr, false, -1, false);
@@ -1499,36 +1467,9 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			}
 			return stringStream.str();
 		}
-		else if(command.compare(0, 13, "peers setname") == 0 || command.compare(0, 2, "pn") == 0)
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "peers setname", "pn", "", 2, arguments, showHelp))
 		{
-			uint64_t peerID = 0;
-			std::string name;
-
-			std::stringstream stream(command);
-			std::string element;
-			int32_t offset = (command.at(1) == 'n') ? 0 : 1;
-			int32_t index = 0;
-			while(std::getline(stream, element, ' '))
-			{
-				if(index < 1 + offset)
-				{
-					index++;
-					continue;
-				}
-				else if(index == 1 + offset)
-				{
-					if(element == "help") break;
-					else
-					{
-						peerID = BaseLib::Math::getNumber(element, false);
-						if(peerID == 0) return "Invalid id.\n";
-					}
-				}
-				else if(index == 2 + offset) name = element;
-				else name += ' ' + element;
-				index++;
-			}
-			if(index == 1 + offset)
+			if(showHelp)
 			{
 				stringStream << "Description: This command sets or changes the name of a peer to identify it more easily." << std::endl;
 				stringStream << "Usage: peers setname PEERID NAME" << std::endl << std::endl;
@@ -1536,6 +1477,14 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				stringStream << "  PEERID:\tThe id of the peer to set the name for. Example: 513" << std::endl;
 				stringStream << "  NAME:\tThe name to set. Example: \"1st floor light switch\"." << std::endl;
 				return stringStream.str();
+			}
+
+			uint64_t peerID = BaseLib::Math::getNumber(arguments.at(0));
+			if(peerID == 0) return "Invalid id.\n";
+			std::string name = arguments.at(1);
+			for(uint32_t i = 2; i < arguments.size(); i++)
+			{
+				name += ' ' + arguments.at(i);
 			}
 
 			if(!peerExists(peerID)) stringStream << "This peer is not paired to this central." << std::endl;
@@ -1620,41 +1569,11 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			else stringStream << "Started firmware update(s)... This might take a long time. Use the RPC function \"getUpdateStatus\" or see the log for details." << std::endl;
 			return stringStream.str();
 		}
-		else if(command.compare(0, 10, "peers list") == 0 || command.compare(0, 2, "pl") == 0 || command.compare(0, 2, "ls") == 0)
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "peers list", "pl", "ls", 0, arguments, showHelp))
 		{
 			try
 			{
-				std::string filterType;
-				std::string filterValue;
-
-				std::stringstream stream(command);
-				std::string element;
-				int32_t offset = (command.at(1) == 'l' || command.at(1) == 's') ? 0 : 1;
-				int32_t index = 0;
-				while(std::getline(stream, element, ' '))
-				{
-					if(index < 1 + offset)
-					{
-						index++;
-						continue;
-					}
-					else if(index == 1 + offset)
-					{
-						if(element == "help")
-						{
-							index = -1;
-							break;
-						}
-						filterType = BaseLib::HelperFunctions::toLower(element);
-					}
-					else if(index == 2 + offset)
-					{
-						filterValue = element;
-						if(filterType == "name") BaseLib::HelperFunctions::toLower(filterValue);
-					}
-					index++;
-				}
-				if(index == -1)
+				if(showHelp)
 				{
 					stringStream << "Description: This command unpairs a peer." << std::endl;
 					stringStream << "Usage: peers list [FILTERTYPE] [FILTERVALUE]" << std::endl << std::endl;
@@ -1680,6 +1599,10 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					stringStream << "      FILTERVALUE: empty" << std::endl;
 					return stringStream.str();
 				}
+
+				std::string filterType = arguments.size() > 1 ? BaseLib::HelperFunctions::toLower(arguments.at(0)) : "";
+				std::string filterValue = arguments.size() > 1 ? BaseLib::HelperFunctions::toLower(arguments.at(1)) : "";
+				if(filterType == "name") BaseLib::HelperFunctions::toLower(filterValue);
 
 				if(_peers.empty())
 				{
@@ -1845,7 +1768,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 		}
 		else if(command.compare(0, 12, "peers select") == 0 || command.compare(0, 2, "ps") == 0)
 		{
-			uint64_t peerID;
+			uint64_t peerID = 0;
 
 			std::stringstream stream(command);
 			std::string element;

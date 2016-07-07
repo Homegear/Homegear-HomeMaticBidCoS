@@ -157,6 +157,22 @@
 				</element>
 			</binaryPayload>
 		</packet>
+		<packet id="SEND_TEXT">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<splitAfter>17</splitAfter>
+			<maxPackets>8</maxPackets>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<size>15.0</size>
+					<parameterId>SUBMIT</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
 	</packets>
 	<parameterGroups>
 		<configParameters id="remote_ch_master--1">
@@ -582,7 +598,14 @@
 					</casts>
 				</properties>
 				<logicalString/>
-				<physicalString groupId="SUBMIT_VALUE"/>
+				<physicalString groupId="SUBMIT">
+					<operationType>command</operationType>
+				</physicalString>
+				<packets>
+					<packet id="SEND_TEXT">
+						<type>set</type>
+					</packet>
+				</packets>
 			</parameter>
 		</variables>
 		<linkParameters id="remote_ch_link--1">

@@ -849,13 +849,13 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
 {
 	try
 	{
-		std::lock_guard<std::mutex> peersGuard(_peersMutex);
+		BaseLib::DisposableLockGuard peersGuard(_peersMutex);
 		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
 		{
 			if((*i)->address == address && (*i)->channel == remoteChannel)
 			{
 				_peers[channel].erase(i);
-				peersGuard.~lock_guard();
+				peersGuard.dispose();
 				if(linksCentral[channel].find(address) != linksCentral[channel].end() && linksCentral[channel][address].find(remoteChannel) != linksCentral[channel][address].end()) linksCentral[channel][address].erase(linksCentral[channel][address].find(remoteChannel));
 				BaseLib::Database::DataRow data;
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(_peerID)));
@@ -2019,7 +2019,7 @@ void BidCoSPeer::getValuesFromPacket(std::shared_ptr<BidCoSPacket> packet, std::
 						if(frame->channel == -2)
 						{
 							startChannel = 0;
-							endChannel = (_rpcDevice->functions.end()--)->first;
+							endChannel = _rpcDevice->functions.rbegin()->first;
 						}
 						else endChannel = startChannel;
 						for(int32_t l = startChannel; l <= endChannel; l++)
@@ -2344,7 +2344,13 @@ PParameterGroup BidCoSPeer::getParameterSet(int32_t channel, ParameterGroup::Typ
 {
 	try
 	{
-		PFunction rpcFunction = _rpcDevice->functions.at(channel);
+		Functions::iterator function = _rpcDevice->functions.find(channel);
+		if(function == _rpcDevice->functions.end())
+		{
+			GD::out.printWarning("Unknown channel in getParameterSet: " + std::to_string(channel));
+			return PParameterGroup();
+		}
+		PFunction rpcFunction = function->second;
 		PParameterGroup parameterGroup;
 		if(rpcFunction->parameterGroupSelector && !rpcFunction->alternativeFunctions.empty())
 		{
@@ -2405,7 +2411,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 		setLastPacketReceived();
 		setRSSIDevice(packet->rssiDevice());
 		serviceMessages->endUnreach();
-		if(packet->destinationAddress() != central->getAddress() && aesEnabled())
+		if(packet->destinationAddress() != central->getAddress() && aesEnabled() && GD::settings->get("processbroadcastwithaesenabled") != "true")
 		{
 			if(packet->destinationAddress() == 0) _bl->out.printInfo("Info: Ignoring broadcast packet from peer " + std::to_string(_peerID) + ", because AES handshakes are enabled for this peer and AES handshakes are not possible for broadcast packets.");
 			else _bl->out.printInfo("Info: Ignoring broadcast packet from peer " + std::to_string(_peerID) + " to other peer, because AES handshakes are enabled for this peer.");

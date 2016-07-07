@@ -655,7 +655,6 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 			return;
 		}
 
-		std::cerr << "Sending packet " << bidCoSPacket->hexString() << std::endl;
 		forceSendPacket(bidCoSPacket);
 		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 		_aesHandshake->setMFrame(bidCoSPacket);

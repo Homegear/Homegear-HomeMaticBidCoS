@@ -48,7 +48,7 @@ class Cunx  : public IBidCoSInterface
     protected:
         std::string _hostname;
         std::string _port;
-        std::unique_ptr<BaseLib::SocketOperations> _socket;
+        std::unique_ptr<BaseLib::TcpSocket> _socket;
 
         void reconnect();
         void processData(std::vector<uint8_t>& data);

@@ -40,7 +40,7 @@ using namespace BaseLib;
 class Interfaces : public BaseLib::Systems::PhysicalInterfaces
 {
 public:
-	Interfaces(BaseLib::Obj* bl, std::vector<std::shared_ptr<Systems::PhysicalInterfaceSettings>> physicalInterfaceSettings);
+	Interfaces(BaseLib::Obj* bl, std::map<std::string, Systems::PPhysicalInterfaceSettings> physicalInterfaceSettings);
 	virtual ~Interfaces();
 
 protected:

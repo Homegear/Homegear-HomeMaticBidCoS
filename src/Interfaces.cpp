@@ -41,7 +41,7 @@
 namespace BidCoS
 {
 
-Interfaces::Interfaces(BaseLib::Obj* bl, std::vector<std::shared_ptr<Systems::PhysicalInterfaceSettings>> physicalInterfaceSettings) : Systems::PhysicalInterfaces(bl, GD::family->getFamily(), physicalInterfaceSettings)
+Interfaces::Interfaces(BaseLib::Obj* bl, std::map<std::string, Systems::PPhysicalInterfaceSettings> physicalInterfaceSettings) : Systems::PhysicalInterfaces(bl, GD::family->getFamily(), physicalInterfaceSettings)
 {
 	create();
 }
@@ -54,27 +54,27 @@ void Interfaces::create()
 {
 	try
 	{
-		for(std::vector<std::shared_ptr<Systems::PhysicalInterfaceSettings>>::iterator i = _physicalInterfaceSettings.begin(); i != _physicalInterfaceSettings.end(); ++i)
+		for(std::map<std::string, Systems::PPhysicalInterfaceSettings>::iterator i = _physicalInterfaceSettings.begin(); i != _physicalInterfaceSettings.end(); ++i)
 		{
 			std::shared_ptr<IBidCoSInterface> device;
-			if(!*i) continue;
-			GD::out.printDebug("Debug: Creating physical device. Type defined in homematicbidcos.conf is: " + (*i)->type);
-			if((*i)->type == "cul") device.reset(new Cul(*i));
-			else if((*i)->type == "coc") device.reset(new COC(*i));
-			else if((*i)->type == "cunx") device.reset(new Cunx(*i));
+			if(!i->second) continue;
+			GD::out.printDebug("Debug: Creating physical device. Type defined in homematicbidcos.conf is: " + i->second->type);
+			if(i->second->type == "cul") device.reset(new Cul(i->second));
+			else if(i->second->type == "coc") device.reset(new COC(i->second));
+			else if(i->second->type == "cunx") device.reset(new Cunx(i->second));
 	#ifdef SPIINTERFACES
-			else if((*i)->type == "cc1100") device.reset(new TICC1100(*i));
+			else if(i->second->type == "cc1100") device.reset(new TICC1100(i->second));
 	#endif
-			else if((*i)->type == "hmcfglan") device.reset(new HM_CFG_LAN(*i));
-			else if((*i)->type == "hmlgw") device.reset(new HM_LGW(*i));
-			else if((*i)->type == "hm-mod-rpi-pcb") device.reset(new Hm_Mod_Rpi_Pcb(*i));
-			else GD::out.printError("Error: Unsupported physical device type: " + (*i)->type);
+			else if(i->second->type == "hmcfglan") device.reset(new HM_CFG_LAN(i->second));
+			else if(i->second->type == "hmlgw") device.reset(new HM_LGW(i->second));
+			else if(i->second->type == "hm-mod-rpi-pcb") device.reset(new Hm_Mod_Rpi_Pcb(i->second));
+			else GD::out.printError("Error: Unsupported physical device type: " + i->second->type);
 			if(device)
 			{
-				if(_physicalInterfaces.find((*i)->id) != _physicalInterfaces.end()) GD::out.printError("Error: id used for two devices: " + (*i)->id);
-				_physicalInterfaces[(*i)->id] = device;
-				GD::physicalInterfaces[(*i)->id] = device;
-				if((*i)->isDefault || !GD::defaultPhysicalInterface) GD::defaultPhysicalInterface = device;
+				if(_physicalInterfaces.find(i->second->id) != _physicalInterfaces.end()) GD::out.printError("Error: id used for two devices: " + i->second->id);
+				_physicalInterfaces[i->second->id] = device;
+				GD::physicalInterfaces[i->second->id] = device;
+				if(i->second->isDefault || !GD::defaultPhysicalInterface) GD::defaultPhysicalInterface = device;
 			}
 		}
 	}

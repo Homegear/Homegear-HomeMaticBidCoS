@@ -67,8 +67,8 @@ IBidCoSInterface::IBidCoSInterface(std::shared_ptr<BaseLib::Systems::PhysicalInt
 	_bl = GD::bl;
 	_currentRfKeyIndex = GD::settings->getNumber("currentrfkeyindex");
 	if(_currentRfKeyIndex < 0) _currentRfKeyIndex = 0;
-	_rfKeyHex = GD::settings->get("rfkey");
-	_oldRfKeyHex = GD::settings->get("oldrfkey");
+	_rfKeyHex = GD::settings->getString("rfkey");
+	_oldRfKeyHex = GD::settings->getString("oldrfkey");
 	BaseLib::HelperFunctions::toLower(_rfKeyHex);
 	BaseLib::HelperFunctions::toLower(_oldRfKeyHex);
 

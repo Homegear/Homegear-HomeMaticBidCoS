@@ -2411,7 +2411,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 		setLastPacketReceived();
 		setRSSIDevice(packet->rssiDevice());
 		serviceMessages->endUnreach();
-		if(packet->destinationAddress() != central->getAddress() && aesEnabled() && GD::settings->get("processbroadcastwithaesenabled") != "true")
+		if(packet->destinationAddress() != central->getAddress() && aesEnabled() && GD::settings->getString("processbroadcastwithaesenabled") != "true")
 		{
 			if(packet->destinationAddress() == 0) _bl->out.printInfo("Info: Ignoring broadcast packet from peer " + std::to_string(_peerID) + ", because AES handshakes are enabled for this peer and AES handshakes are not possible for broadcast packets.");
 			else _bl->out.printInfo("Info: Ignoring broadcast packet from peer " + std::to_string(_peerID) + " to other peer, because AES handshakes are enabled for this peer.");

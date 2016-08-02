@@ -748,7 +748,11 @@ uint8_t TICC1100::writeRegister(Registers::Enum registerAddress, uint8_t value, 
 			data.at(0) = registerAddress | RegisterBitmasks::Enum::READ_SINGLE;
 			data.at(1) = 0;
 			readwrite(data);
-			if(data.at(1) != value) throw BaseLib::Exception("Error (check) writing to register " + std::to_string(registerAddress) + ".");
+			if(data.at(1) != value)
+			{
+				_out.printError("Error (check) writing to register " + std::to_string(registerAddress) + ".");
+				return 0;
+			}
 		}
 		return data.at(0);
 	}
@@ -775,7 +779,7 @@ void TICC1100::writeRegisters(Registers::Enum startAddress, std::vector<uint8_t>
 		std::vector<uint8_t> data({(uint8_t)(startAddress | RegisterBitmasks::Enum::WRITE_BURST) });
 		data.insert(data.end(), values.begin(), values.end());
 		readwrite(data);
-		if((data.at(0) & StatusBitmasks::Enum::CHIP_RDYn)) throw BaseLib::Exception("Error writing to registers " + std::to_string(startAddress) + ".");
+		if((data.at(0) & StatusBitmasks::Enum::CHIP_RDYn)) _out.printError("Error writing to registers " + std::to_string(startAddress) + ".");
 	}
     catch(const std::exception& ex)
     {
@@ -859,7 +863,12 @@ void TICC1100::initChip()
 		int32_t index = 0;
 		for(std::vector<uint8_t>::const_iterator i = _config.begin(); i != _config.end(); ++i)
 		{
-			writeRegister((Registers::Enum)index, *i, true);
+			uint8_t result = writeRegister((Registers::Enum)index, *i, true);
+			if(result != *i)
+			{
+				closeDevice();
+				return;
+			}
 			index++;
 		}
 		writeRegister(Registers::Enum::FSTEST, 0x59, true);

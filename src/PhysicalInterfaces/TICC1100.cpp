@@ -754,7 +754,7 @@ uint8_t TICC1100::writeRegister(Registers::Enum registerAddress, uint8_t value, 
 				return 0;
 			}
 		}
-		return data.at(0);
+		return value;
 	}
     catch(const std::exception& ex)
     {
@@ -863,18 +863,33 @@ void TICC1100::initChip()
 		int32_t index = 0;
 		for(std::vector<uint8_t>::const_iterator i = _config.begin(); i != _config.end(); ++i)
 		{
-			uint8_t result = writeRegister((Registers::Enum)index, *i, true);
-			if(result != *i)
+			if(writeRegister((Registers::Enum)index, *i, true) != *i)
 			{
 				closeDevice();
 				return;
 			}
 			index++;
 		}
-		writeRegister(Registers::Enum::FSTEST, 0x59, true);
-		writeRegister(Registers::Enum::TEST2, 0x81, true); //Determined by SmartRF Studio
-		writeRegister(Registers::Enum::TEST1, 0x35, true); //Determined by SmartRF Studio
-		writeRegister(Registers::Enum::PATABLE, _settings->txPowerSetting, true);
+		if(writeRegister(Registers::Enum::FSTEST, 0x59, true) != 0x59)
+		{
+			closeDevice();
+			return;
+		}
+		if(writeRegister(Registers::Enum::TEST2, 0x81, true) != 0x81) //Determined by SmartRF Studio
+		{
+			closeDevice();
+			return;
+		}
+		if(writeRegister(Registers::Enum::TEST1, 0x35, true) != 0x35) //Determined by SmartRF Studio
+		{
+			closeDevice();
+			return;
+		}
+		if(writeRegister(Registers::Enum::PATABLE, _settings->txPowerSetting, true) != _settings->txPowerSetting)
+		{
+			closeDevice();
+			return;
+		}
 
 		sendCommandStrobe(CommandStrobes::Enum::SFRX);
 

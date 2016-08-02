@@ -2452,6 +2452,20 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 					parameter->data = i->second.value;
 					if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
 					else saveParameter(0, ParameterGroup::Type::Enum::variables, *j, i->first, parameter->data);
+
+					// {{{ Only set PRESS_LONG of remotes once on continuous pressing
+						if(i->first == "PRESS_LONG")
+						{
+							if(BaseLib::HelperFunctions::getTime() - _lastPressLong < 1000)
+							{
+								_lastPressLong = BaseLib::HelperFunctions::getTime();
+								GD::out.printInfo("Info: Ignoring PRESS_LONG.");
+								continue;
+							}
+							_lastPressLong = BaseLib::HelperFunctions::getTime();
+						}
+						if(i->first == "PRESS_LONG_RELEASE") _lastPressLong = 0;
+					// }}}
 					if(_bl->debugLevel >= 4) GD::out.printInfo("Info: " + i->first + " on channel " + std::to_string(*j) + " of HomeMatic BidCoS peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + " was set to 0x" + BaseLib::HelperFunctions::getHexString(i->second.value) + ".");
 
 					/// {{{ Remove parameter from _variablesToReset

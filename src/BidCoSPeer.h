@@ -242,6 +242,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         //End RPC methods
     protected:
         uint32_t _lastRSSIDevice = 0;
+        int64_t _lastPressLong = 0;
         std::mutex _variablesToResetMutex;
         std::map<std::int32_t, std::map<std::string, std::shared_ptr<VariableToReset>>> _variablesToReset;
         std::shared_ptr<IBidCoSInterface> _physicalInterface;

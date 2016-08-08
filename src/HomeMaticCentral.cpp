@@ -4731,7 +4731,7 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 
 		description->structValue->insert(StructElement("FIRMWARE", PVariable(new Variable(std::string(VERSION)))));
 
-		int32_t uiFlags = (int32_t)BaseLib::RPC::Device::UIFlags::dontdelete | (int32_t)BaseLib::RPC::Device::UIFlags::visible;
+		int32_t uiFlags = (int32_t)BaseLib::Rpc::Device::UIFlags::dontdelete | (int32_t)BaseLib::Rpc::Device::UIFlags::visible;
 		description->structValue->insert(StructElement("FLAGS", PVariable(new Variable(uiFlags))));
 
 		description->structValue->insert(StructElement("INTERFACE", PVariable(new Variable(_serialNumber))));

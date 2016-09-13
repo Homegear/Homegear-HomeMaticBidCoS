@@ -1575,7 +1575,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			{
 				if(showHelp)
 				{
-					stringStream << "Description: This command unpairs a peer." << std::endl;
+					stringStream << "Description: This command lists information about all peers." << std::endl;
 					stringStream << "Usage: peers list [FILTERTYPE] [FILTERVALUE]" << std::endl << std::endl;
 					stringStream << "Parameters:" << std::endl;
 					stringStream << "  FILTERTYPE:\tSee filter types below." << std::endl;

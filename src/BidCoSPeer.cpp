@@ -1417,7 +1417,7 @@ bool BidCoSPeer::load(BaseLib::Systems::ICentral* device)
 		_rpcDevice = GD::family->getRpcDevices()->find(_deviceType, _firmwareVersion, _countFromSysinfo);
 		if(!_rpcDevice)
 		{
-			GD::out.printError("Error loading HomeMatic BidCoS peer " + std::to_string(_peerID) + ": Device type not found: 0x" + BaseLib::HelperFunctions::getHexString((uint32_t)_deviceType.type()) + " Firmware version: " + std::to_string(_firmwareVersion));
+			GD::out.printError("Error loading HomeMatic BidCoS peer " + std::to_string(_peerID) + ": Device type not found: 0x" + BaseLib::HelperFunctions::getHexString((uint32_t)_deviceType) + " Firmware version: " + std::to_string(_firmwareVersion));
 			return false;
 		}
 		initializeTypeString();
@@ -1896,7 +1896,7 @@ int32_t BidCoSPeer::getNewFirmwareVersion()
 {
 	try
 	{
-		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString(0, 4) + "." + BaseLib::HelperFunctions::getHexString(_deviceType.type(), 8);
+		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString(0, 4) + "." + BaseLib::HelperFunctions::getHexString(_deviceType, 8);
 		std::string versionFile(_bl->settings.firmwarePath() + filenamePrefix + ".version");
 		if(!BaseLib::Io::fileExists(versionFile)) return 0;
 		std::string versionHex = BaseLib::Io::getFileContent(versionFile);
@@ -3247,7 +3247,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 {
 	try
 	{
-		if(_deviceType.type() == (uint32_t)DeviceType::HMCCVD && valueKey == "VALVE_STATE")
+		if(_deviceType == (uint32_t)DeviceType::HMCCVD && valueKey == "VALVE_STATE")
 		{
 			_peersMutex.lock();
 			std::unordered_map<int32_t, std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>>::iterator peersIterator = _peers.find(1);
@@ -3261,11 +3261,11 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 			if(!remotePeer->peer)
 			{
 				remotePeer->peer = getCentral()->getPeer(remotePeer->id);
-				if(!remotePeer->peer || remotePeer->peer->getDeviceType().type() != (uint32_t)DeviceType::HMCCTC) return false;
+				if(!remotePeer->peer || remotePeer->peer->getDeviceType() != (uint32_t)DeviceType::HMCCTC) return false;
 			}
 			if(remotePeer->peer)
 			{
-				if(remotePeer->peer->getDeviceType().type() != (uint32_t)DeviceType::HMCCTC) return false;
+				if(remotePeer->peer->getDeviceType() != (uint32_t)DeviceType::HMCCTC) return false;
 				std::shared_ptr<HmCcTc> tc(std::dynamic_pointer_cast<HmCcTc>(remotePeer->peer));
 				if(!tc) return false;
 				tc->setValveState(value->integerValue);
@@ -3279,7 +3279,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				return true;
 			}
 		}
-		else if(_deviceType.type() == (uint32_t)DeviceType::HMSECSD)
+		else if(_deviceType == (uint32_t)DeviceType::HMSECSD)
 		{
 			if(valueKey == "STATE")
 			{
@@ -3648,7 +3648,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 			central->enqueuePendingQueues(_address, wait, &result);
 			if(!result)
 			{
-				if((_deviceType.type() == 0x19 || _deviceType.type() == 0x26 || _deviceType.type() == 0x27 || _deviceType.type() == 0x28) && valueKey == "STATE" && value->booleanValue) pendingBidCoSQueues->remove(BidCoSQueueType::PEER, valueKey, channel); //Clear queue of KeyMatic and WinMatic when STATE was set to true;
+				if((_deviceType == 0x19 || _deviceType == 0x26 || _deviceType == 0x27 || _deviceType == 0x28) && valueKey == "STATE" && value->booleanValue) pendingBidCoSQueues->remove(BidCoSQueueType::PEER, valueKey, channel); //Clear queue of KeyMatic and WinMatic when STATE was set to true;
 				return Variable::createError(-100, "No answer from device.");
 			}
 		}

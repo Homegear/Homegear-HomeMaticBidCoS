@@ -67,8 +67,8 @@ public:
 	std::unordered_map<int32_t, uint8_t>* messageCounter() { return &_messageCounter; }
 	virtual std::shared_ptr<BidCoSMessages> getMessages() { return _messages; }
 	virtual bool isInPairingMode() { return _pairing; }
-	static bool isDimmer(BaseLib::Systems::LogicalDeviceType type);
-    static bool isSwitch(BaseLib::Systems::LogicalDeviceType type);
+	static bool isDimmer(uint32_t type);
+    static bool isSwitch(uint32_t type);
 
 	virtual bool onPacketReceived(std::string& senderID, std::shared_ptr<BaseLib::Systems::Packet> packet);
 	void enablePairingMode() { _pairing = true; }
@@ -174,8 +174,8 @@ protected:
 	void setUpBidCoSMessages();
 	uint8_t getMessageCounter();
 
-	std::shared_ptr<BidCoSPeer> createPeer(int32_t address, int32_t firmwareVersion, BaseLib::Systems::LogicalDeviceType deviceType, std::string serialNumber, int32_t remoteChannel, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet = std::shared_ptr<BidCoSPacket>(), bool save = true);
-    std::shared_ptr<BidCoSPeer> createTeam(int32_t address, BaseLib::Systems::LogicalDeviceType deviceType, std::string serialNumber);
+	std::shared_ptr<BidCoSPeer> createPeer(int32_t address, int32_t firmwareVersion, uint32_t deviceType, std::string serialNumber, int32_t remoteChannel, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet = std::shared_ptr<BidCoSPacket>(), bool save = true);
+    std::shared_ptr<BidCoSPeer> createTeam(int32_t address, uint32_t deviceType, std::string serialNumber);
 	virtual void worker();
 	virtual void init();
 	virtual std::shared_ptr<IBidCoSInterface> getPhysicalInterface(int32_t peerAddress);

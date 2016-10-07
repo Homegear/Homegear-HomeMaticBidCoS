@@ -548,9 +548,9 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::getQueue(int32_t address)
 	return _bidCoSQueueManager.get(address);
 }
 
-bool HomeMaticCentral::isSwitch(BaseLib::Systems::LogicalDeviceType type)
+bool HomeMaticCentral::isSwitch(uint32_t type)
 {
-	switch((DeviceType)type.type())
+	switch((DeviceType)type)
 	{
 	case DeviceType::HMESPMSW1PL:
 		return true;
@@ -620,9 +620,9 @@ bool HomeMaticCentral::isSwitch(BaseLib::Systems::LogicalDeviceType type)
 	return false;
 }
 
-bool HomeMaticCentral::isDimmer(BaseLib::Systems::LogicalDeviceType type)
+bool HomeMaticCentral::isDimmer(uint32_t type)
 {
-	switch((DeviceType)type.type())
+	switch((DeviceType)type)
 	{
 	case DeviceType::HMLCDIM1TPL:
 		return true;
@@ -1088,7 +1088,7 @@ void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface>
     }
 }
 
-std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_t firmwareVersion, BaseLib::Systems::LogicalDeviceType deviceType, std::string serialNumber, int32_t remoteChannel, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet, bool save)
+std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_t firmwareVersion, uint32_t deviceType, std::string serialNumber, int32_t remoteChannel, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet, bool save)
 {
 	try
 	{
@@ -1138,7 +1138,7 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_
     return std::shared_ptr<BidCoSPeer>();
 }
 
-std::shared_ptr<BidCoSPeer> HomeMaticCentral::createTeam(int32_t address, BaseLib::Systems::LogicalDeviceType deviceType, std::string serialNumber)
+std::shared_ptr<BidCoSPeer> HomeMaticCentral::createTeam(int32_t address, uint32_t deviceType, std::string serialNumber)
 {
 	try
 	{
@@ -1302,7 +1302,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			if(peerExists(peerAddress) || peerExists(serialNumber)) stringStream << "This peer is already paired to this central." << std::endl;
 			else
 			{
-				std::shared_ptr<BidCoSPeer> peer = createPeer(peerAddress, firmwareVersion, BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, deviceType), serialNumber, 0, 0, packet, false);
+				std::shared_ptr<BidCoSPeer> peer = createPeer(peerAddress, firmwareVersion, deviceType, serialNumber, 0, 0, packet, false);
 				if(!peer || !peer->getRpcDevice()) return "Device type not supported.\n";
 				try
 				{
@@ -1676,7 +1676,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					else if(filterType == "type")
 					{
 						int32_t deviceType = BaseLib::Math::getNumber(filterValue, true);
-						if((int32_t)i->second->getDeviceType().type() != deviceType) continue;
+						if((int32_t)i->second->getDeviceType() != deviceType) continue;
 					}
 					else if(filterType == "configpending")
 					{
@@ -1714,7 +1714,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					stringStream << name << bar
 						<< std::setw(addressWidth) << BaseLib::HelperFunctions::getHexString(i->second->getAddress(), 6) << bar
 						<< std::setw(serialWidth) << i->second->getSerialNumber() << bar
-						<< std::setw(typeWidth1) << BaseLib::HelperFunctions::getHexString(i->second->getDeviceType().type(), 4) << bar;
+						<< std::setw(typeWidth1) << BaseLib::HelperFunctions::getHexString(i->second->getDeviceType(), 4) << bar;
 					if(i->second->getRpcDevice())
 					{
 						std::string typeID = i->second->getRpcTypeString();
@@ -1802,7 +1802,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			if(!_currentPeer) stringStream << "This peer is not paired to this central." << std::endl;
 			else
 			{
-				stringStream << "Peer with id " << peerID << " and device type 0x" << _bl->hf.getHexString(_currentPeer->getDeviceType().type()) << " selected." << std::dec << std::endl;
+				stringStream << "Peer with id " << peerID << " and device type 0x" << _bl->hf.getHexString(_currentPeer->getDeviceType()) << " selected." << std::dec << std::endl;
 				stringStream << "For information about the peer's commands type: \"help\"" << std::endl;
 			}
 			return stringStream.str();
@@ -1900,7 +1900,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 		_updateMode = true;
 		_updateMutex.lock();
 		GD::out.printInfo("Starting firmware update for peer " + std::to_string(peer->getID()) + " (address 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress(), 6) + "). Interface: " + physicalInterface->getID());
-		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString((int32_t)0, 4) + "." + BaseLib::HelperFunctions::getHexString(peer->getDeviceType().type(), 8);
+		std::string filenamePrefix = BaseLib::HelperFunctions::getHexString((int32_t)0, 4) + "." + BaseLib::HelperFunctions::getHexString(peer->getDeviceType(), 8);
 		std::string versionFile(_bl->settings.firmwarePath() + filenamePrefix + ".version");
 		if(!BaseLib::Io::fileExists(versionFile))
 		{
@@ -2296,7 +2296,7 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 			tc.reset(new HmCcTc(_deviceId, this));
 			tc->setAddress(hmcctcAddress);
 			tc->setFirmwareVersion(0x10);
-			tc->setDeviceType(BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, (uint32_t)DeviceType::HMCCTC));
+			tc->setDeviceType((uint32_t)DeviceType::HMCCTC);
 			tc->setSerialNumber(serialNumber);
 			PHomegearDevice rpcDevice = GD::family->getRpcDevices()->find(tc->getDeviceType(), 0x10);
 			if(!rpcDevice)
@@ -2430,7 +2430,7 @@ void HomeMaticCentral::addHomegearFeaturesRemote(std::shared_ptr<BidCoSPeer> pee
 		}
 
 		PVariable paramset(new Variable(VariableType::tStruct));
-		if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC19 || peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC19B || peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC19SW)
+		if(peer->getDeviceType() == (uint32_t)DeviceType::HMRC19 || peer->getDeviceType() == (uint32_t)DeviceType::HMRC19B || peer->getDeviceType() == (uint32_t)DeviceType::HMRC19SW)
 		{
 			paramset->structValue->insert(StructElement("LCD_SYMBOL", PVariable(new Variable(2))));
 			paramset->structValue->insert(StructElement("LCD_LEVEL_INTERP", PVariable(new Variable(1))));
@@ -2692,56 +2692,56 @@ void HomeMaticCentral::addHomegearFeatures(std::shared_ptr<BidCoSPeer> peer, int
 {
 	try
 	{
-		GD::out.printDebug("Debug: Adding homegear features. Device type: 0x" + BaseLib::HelperFunctions::getHexString((int32_t)peer->getDeviceType().type()));
-		if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCVD) addHomegearFeaturesHMCCVD(peer, channel, pushPendingBidCoSQueues);
-		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMPB4DISWM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmPb4DisWm2 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC4 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC8 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC4B ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRCP1 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRCSEC3 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRCSEC3B ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRCKEY3 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRCKEY3B ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMPBI4FM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMPB4WM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMPB2WM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMPB2FM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC12 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC12B ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC12SW ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC19 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC19B ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC19SW ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::RCH ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::ATENT ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::ZELSTGRMHS4 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRC42 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRCSEC42 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMRCKEY42 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMPB6WM55 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSWI3FM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSWI3FMSCHUECO ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSWI3FMROTO ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENEP ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRc43 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRc43D ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRcSec43 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRcKey43 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRc2PbuFm ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmRcDisHXEu ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::BrcH ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmPb2Wm55 ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmPb2Wm552) addHomegearFeaturesRemote(peer, channel, pushPendingBidCoSQueues);
-		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMSECMDIR ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSECMDIRSCHUECO ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRSM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMSENMDIRO ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmSenMdirWm55) addHomegearFeaturesMotionDetector(peer, channel, pushPendingBidCoSQueues);
-		else if(peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCRTDN ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HMCCRTDNBOM ||
-				peer->getDeviceType().type() == (uint32_t)DeviceType::HmTcItWmWEu) addHomegearFeaturesHMCCRTDN(peer, channel, pushPendingBidCoSQueues);
+		GD::out.printDebug("Debug: Adding homegear features. Device type: 0x" + BaseLib::HelperFunctions::getHexString((int32_t)peer->getDeviceType()));
+		if(peer->getDeviceType() == (uint32_t)DeviceType::HMCCVD) addHomegearFeaturesHMCCVD(peer, channel, pushPendingBidCoSQueues);
+		else if(peer->getDeviceType() == (uint32_t)DeviceType::HMPB4DISWM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmPb4DisWm2 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC4 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC8 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC4B ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRCP1 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRCSEC3 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRCSEC3B ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRCKEY3 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRCKEY3B ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMPBI4FM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMPB4WM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMPB2WM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMPB2FM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC12 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC12B ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC12SW ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC19 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC19B ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC19SW ||
+				peer->getDeviceType() == (uint32_t)DeviceType::RCH ||
+				peer->getDeviceType() == (uint32_t)DeviceType::ATENT ||
+				peer->getDeviceType() == (uint32_t)DeviceType::ZELSTGRMHS4 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRC42 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRCSEC42 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMRCKEY42 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMPB6WM55 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMSWI3FM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMSWI3FMSCHUECO ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMSWI3FMROTO ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMSENEP ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmRc43 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmRc43D ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmRcSec43 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmRcKey43 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmRc2PbuFm ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmRcDisHXEu ||
+				peer->getDeviceType() == (uint32_t)DeviceType::BrcH ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmPb2Wm55 ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmPb2Wm552) addHomegearFeaturesRemote(peer, channel, pushPendingBidCoSQueues);
+		else if(peer->getDeviceType() == (uint32_t)DeviceType::HMSECMDIR ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMSECMDIRSCHUECO ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMSENMDIRSM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMSENMDIRO ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmSenMdirWm55) addHomegearFeaturesMotionDetector(peer, channel, pushPendingBidCoSQueues);
+		else if(peer->getDeviceType() == (uint32_t)DeviceType::HMCCRTDN ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HMCCRTDNBOM ||
+				peer->getDeviceType() == (uint32_t)DeviceType::HmTcItWmWEu) addHomegearFeaturesHMCCRTDN(peer, channel, pushPendingBidCoSQueues);
 		else if(HomeMaticCentral::isDimmer(peer->getDeviceType()) || HomeMaticCentral::isSwitch(peer->getDeviceType())) addHomegearFeaturesSwitch(peer, channel, pushPendingBidCoSQueues);
 		else GD::out.printDebug("Debug: No homegear features to add.");
 	}
@@ -2947,10 +2947,12 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 		}
 
 		std::string serialNumber;
+		serialNumber.reserve(10);
 		for(uint32_t i = 3; i < 13; i++)
+		{
 			serialNumber.push_back((char)packet->payload()->at(i));
-		uint32_t rawType = (packet->payload()->at(1) << 8) + packet->payload()->at(2);
-		BaseLib::Systems::LogicalDeviceType deviceType(BIDCOS_FAMILY_ID, rawType);
+		}
+		uint32_t deviceType = (packet->payload()->at(1) << 8) + packet->payload()->at(2);
 
 		std::shared_ptr<BidCoSPeer> peer(getPeer(packet->senderAddress()));
 		if(peer && (peer->getSerialNumber() != serialNumber || peer->getDeviceType() != deviceType))
@@ -2973,7 +2975,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			queue->peer = createPeer(packet->senderAddress(), packet->payload()->at(0), deviceType, serialNumber, 0, 0, packet, false);
 			if(!queue->peer)
 			{
-				GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType.type(), 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload()->at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
+				GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType, 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload()->at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 				return;
 			}
 			peer = queue->peer;
@@ -4180,9 +4182,9 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			uint8_t configByte = 0xA0;
 			if(receiver->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
 
-			if(receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDN &&
-				receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDNBOM &&
-				receiver->getDeviceType().type() != (uint32_t)DeviceType::HmTcItWmWEu &&
+			if(receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDN &&
+				receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDNBOM &&
+				receiver->getDeviceType() != (uint32_t)DeviceType::HmTcItWmWEu &&
 				!HomeMaticCentral::isSwitch(receiver->getDeviceType()) &&
 				!HomeMaticCentral::isDimmer(receiver->getDeviceType()))
 			{
@@ -4408,9 +4410,9 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 			receiver->serviceMessages->setConfigPending(true);
 			queue->push(receiver->pendingBidCoSQueues);
 
-			if(receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDN &&
-				receiver->getDeviceType().type() != (uint32_t)DeviceType::HMCCRTDNBOM &&
-				receiver->getDeviceType().type() != (uint32_t)DeviceType::HmTcItWmWEu &&
+			if(receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDN &&
+				receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDNBOM &&
+				receiver->getDeviceType() != (uint32_t)DeviceType::HmTcItWmWEu &&
 				!HomeMaticCentral::isSwitch(receiver->getDeviceType()) &&
 				!HomeMaticCentral::isDimmer(receiver->getDeviceType()))
 			{

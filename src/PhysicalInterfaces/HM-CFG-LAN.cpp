@@ -544,7 +544,7 @@ bool HM_CFG_LAN::aesInit()
 	if((result = gcry_cipher_open(&_encryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_encryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 	if(!_encryptHandle)
@@ -555,14 +555,14 @@ bool HM_CFG_LAN::aesInit()
 	if((result = gcry_cipher_setkey(_encryptHandle, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
 	{
 		aesCleanup();
-		_out.printError("Error: Could not set key for encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error: Could not set key for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 
 	if((result = gcry_cipher_open(&_decryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_decryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for decryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 	if(!_decryptHandle)
@@ -573,7 +573,7 @@ bool HM_CFG_LAN::aesInit()
 	if((result = gcry_cipher_setkey(_decryptHandle, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
 	{
 		aesCleanup();
-		_out.printError("Error: Could not set key for decryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error: Could not set key for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 
@@ -602,7 +602,7 @@ std::vector<char> HM_CFG_LAN::encrypt(std::vector<char>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_encrypt(_encryptHandle, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error encrypting data: " + _bl->hf.getGCRYPTError(result));
+		GD::out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<char>();
 	}
@@ -616,7 +616,7 @@ std::vector<uint8_t> HM_CFG_LAN::decrypt(std::vector<uint8_t>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_decrypt(_decryptHandle, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
+		GD::out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<uint8_t>();
 	}
@@ -807,7 +807,7 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 			{
 				_stopCallbackThread = true;
 				aesCleanup();
-				_out.printError("Error: Could not set IV for encryption: " + _bl->hf.getGCRYPTError(result));
+				_out.printError("Error: Could not set IV for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 				return false;
 			}
 
@@ -838,7 +838,7 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 			{
 				_stopCallbackThread = true;
 				aesCleanup();
-				_out.printError("Error: Could not set IV for decryption: " + _bl->hf.getGCRYPTError(result));
+				_out.printError("Error: Could not set IV for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 				return false;
 			}
 

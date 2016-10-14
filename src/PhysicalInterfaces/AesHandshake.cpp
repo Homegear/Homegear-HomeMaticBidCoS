@@ -46,7 +46,7 @@ AesHandshake::AesHandshake(BaseLib::Obj* baseLib, BaseLib::Output& out, int32_t 
 	if((result = gcry_cipher_open(&_encryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_ECB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_encryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return;
 	}
 	if(!_encryptHandle)
@@ -57,7 +57,7 @@ AesHandshake::AesHandshake(BaseLib::Obj* baseLib, BaseLib::Output& out, int32_t 
 	if((result = gcry_cipher_open(&_encryptHandleKeyChange, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_ECB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_encryptHandleKeyChange = nullptr;
-		_out.printError("Error initializing cypher handle for encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return;
 	}
 	if(!_encryptHandleKeyChange)
@@ -68,7 +68,7 @@ AesHandshake::AesHandshake(BaseLib::Obj* baseLib, BaseLib::Output& out, int32_t 
 	if((result = gcry_cipher_open(&_decryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_ECB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_decryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for decryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return;
 	}
 	if(!_decryptHandle)
@@ -223,7 +223,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		gcry_error_t result;
 		if((result = gcry_cipher_setkey(_decryptHandle, &tempKey.at(0), tempKey.size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error: Could not set key for decryption: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error: Could not set key for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 			return aFrame;
 		}
 
@@ -231,7 +231,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		if(!_decryptHandle) return aFrame;
 		if((result = gcry_cipher_decrypt(_decryptHandle, &pd.at(0), pd.size(), &rFrame->payload()->at(0), rFrame->payload()->size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 			return aFrame;
 		}
 
@@ -246,7 +246,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		std::vector<uint8_t> pdd(tempKey.size());
 		if((result = gcry_cipher_decrypt(_decryptHandle, &pdd.at(0), pdd.size(), &pd.at(0), pd.size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 			return aFrame;
 		}
 
@@ -405,7 +405,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 		}
 		if((result = gcry_cipher_setkey(_encryptHandle, &tempKey.at(0), tempKey.size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error: Could not set key for encryption: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error: Could not set key for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 			_encryptMutex.unlock();
 			return rFrame;
 		}
@@ -429,7 +429,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 		std::vector<uint8_t> pd(tempKey.size());
 		if((result = gcry_cipher_encrypt(_encryptHandle, &pd.at(0), pd.size(), &pdd.at(0), pdd.size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error encrypting data: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 			_encryptMutex.unlock();
 			return rFrame;
 		}
@@ -465,7 +465,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 		std::vector<uint8_t> rPayload(tempKey.size());
 		if((result = gcry_cipher_encrypt(_encryptHandle, &rPayload.at(0), tempKey.size(), &pd.at(0), pd.size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 			_encryptMutex.unlock();
 			return rFrame;
 		}
@@ -634,7 +634,7 @@ bool AesHandshake::generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChan
 		}
 		if((result = gcry_cipher_setkey(_encryptHandleKeyChange, &oldRfKey.at(0), oldRfKey.size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error: Could not set key for encryption: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error: Could not set key for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 			_keyChangeMutex.unlock();
 			return false;
 		}
@@ -642,7 +642,7 @@ bool AesHandshake::generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChan
 		std::vector<uint8_t> encryptedPayload(oldRfKey.size());
 		if((result = gcry_cipher_encrypt(_encryptHandleKeyChange, &encryptedPayload.at(0), encryptedPayload.size(), &payload->at(0), payload->size())) != GPG_ERR_NO_ERROR)
 		{
-			_out.printError("Error encrypting data: " + _bl->hf.getGCRYPTError(result));
+			_out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 			_keyChangeMutex.unlock();
 			return false;
 		}

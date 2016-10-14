@@ -150,7 +150,7 @@ void HmCcTc::loadVariables(BaseLib::Systems::ICentral* device, std::shared_ptr<B
 				break;
 			}
 		}
-		setDeviceType(BaseLib::Systems::LogicalDeviceType(BIDCOS_FAMILY_ID, (uint32_t)DeviceType::HMCCTC));
+		setDeviceType((uint32_t)DeviceType::HMCCTC);
 		startDutyCycle(calculateLastDutyCycleEvent());
 	}
 	catch(const std::exception& ex)

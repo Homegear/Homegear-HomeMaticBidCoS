@@ -1615,7 +1615,7 @@ bool HM_LGW::aesInit()
 	gcry_md_hd_t md5Handle = nullptr;
 	if((result = gcry_md_open(&md5Handle, GCRY_MD_MD5, 0)) != GPG_ERR_NO_ERROR)
 	{
-		_out.printError("Could not initialize MD5 handle: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Could not initialize MD5 handle: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 	gcry_md_write(md5Handle, _settings->lanKey.c_str(), _settings->lanKey.size());
@@ -1623,7 +1623,7 @@ bool HM_LGW::aesInit()
 	uint8_t* digest = gcry_md_read(md5Handle, GCRY_MD_MD5);
 	if(!digest)
 	{
-		_out.printError("Could not generate MD5 of lanKey: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Could not generate MD5 of lanKey: " + BaseLib::Security::Gcrypt::getError(result));
 		gcry_md_close(md5Handle);
 		return false;
 	}
@@ -1635,7 +1635,7 @@ bool HM_LGW::aesInit()
 	if((result = gcry_cipher_open(&_encryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_encryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 	if(!_encryptHandle)
@@ -1646,14 +1646,14 @@ bool HM_LGW::aesInit()
 	if((result = gcry_cipher_setkey(_encryptHandle, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
 	{
 		aesCleanup();
-		_out.printError("Error: Could not set key for encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error: Could not set key for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 
 	if((result = gcry_cipher_open(&_decryptHandle, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_decryptHandle = nullptr;
-		_out.printError("Error initializing cypher handle for decryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 	if(!_decryptHandle)
@@ -1664,14 +1664,14 @@ bool HM_LGW::aesInit()
 	if((result = gcry_cipher_setkey(_decryptHandle, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
 	{
 		aesCleanup();
-		_out.printError("Error: Could not set key for decryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error: Could not set key for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 
 	if((result = gcry_cipher_open(&_encryptHandleKeepAlive, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_encryptHandleKeepAlive = nullptr;
-		_out.printError("Error initializing cypher handle for keep alive encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for keep alive encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 	if(!_encryptHandleKeepAlive)
@@ -1682,14 +1682,14 @@ bool HM_LGW::aesInit()
 	if((result = gcry_cipher_setkey(_encryptHandleKeepAlive, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
 	{
 		aesCleanup();
-		_out.printError("Error: Could not set key for keep alive encryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error: Could not set key for keep alive encryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 
 	if((result = gcry_cipher_open(&_decryptHandleKeepAlive, GCRY_CIPHER_AES128, GCRY_CIPHER_MODE_CFB, GCRY_CIPHER_SECURE)) != GPG_ERR_NO_ERROR)
 	{
 		_decryptHandleKeepAlive = nullptr;
-		_out.printError("Error initializing cypher handle for keep alive decryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error initializing cypher handle for keep alive decryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 	if(!_decryptHandleKeepAlive)
@@ -1700,7 +1700,7 @@ bool HM_LGW::aesInit()
 	if((result = gcry_cipher_setkey(_decryptHandleKeepAlive, &_key.at(0), _key.size())) != GPG_ERR_NO_ERROR)
 	{
 		aesCleanup();
-		_out.printError("Error: Could not set key for keep alive decryption: " + _bl->hf.getGCRYPTError(result));
+		_out.printError("Error: Could not set key for keep alive decryption: " + BaseLib::Security::Gcrypt::getError(result));
 		return false;
 	}
 
@@ -1738,7 +1738,7 @@ std::vector<char> HM_LGW::encrypt(const std::vector<char>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_encrypt(_encryptHandle, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error encrypting data: " + _bl->hf.getGCRYPTError(result));
+		GD::out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<char>();
 	}
@@ -1752,7 +1752,7 @@ std::vector<uint8_t> HM_LGW::decrypt(std::vector<uint8_t>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_decrypt(_decryptHandle, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error decrypting data: " + _bl->hf.getGCRYPTError(result));
+		GD::out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<uint8_t>();
 	}
@@ -1766,7 +1766,7 @@ std::vector<char> HM_LGW::encryptKeepAlive(std::vector<char>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_encrypt(_encryptHandleKeepAlive, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error encrypting keep alive data: " + _bl->hf.getGCRYPTError(result));
+		GD::out.printError("Error encrypting keep alive data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<char>();
 	}
@@ -1780,7 +1780,7 @@ std::vector<uint8_t> HM_LGW::decryptKeepAlive(std::vector<uint8_t>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_decrypt(_decryptHandleKeepAlive, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error decrypting keep alive data: " + _bl->hf.getGCRYPTError(result));
+		GD::out.printError("Error decrypting keep alive data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<uint8_t>();
 	}
@@ -2132,7 +2132,7 @@ bool HM_LGW::aesKeyExchange(std::vector<uint8_t>& data)
 			{
 				_stopCallbackThread = true;
 				aesCleanup();
-				_out.printError("Error: Could not set IV for encryption: " + _bl->hf.getGCRYPTError(result));
+				_out.printError("Error: Could not set IV for encryption: " + BaseLib::Security::Gcrypt::getError(result));
 				return false;
 			}
 
@@ -2163,7 +2163,7 @@ bool HM_LGW::aesKeyExchange(std::vector<uint8_t>& data)
 			{
 				_stopCallbackThread = true;
 				aesCleanup();
-				_out.printError("Error: Could not set IV for decryption: " + _bl->hf.getGCRYPTError(result));
+				_out.printError("Error: Could not set IV for decryption: " + BaseLib::Security::Gcrypt::getError(result));
 				return false;
 			}
 
@@ -2249,7 +2249,7 @@ bool HM_LGW::aesKeyExchangeKeepAlive(std::vector<uint8_t>& data)
 			{
 				_stopCallbackThread = true;
 				aesCleanup();
-				_out.printError("Error: Could not set IV for keep alive encryption: " + _bl->hf.getGCRYPTError(result));
+				_out.printError("Error: Could not set IV for keep alive encryption: " + BaseLib::Security::Gcrypt::getError(result));
 				return false;
 			}
 
@@ -2280,7 +2280,7 @@ bool HM_LGW::aesKeyExchangeKeepAlive(std::vector<uint8_t>& data)
 			{
 				_stopCallbackThread = true;
 				aesCleanup();
-				_out.printError("Error: Could not set IV for keep alive decryption: " + _bl->hf.getGCRYPTError(result));
+				_out.printError("Error: Could not set IV for keep alive decryption: " + BaseLib::Security::Gcrypt::getError(result));
 				return false;
 			}
 

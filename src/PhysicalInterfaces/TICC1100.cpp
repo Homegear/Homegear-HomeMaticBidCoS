@@ -538,7 +538,16 @@ void TICC1100::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 
 		int64_t timeBeforeLock = BaseLib::HelperFunctions::getTime();
 		_sendingPending = true;
-		_txMutex.lock();
+		if(!_txMutex.try_lock_for(std::chrono::milliseconds(10000)))
+		{
+			_out.printCritical("Critical: Could not acquire lock for sending packet. This should never happen. Please report this error.");
+			_txMutex.unlock();
+			if(!_txMutex.try_lock_for(std::chrono::milliseconds(100)))
+			{
+				_sendingPending = false;
+				return;
+			}
+		}
 		_sendingPending = false;
 		if(_stopCallbackThread || _fileDescriptor->descriptor == -1 || _gpioDescriptors[1]->descriptor == -1 || _stopped)
 		{

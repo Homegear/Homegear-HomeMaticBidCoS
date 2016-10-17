@@ -1588,7 +1588,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 				continue;
 			}
 
-			if(_bl->debugLevel >= 6) _out.printDebug("Debug: Packet received. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
+			if(_bl->debugLevel >= 5) _out.printDebug("Debug: Packet received. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 
 			if(data.empty()) continue;
 			if(data.size() > 100000)

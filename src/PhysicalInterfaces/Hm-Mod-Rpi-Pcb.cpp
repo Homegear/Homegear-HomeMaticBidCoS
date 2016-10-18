@@ -1548,7 +1548,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 					continue;
 				}
 
-				bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
+				bytesRead = read(_fileDescriptor->descriptor, buffer.data(), buffer.size());
 				if(bytesRead <= 0) //read returns 0, when connection is disrupted.
 				{
 					_out.printWarning("Warning: Connection closed (3). Trying to reconnect...");
@@ -1557,7 +1557,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 				}
 
 				if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
-				data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
+				data.insert(data.end(), buffer.begin(), buffer.begin() + bytesRead);
 
 				if(data.size() > 100000)
 				{

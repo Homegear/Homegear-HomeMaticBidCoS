@@ -196,7 +196,7 @@ void Hm_Mod_Rpi_Pcb::openDevice()
 	{
 		if(_fileDescriptor->descriptor > -1) closeDevice();
 
-		_lockfile = "/var/lock" + _settings->device.substr(_settings->device.find_last_of('/')) + ".lock";
+		_lockfile = GD::bl->settings.lockFilePath() + "LCK.." + _settings->device.substr(_settings->device.find_last_of('/') + 1);
 		int lockfileDescriptor = open(_lockfile.c_str(), O_WRONLY | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 		if(lockfileDescriptor == -1)
 		{
@@ -1548,7 +1548,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 					continue;
 				}
 
-				bytesRead = read(_fileDescriptor->descriptor, &buffer[0], buffer.size());
+				bytesRead = read(_fileDescriptor->descriptor, buffer.data(), buffer.size());
 				if(bytesRead <= 0) //read returns 0, when connection is disrupted.
 				{
 					_out.printWarning("Warning: Connection closed (3). Trying to reconnect...");
@@ -1557,7 +1557,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 				}
 
 				if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
-				data.insert(data.end(), &buffer[0], &buffer[0] + bytesRead);
+				data.insert(data.end(), buffer.begin(), buffer.begin() + bytesRead);
 
 				if(data.size() > 100000)
 				{
@@ -1588,7 +1588,7 @@ void Hm_Mod_Rpi_Pcb::listen()
 				continue;
 			}
 
-			if(_bl->debugLevel >= 6) _out.printDebug("Debug: Packet received. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
+			if(_bl->debugLevel >= 5) _out.printDebug("Debug: Packet received. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 
 			if(data.empty()) continue;
 			if(data.size() > 100000)

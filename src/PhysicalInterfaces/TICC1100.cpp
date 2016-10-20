@@ -338,7 +338,7 @@ void TICC1100::openDevice()
 	{
 		if(_fileDescriptor->descriptor != -1) closeDevice();
 
-		_lockfile = "/var/lock" + _settings->device.substr(_settings->device.find_last_of('/')) + ".lock";
+		_lockfile = GD::bl->settings.lockFilePath() + "LCK.." + _settings->device.substr(_settings->device.find_last_of('/') + 1);
 		int lockfileDescriptor = open(_lockfile.c_str(), O_WRONLY | O_EXCL | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 		if(lockfileDescriptor == -1)
 		{
@@ -538,7 +538,16 @@ void TICC1100::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 
 		int64_t timeBeforeLock = BaseLib::HelperFunctions::getTime();
 		_sendingPending = true;
-		_txMutex.lock();
+		if(!_txMutex.try_lock_for(std::chrono::milliseconds(10000)))
+		{
+			_out.printCritical("Critical: Could not acquire lock for sending packet. This should never happen. Please report this error.");
+			_txMutex.unlock();
+			if(!_txMutex.try_lock_for(std::chrono::milliseconds(100)))
+			{
+				_sendingPending = false;
+				return;
+			}
+		}
 		_sendingPending = false;
 		if(_stopCallbackThread || _fileDescriptor->descriptor == -1 || _gpioDescriptors[1]->descriptor == -1 || _stopped)
 		{

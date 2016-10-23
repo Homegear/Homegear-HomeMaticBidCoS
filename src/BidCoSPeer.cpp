@@ -955,7 +955,6 @@ void BidCoSPeer::serializePeers(std::vector<uint8_t>& encodedData)
 
 void BidCoSPeer::unserializePeers(std::shared_ptr<std::vector<char>> serializedData)
 {
-	if(_peerID == 154) std::cerr << "Moin0" << std::endl;
 	_peersMutex.lock();
 	try
 	{

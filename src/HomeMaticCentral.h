@@ -123,7 +123,6 @@ public:
 	virtual BaseLib::PVariable deleteDevice(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t flags);
 	virtual BaseLib::PVariable getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, uint64_t id, std::map<std::string, bool> fields);
 	virtual BaseLib::PVariable getInstallMode(BaseLib::PRpcClientInfo clientInfo);
-	virtual BaseLib::PVariable listTeams(BaseLib::PRpcClientInfo clientInfo);
 	virtual BaseLib::PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, ParameterGroup::Type::Enum type, std::string remoteSerialNumber, int32_t remoteChannel, BaseLib::PVariable paramset);
 	virtual BaseLib::PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, BaseLib::PVariable paramset);
 	virtual BaseLib::PVariable removeLink(BaseLib::PRpcClientInfo clientInfo, std::string senderSerialNumber, int32_t senderChannel, std::string receiverSerialNumber, int32_t receiverChannel);
@@ -143,7 +142,7 @@ protected:
 	BidCoSPacketManager _sentPackets;
 	std::shared_ptr<BidCoSMessages> _messages;
 
-    bool _stopWorkerThread = false;
+    std::atomic_bool _stopWorkerThread;
     std::thread _workerThread;
 
     std::mutex _sendMultiplePacketsThreadMutex;
@@ -152,16 +151,16 @@ protected:
     std::thread _sendPacketThread;
     std::thread _resetThread;
 
-    bool _pairing = false;
+    std::atomic_bool _pairing;
 	uint32_t _timeLeftInPairingMode = 0;
 	void pairingModeTimer(int32_t duration, bool debugOutput = true);
-	bool _stopPairingModeThread = false;
+	std::atomic_bool _stopPairingModeThread;
 	std::mutex _pairingModeThreadMutex;
 	std::thread _pairingModeThread;
 	std::mutex _enqueuePendingQueuesMutex;
 
 	//Updates:
-	bool _updateMode = false;
+	std::atomic_bool _updateMode;
 	std::mutex _updateFirmwareThreadMutex;
 	std::mutex _updateMutex;
 	std::thread _updateFirmwareThread;

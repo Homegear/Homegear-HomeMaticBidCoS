@@ -85,7 +85,7 @@ protected:
 		std::shared_ptr<BidCoSPacket> packet;
 	};
 
-	BaseLib::Obj* _bl = nullptr;
+	BaseLib::SharedObjects* _bl = nullptr;
 	int64_t _lastAesHandshakeGc = 0;
 	std::shared_ptr<AesHandshake> _aesHandshake;
 	std::mutex _queueIdsMutex;

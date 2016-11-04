@@ -170,6 +170,11 @@ void HomeMaticCentral::init()
 		if(_initialized) return; //Prevent running init two times
 		_initialized = true;
 
+		_stopWorkerThread = false;
+		_pairing = false;
+		_stopPairingModeThread = false;
+		_updateMode = false;
+
 		_messages = std::shared_ptr<BidCoSMessages>(new BidCoSMessages());
 		_messageCounter[0] = 0; //Broadcast message counter
 
@@ -436,9 +441,9 @@ void HomeMaticCentral::savePeers(bool full)
 	try
 	{
 		_peersMutex.lock();
-		//Don't change this to _peersById, because then teams would be saved!
 		for(std::map<uint64_t, std::shared_ptr<BaseLib::Systems::Peer>>::iterator i = _peersById.begin(); i != _peersById.end(); ++i)
 		{
+			if(i->second->isTeam()) continue;
 			//We are always printing this, because the init script needs it
 			GD::out.printMessage("(Shutdown) => Saving HomeMatic BidCoS peer " + std::to_string(i->second->getID()) + " with address 0x" + BaseLib::HelperFunctions::getHexString(i->second->getAddress(), 6));
 			i->second->save(full, full, full);
@@ -4525,52 +4530,6 @@ PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, uin
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-    return Variable::createError(-32500, "Unknown application error.");
-}
-
-PVariable HomeMaticCentral::listTeams(BaseLib::PRpcClientInfo clientInfo)
-{
-	try
-	{
-		PVariable array(new Variable(VariableType::tArray));
-
-		std::vector<std::shared_ptr<BidCoSPeer>> peers;
-		//Copy all peers first, because listTeams takes very long and we don't want to lock _peersMutex too long
-		_peersMutex.lock();
-		for(std::unordered_map<std::string, std::shared_ptr<BaseLib::Systems::Peer>>::iterator i = _peersBySerial.begin(); i != _peersBySerial.end(); ++i)
-		{
-			peers.push_back(std::dynamic_pointer_cast<BidCoSPeer>(i->second));
-		}
-		_peersMutex.unlock();
-
-		for(std::vector<std::shared_ptr<BidCoSPeer>>::iterator i = peers.begin(); i != peers.end(); ++i)
-		{
-			//listTeams really needs a lot of ressources, so wait a little bit after each device
-			std::this_thread::sleep_for(std::chrono::milliseconds(3));
-			std::string serialNumber = (*i)->getSerialNumber();
-			if(serialNumber.empty() || serialNumber.at(0) != '*') continue;
-			std::shared_ptr<std::vector<PVariable>> descriptions = (*i)->getDeviceDescriptions(clientInfo, true, std::map<std::string, bool>());
-			if(!descriptions) continue;
-			for(std::vector<PVariable>::iterator j = descriptions->begin(); j != descriptions->end(); ++j)
-			{
-				array->arrayValue->push_back(*j);
-			}
-		}
-		return array;
-	}
-	catch(const std::exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    _peersMutex.unlock();
     return Variable::createError(-32500, "Unknown application error.");
 }
 

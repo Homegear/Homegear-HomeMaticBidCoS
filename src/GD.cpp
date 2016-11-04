@@ -31,7 +31,7 @@
 
 namespace BidCoS
 {
-	BaseLib::Obj* GD::bl = nullptr;
+	BaseLib::SharedObjects* GD::bl = nullptr;
 	BidCoS* GD::family = nullptr;
 	std::shared_ptr<Systems::FamilySettings> GD::settings;
 	BaseLib::Output GD::out;

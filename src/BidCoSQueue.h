@@ -83,7 +83,7 @@ enum class BidCoSQueueType { EMPTY, DEFAULT, CONFIG, PAIRING, PAIRINGCENTRAL, UN
 class BidCoSQueue
 {
     protected:
-		bool _disposing = false;
+		std::atomic_bool _disposing;
 		bool _setWakeOnRadioBit = false;
 		//I'm using list, so iterators are not invalidated
         std::list<BidCoSQueueEntry> _queue;
@@ -91,7 +91,7 @@ class BidCoSQueue
         std::shared_ptr<PendingBidCoSQueues> _pendingQueues;
         std::mutex _queueMutex;
         BidCoSQueueType _queueType;
-        bool _stopPopWaitThread = false;
+        std::atomic_bool _stopPopWaitThread;
         uint32_t _popWaitThreadId = 0;
         std::thread _popWaitThread;
         std::thread _sendThread;
@@ -100,7 +100,7 @@ class BidCoSQueue
         std::mutex _startResendThreadMutex;
         std::thread _pushPendingQueueThread;
         std::mutex _pushPendingQueueThreadMutex;
-        bool _workingOnPendingQueue = false;
+        std::atomic_bool _workingOnPendingQueue;
         int64_t _lastPop = 0;
         void (HomeMaticCentral::*_queueProcessed)() = nullptr;
         void pushPendingQueue();
@@ -112,7 +112,7 @@ class BidCoSQueue
         uint32_t id = 0;
         uint32_t pendingQueueID = 0;
         std::shared_ptr<int64_t> lastAction;
-        bool noSending = false;
+        std::atomic_bool noSending;
         std::shared_ptr<BidCoSPeer> peer;
         std::shared_ptr<CallbackFunctionParameter> callbackParameter;
         std::function<void(std::shared_ptr<CallbackFunctionParameter>)> queueEmptyCallback;

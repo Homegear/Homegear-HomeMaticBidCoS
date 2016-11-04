@@ -65,8 +65,8 @@ public:
 	void resetQueue(int32_t address, uint32_t id);
 	void dispose(bool wait = true);
 protected:
-	bool _disposing = false;
-	bool _stopWorkerThread = true;
+	std::atomic_bool _disposing;
+	std::atomic_bool _stopWorkerThread;
 	std::mutex _workerThreadMutex;
     std::thread _workerThread;
     std::mutex _resetQueueThreadMutex;

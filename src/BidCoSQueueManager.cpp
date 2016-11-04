@@ -43,6 +43,8 @@ BidCoSQueueData::BidCoSQueueData(std::shared_ptr<IBidCoSInterface> physicalInter
 
 BidCoSQueueManager::BidCoSQueueManager()
 {
+	_disposing = false;
+	_stopWorkerThread = true;
 }
 
 BidCoSQueueManager::~BidCoSQueueManager()

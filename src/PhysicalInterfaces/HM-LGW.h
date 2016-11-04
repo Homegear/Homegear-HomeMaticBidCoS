@@ -128,7 +128,7 @@ class HM_LGW  : public IBidCoSInterface
         std::mutex _sendMutexKeepAlive;
         bool _initStarted = false;
         bool _firstPacket = true;
-        bool _initCompleteKeepAlive = false;
+        std::atomic_bool _initCompleteKeepAlive;
         int32_t _lastKeepAlive1 = 0;
         int32_t _lastKeepAliveResponse1 = 0;
         int32_t _lastKeepAlive2 = 0;

@@ -67,8 +67,8 @@ public:
 	void keepAlive(int32_t address);
 	void dispose(bool wait = true);
 protected:
-	bool _disposing = false;
-	bool _stopWorkerThread = false;
+	std::atomic_bool _disposing;
+	std::atomic_bool _stopWorkerThread;
     std::thread _workerThread;
 	uint32_t _id = 0;
 	std::unordered_map<int32_t, std::shared_ptr<BidCoSPacketInfo>> _packets;

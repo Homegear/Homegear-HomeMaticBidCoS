@@ -58,7 +58,7 @@ class HmCcTc : public BidCoSPeer
         std::unordered_map<int32_t, bool> _decalcification;
 
         const int32_t _dutyCycleTimeOffset = 3000;
-        bool _stopDutyCycleThread = false;
+        std::atomic_bool _stopDutyCycleThread;
         std::thread _dutyCycleThread;
         int32_t _dutyCycleCounter  = 0;
         std::thread _sendDutyCyclePacketThread;

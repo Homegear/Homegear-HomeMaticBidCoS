@@ -43,14 +43,15 @@ BidCoSQueue::BidCoSQueue()
 	_queueType = BidCoSQueueType::EMPTY;
 	_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	_physicalInterface = GD::defaultPhysicalInterface;
+	_disposing = false;
+	_stopPopWaitThread = false;
+	_workingOnPendingQueue = false;
+	noSending = false;
 }
 
-BidCoSQueue::BidCoSQueue(std::shared_ptr<IBidCoSInterface> physicalInterface)
+BidCoSQueue::BidCoSQueue(std::shared_ptr<IBidCoSInterface> physicalInterface) : BidCoSQueue()
 {
-	_queueType = BidCoSQueueType::EMPTY;
-	_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	if(physicalInterface) _physicalInterface = physicalInterface;
-	else _physicalInterface = GD::defaultPhysicalInterface;
 }
 
 BidCoSQueue::BidCoSQueue(std::shared_ptr<IBidCoSInterface> physicalInterface, BidCoSQueueType queueType) : BidCoSQueue(physicalInterface)

@@ -39,6 +39,7 @@ Hm_Mod_Rpi_Pcb::Hm_Mod_Rpi_Pcb(std::shared_ptr<BaseLib::Systems::PhysicalInterfa
 
 	signal(SIGPIPE, SIG_IGN);
 
+	_packetIndex = 0;
 	memset(&_termios, 0, sizeof(termios));
 
 	if(!settings)

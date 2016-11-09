@@ -3279,7 +3279,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				return true;
 			}
 		}
-		else if(_deviceType == (uint32_t)DeviceType::HMSECSD)
+		else if(_deviceType == (uint32_t)DeviceType::HMSECSD || _deviceType == (uint32_t)DeviceType::HMSECSD2)
 		{
 			if(valueKey == "STATE")
 			{

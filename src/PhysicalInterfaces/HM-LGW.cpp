@@ -1544,6 +1544,8 @@ void HM_LGW::reconnect()
 		_out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_socket->open();
 		_socketKeepAlive->open();
+		_hostname = _settings->host;
+		_ipAddress = _socket->getIpAddress();
 		_out.printInfo("Connected to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);

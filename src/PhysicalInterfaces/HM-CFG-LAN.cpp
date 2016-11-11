@@ -407,6 +407,8 @@ void HM_CFG_LAN::reconnect()
 		createInitCommandQueue();
 		_out.printDebug("Connecting to HM-CFG-LAN device with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_socket->open();
+		_hostname = _settings->host;
+		_ipAddress = _socket->getIpAddress();
 		_out.printInfo("Connected to HM-CFG-LAN device with hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
 	}

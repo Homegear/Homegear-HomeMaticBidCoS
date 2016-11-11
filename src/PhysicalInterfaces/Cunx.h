@@ -46,7 +46,6 @@ class Cunx  : public IBidCoSInterface
         void disableUpdateMode();
         virtual bool isOpen() { return _socket->connected(); }
     protected:
-        std::string _hostname;
         std::string _port;
         std::unique_ptr<BaseLib::TcpSocket> _socket;
 

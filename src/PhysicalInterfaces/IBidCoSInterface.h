@@ -92,7 +92,6 @@ protected:
 	std::map<int32_t, std::set<int64_t>> _queueIds;
 	std::mutex _peersMutex;
 	std::map<int32_t, PeerInfo> _peers;
-	int32_t _myAddress = 0x1C6940;
 
 	BaseLib::Output _out;
 	bool _initComplete = false;

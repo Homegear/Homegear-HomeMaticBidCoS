@@ -117,7 +117,6 @@ class HM_LGW  : public IBidCoSInterface
         BaseLib::Math _math;
         std::thread _listenThreadKeepAlive;
         std::thread _initThread;
-        std::string _hostname;
         std::string _port;
         std::unique_ptr<BaseLib::TcpSocket> _socket;
         std::unique_ptr<BaseLib::TcpSocket> _socketKeepAlive;

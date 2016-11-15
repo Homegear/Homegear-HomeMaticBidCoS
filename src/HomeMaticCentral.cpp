@@ -1185,6 +1185,25 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			}
 			return _currentPeer->handleCliCommand(command);
 		}
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "test", "ts", "", 0, arguments, showHelp))
+		{
+			std::vector<uint8_t> payload;
+			payload.push_back(0x80);
+			payload.push_back(0x82);
+			payload.push_back(0xF1);
+			payload.push_back(0x00);
+			payload.push_back(0x00);
+			payload.push_back(0x00);
+			payload.push_back(0x00);
+			payload.push_back(0x00);
+			payload.push_back(0x09);
+			payload.push_back(0x07);
+			payload.push_back(0x01);
+			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(0xF9, 0xA4, 0x5F, 0x2DB00F, 0x272E12, payload));
+			std::shared_ptr<BidCoSPeer> peer = getPeer((uint64_t)5);
+			if(peer) peer->packetReceived(packet);
+			return "ok\n";
+		}
 		else if(BaseLib::HelperFunctions::checkCliCommand(command, "help", "h", "", 0, arguments, showHelp))
 		{
 			stringStream << "List of commands (shortcut in brackets):" << std::endl << std::endl;

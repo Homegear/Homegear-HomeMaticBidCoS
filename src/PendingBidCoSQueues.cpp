@@ -102,7 +102,7 @@ void PendingBidCoSQueues::unserialize(std::shared_ptr<std::vector<char>> seriali
 				queue->queueEmptyCallback = std::bind(&BidCoSPeer::addVariableToResetCallback, peer, std::placeholders::_1);
 			}
 			queue->pendingQueueID = _currentID++;
-			_queues.push_back(queue);
+			if(!queue->isEmpty()) _queues.push_back(queue);
 		}
 	}
 	catch(const std::exception& ex)

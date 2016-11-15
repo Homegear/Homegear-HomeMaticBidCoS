@@ -2571,8 +2571,14 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 			}
 			if(!queue->isEmpty() && queue->front()->getType() == QueueEntryType::MESSAGE)
 			{
+				std::shared_ptr<BidCoSMessage> message = queue->front()->getMessage();
+				if(!message)
+				{
+					GD::out.printError("Error: Empty message in front of queue. Clearing queue.");
+					queue->clear();
+				}
 				//Requeue getValue packet if message type doesn't match received packet
-				if(!queue->front()->getMessage()->typeIsEqual(packet) && queuePacket) queue->pushFront(queuePacket);
+				else if(!message->typeIsEqual(packet) && queuePacket) queue->pushFront(queuePacket);
 			}
 		}
 		if(pendingBidCoSQueues && !pendingBidCoSQueues->empty() && packet->senderAddress() == _address)

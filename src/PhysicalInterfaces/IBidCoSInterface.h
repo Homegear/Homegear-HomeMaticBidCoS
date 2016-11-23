@@ -85,14 +85,13 @@ protected:
 		std::shared_ptr<BidCoSPacket> packet;
 	};
 
-	BaseLib::Obj* _bl = nullptr;
+	BaseLib::SharedObjects* _bl = nullptr;
 	int64_t _lastAesHandshakeGc = 0;
 	std::shared_ptr<AesHandshake> _aesHandshake;
 	std::mutex _queueIdsMutex;
 	std::map<int32_t, std::set<int64_t>> _queueIds;
 	std::mutex _peersMutex;
 	std::map<int32_t, PeerInfo> _peers;
-	int32_t _myAddress = 0x1C6940;
 
 	BaseLib::Output _out;
 	bool _initComplete = false;

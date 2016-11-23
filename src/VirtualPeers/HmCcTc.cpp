@@ -55,6 +55,7 @@ void HmCcTc::init()
 	try
 	{
 		if(!_rpcDevice) return;
+		_stopDutyCycleThread = false;
 		_rpcDevice->receiveModes = BaseLib::DeviceDescription::HomegearDevice::ReceiveModes::Enum::always;
 		_rpcDevice->timeout = 0;
 	}

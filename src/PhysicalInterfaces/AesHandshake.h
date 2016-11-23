@@ -42,7 +42,7 @@ class BidCoSPacket;
 class AesHandshake
 {
 	public:
-		AesHandshake(BaseLib::Obj* baseLib, BaseLib::Output& out, int32_t address, std::vector<uint8_t> rfKey, std::vector<uint8_t> oldRfKey, uint32_t currentRfKeyIndex);
+		AesHandshake(BaseLib::SharedObjects* baseLib, BaseLib::Output& out, int32_t address, std::vector<uint8_t> rfKey, std::vector<uint8_t> oldRfKey, uint32_t currentRfKeyIndex);
         virtual ~AesHandshake();
 
         void setMyAddress(int32_t address) { _myAddress = address; }
@@ -67,7 +67,7 @@ class AesHandshake
         	std::shared_ptr<std::vector<uint8_t>> pd;
 		};
 
-        BaseLib::Obj* _bl = nullptr;
+        BaseLib::SharedObjects* _bl = nullptr;
         BaseLib::Output _out;
         int32_t _myAddress = 0x1C6940;
         std::vector<uint8_t> _rfKey;

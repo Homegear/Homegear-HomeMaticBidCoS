@@ -173,18 +173,32 @@ if [ $? -eq 0 ]; then
 	[ $? -ne 0 ] && exit 1
 fi
 
-wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-Sen-MDIR-WM55_update_V1_1_2_150413.tgz
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/HM-Sen-MDIR-WM55_update_V1_2_0_160825.tgz
 if [ $? -eq 0 ]; then
-	tar -zxf $FIRMWAREDIR/HM-Sen-MDIR-WM55_update_V1_1_2_150413.tgz -C $FIRMWAREDIR
+	tar -zxf $FIRMWAREDIR/HM-Sen-MDIR-WM55_update_V1_2_0_160825.tgz -C $FIRMWAREDIR
 	[ $? -ne 0 ] && exit 1
-	mv $FIRMWAREDIR/HM-Sen-MDIR-WM55_update_V1_1_2_150413.eq3 $SCRIPTDIR/0000.000000DB.fw
+	mv $FIRMWAREDIR/HM-Sen-MDIR-WM55_update_V1_2_0_160825.eq3 $SCRIPTDIR/0000.000000DB.fw
 	[ $? -ne 0 ] && exit 1
-	rm $FIRMWAREDIR/HM-Sen-MDIR-WM55_update_V1_1_2_150413.tgz
+	rm $FIRMWAREDIR/HM-Sen-MDIR-WM55_update_V1_2_0_160825.tgz
 	rm $FIRMWAREDIR/changelog.txt
 	rm $FIRMWAREDIR/info
-	echo "11" > $SCRIPTDIR/0000.000000DB.version
+	echo "12" > $SCRIPTDIR/0000.000000DB.version
 	[ $? -ne 0 ] && exit 1
 fi
+
+wget -P $FIRMWAREDIR http://www.eq-3.de/Downloads/Software/Firmware/hm_dis_ep_wm55_update_V1_1_160927.tgz
+if [ $? -eq 0 ]; then
+	tar -zxf $FIRMWAREDIR/hm_dis_ep_wm55_update_V1_1_160927.tgz -C $FIRMWAREDIR
+	[ $? -ne 0 ] && exit 1
+	mv $FIRMWAREDIR/hm_dis_ep_wm55_update_V1_1_160927.eq3 $SCRIPTDIR/0000.000000FB.fw
+	[ $? -ne 0 ] && exit 1
+	rm $FIRMWAREDIR/hm_dis_ep_wm55_update_V1_1_160927.tgz
+	rm $FIRMWAREDIR/changelog.txt
+	rm $FIRMWAREDIR/info
+	echo "11" > $SCRIPTDIR/0000.000000FB.version
+	[ $? -ne 0 ] && exit 1
+fi
+
 
 rm -Rf /tmp/HomegearTemp
 

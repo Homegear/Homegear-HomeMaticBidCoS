@@ -44,7 +44,7 @@ class GD
 public:
 	virtual ~GD();
 
-	static BaseLib::Obj* bl;
+	static BaseLib::SharedObjects* bl;
 	static BidCoS* family;
 	static std::shared_ptr<Systems::FamilySettings> settings;
 	static std::map<std::string, std::shared_ptr<IBidCoSInterface>> physicalInterfaces;

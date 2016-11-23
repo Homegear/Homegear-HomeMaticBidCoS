@@ -117,7 +117,6 @@ class HM_LGW  : public IBidCoSInterface
         BaseLib::Math _math;
         std::thread _listenThreadKeepAlive;
         std::thread _initThread;
-        std::string _hostname;
         std::string _port;
         std::unique_ptr<BaseLib::TcpSocket> _socket;
         std::unique_ptr<BaseLib::TcpSocket> _socketKeepAlive;
@@ -128,7 +127,7 @@ class HM_LGW  : public IBidCoSInterface
         std::mutex _sendMutexKeepAlive;
         bool _initStarted = false;
         bool _firstPacket = true;
-        bool _initCompleteKeepAlive = false;
+        std::atomic_bool _initCompleteKeepAlive;
         int32_t _lastKeepAlive1 = 0;
         int32_t _lastKeepAliveResponse1 = 0;
         int32_t _lastKeepAlive2 = 0;

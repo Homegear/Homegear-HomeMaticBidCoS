@@ -43,14 +43,15 @@ BidCoSQueue::BidCoSQueue()
 	_queueType = BidCoSQueueType::EMPTY;
 	_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	_physicalInterface = GD::defaultPhysicalInterface;
+	_disposing = false;
+	_stopPopWaitThread = false;
+	_workingOnPendingQueue = false;
+	noSending = false;
 }
 
-BidCoSQueue::BidCoSQueue(std::shared_ptr<IBidCoSInterface> physicalInterface)
+BidCoSQueue::BidCoSQueue(std::shared_ptr<IBidCoSInterface> physicalInterface) : BidCoSQueue()
 {
-	_queueType = BidCoSQueueType::EMPTY;
-	_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	if(physicalInterface) _physicalInterface = physicalInterface;
-	else _physicalInterface = GD::defaultPhysicalInterface;
 }
 
 BidCoSQueue::BidCoSQueue(std::shared_ptr<IBidCoSInterface> physicalInterface, BidCoSQueueType queueType) : BidCoSQueue(physicalInterface)
@@ -137,18 +138,18 @@ void BidCoSQueue::serialize(std::vector<uint8_t>& encodedData)
 
 void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData, uint32_t position)
 {
+	std::lock_guard<std::mutex> queueGuard(_queueMutex);
 	try
 	{
+		_physicalInterface = GD::defaultPhysicalInterface;
 		BaseLib::BinaryDecoder decoder(GD::bl);
-		_queueMutex.lock();
 		_queueType = (BidCoSQueueType)decoder.decodeByte(*serializedData, position);
 		uint32_t queueSize = decoder.decodeInteger(*serializedData, position);
 		for(uint32_t i = 0; i < queueSize; i++)
 		{
-			_queue.push_back(BidCoSQueueEntry());
-			BidCoSQueueEntry* entry = &_queue.back();
-			entry->setType((QueueEntryType)decoder.decodeByte(*serializedData, position));
-			entry->stealthy = decoder.decodeBoolean(*serializedData, position);
+			BidCoSQueueEntry entry;
+			entry.setType((QueueEntryType)decoder.decodeByte(*serializedData, position));
+			entry.stealthy = decoder.decodeBoolean(*serializedData, position);
 			decoder.decodeBoolean(*serializedData, position); //dummy
 			int32_t packetExists = decoder.decodeBoolean(*serializedData, position);
 			if(packetExists)
@@ -158,7 +159,7 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 				if(position + dataSize <= serializedData->size()) packetData.insert(packetData.end(), serializedData->begin() + position, serializedData->begin() + position + dataSize);
 				position += dataSize;
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetData, false));
-				entry->setPacket(packet, false);
+				entry.setPacket(packet, false);
 			}
 			int32_t messageExists = decoder.decodeBoolean(*serializedData, position);
 			if(messageExists)
@@ -167,35 +168,36 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 				int32_t messageType = decoder.decodeByte(*serializedData, position);
 				decoder.decodeByte(*serializedData, position); //Dummy
 				std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
-				if(central) entry->setMessage(central->getMessages()->find(messageType), false);
+				if(central) entry.setMessage(central->getMessages()->find(messageType), false);
 			}
 			parameterName = decoder.decodeString(*serializedData, position);
 			channel = decoder.decodeInteger(*serializedData, position);
 			std::string physicalInterfaceID = decoder.decodeString(*serializedData, position);
 			if(GD::physicalInterfaces.find(physicalInterfaceID) != GD::physicalInterfaces.end()) _physicalInterface = GD::physicalInterfaces.at(physicalInterfaceID);
-			else _physicalInterface = GD::defaultPhysicalInterface;
+			if((entry.getType() == QueueEntryType::PACKET && !entry.getPacket()) || (entry.getType() == QueueEntryType::MESSAGE && !entry.getMessage()))
+			{
+				GD::out.printError("Error unserializing queue of type " + std::to_string((int32_t)_queueType) + ". Clearing it...");
+				_queue.clear();
+				return;
+			}
+			_queue.push_back(std::move(entry));
 		}
+		return;
 	}
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    	clear();
-    	_pendingQueues.reset();
     }
     catch(BaseLib::Exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    	clear();
-    	_pendingQueues.reset();
     }
     catch(...)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    	clear();
-    	_pendingQueues.reset();
     }
+    _queue.clear();
     if(!_physicalInterface) _physicalInterface = GD::defaultPhysicalInterface;
-    _queueMutex.unlock();
 }
 
 void BidCoSQueue::dispose()

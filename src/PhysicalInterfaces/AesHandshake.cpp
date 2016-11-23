@@ -32,7 +32,7 @@
 
 namespace BidCoS
 {
-AesHandshake::AesHandshake(BaseLib::Obj* baseLib, BaseLib::Output& out, int32_t address, std::vector<uint8_t> rfKey, std::vector<uint8_t> oldRfKey, uint32_t currentRfKeyIndex)
+AesHandshake::AesHandshake(BaseLib::SharedObjects* baseLib, BaseLib::Output& out, int32_t address, std::vector<uint8_t> rfKey, std::vector<uint8_t> oldRfKey, uint32_t currentRfKeyIndex)
 {
 	_bl = baseLib;
 	_out.init(_bl);

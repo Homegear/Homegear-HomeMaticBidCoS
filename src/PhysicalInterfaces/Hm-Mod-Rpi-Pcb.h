@@ -130,7 +130,7 @@ class Hm_Mod_Rpi_Pcb  : public IBidCoSInterface
         int64_t _startUpTime = 0;
         bool _escapeByte = false;
         std::vector<uint8_t> _packetBuffer;
-        uint8_t _packetIndex = 0;
+        std::atomic<uint8_t> _packetIndex;
         CRC16 _crc;
 
         void openDevice();

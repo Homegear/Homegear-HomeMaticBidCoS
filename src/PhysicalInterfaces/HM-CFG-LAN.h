@@ -72,7 +72,6 @@ class HM_CFG_LAN  : public IBidCoSInterface
         virtual void sendPeers();
         virtual std::string getPeerInfoPacket(PeerInfo& peerInfo);
     protected:
-        std::string _hostname;
         std::string _port;
         std::unique_ptr<BaseLib::TcpSocket> _socket;
         std::mutex _sendMutex;

@@ -62,7 +62,7 @@ std::vector<char> IBidCoSInterface::PeerInfo::getAESChannelMap()
     return map;
 }
 
-IBidCoSInterface::IBidCoSInterface(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IPhysicalInterface(GD::bl, GD::family->getFamily(), settings), BaseLib::ITimedQueue(GD::bl)
+IBidCoSInterface::IBidCoSInterface(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IPhysicalInterface(GD::bl, GD::family->getFamily(), settings), BaseLib::ITimedQueue(GD::bl, 1)
 {
 	_bl = GD::bl;
 	_currentRfKeyIndex = GD::settings->getNumber("currentrfkeyindex");

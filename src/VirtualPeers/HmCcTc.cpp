@@ -54,10 +54,7 @@ void HmCcTc::init()
 {
 	try
 	{
-		if(!_rpcDevice) return;
 		_stopDutyCycleThread = false;
-		_rpcDevice->receiveModes = BaseLib::DeviceDescription::HomegearDevice::ReceiveModes::Enum::always;
-		_rpcDevice->timeout = 0;
 	}
 	catch(const std::exception& ex)
     {
@@ -107,6 +104,13 @@ bool HmCcTc::load(BaseLib::Systems::ICentral* device)
 	{
 		BidCoSPeer::load(device);
 		serviceMessages->endUnreach();
+		if(!_rpcDevice)
+		{
+			GD::out.printError("Error: Could not find RPC device for peer with ID " + std::to_string(_peerID));
+			return true;
+		}
+		_rpcDevice->receiveModes = BaseLib::DeviceDescription::HomegearDevice::ReceiveModes::Enum::always;
+		_rpcDevice->timeout = 0;
 		return true;
 	}
 	catch(const std::exception& ex)
@@ -295,15 +299,16 @@ void HmCcTc::dutyCycleThread(int64_t lastDutyCycleEvent)
 		uint32_t cycleLength = calculateCycleLength(_dutyCycleMessageCounter - 1); //The calculation has to use the last message counter
 		_dutyCycleCounter = (std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::system_clock::now().time_since_epoch()).count() - _lastDutyCycleEvent) / 250000;
 		if(_dutyCycleCounter < 0) _dutyCycleCounter = 0;
-		if(_dutyCycleCounter > 0) GD::out.printDebug("Debug: Skipping " + std::to_string(_dutyCycleCounter * 250) + " ms of duty cycle.");
+		if(_dutyCycleCounter > 0) GD::out.printInfo("Info: Skipping " + std::to_string(_dutyCycleCounter * 250) + " ms of duty cycle.");
 		//_dutyCycleCounter = (_dutyCycleCounter % 8 > 3) ? _dutyCycleCounter + (8 - (_dutyCycleCounter % 8)) : _dutyCycleCounter - (_dutyCycleCounter % 8);
+
 		while(!_stopDutyCycleThread)
 		{
 			try
 			{
 				cycleTime = (int64_t)cycleLength * 250000;
 				nextDutyCycleEvent += cycleTime + _dutyCycleTimeOffset; //Add offset every cycle. This is very important! Without it, 20% of the packets are sent too early.
-				GD::out.printDebug("Next duty cycle: " + std::to_string(nextDutyCycleEvent / 1000) + " (in " + std::to_string(cycleTime / 1000) + " ms) with message counter 0x" + BaseLib::HelperFunctions::getHexString(_dutyCycleMessageCounter));
+				GD::out.printInfo("Info: Next duty cycle: " + std::to_string(nextDutyCycleEvent / 1000) + " (in " + std::to_string(cycleTime / 1000) + " ms) with message counter 0x" + BaseLib::HelperFunctions::getHexString(_dutyCycleMessageCounter));
 
 				std::chrono::milliseconds sleepingTime(250);
 				while(!_stopDutyCycleThread && _dutyCycleCounter < (signed)cycleLength - 80)
@@ -323,7 +328,7 @@ void HmCcTc::dutyCycleThread(int64_t lastDutyCycleEvent)
 				setDecalcification();
 
 				timePoint = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
-				GD::out.printDebug("Correcting time mismatch of " + std::to_string((nextDutyCycleEvent - 10000000 - timePoint) / 1000) + "ms.");
+				GD::out.printInfo("Info: Correcting time mismatch of " + std::to_string((nextDutyCycleEvent - 10000000 - timePoint) / 1000) + "ms.");
 				std::this_thread::sleep_for(std::chrono::microseconds(nextDutyCycleEvent - timePoint - 5000000));
 				if(_stopDutyCycleThread) break;
 

@@ -1535,9 +1535,11 @@ void Hm_Mod_Rpi_Pcb::listen()
 				timeout.tv_usec = 0;
 				fd_set readFileDescriptor;
 				FD_ZERO(&readFileDescriptor);
-				GD::bl->fileDescriptorManager.lock();
-				FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
-				GD::bl->fileDescriptorManager.unlock();
+				{
+					auto fileDescriptorGuard = GD::bl->fileDescriptorManager.getLock();
+					fileDescriptorGuard.lock();
+					FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
+				}
 
 				result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
 				if(result == 0) continue;

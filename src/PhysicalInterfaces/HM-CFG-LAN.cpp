@@ -57,6 +57,8 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 		_useAES = false;
 		_out.printInfo("Info: Disabling AES encryption for communication with HM-CFG-LAN.");
 	}
+
+	_reconnecting = false;
 }
 
 HM_CFG_LAN::~HM_CFG_LAN()
@@ -65,6 +67,7 @@ HM_CFG_LAN::~HM_CFG_LAN()
 	{
 		_stopCallbackThread = true;
 		GD::bl->threadManager.join(_listenThread);
+		GD::bl->threadManager.join(_reconnectThread);
 		if(_useAES) aesCleanup();
 	}
     catch(const std::exception& ex)
@@ -327,13 +330,12 @@ void HM_CFG_LAN::send(std::vector<char>& data, bool raw)
     try
     {
     	if(data.size() < 3) return; //Otherwise error in printInfo
+    	std::lock_guard<std::mutex> sendGuard(_sendMutex);
     	std::vector<char> encryptedData;
     	if(_useAES && !raw) encryptedData = encrypt(data);
-    	_sendMutex.lock();
     	if(!_socket->connected() || _stopped)
     	{
     		_out.printWarning(std::string("Warning: !!!Not!!! sending") + ((_useAES && !raw) ? " (encrypted)" : "") + ": " + std::string(&data.at(0), data.size() - 2));
-    		_sendMutex.unlock();
     		return;
     	}
     	if(_bl->debugLevel >= 5)
@@ -341,8 +343,6 @@ void HM_CFG_LAN::send(std::vector<char>& data, bool raw)
             _out.printInfo(std::string("Debug: Sending") + ((_useAES && !raw) ? " (encrypted)" : "") + ": " + std::string(&data.at(0), data.size() - 2));
         }
     	(_useAES && !raw) ? _socket->proofwrite(encryptedData) : _socket->proofwrite(data);
-    	 _sendMutex.unlock();
-    	 return;
     }
     catch(const BaseLib::SocketOperationException& ex)
     {
@@ -360,8 +360,6 @@ void HM_CFG_LAN::send(std::vector<char>& data, bool raw)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-    _stopped = true;
-    _sendMutex.unlock();
 }
 
 void HM_CFG_LAN::startListening()
@@ -376,7 +374,7 @@ void HM_CFG_LAN::startListening()
 		}
 		if(_useAES) aesInit();
 		_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
-		_out.printDebug("Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
+		_out.printDebug("Debug: Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
 		//_socket->open();
 		//_out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
@@ -398,19 +396,66 @@ void HM_CFG_LAN::startListening()
     }
 }
 
+void HM_CFG_LAN::reconnectThread()
+{
+	try
+	{
+		std::cerr << "Moin0" << std::endl;
+		_stopped = true;
+		std::lock_guard<std::mutex> sendGuard(_sendMutex);
+		std::cerr << "Moin1" << std::endl;
+		std::lock_guard<std::mutex> listenGuard(_listenMutex);
+		std::cerr << "Moin2" << std::endl;
+		_socket->close();
+		if(_useAES) aesCleanup();
+
+		std::cerr << "Moin3" << std::endl;
+		if(_rfKey.empty())
+		{
+			_out.printError("Error: Cannot start listening , because rfKey is not specified.");
+			_reconnecting = false;
+			return;
+		}
+		if(_useAES) aesInit();
+		std::cerr << "Moin4" << std::endl;
+		createInitCommandQueue();
+		std::cerr << "Moin5" << std::endl;
+		_out.printDebug("Debug: Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
+		_socket->open();
+		_hostname = _settings->host;
+		_ipAddress = _socket->getIpAddress();
+		_out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");
+		_stopped = false;
+		std::cerr << "Moin6" << std::endl;
+	}
+    catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+    _reconnecting = false;
+}
+
 void HM_CFG_LAN::reconnect()
 {
 	try
 	{
-		_socket->close();
-		if(_useAES) aesInit();
-		createInitCommandQueue();
-		_out.printDebug("Connecting to HM-CFG-LAN device with hostname " + _settings->host + " on port " + _settings->port + "...");
-		_socket->open();
-		_hostname = _settings->host;
-		_ipAddress = _socket->getIpAddress();
-		_out.printInfo("Connected to HM-CFG-LAN device with hostname " + _settings->host + " on port " + _settings->port + ".");
-		_stopped = false;
+		std::cerr << "Moin10" << std::endl;
+		std::lock_guard<std::mutex> reconnectGuard(_reconnectMutex);
+		std::cerr << "Moin11" << std::endl;
+		if(_reconnecting) return;
+		std::cerr << "Moin12" << std::endl;
+		_reconnecting = true;
+		GD::bl->threadManager.join(_reconnectThread);
+		std::cerr << "Moin13" << std::endl;
+		GD::bl->threadManager.start(_reconnectThread, true, &HM_CFG_LAN::reconnectThread, this);
 	}
     catch(const std::exception& ex)
     {
@@ -430,12 +475,16 @@ void HM_CFG_LAN::stopListening()
 {
 	try
 	{
+		_stopped = true;
+		{
+			std::lock_guard<std::mutex> reconnectGuard(_reconnectMutex);
+			GD::bl->threadManager.join(_reconnectThread);
+		}
 		_stopCallbackThread = true;
 		GD::bl->threadManager.join(_listenThread);
 		_stopCallbackThread = false;
 		_socket->close();
 		if(_useAES) aesCleanup();
-		_stopped = true;
 		_sendMutex.unlock(); //In case it is deadlocked - shouldn't happen of course
 		IPhysicalInterface::stopListening();
 	}
@@ -605,7 +654,7 @@ std::vector<char> HM_CFG_LAN::encrypt(std::vector<char>& data)
 	if((result = gcry_cipher_encrypt(_encryptHandle, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
 		GD::out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
-		_stopCallbackThread = true;
+		reconnect();
 		return std::vector<char>();
 	}
 	return encryptedData;
@@ -619,7 +668,7 @@ std::vector<uint8_t> HM_CFG_LAN::decrypt(std::vector<uint8_t>& data)
 	if((result = gcry_cipher_decrypt(_decryptHandle, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
 		GD::out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
-		_stopCallbackThread = true;
+		reconnect();
 		return std::vector<uint8_t>();
 	}
 	return decryptedData;
@@ -697,68 +746,92 @@ void HM_CFG_LAN::listen()
 
         while(!_stopCallbackThread)
         {
-        	if(_stopped)
+        	try
         	{
-        		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        		if(_stopCallbackThread) return;
-        		_out.printWarning("Warning: Connection to HM-CFG-LAN closed. Trying to reconnect...");
-        		reconnect();
-        		continue;
-        	}
-        	std::vector<uint8_t> data;
-			try
-			{
-				do
+				if(_reconnecting)
 				{
-					receivedBytes = _socket->proofread(&buffer[0], bufferMax);
-					if(receivedBytes > 0)
-					{
-						data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
-						if(data.size() > 1000000)
-						{
-							_out.printError("Could not read from HM-CFG-LAN: Too much data.");
-							break;
-						}
-					}
-				} while(receivedBytes == (unsigned)bufferMax);
-			}
-			catch(const BaseLib::SocketTimeOutException& ex)
-			{
-				if(data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
-				{
-					if(_socket->connected())
-					{
-						if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
-						sendKeepAlive();
-					}
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 					continue;
 				}
+				if(_stopped)
+				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					if(_stopCallbackThread) return;
+					_out.printWarning("Warning: Connection to HM-CFG-LAN closed. Trying to reconnect...");
+					reconnect();
+					continue;
+				}
+
+				{
+					std::lock_guard<std::mutex> listenGuard(_listenMutex);
+					std::vector<uint8_t> data;
+					try
+					{
+						do
+						{
+							receivedBytes = _socket->proofread(&buffer[0], bufferMax);
+							if(receivedBytes > 0)
+							{
+								data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
+								if(data.size() > 1000000)
+								{
+									_out.printError("Could not read from HM-CFG-LAN: Too much data.");
+									break;
+								}
+							}
+						} while(receivedBytes == (unsigned)bufferMax);
+					}
+					catch(const BaseLib::SocketTimeOutException& ex)
+					{
+						if(data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
+						{
+							if(_socket->connected())
+							{
+								if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
+								sendKeepAlive();
+							}
+							continue;
+						}
+					}
+					catch(const BaseLib::SocketClosedException& ex)
+					{
+						_stopped = true;
+						_out.printWarning("Warning: " + ex.what());
+						std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+						continue;
+					}
+					catch(const BaseLib::SocketOperationException& ex)
+					{
+						_stopped = true;
+						_out.printError("Error: " + ex.what());
+						std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+						continue;
+					}
+					if(data.empty() || data.size() > 1000000) continue;
+
+					if(_bl->debugLevel >= 6)
+					{
+						_out.printDebug("Debug: Packet received from HM-CFG-LAN. Raw data:");
+						_out.printBinary(data);
+					}
+
+					processData(data);
+
+					_lastPacketReceived = BaseLib::HelperFunctions::getTime();
+				}
 			}
-			catch(const BaseLib::SocketClosedException& ex)
+			catch(const std::exception& ex)
 			{
-				_stopped = true;
-				_out.printWarning("Warning: " + ex.what());
-				std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-				continue;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(const BaseLib::SocketOperationException& ex)
+			catch(BaseLib::Exception& ex)
 			{
-				_stopped = true;
-				_out.printError("Error: " + ex.what());
-				std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-				continue;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			if(data.empty() || data.size() > 1000000) continue;
-
-        	if(_bl->debugLevel >= 6)
-        	{
-        		_out.printDebug("Debug: Packet received from HM-CFG-LAN. Raw data:");
-        		_out.printBinary(data);
-        	}
-
-        	processData(data);
-
-        	_lastPacketReceived = BaseLib::HelperFunctions::getTime();
+			catch(...)
+			{
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+			}
         }
     }
     catch(const std::exception& ex)
@@ -783,13 +856,13 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 		{
 			if(!_useAES)
 			{
-				_stopCallbackThread = true;
+				reconnect();
 				_out.printError("Error: Error communicating with HM-CFG-LAN. Device requires AES, but no AES key was specified in homematicbidcos.conf.");
 				return false;
 			}
 			if(data.size() != 35)
 			{
-				_stopCallbackThread = true;
+				reconnect();
 				_out.printError("Error: Error communicating with HM-CFG-LAN. Received IV has wrong size.");
 				return false;
 			}
@@ -798,7 +871,7 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 			_remoteIV = _bl->hf.getUBinary(ivHex);
 			if(_remoteIV.size() != 16)
 			{
-				_stopCallbackThread = true;
+				reconnect();
 				_out.printError("Error: Error communicating with HM-CFG-LAN. Received IV is not in hexadecimal format.");
 				return false;
 			}
@@ -807,9 +880,8 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 			gcry_error_t result;
 			if((result = gcry_cipher_setiv(_encryptHandle, &_remoteIV.at(0), _remoteIV.size())) != GPG_ERR_NO_ERROR)
 			{
-				_stopCallbackThread = true;
-				aesCleanup();
 				_out.printError("Error: Could not set IV for encryption: " + BaseLib::Security::Gcrypt::getError(result));
+				reconnect();
 				return false;
 			}
 
@@ -838,9 +910,8 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 
 			if((result = gcry_cipher_setiv(_decryptHandle, &_myIV.at(0), _myIV.size())) != GPG_ERR_NO_ERROR)
 			{
-				_stopCallbackThread = true;
-				aesCleanup();
 				_out.printError("Error: Could not set IV for decryption: " + BaseLib::Security::Gcrypt::getError(result));
+				reconnect();
 				return false;
 			}
 
@@ -850,8 +921,8 @@ bool HM_CFG_LAN::aesKeyExchange(std::vector<uint8_t>& data)
 		}
 		else if(_remoteIV.empty())
 		{
-			_stopCallbackThread = true;
 			_out.printError("Error: Error communicating with HM-CFG-LAN. AES is enabled but no IV was send from HM-CFG-LAN. Please use the HomeMatic LAN Interface Configurator to re-enable AES.");
+			reconnect();
 			return false;
 		}
 	}
@@ -918,8 +989,8 @@ void HM_CFG_LAN::processInit(std::string& packet)
 		std::vector<std::string> parts = BaseLib::HelperFunctions::splitAll(packet, ',');
 		if(parts.size() < 7 || (parts.at(0) != "HHM-LAN-IF" && parts.at(0) != "HHM-USB-IF"))
 		{
-			_stopCallbackThread = true;
 			_out.printError("Error: First packet from HM-CFG-LAN does not start with \"HHM-LAN-IF\", \"HHM-USB-IF\" or has wrong structure. Please check your AES key in homematicbidcos.conf. Stopping listening. Packet was: " + packet);
+			reconnect();
 			return;
 		}
 		_startUpTime = BaseLib::HelperFunctions::getTime() - (int64_t)BaseLib::Math::getNumber(parts.at(5), true);
@@ -940,6 +1011,7 @@ void HM_CFG_LAN::processInit(std::string& packet)
 	else if(GD::bl->hf.getTime() - _initStarted > 30000)
 	{
 		_out.printWarning("Warning: Init queue did not complete within 30 seconds. Reconnecting...");
+		_initCommandQueue.clear();
 		reconnect();
 	}
 }

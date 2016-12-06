@@ -82,6 +82,10 @@ class HM_CFG_LAN  : public IBidCoSInterface
         int32_t _lastTimePacket = 0;
         std::vector<char> _keepAlivePacket = { 'K', '\r', '\n' };
         int64_t _startUpTime = 0;
+        std::mutex _reconnectMutex;
+        std::thread _reconnectThread;
+        std::mutex _listenMutex;
+        std::atomic_bool _reconnecting;
 
         //AES stuff
         bool _aesInitialized = false;
@@ -101,6 +105,7 @@ class HM_CFG_LAN  : public IBidCoSInterface
         //End AES stuff
 
         void reconnect();
+        void reconnectThread();
         void createInitCommandQueue();
         void processData(std::vector<uint8_t>& data);
         void processInit(std::string& packet);

@@ -400,16 +400,12 @@ void HM_CFG_LAN::reconnectThread()
 {
 	try
 	{
-		std::cerr << "Moin0" << std::endl;
 		_stopped = true;
 		std::lock_guard<std::mutex> sendGuard(_sendMutex);
-		std::cerr << "Moin1" << std::endl;
 		std::lock_guard<std::mutex> listenGuard(_listenMutex);
-		std::cerr << "Moin2" << std::endl;
 		_socket->close();
 		if(_useAES) aesCleanup();
 
-		std::cerr << "Moin3" << std::endl;
 		if(_rfKey.empty())
 		{
 			_out.printError("Error: Cannot start listening , because rfKey is not specified.");
@@ -417,16 +413,13 @@ void HM_CFG_LAN::reconnectThread()
 			return;
 		}
 		if(_useAES) aesInit();
-		std::cerr << "Moin4" << std::endl;
 		createInitCommandQueue();
-		std::cerr << "Moin5" << std::endl;
 		_out.printDebug("Debug: Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_socket->open();
 		_hostname = _settings->host;
 		_ipAddress = _socket->getIpAddress();
 		_out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");
 		_stopped = false;
-		std::cerr << "Moin6" << std::endl;
 	}
     catch(const std::exception& ex)
     {
@@ -447,14 +440,10 @@ void HM_CFG_LAN::reconnect()
 {
 	try
 	{
-		std::cerr << "Moin10" << std::endl;
 		std::lock_guard<std::mutex> reconnectGuard(_reconnectMutex);
-		std::cerr << "Moin11" << std::endl;
 		if(_reconnecting) return;
-		std::cerr << "Moin12" << std::endl;
 		_reconnecting = true;
 		GD::bl->threadManager.join(_reconnectThread);
-		std::cerr << "Moin13" << std::endl;
 		GD::bl->threadManager.start(_reconnectThread, true, &HM_CFG_LAN::reconnectThread, this);
 	}
     catch(const std::exception& ex)

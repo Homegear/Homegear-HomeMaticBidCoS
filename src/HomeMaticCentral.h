@@ -96,7 +96,7 @@ public:
 	std::shared_ptr<BidCoSQueue> enqueuePendingQueues(int32_t deviceAddress, bool wait = false, bool* result = nullptr);
 	int32_t getUniqueAddress(int32_t seed);
 	std::string getUniqueSerialNumber(std::string seedPrefix, uint32_t seedNumber);
-	uint64_t getPeerIdFromSerial(std::string serialNumber) { std::shared_ptr<BidCoSPeer> peer = getPeer(serialNumber); if(peer) return peer->getID(); else return 0; }
+	uint64_t getPeerIdFromSerial(std::string& serialNumber) { std::shared_ptr<BidCoSPeer> peer = getPeer(serialNumber); if(peer) return peer->getID(); else return 0; }
 	void updateFirmwares(std::vector<uint64_t> ids);
 	void updateFirmware(uint64_t id);
 	void addPeersToVirtualDevices();

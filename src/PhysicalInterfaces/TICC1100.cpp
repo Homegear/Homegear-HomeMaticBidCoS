@@ -413,18 +413,18 @@ void TICC1100::closeDevice()
     }
 }
 
-void TICC1100::setup(int32_t userID, int32_t groupID)
+void TICC1100::setup(int32_t userID, int32_t groupID, bool setPermissions)
 {
 	try
 	{
 		_out.printDebug("Debug: CC1100: Setting device permissions");
-		setDevicePermission(userID, groupID);
+		if(setPermissions) setDevicePermission(userID, groupID);
 		_out.printDebug("Debug: CC1100: Exporting GPIO");
 		exportGPIO(1);
 		if(gpioDefined(2)) exportGPIO(2);
 		_out.printDebug("Debug: CC1100: Setting GPIO permissions");
-		setGPIOPermission(1, userID, groupID, false);
-		if(gpioDefined(2)) setGPIOPermission(2, userID, groupID, false);
+		if(setPermissions) setGPIOPermission(1, userID, groupID, false);
+		if(setPermissions && gpioDefined(2)) setGPIOPermission(2, userID, groupID, false);
 		if(gpioDefined(2)) setGPIODirection(2, GPIODirection::OUT);
 	}
     catch(const std::exception& ex)

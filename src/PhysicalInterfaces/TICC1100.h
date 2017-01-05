@@ -195,7 +195,7 @@ public:
 
 	void startListening();
 	void stopListening();
-	virtual void setup(int32_t userID, int32_t groupID);
+	virtual void setup(int32_t userID, int32_t groupID, bool setPermissions);
 	void enableUpdateMode();
 	void disableUpdateMode();
 	virtual void addPeer(PeerInfo peerInfo);

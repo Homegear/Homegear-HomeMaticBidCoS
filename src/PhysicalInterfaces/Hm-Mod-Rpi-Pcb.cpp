@@ -71,16 +71,16 @@ Hm_Mod_Rpi_Pcb::~Hm_Mod_Rpi_Pcb()
     }
 }
 
-void Hm_Mod_Rpi_Pcb::setup(int32_t userID, int32_t groupID)
+void Hm_Mod_Rpi_Pcb::setup(int32_t userID, int32_t groupID, bool setPermissions)
 {
 	try
 	{
 		_out.printDebug("Debug: HM-MOD_RPI_PCB: Setting device permissions");
-		setDevicePermission(userID, groupID);
+		if(setPermissions) setDevicePermission(userID, groupID);
 		_out.printDebug("Debug: HM-MOD_RPI_PCB: Exporting GPIO");
 		exportGPIO(1);
 		_out.printDebug("Debug: HM-MOD_RPI_PCB: Setting GPIO permissions");
-		setGPIOPermission(1, userID, groupID, false);
+		if(setPermissions) setGPIOPermission(1, userID, groupID, false);
 		setGPIODirection(1, BaseLib::Systems::IPhysicalInterface::GPIODirection::Enum::OUT);
 	}
     catch(const std::exception& ex)

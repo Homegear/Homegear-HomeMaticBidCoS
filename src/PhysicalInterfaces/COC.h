@@ -42,7 +42,7 @@ class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerial
         virtual ~COC();
         void startListening();
         void stopListening();
-        virtual void setup(int32_t userID, int32_t groupID);
+        virtual void setup(int32_t userID, int32_t groupID, bool setPermissions);
         void enableUpdateMode();
         void disableUpdateMode();
         bool isOpen() { return _socket && _socket->isOpen(); }

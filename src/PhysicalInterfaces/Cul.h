@@ -61,7 +61,7 @@ class Cul : public IBidCoSInterface
         virtual ~Cul();
         void startListening();
         void stopListening();
-        virtual void setup(int32_t userID, int32_t groupID);
+        virtual void setup(int32_t userID, int32_t groupID, bool setPermissions);
         void enableUpdateMode();
         void disableUpdateMode();
     protected:

@@ -310,7 +310,7 @@ void HM_LGW::processQueueEntry(int32_t index, int64_t id, std::shared_ptr<BaseLi
 				payload.push_back(queueEntry->peerInfo.address & 0xFF);
 				payload.push_back(queueEntry->peerInfo.keyIndex);
 				payload.push_back((char)(queueEntry->peerInfo.wakeUp)); //CCU2 sets this for wake up, too. No idea, what the meaning is.
-				payload.push_back((char)(queueEntry->peerInfo.wakeUp)); //This actually enables the sending of the wake up packet
+				payload.push_back(0);
 				buildPacket(requestPacket, payload);
 				_packetIndex++;
 				getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
@@ -423,7 +423,7 @@ void HM_LGW::sendPeer(PeerInfo& peerInfo)
 	try
 	{
 		if(GD::bl->debugLevel > 4) GD::out.printDebug("Debug: Sending peer to LGW \"" + _settings->id + "\": Address " + GD::bl->hf.getHexString(peerInfo.address, 6) + ", AES enabled " + std::to_string(peerInfo.aesEnabled) + ", AES map " + GD::bl->hf.getHexString(peerInfo.getAESChannelMap()) + ".");
-		for(int32_t i = 0; i < 2; i++) //The CCU sends this packet two times, I don't know why
+		for(int32_t i = 0; i < 2; i++) //The CCU sends this packet two or even more times, I don't know why
 		{
 			//Get current config
 			for(int32_t j = 0; j < 40; j++)
@@ -1913,71 +1913,89 @@ void HM_LGW::listen()
 		std::vector<uint8_t> data;
         while(!_stopCallbackThread)
         {
-        	if(_stopped)
+        	try
         	{
-        		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        		if(_stopCallbackThread) return;
-        		_out.printWarning("Warning: Connection closed. Trying to reconnect...");
-        		reconnect();
-        		continue;
-        	}
-			try
-			{
-				do
+				if(_stopped)
 				{
-					if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
-					else sendKeepAlivePacket1();
-					receivedBytes = _socket->proofread(&buffer[0], bufferMax);
-					if(receivedBytes > 0)
-					{
-						data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
-						if(data.size() > 100000)
-						{
-							_out.printError("Could not read from HM-LGW: Too much data.");
-							break;
-						}
-					}
-				} while(receivedBytes == (unsigned)bufferMax);
-			}
-			catch(const BaseLib::SocketTimeOutException& ex)
-			{
-				if(data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
-				{
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					if(_stopCallbackThread) return;
+					_out.printWarning("Warning: Connection closed. Trying to reconnect...");
+					reconnect();
 					continue;
 				}
-			}
-			catch(const BaseLib::SocketClosedException& ex)
-			{
-				_stopped = true;
-				_out.printWarning("Warning: " + ex.what());
-				std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-				continue;
-			}
-			catch(const BaseLib::SocketOperationException& ex)
-			{
-				_stopped = true;
-				_out.printError("Error: " + ex.what());
-				std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-				continue;
-			}
+				try
+				{
+					do
+					{
+						if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
+						else sendKeepAlivePacket1();
+						receivedBytes = _socket->proofread(&buffer[0], bufferMax);
+						if(receivedBytes > 0)
+						{
+							data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
+							if(data.size() > 100000)
+							{
+								_out.printError("Could not read from HM-LGW: Too much data.");
+								break;
+							}
+						}
+					} while(receivedBytes == (unsigned)bufferMax);
+				}
+				catch(const BaseLib::SocketTimeOutException& ex)
+				{
+					if(data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
+					{
+						continue;
+					}
+				}
+				catch(const BaseLib::SocketClosedException& ex)
+				{
+					_stopped = true;
+					_out.printWarning("Warning: " + ex.what());
+					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+					continue;
+				}
+				catch(const BaseLib::SocketOperationException& ex)
+				{
+					_stopped = true;
+					_out.printError("Error: " + ex.what());
+					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+					continue;
+				}
 
-			if(_bl->debugLevel >= 6)
-        	{
-        		_out.printDebug("Debug: Packet received on port " + _settings->port + ". Raw data:");
-        		_out.printBinary(data);
-        	}
+				if(_bl->debugLevel >= 6)
+				{
+					_out.printDebug("Debug: Packet received on port " + _settings->port + ". Raw data:");
+					_out.printBinary(data);
+				}
 
-			if(data.empty()) continue;
-			if(data.size() > 100000)
-			{
+				if(data.empty()) continue;
+				if(data.size() > 100000)
+				{
+					data.clear();
+					continue;
+				}
+
+				processData(data);
 				data.clear();
-				continue;
+
+				_lastPacketReceived = BaseLib::HelperFunctions::getTime();
+        	}
+			catch(const std::exception& ex)
+			{
+				_stopped = true;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-
-        	processData(data);
-        	data.clear();
-
-        	_lastPacketReceived = BaseLib::HelperFunctions::getTime();
+			catch(BaseLib::Exception& ex)
+			{
+				_stopped = true;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+			}
+			catch(...)
+			{
+				_stopped = true;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+			}
         }
     }
     catch(const std::exception& ex)
@@ -2011,58 +2029,76 @@ void HM_LGW::listenKeepAlive()
 
         while(!_stopCallbackThread)
         {
-        	if(_stopped)
+        	try
         	{
-        		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        		if(_stopCallbackThread) return;
-        		continue;
-        	}
-        	std::vector<uint8_t> data;
-			try
-			{
-				do
+				if(_stopped)
 				{
-					receivedBytes = _socketKeepAlive->proofread(&buffer[0], bufferMax);
-					if(receivedBytes > 0)
-					{
-						data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
-						if(data.size() > 1000000)
-						{
-							_out.printError("Could not read from HM-LGW: Too much data.");
-							break;
-						}
-					}
-				} while(receivedBytes == (unsigned)bufferMax);
-			}
-			catch(const BaseLib::SocketTimeOutException& ex)
-			{
-				if(data.empty())
-				{
-					if(_socketKeepAlive->connected()) sendKeepAlivePacket2();
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					if(_stopCallbackThread) return;
 					continue;
 				}
+				std::vector<uint8_t> data;
+				try
+				{
+					do
+					{
+						receivedBytes = _socketKeepAlive->proofread(&buffer[0], bufferMax);
+						if(receivedBytes > 0)
+						{
+							data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
+							if(data.size() > 1000000)
+							{
+								_out.printError("Could not read from HM-LGW: Too much data.");
+								break;
+							}
+						}
+					} while(receivedBytes == (unsigned)bufferMax);
+				}
+				catch(const BaseLib::SocketTimeOutException& ex)
+				{
+					if(data.empty())
+					{
+						if(_socketKeepAlive->connected()) sendKeepAlivePacket2();
+						continue;
+					}
+				}
+				catch(const BaseLib::SocketClosedException& ex)
+				{
+					_stopped = true;
+					_out.printWarning("Warning: " + ex.what());
+					continue;
+				}
+				catch(const BaseLib::SocketOperationException& ex)
+				{
+					_stopped = true;
+					_out.printError("Error: " + ex.what());
+					continue;
+				}
+				if(data.empty() || data.size() > 1000000) continue;
+
+				if(_bl->debugLevel >= 6)
+				{
+					_out.printDebug("Debug: Packet received on port " + _settings->portKeepAlive + ". Raw data:");
+					_out.printBinary(data);
+				}
+
+				processDataKeepAlive(data);
 			}
-			catch(const BaseLib::SocketClosedException& ex)
+			catch(const std::exception& ex)
 			{
 				_stopped = true;
-				_out.printWarning("Warning: " + ex.what());
-				continue;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(const BaseLib::SocketOperationException& ex)
+			catch(BaseLib::Exception& ex)
 			{
 				_stopped = true;
-				_out.printError("Error: " + ex.what());
-				continue;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			if(data.empty() || data.size() > 1000000) continue;
-
-        	if(_bl->debugLevel >= 6)
-        	{
-        		_out.printDebug("Debug: Packet received on port " + _settings->portKeepAlive + ". Raw data:");
-        		_out.printBinary(data);
-        	}
-
-        	processDataKeepAlive(data);
+			catch(...)
+			{
+				_stopped = true;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+			}
         }
     }
     catch(const std::exception& ex)

@@ -2541,6 +2541,18 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 							valueKeys[*i]->push_back("SENDERADDRESS");
 							rpcValues[*i]->push_back(rpcParameter->convertFromPacket(parameter->data, true));
 						}
+
+						rpcParameter = parameterGroup->parameters.at("SENDERID");
+						if(rpcParameter)
+						{
+							BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral[*i]["SENDERID"];
+							PVariable peerIdValue(new Variable((int32_t)senderPeer->getID()));
+							rpcParameter->convertToPacket(peerIdValue, parameter->data);
+							if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
+							else saveParameter(0, ParameterGroup::Type::Enum::variables, *i, "SENDERID", parameter->data);
+							valueKeys[*i]->push_back("SENDERID");
+							rpcValues[*i]->push_back(rpcParameter->convertFromPacket(parameter->data, true));
+						}
 					}
 				}
 			}
@@ -3285,7 +3297,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				return true;
 			}
 		}
-		else if(_deviceType == (uint32_t)DeviceType::HMSECSD || _deviceType == (uint32_t)DeviceType::HMSECSD2)
+		else if(_deviceType == (uint32_t)DeviceType::HMSECSD)
 		{
 			if(valueKey == "STATE")
 			{
@@ -3313,7 +3325,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				else payload.push_back(0x01);
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x94, 0x41, _address, central->getAddress(), payload));
 				central->messageCounter()->at(0)++;
-				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 1000, true);
+				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 1000, true, true);
 				return true;
 			}
 			else if(valueKey == "INSTALL_TEST")
@@ -3340,7 +3352,80 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				associatedPeer->saveVariable(11, associatedPeer->getTeamData());
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x94, 0x40, _address, central->getAddress(), payload));
 				central->messageCounter()->at(0)++;
-				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 600, true);
+				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 600, true, false);
+				return true;
+			}
+		}
+		else if(_deviceType == (uint32_t)DeviceType::HMSECSD2)
+		{
+			if(valueKey == "STATE")
+			{
+				PParameter rpcParameter = valuesCentral[channel][valueKey].rpcParameter;
+				if(!rpcParameter) return false;
+				BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral[channel][valueKey];
+				rpcParameter->convertToPacket(value, parameter->data);
+				if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
+				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameter->data);
+
+				std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
+				std::shared_ptr<BidCoSPeer> associatedPeer = central->getPeer(_address);
+				if(!associatedPeer)
+				{
+					GD::out.printError("Error: Could not handle \"STATE\", because the main team peer is not paired to this central.");
+					return false;
+				}
+				while(associatedPeer->getTeamData().size() < 2) associatedPeer->getTeamData().push_back(0);
+				std::vector<uint8_t> payload;
+				payload.reserve(10);
+				payload.push_back(01);
+				payload.push_back(central->messageCounter()->at(0));
+				if(value->booleanValue) payload.push_back(0xC6);
+				else payload.push_back(0);
+				payload.push_back(0);
+				payload.push_back(associatedPeer->getTeamData().at(0));
+				payload.push_back(associatedPeer->getTeamData().at(1));
+				associatedPeer->getTeamData().at(1)++;
+				if(associatedPeer->getTeamData().at(1) == 0) associatedPeer->getTeamData().at(0)++;
+				associatedPeer->saveVariable(11, associatedPeer->getTeamData());
+				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x14, 0x41, _address, central->getAddress(), payload));
+				central->messageCounter()->at(0)++;
+				_physicalInterface->appendSignature(packet);
+				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 700, false);
+				return true;
+			}
+			else if(valueKey == "INSTALL_TEST")
+			{
+				PParameter rpcParameter = valuesCentral[channel][valueKey].rpcParameter;
+				if(!rpcParameter) return false;
+				BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral[channel][valueKey];
+				rpcParameter->convertToPacket(value, parameter->data);
+				if(parameter->databaseID > 0) saveParameter(parameter->databaseID, parameter->data);
+				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameter->data);
+
+				std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
+				std::shared_ptr<BidCoSPeer> associatedPeer = central->getPeer(_address);
+				if(!associatedPeer)
+				{
+					GD::out.printError("Error: Could not handle \"STATE\", because the main team peer is not paired to this central.");
+					return false;
+				}
+				while(associatedPeer->getTeamData().size() < 2) associatedPeer->getTeamData().push_back(0);
+				std::vector<uint8_t> payload;
+				payload.reserve(10);
+				payload.push_back(01);
+				payload.push_back(central->messageCounter()->at(0));
+				if(value->booleanValue) payload.push_back(0x96);
+				else payload.push_back(0);
+				payload.push_back(0);
+				payload.push_back(associatedPeer->getTeamData().at(0));
+				payload.push_back(associatedPeer->getTeamData().at(1));
+				associatedPeer->getTeamData().at(1)++;
+				if(associatedPeer->getTeamData().at(1) == 0) associatedPeer->getTeamData().at(0)++;
+				associatedPeer->saveVariable(11, associatedPeer->getTeamData());
+				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x14, 0x41, _address, central->getAddress(), payload));
+				central->messageCounter()->at(0)++;
+				_physicalInterface->appendSignature(packet);
+				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 700, false);
 				return true;
 			}
 		}

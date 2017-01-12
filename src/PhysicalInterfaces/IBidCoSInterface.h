@@ -72,6 +72,8 @@ public:
 
 	virtual uint32_t getCurrentRFKeyIndex() { return _currentRfKeyIndex; }
 
+	void appendSignature(std::shared_ptr<BidCoSPacket> packet);
+
 	virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
 	virtual void sendTest() {}
 protected:

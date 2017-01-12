@@ -54,6 +54,8 @@ class AesHandshake
         bool handshakeStarted(int32_t address);
         bool checkAFrame(std::shared_ptr<BidCoSPacket> aFrame);
         bool generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChangeTemplate);
+
+        void appendSignature(std::shared_ptr<BidCoSPacket> packet);
     private:
         class HandshakeInfo
 		{

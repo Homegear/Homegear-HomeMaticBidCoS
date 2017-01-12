@@ -1045,7 +1045,7 @@ void HomeMaticCentral::sendPacket(std::shared_ptr<IBidCoSInterface> physicalInte
     }
 }
 
-void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface> physicalInterface, std::shared_ptr<BidCoSPacket> packet, int32_t peerAddress, int32_t count, int32_t delay, bool useCentralMessageCounter, bool isThread)
+void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface> physicalInterface, std::shared_ptr<BidCoSPacket> packet, int32_t peerAddress, int32_t count, int32_t delay, bool incrementMessageCounter, bool useCentralMessageCounter, bool isThread)
 {
 	try
 	{
@@ -1053,7 +1053,7 @@ void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface>
 		{
 			_sendMultiplePacketsThreadMutex.lock();
 			_bl->threadManager.join(_sendMultiplePacketsThread);
-			_bl->threadManager.start(_sendMultiplePacketsThread, false, &HomeMaticCentral::sendPacketMultipleTimes, this, physicalInterface, packet, peerAddress, count, delay, useCentralMessageCounter, true);
+			_bl->threadManager.start(_sendMultiplePacketsThread, false, &HomeMaticCentral::sendPacketMultipleTimes, this, physicalInterface, packet, peerAddress, count, delay, incrementMessageCounter, useCentralMessageCounter, true);
 			_sendMultiplePacketsThreadMutex.unlock();
 			return;
 		}
@@ -1066,14 +1066,17 @@ void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface>
 			_sentPackets.set(packet->destinationAddress(), packet);
 			int64_t start = BaseLib::HelperFunctions::getTime();
 			physicalInterface->sendPacket(packet);
-			if(useCentralMessageCounter)
+			if(incrementMessageCounter)
 			{
-				packet->setMessageCounter(getMessageCounter());
-			}
-			else
-			{
-				packet->setMessageCounter(peer->getMessageCounter());
-				peer->setMessageCounter(peer->getMessageCounter() + 1);
+				if(useCentralMessageCounter)
+				{
+					packet->setMessageCounter(getMessageCounter());
+				}
+				else
+				{
+					packet->setMessageCounter(peer->getMessageCounter());
+					peer->setMessageCounter(peer->getMessageCounter() + 1);
+				}
 			}
 			int32_t difference = BaseLib::HelperFunctions::getTime() - start;
 			if(difference < delay - 10) std::this_thread::sleep_for(std::chrono::milliseconds(delay - difference));

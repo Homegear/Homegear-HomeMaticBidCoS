@@ -50,6 +50,11 @@
 					<size>0.3</size>
 					<parameterId>STATE_FLAGS</parameterId>
 				</element>
+				<element>
+					<index>12.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
+				</element>
 			</binaryPayload>
 		</packet>
 		<packet id="INFO_LEVEL">
@@ -67,6 +72,11 @@
 					<index>12.4</index>
 					<size>0.3</size>
 					<parameterId>STATE_FLAGS</parameterId>
+				</element>
+				<element>
+					<index>12.7</index>
+					<size>0.1</size>
+					<parameterId>LOWBAT</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>
@@ -524,6 +534,28 @@
 					</packet>
 				</packets>
 			</parameter>
+
+			<parameter id="LOWBAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="LOWBAT">
+					<operationType>internal</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+
+
+
 		</variables>
 		<linkParameters id="switch_ch_link--1">
 			<parameter id="UI_HINT">

@@ -437,6 +437,11 @@
 						<index>11.0</index>
 						<parameterId>TEAM_STATE</parameterId>
 					</element>
+					<element>
+						<index>13.0</index>
+						<size>2.0</size>
+						<parameterId>ALARM_COUNTER</parameterId>
+					</element>
 				</binaryPayload>
 			</packet>
 			<packet id="INFO_LEVEL">
@@ -484,7 +489,7 @@
 					<properties>
 						<internal>true</internal>
 					</properties>
-					<logicalAction/>
+					<logicalBoolean/>
 					<physicalInteger groupId="INSTALL_TEST_VALUE">
 						<operationType>command</operationType>
 					</physicalInteger>
@@ -505,6 +510,32 @@
 					<physicalString groupId="">
 						<operationType>command</operationType>
 					</physicalString>
+				</parameter>
+				<parameter id="SENDERID">
+					<properties>
+						<writeable>false</writeable>
+					</properties>
+					<logicalInteger/>
+					<physicalInteger groupId="">
+						<operationType>command</operationType>
+					</physicalInteger>
+				</parameter>
+				<parameter id="ALARM_COUNTER">
+					<properties>
+						<internal>true</internal>
+					</properties>
+					<logicalInteger>
+						<minimumValue>0</minimumValue>
+						<maximumValue>65535</maximumValue>
+					</logicalInteger>
+					<physicalInteger groupId="ALARM_COUNTER">
+						<operationType>command</operationType>
+					</physicalInteger>
+					<packets>
+						<packet id="EVENT">
+							<type>event</type>
+						</packet>
+					</packets>
 				</parameter>
 			</variables>
 			<linkParameters id="sd_team_ch_link--1">

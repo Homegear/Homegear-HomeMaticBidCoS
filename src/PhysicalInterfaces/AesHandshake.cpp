@@ -691,4 +691,85 @@ void AesHandshake::getKey(std::vector<uint8_t>& key, uint32_t keyIndex)
     }
 }
 // }}}
+
+// {{{ Signature
+void AesHandshake::appendSignature(std::shared_ptr<BidCoSPacket> packet)
+{
+	try
+	{
+		if(packet->payload()->size() < 6) return;
+
+		std::vector<uint8_t> iv(16, 0);
+		iv.at(0) = 0x49;
+		int32_t senderAddress = packet->senderAddress();
+		iv.at(1) = senderAddress >> 16;
+		iv.at(2) = (senderAddress >> 8) & 0xFF;
+		iv.at(3) = senderAddress & 0xFF;
+		int32_t destinationAddress = packet->destinationAddress();
+		iv.at(4) = destinationAddress >> 16;
+		iv.at(5) = (destinationAddress >> 8) & 0xFF;
+		iv.at(6) = destinationAddress & 0xFF;
+		iv.at(7) = packet->payload()->at(4);
+		iv.at(8) = packet->payload()->at(5);
+		iv.at(9) = packet->messageCounter();
+		iv.at(15) = 5;
+
+		gcry_error_t result = 0;
+		std::vector<uint8_t> eIv(iv.size());
+
+		std::lock_guard<std::mutex> encryptGuard(_encryptMutex);
+		if(!_encryptHandle) return;
+
+		if((result = gcry_cipher_setkey(_encryptHandle, _rfKey.data(), _rfKey.size())) != GPG_ERR_NO_ERROR)
+		{
+			_out.printError("Error: Could not set key for encryption: " + BaseLib::Security::Gcrypt::getError(result));
+			return;
+		}
+
+		if((result = gcry_cipher_encrypt(_encryptHandle, eIv.data(), eIv.size(), iv.data(), iv.size())) != GPG_ERR_NO_ERROR)
+		{
+			_out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
+			return;
+		}
+
+		std::vector<uint8_t> plain(2, 0);
+		plain.reserve(16);
+		plain.at(0) = packet->messageCounter();
+		plain.at(1) = packet->controlByte();
+		plain.insert(plain.end(), packet->payload()->begin(), packet->payload()->end() - 2);
+		plain.resize(16, 0);
+
+		for(int32_t i = 0; i < 16; i++)
+		{
+			eIv.at(i) = eIv.at(i) ^ plain.at(i);
+		}
+
+		std::vector<uint8_t> signature(16);
+
+		if((result = gcry_cipher_encrypt(_encryptHandle, signature.data(), signature.size(), eIv.data(), eIv.size())) != GPG_ERR_NO_ERROR)
+		{
+			_out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
+			return;
+		}
+
+		packet->payload()->reserve(packet->payload()->size() + 4);
+		packet->payload()->push_back(signature.at(12));
+		packet->payload()->push_back(signature.at(13));
+		packet->payload()->push_back(signature.at(14));
+		packet->payload()->push_back(signature.at(15));
+	}
+	catch(const std::exception& ex)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+// }}}
 }

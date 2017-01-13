@@ -395,6 +395,15 @@
 						<operationType>command</operationType>
 					</physicalString>
 				</parameter>
+				<parameter id="SENDERID">
+					<properties>
+						<writeable>false</writeable>
+					</properties>
+					<logicalInteger/>
+					<physicalInteger groupId="">
+						<operationType>command</operationType>
+					</physicalInteger>
+				</parameter>
 			</variables>
 			<linkParameters id="sd_team_ch_link--1">
 				<scenario id="default">

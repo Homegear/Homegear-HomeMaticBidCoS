@@ -657,7 +657,8 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 		forceSendPacket(bidCoSPacket);
 		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 		_aesHandshake->setMFrame(bidCoSPacket);
-		if(!_updateMode && bidCoSPacket->messageType() != 0x11)
+		if(!_updateMode && bidCoSPacket->messageType() != 0x11 &&
+				!(bidCoSPacket->messageType() == 0x41 && ((bidCoSPacket->controlByte() == 0x14 && bidCoSPacket->payload()->size() == 10) || (bidCoSPacket->controlByte() == 0x94 && bidCoSPacket->payload()->size() == 3)))) //HM-Sec-SD(-2)
 		{
 			if(bidCoSPacket->controlByte() & 0x10)
 			{
@@ -670,6 +671,26 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 				queuePacket(bidCoSPacket, packet->timeSending() + 400);
 			}
 		}
+	}
+	catch(const std::exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(BaseLib::Exception& ex)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
+    catch(...)
+    {
+        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    }
+}
+
+void IBidCoSInterface::appendSignature(std::shared_ptr<BidCoSPacket> packet)
+{
+	try
+	{
+		_aesHandshake->appendSignature(packet);
 	}
 	catch(const std::exception& ex)
     {

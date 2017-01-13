@@ -420,7 +420,7 @@ void Hm_Mod_Rpi_Pcb::processQueueEntry(int32_t index, int64_t id, std::shared_pt
 				payload.push_back(queueEntry->peerInfo.address & 0xFF);
 				payload.push_back(queueEntry->peerInfo.keyIndex);
 				payload.push_back((char)(queueEntry->peerInfo.wakeUp)); //CCU2 sets this for wake up, too. No idea, what the meaning is.
-				payload.push_back((char)(queueEntry->peerInfo.wakeUp)); //This actually enables the sending of the wake up packet
+				payload.push_back(0);
 				buildPacket(requestPacket, payload);
 				_packetIndex++;
 				getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
@@ -1517,93 +1517,111 @@ void Hm_Mod_Rpi_Pcb::listen()
 		std::vector<uint8_t> data;
         while(!_stopCallbackThread)
         {
-        	if(_stopped)
+        	try
         	{
-        		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        		if(_stopCallbackThread) return;
-        		_out.printWarning("Warning: Connection closed (1). Trying to reconnect...");
-        		reconnect();
-        		continue;
-        	}
-			try
-			{
-				if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
-
-				if(_fileDescriptor->descriptor == -1) break;
-				timeval timeout;
-				timeout.tv_sec = 5;
-				timeout.tv_usec = 0;
-				fd_set readFileDescriptor;
-				FD_ZERO(&readFileDescriptor);
+				if(_stopped)
 				{
-					auto fileDescriptorGuard = GD::bl->fileDescriptorManager.getLock();
-					fileDescriptorGuard.lock();
-					FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					if(_stopCallbackThread) return;
+					_out.printWarning("Warning: Connection closed (1). Trying to reconnect...");
+					reconnect();
+					continue;
 				}
-
-				result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
-				if(result == 0) continue;
-				else if(result == -1)
+				try
 				{
-					if(errno == EINTR) continue;
-					_out.printWarning("Warning: Connection closed (2). Trying to reconnect...");
+					if(BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
+
+					if(_fileDescriptor->descriptor == -1) break;
+					timeval timeout;
+					timeout.tv_sec = 5;
+					timeout.tv_usec = 0;
+					fd_set readFileDescriptor;
+					FD_ZERO(&readFileDescriptor);
+					{
+						auto fileDescriptorGuard = GD::bl->fileDescriptorManager.getLock();
+						fileDescriptorGuard.lock();
+						FD_SET(_fileDescriptor->descriptor, &readFileDescriptor);
+					}
+
+					result = select(_fileDescriptor->descriptor + 1, &readFileDescriptor, NULL, NULL, &timeout);
+					if(result == 0) continue;
+					else if(result == -1)
+					{
+						if(errno == EINTR) continue;
+						_out.printWarning("Warning: Connection closed (2). Trying to reconnect...");
+						_stopped = true;
+						continue;
+					}
+
+					bytesRead = read(_fileDescriptor->descriptor, buffer.data(), buffer.size());
+					if(bytesRead <= 0) //read returns 0, when connection is disrupted.
+					{
+						_out.printWarning("Warning: Connection closed (3). Trying to reconnect...");
+						_stopped = true;
+						continue;
+					}
+
+					if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
+					data.insert(data.end(), buffer.begin(), buffer.begin() + bytesRead);
+
+					if(data.size() > 100000)
+					{
+						_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
+						data.clear();
+						break;
+					}
+				}
+				catch(const BaseLib::SocketTimeOutException& ex)
+				{
+					if(data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
+					{
+						continue;
+					}
+				}
+				catch(const BaseLib::SocketClosedException& ex)
+				{
 					_stopped = true;
+					_out.printWarning("Warning: " + ex.what());
+					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+					continue;
+				}
+				catch(const BaseLib::SocketOperationException& ex)
+				{
+					_stopped = true;
+					_out.printError("Error: " + ex.what());
+					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 					continue;
 				}
 
-				bytesRead = read(_fileDescriptor->descriptor, buffer.data(), buffer.size());
-				if(bytesRead <= 0) //read returns 0, when connection is disrupted.
-				{
-					_out.printWarning("Warning: Connection closed (3). Trying to reconnect...");
-					_stopped = true;
-					continue;
-				}
+				if(_bl->debugLevel >= 5) _out.printDebug("Debug: Packet received. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 
-				if(bytesRead > (signed)buffer.size()) bytesRead = buffer.size();
-				data.insert(data.end(), buffer.begin(), buffer.begin() + bytesRead);
-
+				if(data.empty()) continue;
 				if(data.size() > 100000)
 				{
-					_out.printError("Could not read from HM-MOD-RPI-PCB: Too much data.");
 					data.clear();
-					break;
-				}
-			}
-			catch(const BaseLib::SocketTimeOutException& ex)
-			{
-				if(data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
-				{
 					continue;
 				}
-			}
-			catch(const BaseLib::SocketClosedException& ex)
-			{
-				_stopped = true;
-				_out.printWarning("Warning: " + ex.what());
-				std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-				continue;
-			}
-			catch(const BaseLib::SocketOperationException& ex)
-			{
-				_stopped = true;
-				_out.printError("Error: " + ex.what());
-				std::this_thread::sleep_for(std::chrono::milliseconds(10000));
-				continue;
-			}
 
-			if(_bl->debugLevel >= 5) _out.printDebug("Debug: Packet received. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
-
-			if(data.empty()) continue;
-			if(data.size() > 100000)
-			{
+				processData(data);
 				data.clear();
-				continue;
+
+				_lastPacketReceived = BaseLib::HelperFunctions::getTime();
 			}
-
-        	processData(data);
-        	data.clear();
-
-        	_lastPacketReceived = BaseLib::HelperFunctions::getTime();
+			catch(const std::exception& ex)
+			{
+				_stopped = true;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+			}
+			catch(BaseLib::Exception& ex)
+			{
+				_stopped = true;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+			}
+			catch(...)
+			{
+				_stopped = true;
+				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+			}
         }
     }
     catch(const std::exception& ex)

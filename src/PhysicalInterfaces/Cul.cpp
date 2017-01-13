@@ -490,7 +490,7 @@ void Cul::listen()
         		else
         		{
         			if(_firstPacket) _firstPacket = false;
-        			else
+        			else if(packetHex.size() < 17) // E. g.: A0686ECDDBBBBBAC4 (No idea where these short packets come from in my office)
         			{
 						_out.printError("Error: Too small packet received. Assuming CUL error. I'm closing and reopening device: " + packetHex);
 						closeDevice();

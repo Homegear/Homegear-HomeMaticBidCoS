@@ -1199,7 +1199,7 @@ void HM_LGW::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
@@ -1218,7 +1218,7 @@ void HM_LGW::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
@@ -1234,14 +1234,17 @@ void HM_LGW::doInit()
 		buildPacket(requestPacket, payload);
 		_packetIndex++;
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-		if(responsePacket.size() < 20 || responsePacket.at(6) == 4)
+		if(responsePacket.size() < 19 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
-		std::string serialNumber(responsePacket.data() + 7, 10);
-		_out.printInfo("Info: Serial number: " + serialNumber);
+		if(responsePacket.at(7) != 0xFF) //Valid response?
+		{
+			std::string serialNumber((char*)responsePacket.data() + 7, 10);
+			_out.printInfo("Info: Serial number: " + serialNumber);
+		}
 
 		//6th packet - Set time
 		if(_stopped) return;
@@ -1264,7 +1267,7 @@ void HM_LGW::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
@@ -1291,7 +1294,7 @@ void HM_LGW::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
@@ -1312,7 +1315,7 @@ void HM_LGW::doInit()
 			getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
 			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 				_stopped = true;
 				return;
 			}
@@ -1334,7 +1337,7 @@ void HM_LGW::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
@@ -1352,7 +1355,7 @@ void HM_LGW::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}

@@ -419,7 +419,7 @@ void Hm_Mod_Rpi_Pcb::processQueueEntry(int32_t index, int64_t id, std::shared_pt
 				payload.push_back((queueEntry->peerInfo.address >> 8) & 0xFF);
 				payload.push_back(queueEntry->peerInfo.address & 0xFF);
 				payload.push_back(queueEntry->peerInfo.keyIndex);
-				payload.push_back((char)(queueEntry->peerInfo.wakeUp)); //CCU2 sets this for wake up, too. No idea, what the meaning is.
+				payload.push_back(queueEntry->peerInfo.wakeUp ? 1 : 0); //CCU2 sets this for wake up, too. No idea, what the meaning is.
 				payload.push_back(0);
 				buildPacket(requestPacket, payload);
 				_packetIndex++;
@@ -625,7 +625,7 @@ void Hm_Mod_Rpi_Pcb::sendPeer(PeerInfo& peerInfo)
 				payload.push_back(peerInfo.address & 0xFF);
 				payload.push_back(0);
 				payload.push_back(1);
-				payload.push_back(1);
+				payload.push_back(0);
 				buildPacket(requestPacket, payload);
 				_packetIndex++;
 				getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
@@ -653,8 +653,8 @@ void Hm_Mod_Rpi_Pcb::sendPeer(PeerInfo& peerInfo)
 			payload.push_back((peerInfo.address >> 8) & 0xFF);
 			payload.push_back(peerInfo.address & 0xFF);
 			payload.push_back(peerInfo.keyIndex);
-			payload.push_back((char)peerInfo.wakeUp);
-			payload.push_back((char)peerInfo.wakeUp);
+			payload.push_back(peerInfo.wakeUp ? 1 : 0);
+			payload.push_back(0);
 			buildPacket(requestPacket, payload);
 			_packetIndex++;
 			getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
@@ -1194,7 +1194,7 @@ void Hm_Mod_Rpi_Pcb::doInit()
 			return;
 		}
 
-		//2nd packet
+		//2nd packet - Get firmware version
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
@@ -1207,12 +1207,13 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
+		_out.printInfo("Info: Firmware version: " + std::to_string((int32_t)responsePacket.at(10)) + '.' + std::to_string((int32_t)responsePacket.at(11)) + '.' + std::to_string((int32_t)responsePacket.at(12)));
 
-		//3th packet
+		//3rd packet
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
@@ -1226,31 +1227,35 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
 
-		//4th packet
+		//4th packet - Get serial number
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
 		payload.clear();
-		payload.reserve(3);
+		payload.reserve(2);
 		payload.push_back(0);
-		payload.push_back(9);
-		payload.push_back(0);
+		payload.push_back(0xB);
 		buildPacket(requestPacket, payload);
 		_packetIndex++;
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
-		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
+		if(responsePacket.size() < 19 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
+		if(responsePacket.at(7) != 0xFF) //Valid response?
+		{
+			std::string serialNumber((char*)responsePacket.data() + 7, 10);
+			_out.printInfo("Info: Serial number: " + serialNumber);
+		}
 
-		//5th packet
+		//5th packet - Set time
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
@@ -1271,12 +1276,12 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
 
-		//6th packet
+		//6th packet - Set RF key
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
@@ -1298,12 +1303,12 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
 
-		//7th packet
+		//7th packet - Set old RF key
 		if(_currentRfKeyIndex > 1 && !_oldRfKey.empty())
 		{
 			if(_stopped) return;
@@ -1320,17 +1325,18 @@ void Hm_Mod_Rpi_Pcb::doInit()
 			getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
 			if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 			{
-				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+				if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 				_stopped = true;
 				return;
 			}
 		}
 
-		//8th packet
+		//8th packet - Set address
 		if(_stopped) return;
 		responsePacket.clear();
 		requestPacket.clear();
 		payload.clear();
+		payload.reserve(5);
 		payload.push_back(1);
 		payload.push_back(0);
 		payload.push_back(_myAddress >> 16);
@@ -1341,7 +1347,25 @@ void Hm_Mod_Rpi_Pcb::doInit()
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 1, 4);
 		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
 		{
-			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet. Reconnecting...");
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
+			_stopped = true;
+			return;
+		}
+
+		//9th packet - Disable update mode
+		if(_stopped) return;
+		responsePacket.clear();
+		requestPacket.clear();
+		payload.clear();
+		payload.reserve(2);
+		payload.push_back(0);
+		payload.push_back(6);
+		buildPacket(requestPacket, payload);
+		_packetIndex++;
+		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
+		if(responsePacket.size() < 9 || responsePacket.at(6) == 4)
+		{
+			if(responsePacket.size() >= 9) _out.printError("Error: NACK received in response to init sequence packet (" + BaseLib::HelperFunctions::getHexString(requestPacket) + "). Response was: " + BaseLib::HelperFunctions::getHexString(responsePacket) + ". Reconnecting...");
 			_stopped = true;
 			return;
 		}
@@ -1850,6 +1874,7 @@ void Hm_Mod_Rpi_Pcb::parsePacket(std::vector<uint8_t>& packet)
 			raisePacketReceived(bidCoSPacket);
 			if(wakeUp) //Wake up was sent
 			{
+				_out.printInfo("Info: Detected wake-up packet.");
 				std::vector<uint8_t> payload;
 				payload.push_back(0x00);
 				std::shared_ptr<BidCoSPacket> ok(new BidCoSPacket(bidCoSPacket->messageCounter(), 0x80, 0x02, bidCoSPacket->senderAddress(), _myAddress, payload));

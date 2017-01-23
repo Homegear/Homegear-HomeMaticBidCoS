@@ -673,6 +673,7 @@ void HM_CFG_LAN::sendKeepAlive()
 			if(_lastKeepAliveResponse < _lastKeepAlive)
 			{
 				_lastKeepAliveResponse = _lastKeepAlive;
+				_out.printError("Warning: No response to keep alive packet received. Closing connection.");
 				_stopped = true;
 				return;
 			}

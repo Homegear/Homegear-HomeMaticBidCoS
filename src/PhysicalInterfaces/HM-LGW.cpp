@@ -35,7 +35,7 @@ namespace BidCoS
 HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings)
 {
 	_out.init(GD::bl);
-	_out.setPrefix(GD::out.getPrefix() + "HM-LGW \"" + settings->id + "\": ");
+	_out.setPrefix(_out.getPrefix() + "HM-LGW \"" + settings->id + "\": ");
 
 	signal(SIGPIPE, SIG_IGN);
 
@@ -140,15 +140,15 @@ void HM_LGW::enableUpdateMode()
 	}
     catch(const std::exception& ex)
     {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(BaseLib::Exception& ex)
     {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(...)
     {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -193,15 +193,15 @@ void HM_LGW::disableUpdateMode()
 	}
     catch(const std::exception& ex)
     {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(BaseLib::Exception& ex)
     {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(...)
     {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -422,7 +422,7 @@ void HM_LGW::sendPeer(PeerInfo& peerInfo)
 {
 	try
 	{
-		if(GD::bl->debugLevel > 4) GD::out.printDebug("Debug: Sending peer to LGW \"" + _settings->id + "\": Address " + GD::bl->hf.getHexString(peerInfo.address, 6) + ", AES enabled " + std::to_string(peerInfo.aesEnabled) + ", AES map " + GD::bl->hf.getHexString(peerInfo.getAESChannelMap()) + ".");
+		if(GD::bl->debugLevel > 4) _out.printDebug("Debug: Sending peer to LGW \"" + _settings->id + "\": Address " + GD::bl->hf.getHexString(peerInfo.address, 6) + ", AES enabled " + std::to_string(peerInfo.aesEnabled) + ", AES map " + GD::bl->hf.getHexString(peerInfo.getAESChannelMap()) + ".");
 		for(int32_t i = 0; i < 2; i++) //The CCU sends this packet two or even more times, I don't know why
 		{
 			//Get current config
@@ -1635,7 +1635,7 @@ std::vector<char> HM_LGW::encrypt(const std::vector<char>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_encrypt(_encryptHandle, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
+		_out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<char>();
 	}
@@ -1649,7 +1649,7 @@ std::vector<uint8_t> HM_LGW::decrypt(std::vector<uint8_t>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_decrypt(_decryptHandle, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
+		_out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<uint8_t>();
 	}
@@ -1663,7 +1663,7 @@ std::vector<char> HM_LGW::encryptKeepAlive(std::vector<char>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_encrypt(_encryptHandleKeepAlive, &encryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error encrypting keep alive data: " + BaseLib::Security::Gcrypt::getError(result));
+		_out.printError("Error encrypting keep alive data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<char>();
 	}
@@ -1677,7 +1677,7 @@ std::vector<uint8_t> HM_LGW::decryptKeepAlive(std::vector<uint8_t>& data)
 	gcry_error_t result;
 	if((result = gcry_cipher_decrypt(_decryptHandleKeepAlive, &decryptedData.at(0), data.size(), &data.at(0), data.size())) != GPG_ERR_NO_ERROR)
 	{
-		GD::out.printError("Error decrypting keep alive data: " + BaseLib::Security::Gcrypt::getError(result));
+		_out.printError("Error decrypting keep alive data: " + BaseLib::Security::Gcrypt::getError(result));
 		_stopCallbackThread = true;
 		return std::vector<uint8_t>();
 	}
@@ -1694,6 +1694,7 @@ void HM_LGW::sendKeepAlivePacket1()
 			if(_lastKeepAliveResponse1 < _lastKeepAlive1)
 			{
 				_lastKeepAliveResponse1 = _lastKeepAlive1;
+				_out.printError("Warning: No response to keep alive packet received (1). Closing connection.");
 				_stopped = true;
 				return;
 			}
@@ -1730,6 +1731,7 @@ void HM_LGW::sendKeepAlivePacket2()
 			if(_lastKeepAliveResponse2 < _lastKeepAlive2)
 			{
 				_lastKeepAliveResponse2 = _lastKeepAlive2;
+				_out.printError("Warning: No response to keep alive packet received (2). Closing connection.");
 				_stopped = true;
 				return;
 			}
@@ -2537,7 +2539,7 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 	try
 	{
 		if(packet.empty()) return;
-		if(packet.at(5) == 4 && packet.at(3) == 0 && packet.size() == 10 && packet.at(6) == 2 && packet.at(7) == 0)
+		if(packet.at(5) == 4 && packet.at(3) == 0 && packet.size() == 10 && packet.at(6) == 2 && (packet.at(7) == 0 || packet.at(7) == 2))
 		{
 			if(_bl->debugLevel >= 5) _out.printDebug("Debug: Keep alive response received on port " + _settings->port + ".");
 			_lastKeepAliveResponse1 = BaseLib::HelperFunctions::getTimeSeconds();

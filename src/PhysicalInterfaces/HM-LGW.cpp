@@ -2539,7 +2539,7 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 	try
 	{
 		if(packet.empty()) return;
-		if(packet.at(5) == 4 && packet.at(3) == 0 && packet.size() == 10 && packet.at(6) == 2 && (packet.at(7) == 0 || packet.at(7) == 2))
+		if(packet.at(5) == 4 && packet.at(3) == 0 && packet.size() == 10 && packet.at(6) == 2)
 		{
 			if(_bl->debugLevel >= 5) _out.printDebug("Debug: Keep alive response received on port " + _settings->port + ".");
 			_lastKeepAliveResponse1 = BaseLib::HelperFunctions::getTimeSeconds();

@@ -1129,6 +1129,7 @@ void HM_CFG_LAN::parsePacket(std::string& packet)
         	}
         	else if(!parts.at(5).empty()) _out.printWarning("Warning: Too short packet received: " + parts.at(5));
 		}
+		else _out.printInfo("Info: Packet received: " + packet);
 	}
     catch(const std::exception& ex)
     {

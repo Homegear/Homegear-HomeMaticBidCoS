@@ -2598,6 +2598,7 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 				raisePacketReceived(ok);
 			}
 		}
+		else _out.printInfo("Info: Packet received: " + BaseLib::HelperFunctions::getHexString(packet));
 	}
     catch(const std::exception& ex)
     {

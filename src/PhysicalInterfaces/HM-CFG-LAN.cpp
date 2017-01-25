@@ -679,12 +679,10 @@ void HM_CFG_LAN::sendKeepAlive()
 				{
 					_out.printWarning("Warning: No response to keep alive packet received. Closing connection.");
 					_stopped = true;
+					return;
 				}
 				else _out.printInfo("Info: No response to keep alive packet received. Closing connection.");
-				return;
-			}
-
-			_missedKeepAliveResponses = 0;
+			} else _missedKeepAliveResponses = 0;
 
 			_lastKeepAlive = BaseLib::HelperFunctions::getTimeSeconds();
 			send(_keepAlivePacket, false);

@@ -1701,12 +1701,12 @@ void HM_LGW::sendKeepAlivePacket1()
 				{
 					_out.printWarning("Warning: No response to keep alive packet received (1). Closing connection.");
 					_stopped = true;
+					return;
 				}
 				else _out.printInfo("Info: No response to keep alive packet received (1). Closing connection.");
-				return;
 			}
+			else _missedKeepAliveResponses1 = 0;
 
-			_missedKeepAliveResponses1 = 0;
 			_lastKeepAlive1 = BaseLib::HelperFunctions::getTimeSeconds();
 			std::vector<char> packet;
 			std::vector<char> payload{ 0, 8 };
@@ -1744,12 +1744,11 @@ void HM_LGW::sendKeepAlivePacket2()
 				{
 					_out.printWarning("Warning: No response to keep alive packet received (1). Closing connection.");
 					_stopped = true;
+					return;
 				}
 				else _out.printInfo("Info: No response to keep alive packet received (1). Closing connection.");
-				return;
 			}
-
-			_missedKeepAliveResponses2 = 0;
+			else _missedKeepAliveResponses2 = 0;
 			_lastKeepAlive2 = BaseLib::HelperFunctions::getTimeSeconds();
 			std::vector<char> packet = { 'K', _bl->hf.getHexChar(_packetIndexKeepAlive >> 4), _bl->hf.getHexChar(_packetIndexKeepAlive & 0xF), '\r', '\n' };
 			sendKeepAlive(packet, false);

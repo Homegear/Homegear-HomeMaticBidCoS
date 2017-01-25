@@ -675,7 +675,7 @@ void HM_CFG_LAN::sendKeepAlive()
 			{
 				_lastKeepAliveResponse = _lastKeepAlive;
 				_missedKeepAliveResponses++;
-				if(_missedKeepAliveResponses >= 3)
+				if(_missedKeepAliveResponses >= 5)
 				{
 					_out.printWarning("Warning: No response to keep alive packet received. Closing connection.");
 					_stopped = true;

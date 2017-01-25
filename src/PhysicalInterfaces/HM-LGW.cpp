@@ -1697,7 +1697,7 @@ void HM_LGW::sendKeepAlivePacket1()
 			{
 				_lastKeepAliveResponse1 = _lastKeepAlive1;
 				_missedKeepAliveResponses1++;
-				if(_missedKeepAliveResponses1 >= 3)
+				if(_missedKeepAliveResponses1 >= 5)
 				{
 					_out.printWarning("Warning: No response to keep alive packet received (1). Closing connection.");
 					_stopped = true;

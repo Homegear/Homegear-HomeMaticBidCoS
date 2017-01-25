@@ -401,6 +401,7 @@ void HM_CFG_LAN::reconnectThread()
 	try
 	{
 		_stopped = true;
+		_missedKeepAliveResponses = 0;
 		std::lock_guard<std::mutex> sendGuard(_sendMutex);
 		std::lock_guard<std::mutex> listenGuard(_listenMutex);
 		_socket->close();
@@ -673,10 +674,17 @@ void HM_CFG_LAN::sendKeepAlive()
 			if(_lastKeepAliveResponse < _lastKeepAlive)
 			{
 				_lastKeepAliveResponse = _lastKeepAlive;
-				_out.printError("Warning: No response to keep alive packet received. Closing connection.");
-				_stopped = true;
+				_missedKeepAliveResponses++;
+				if(_missedKeepAliveResponses >= 3)
+				{
+					_out.printWarning("Warning: No response to keep alive packet received. Closing connection.");
+					_stopped = true;
+				}
+				else _out.printInfo("Info: No response to keep alive packet received. Closing connection.");
 				return;
 			}
+
+			_missedKeepAliveResponses = 0;
 
 			_lastKeepAlive = BaseLib::HelperFunctions::getTimeSeconds();
 			send(_keepAlivePacket, false);

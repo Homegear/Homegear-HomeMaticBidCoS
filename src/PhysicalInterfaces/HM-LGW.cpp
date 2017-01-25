@@ -1434,6 +1434,8 @@ void HM_LGW::reconnect()
 		_initStarted = false;
 		_initComplete = false;
 		_initCompleteKeepAlive = false;
+		_missedKeepAliveResponses1 = 0;
+		_missedKeepAliveResponses2 = 0;
 		_firstPacket = true;
 		_out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
 		_socket->open();
@@ -1694,11 +1696,17 @@ void HM_LGW::sendKeepAlivePacket1()
 			if(_lastKeepAliveResponse1 < _lastKeepAlive1)
 			{
 				_lastKeepAliveResponse1 = _lastKeepAlive1;
-				_out.printError("Warning: No response to keep alive packet received (1). Closing connection.");
-				_stopped = true;
+				_missedKeepAliveResponses1++;
+				if(_missedKeepAliveResponses1 >= 3)
+				{
+					_out.printWarning("Warning: No response to keep alive packet received (1). Closing connection.");
+					_stopped = true;
+				}
+				else _out.printInfo("Info: No response to keep alive packet received (1). Closing connection.");
 				return;
 			}
 
+			_missedKeepAliveResponses1 = 0;
 			_lastKeepAlive1 = BaseLib::HelperFunctions::getTimeSeconds();
 			std::vector<char> packet;
 			std::vector<char> payload{ 0, 8 };
@@ -1731,11 +1739,17 @@ void HM_LGW::sendKeepAlivePacket2()
 			if(_lastKeepAliveResponse2 < _lastKeepAlive2)
 			{
 				_lastKeepAliveResponse2 = _lastKeepAlive2;
-				_out.printError("Warning: No response to keep alive packet received (2). Closing connection.");
-				_stopped = true;
+				_missedKeepAliveResponses2++;
+				if(_missedKeepAliveResponses2 >= 3)
+				{
+					_out.printWarning("Warning: No response to keep alive packet received (1). Closing connection.");
+					_stopped = true;
+				}
+				else _out.printInfo("Info: No response to keep alive packet received (1). Closing connection.");
 				return;
 			}
 
+			_missedKeepAliveResponses2 = 0;
 			_lastKeepAlive2 = BaseLib::HelperFunctions::getTimeSeconds();
 			std::vector<char> packet = { 'K', _bl->hf.getHexChar(_packetIndexKeepAlive >> 4), _bl->hf.getHexChar(_packetIndexKeepAlive & 0xF), '\r', '\n' };
 			sendKeepAlive(packet, false);

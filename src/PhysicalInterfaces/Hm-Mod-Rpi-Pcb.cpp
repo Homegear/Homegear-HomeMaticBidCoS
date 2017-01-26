@@ -37,7 +37,11 @@ Hm_Mod_Rpi_Pcb::Hm_Mod_Rpi_Pcb(std::shared_ptr<BaseLib::Systems::PhysicalInterfa
 	_out.init(GD::bl);
 	_out.setPrefix(GD::out.getPrefix() + "HM-MOD-RPI-PCB \"" + settings->id + "\": ");
 
-	signal(SIGPIPE, SIG_IGN);
+	if(settings->listenThreadPriority == -1)
+	{
+		settings->listenThreadPriority = 45;
+		settings->listenThreadPolicy = SCHED_FIFO;
+	}
 
 	_packetIndex = 0;
 	memset(&_termios, 0, sizeof(termios));

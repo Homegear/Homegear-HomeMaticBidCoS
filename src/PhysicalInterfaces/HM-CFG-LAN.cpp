@@ -374,6 +374,7 @@ void HM_CFG_LAN::startListening()
 		}
 		if(_useAES) aesInit();
 		_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
+		_socket->setReadTimeout(1000000);
 		_out.printDebug("Debug: Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
 		//_socket->open();
 		//_out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");

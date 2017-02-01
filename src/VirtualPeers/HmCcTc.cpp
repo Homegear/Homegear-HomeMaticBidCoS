@@ -337,7 +337,7 @@ void HmCcTc::dutyCycleThread(int64_t lastDutyCycleEvent)
 				if(_stopDutyCycleThread) break;
 
 				_bl->threadManager.join(_sendDutyCyclePacketThread);
-				_bl->threadManager.start(_sendDutyCyclePacketThread, false, 45, SCHED_FIFO, &HmCcTc::sendDutyCyclePacket, this, _dutyCycleMessageCounter, nextDutyCycleEvent);
+				_bl->threadManager.start(_sendDutyCyclePacketThread, false, 44, SCHED_FIFO, &HmCcTc::sendDutyCyclePacket, this, _dutyCycleMessageCounter, nextDutyCycleEvent);
 
 				_lastDutyCycleEvent = nextDutyCycleEvent;
 				cycleLength = calculateCycleLength(_dutyCycleMessageCounter);

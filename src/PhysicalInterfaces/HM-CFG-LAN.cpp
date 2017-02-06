@@ -374,6 +374,7 @@ void HM_CFG_LAN::startListening()
 		}
 		if(_useAES) aesInit();
 		_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
+		_socket->setReadTimeout(1000000);
 		_out.printDebug("Debug: Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
 		//_socket->open();
 		//_out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");
@@ -401,6 +402,7 @@ void HM_CFG_LAN::reconnectThread()
 	try
 	{
 		_stopped = true;
+		_missedKeepAliveResponses = 0;
 		std::lock_guard<std::mutex> sendGuard(_sendMutex);
 		std::lock_guard<std::mutex> listenGuard(_listenMutex);
 		_socket->close();
@@ -673,9 +675,15 @@ void HM_CFG_LAN::sendKeepAlive()
 			if(_lastKeepAliveResponse < _lastKeepAlive)
 			{
 				_lastKeepAliveResponse = _lastKeepAlive;
-				_stopped = true;
-				return;
-			}
+				_missedKeepAliveResponses++;
+				if(_missedKeepAliveResponses >= 5)
+				{
+					_out.printWarning("Warning: No response to keep alive packet received. Closing connection.");
+					_stopped = true;
+					return;
+				}
+				else _out.printInfo("Info: No response to keep alive packet received. Closing connection.");
+			} else _missedKeepAliveResponses = 0;
 
 			_lastKeepAlive = BaseLib::HelperFunctions::getTimeSeconds();
 			send(_keepAlivePacket, false);
@@ -1128,6 +1136,7 @@ void HM_CFG_LAN::parsePacket(std::string& packet)
         	}
         	else if(!parts.at(5).empty()) _out.printWarning("Warning: Too short packet received: " + parts.at(5));
 		}
+		else _out.printInfo("Info: Packet received: " + packet);
 	}
     catch(const std::exception& ex)
     {

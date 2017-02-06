@@ -130,8 +130,10 @@ class HM_LGW  : public IBidCoSInterface
         std::atomic_bool _initCompleteKeepAlive;
         int32_t _lastKeepAlive1 = 0;
         int32_t _lastKeepAliveResponse1 = 0;
+        int32_t _missedKeepAliveResponses1 = 0;
         int32_t _lastKeepAlive2 = 0;
         int32_t _lastKeepAliveResponse2 = 0;
+        int32_t _missedKeepAliveResponses2 = 0;
         int32_t _lastTimePacket = 0;
         int64_t _startUpTime = 0;
         bool _escapeByte = false;

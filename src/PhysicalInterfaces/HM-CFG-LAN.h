@@ -79,6 +79,7 @@ class HM_CFG_LAN  : public IBidCoSInterface
         std::list<std::vector<char>> _initCommandQueue;
         int32_t _lastKeepAlive = 0;
         int32_t _lastKeepAliveResponse = 0;
+        int32_t _missedKeepAliveResponses = 0;
         int32_t _lastTimePacket = 0;
         std::vector<char> _keepAlivePacket = { 'K', '\r', '\n' };
         int64_t _startUpTime = 0;

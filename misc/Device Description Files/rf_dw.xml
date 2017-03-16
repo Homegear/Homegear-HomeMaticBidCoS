@@ -1,9 +1,9 @@
-<homegearDevice version="6">
+<homegearDevice version="3">
 	<supportedDevices>
-		<device id="OLIGO.smart.iq.HM">
-			<description>PWM dimmer module</description>
-			<typeNumber>0xFC</typeNumber>
-			<minFirmwareVersion>0x2A</minFirmwareVersion>
+		<device id="HM-LC-DW-WM">
+			<description>dual white PWM dimmer</description>
+			<typeNumber>0x108</typeNumber>
+			<minFirmwareVersion>0x2C</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -17,7 +17,7 @@
 			<configParameters>dimmer_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="DIMMER">
+		<function channel="1" type="DUAL_WHITE_BRIGHTNESS">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -25,11 +25,11 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_ch_master--1</configParameters>
-			<variables>dimmer_ch_values1--1</variables>
-			<linkParameters>dimmer_ch_link--1</linkParameters>
+			<configParameters>dw_controller_brightness_ch_master--1</configParameters>
+			<variables>dw_controller_brightness_ch_values--1</variables>
+			<linkParameters>dw_controller_brightness_ch_link--1</linkParameters>
 		</function>
-		<function channel="2" type="DIMMER">
+		<function channel="2" type="DUAL_WHITE_COLOR">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -37,11 +37,11 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_ch_master--2</configParameters>
-			<variables>dimmer_ch_values2--2</variables>
-			<linkParameters>dimmer_ch_link--2</linkParameters>
+			<configParameters>dw_controller_color_ch_master--2</configParameters>
+			<variables>dw_controller_color_ch_values--2</variables>
+			<linkParameters>dw_controller_color_ch_link--2</linkParameters>
 		</function>
-		<function channel="3" type="VIRTUAL_DIMMER">
+		<function channel="3" type="VIRTUAL_DUAL_WHITE_BRIGHTNESS">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -49,11 +49,11 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_virt_ch_master--3</configParameters>
-			<variables>dimmer_ch_values1--3</variables>
-			<linkParameters>dimmer_ch_link--3</linkParameters>
+			<configParameters>dw_controller_brightness_virt_ch_master--3</configParameters>
+			<variables>dw_controller_brightness_ch_values--3</variables>
+			<linkParameters>dw_controller_brightness_ch_link--3</linkParameters>
 		</function>
-		<function channel="4" type="VIRTUAL_DIMMER">
+		<function channel="4" type="VIRTUAL_DUAL_WHITE_COLOR">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -61,11 +61,11 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_virt_ch_master--4</configParameters>
-			<variables>dimmer_ch_values2--4</variables>
-			<linkParameters>dimmer_ch_link--4</linkParameters>
+			<configParameters>dw_controller_color_virt_ch_master--4</configParameters>
+			<variables>dw_controller_color_ch_values--4</variables>
+			<linkParameters>dw_controller_color_ch_link--4</linkParameters>
 		</function>
-		<function channel="5" type="VIRTUAL_DIMMER">
+		<function channel="5" type="VIRTUAL_DUAL_WHITE_BRIGHTNESS">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -73,11 +73,11 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_virt_ch_master--5</configParameters>
-			<variables>dimmer_ch_values1--5</variables>
-			<linkParameters>dimmer_ch_link--5</linkParameters>
+			<configParameters>dw_controller_brightness_virt_ch_master--5</configParameters>
+			<variables>dw_controller_brightness_ch_values--5</variables>
+			<linkParameters>dw_controller_brightness_ch_link--5</linkParameters>
 		</function>
-		<function channel="6" type="VIRTUAL_DIMMER">
+		<function channel="6" type="VIRTUAL_DUAL_WHITE_COLOR">
 			<properties>
 				<linkReceiverFunctionTypes>
 					<type>SWITCH</type>
@@ -85,9 +85,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>dimmer_virt_ch_master--6</configParameters>
-			<variables>dimmer_ch_values2--6</variables>
-			<linkParameters>dimmer_ch_link--6</linkParameters>
+			<configParameters>dw_controller_color_virt_ch_master--6</configParameters>
+			<variables>dw_controller_color_ch_values--6</variables>
+			<linkParameters>dw_controller_color_ch_link--6</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -101,6 +101,26 @@
 				<element>
 					<index>11.0</index>
 					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERLOAD</parameterId>
+				</element>
+				<element>
+					<index>12.2</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERHEAT</parameterId>
+				</element>
+				<element>
+					<index>12.3</index>
+					<size>0.1</size>
+					<parameterId>ERROR_REDUCED</parameterId>
 				</element>
 				<element>
 					<index>12.4</index>
@@ -128,6 +148,26 @@
 				<element>
 					<index>11.0</index>
 					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERLOAD</parameterId>
+				</element>
+				<element>
+					<index>12.2</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERHEAT</parameterId>
+				</element>
+				<element>
+					<index>12.3</index>
+					<size>0.1</size>
+					<parameterId>ERROR_REDUCED</parameterId>
 				</element>
 				<element>
 					<index>12.4</index>
@@ -276,360 +316,6 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="dimmer_ch_master--1">
-			<parameter id="AES_ACTIVE">
-				<properties>
-					<internal>true</internal>
-					<casts>
-						<booleanInteger/>
-					</casts>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="AES_ACTIVE">
-					<index>8.0</index>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="TRANSMIT_TRY_MAX">
-				<properties/>
-				<logicalInteger>
-					<minimumValue>0</minimumValue>
-					<maximumValue>10</maximumValue>
-					<defaultValue>6</defaultValue>
-				</logicalInteger>
-				<physicalInteger>
-					<index>48.0</index>
-					<size>1.0</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POWERUP_ACTION">
-				<properties/>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>POWERUP_OFF</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>POWERUP_ON</id>
-						<index>1</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger>
-					<index>86.0</index>
-					<size>0.1</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="STATUSINFO_MINDELAY">
-				<properties>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>2.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.500000</minimumValue>
-					<maximumValue>15.500000</maximumValue>
-					<defaultValue>2.000000</defaultValue>
-					<specialValues>
-						<specialValue id="NOT_USED">0.000000</specialValue>
-					</specialValues>
-				</logicalDecimal>
-				<physicalInteger>
-					<index>87.0</index>
-					<size>0.5</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="STATUSINFO_RANDOM">
-				<properties>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>1.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>7.000000</maximumValue>
-					<defaultValue>1.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger>
-					<index>87.5</index>
-					<size>0.3</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="LOGIC_COMBINATION">
-				<properties/>
-				<logicalEnumeration>
-					<defaultValue>1</defaultValue>
-					<value>
-						<id>LOGIC_INACTIVE</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>LOGIC_OR</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>LOGIC_AND</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>LOGIC_XOR</id>
-						<index>3</index>
-					</value>
-					<value>
-						<id>LOGIC_NOR</id>
-						<index>4</index>
-					</value>
-					<value>
-						<id>LOGIC_NAND</id>
-						<index>5</index>
-					</value>
-					<value>
-						<id>LOGIC_ORINVERS</id>
-						<index>6</index>
-					</value>
-					<value>
-						<id>LOGIC_ANDINVERS</id>
-						<index>7</index>
-					</value>
-					<value>
-						<id>LOGIC_PLUS</id>
-						<index>8</index>
-					</value>
-					<value>
-						<id>LOGIC_MINUS</id>
-						<index>9</index>
-					</value>
-					<value>
-						<id>LOGIC_MUL</id>
-						<index>10</index>
-					</value>
-					<value>
-						<id>LOGIC_PLUSINVERS</id>
-						<index>11</index>
-					</value>
-					<value>
-						<id>LOGIC_MINUSINVERS</id>
-						<index>12</index>
-					</value>
-					<value>
-						<id>LOGIC_MULINVERS</id>
-						<index>13</index>
-					</value>
-					<value>
-						<id>LOGIC_INVERSPLUS</id>
-						<index>14</index>
-					</value>
-					<value>
-						<id>LOGIC_INVERSMINUS</id>
-						<index>15</index>
-					</value>
-					<value>
-						<id>LOGIC_INVERSMUL</id>
-						<index>16</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger>
-					<index>89.0</index>
-					<size>0.5</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-		</configParameters>
-		<configParameters id="dimmer_ch_master--2">
-			<parameter id="AES_ACTIVE">
-				<properties>
-					<internal>true</internal>
-					<casts>
-						<booleanInteger/>
-					</casts>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="AES_ACTIVE">
-					<index>8.0</index>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="TRANSMIT_TRY_MAX">
-				<properties/>
-				<logicalInteger>
-					<minimumValue>0</minimumValue>
-					<maximumValue>10</maximumValue>
-					<defaultValue>6</defaultValue>
-				</logicalInteger>
-				<physicalInteger>
-					<index>48.0</index>
-					<size>1.0</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="POWERUP_ACTION">
-				<properties/>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>POWERUP_OFF</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>POWERUP_ON</id>
-						<index>1</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger>
-					<index>86.0</index>
-					<size>0.1</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="STATUSINFO_MINDELAY">
-				<properties>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>2.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.500000</minimumValue>
-					<maximumValue>15.500000</maximumValue>
-					<defaultValue>2.000000</defaultValue>
-					<specialValues>
-						<specialValue id="NOT_USED">0.000000</specialValue>
-					</specialValues>
-				</logicalDecimal>
-				<physicalInteger>
-					<index>87.0</index>
-					<size>0.5</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="STATUSINFO_RANDOM">
-				<properties>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>1.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>7.000000</maximumValue>
-					<defaultValue>1.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger>
-					<index>87.5</index>
-					<size>0.3</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="LOGIC_COMBINATION">
-				<properties/>
-				<logicalEnumeration>
-					<defaultValue>1</defaultValue>
-					<value>
-						<id>LOGIC_INACTIVE</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>LOGIC_OR</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>LOGIC_AND</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>LOGIC_XOR</id>
-						<index>3</index>
-					</value>
-					<value>
-						<id>LOGIC_NOR</id>
-						<index>4</index>
-					</value>
-					<value>
-						<id>LOGIC_NAND</id>
-						<index>5</index>
-					</value>
-					<value>
-						<id>LOGIC_ORINVERS</id>
-						<index>6</index>
-					</value>
-					<value>
-						<id>LOGIC_ANDINVERS</id>
-						<index>7</index>
-					</value>
-					<value>
-						<id>LOGIC_PLUS</id>
-						<index>8</index>
-					</value>
-					<value>
-						<id>LOGIC_MINUS</id>
-						<index>9</index>
-					</value>
-					<value>
-						<id>LOGIC_MUL</id>
-						<index>10</index>
-					</value>
-					<value>
-						<id>LOGIC_PLUSINVERS</id>
-						<index>11</index>
-					</value>
-					<value>
-						<id>LOGIC_MINUSINVERS</id>
-						<index>12</index>
-					</value>
-					<value>
-						<id>LOGIC_MULINVERS</id>
-						<index>13</index>
-					</value>
-					<value>
-						<id>LOGIC_INVERSPLUS</id>
-						<index>14</index>
-					</value>
-					<value>
-						<id>LOGIC_INVERSMINUS</id>
-						<index>15</index>
-					</value>
-					<value>
-						<id>LOGIC_INVERSMUL</id>
-						<index>16</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger>
-					<index>89.0</index>
-					<size>0.5</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-		</configParameters>
 		<configParameters id="dimmer_dev_master--0">
 			<parameter id="INTERNAL_KEYS_VISIBLE">
 				<properties>
@@ -678,38 +364,13 @@
 			</parameter>
 			<parameter id="SPEED_MULTIPLIER">
 				<properties>
-					<casts>
-						<optionInteger>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>40</physical>
-								<logical>2</logical>
-							</value>
-						</optionInteger>
-					</casts>
+					<unit>x 200Hz</unit>
 				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>Hardware default</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>1 (400Hz)</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>40 (16kHz)</id>
-						<index>2</index>
-					</value>
-				</logicalEnumeration>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>2</defaultValue>
+				</logicalInteger>
 				<physicalInteger>
 					<index>30.0</index>
 					<size>1.0</size>
@@ -754,7 +415,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="dimmer_virt_ch_master--3">
+		<configParameters id="dw_controller_brightness_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -931,7 +592,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="dimmer_virt_ch_master--4">
+		<configParameters id="dw_controller_brightness_virt_ch_master--3">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -1108,7 +769,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="dimmer_virt_ch_master--5">
+		<configParameters id="dw_controller_brightness_virt_ch_master--5">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -1285,7 +946,7 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<configParameters id="dimmer_virt_ch_master--6">
+		<configParameters id="dw_controller_color_ch_master--2">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -1462,11 +1123,365 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="dimmer_ch_values1--1">
+		<configParameters id="dw_controller_color_virt_ch_master--4">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TRANSMIT_TRY_MAX">
+				<properties/>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger>
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POWERUP_ACTION">
+				<properties/>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>POWERUP_OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>POWERUP_ON</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger>
+					<index>86.0</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_MINDELAY">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.500000</minimumValue>
+					<maximumValue>15.500000</maximumValue>
+					<defaultValue>2.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>87.0</index>
+					<size>0.5</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_RANDOM">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>7.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>87.5</index>
+					<size>0.3</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOGIC_COMBINATION">
+				<properties/>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>LOGIC_INACTIVE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>LOGIC_OR</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>LOGIC_AND</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>LOGIC_XOR</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>LOGIC_NOR</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>LOGIC_NAND</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>LOGIC_ORINVERS</id>
+						<index>6</index>
+					</value>
+					<value>
+						<id>LOGIC_ANDINVERS</id>
+						<index>7</index>
+					</value>
+					<value>
+						<id>LOGIC_PLUS</id>
+						<index>8</index>
+					</value>
+					<value>
+						<id>LOGIC_MINUS</id>
+						<index>9</index>
+					</value>
+					<value>
+						<id>LOGIC_MUL</id>
+						<index>10</index>
+					</value>
+					<value>
+						<id>LOGIC_PLUSINVERS</id>
+						<index>11</index>
+					</value>
+					<value>
+						<id>LOGIC_MINUSINVERS</id>
+						<index>12</index>
+					</value>
+					<value>
+						<id>LOGIC_MULINVERS</id>
+						<index>13</index>
+					</value>
+					<value>
+						<id>LOGIC_INVERSPLUS</id>
+						<index>14</index>
+					</value>
+					<value>
+						<id>LOGIC_INVERSMINUS</id>
+						<index>15</index>
+					</value>
+					<value>
+						<id>LOGIC_INVERSMUL</id>
+						<index>16</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger>
+					<index>89.0</index>
+					<size>0.5</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<configParameters id="dw_controller_color_virt_ch_master--6">
+			<parameter id="AES_ACTIVE">
+				<properties>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="TRANSMIT_TRY_MAX">
+				<properties/>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger>
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POWERUP_ACTION">
+				<properties/>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>POWERUP_OFF</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>POWERUP_ON</id>
+						<index>1</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger>
+					<index>86.0</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_MINDELAY">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.500000</minimumValue>
+					<maximumValue>15.500000</maximumValue>
+					<defaultValue>2.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>87.0</index>
+					<size>0.5</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_RANDOM">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>7.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>87.5</index>
+					<size>0.3</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOGIC_COMBINATION">
+				<properties/>
+				<logicalEnumeration>
+					<defaultValue>1</defaultValue>
+					<value>
+						<id>LOGIC_INACTIVE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>LOGIC_OR</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>LOGIC_AND</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>LOGIC_XOR</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>LOGIC_NOR</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>LOGIC_NAND</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>LOGIC_ORINVERS</id>
+						<index>6</index>
+					</value>
+					<value>
+						<id>LOGIC_ANDINVERS</id>
+						<index>7</index>
+					</value>
+					<value>
+						<id>LOGIC_PLUS</id>
+						<index>8</index>
+					</value>
+					<value>
+						<id>LOGIC_MINUS</id>
+						<index>9</index>
+					</value>
+					<value>
+						<id>LOGIC_MUL</id>
+						<index>10</index>
+					</value>
+					<value>
+						<id>LOGIC_PLUSINVERS</id>
+						<index>11</index>
+					</value>
+					<value>
+						<id>LOGIC_MINUSINVERS</id>
+						<index>12</index>
+					</value>
+					<value>
+						<id>LOGIC_MULINVERS</id>
+						<index>13</index>
+					</value>
+					<value>
+						<id>LOGIC_INVERSPLUS</id>
+						<index>14</index>
+					</value>
+					<value>
+						<id>LOGIC_INVERSMINUS</id>
+						<index>15</index>
+					</value>
+					<value>
+						<id>LOGIC_INVERSMUL</id>
+						<index>16</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger>
+					<index>89.0</index>
+					<size>0.5</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+		</configParameters>
+		<variables id="dw_controller_brightness_ch_values--1">
 			<parameter id="LEVEL_REAL">
 				<properties>
 					<writeable>false</writeable>
-					<control>DIMMER.LEVEL_REAL</control>
+					<control>DUAL_WHITE_BRIGHTNESS.LEVEL_REAL</control>
 					<unit>100%</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -1505,7 +1520,7 @@
 			</parameter>
 			<parameter id="LEVEL">
 				<properties>
-					<control>DIMMER.LEVEL</control>
+					<control>DUAL_WHITE_BRIGHTNESS.LEVEL</control>
 					<unit>100%</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -1552,7 +1567,1090 @@
 			<parameter id="OLD_LEVEL">
 				<properties>
 					<readable>false</readable>
-					<control>DIMMER.OLD_LEVEL</control>
+					<control>NONE</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="OLD_LEVEL">
+						<type>set</type>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="RAMP_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.500000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="RAMP_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ON_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ON_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RAMP_STOP">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="RAMP_STOP">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INHIBIT">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="INHIBIT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LOCK">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WORKING">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="DIRECTION">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NONE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>UP</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>DOWN</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>UNDEFINED</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="DIRECTION_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>DUAL_WHITE_BRIGHTNESS.ERROR_REDUCED</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>DUAL_WHITE_BRIGHTNESS.ERROR_OVERHEAT</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<readable>false</readable>
+					<internal>true</internal>
+					<casts>
+						<toggle>
+							<parameter>LEVEL</parameter>
+						</toggle>
+					</casts>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="TOGGLE_FLAG">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="TOGGLE_INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="dw_controller_brightness_ch_values--3">
+			<parameter id="LEVEL_REAL">
+				<properties>
+					<writeable>false</writeable>
+					<control>DUAL_WHITE_BRIGHTNESS.LEVEL_REAL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL_REAL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LEVEL">
+				<properties>
+					<control>DUAL_WHITE_BRIGHTNESS.LEVEL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="LEVEL_SET">
+						<type>set</type>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="OLD_LEVEL">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="OLD_LEVEL">
+						<type>set</type>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="RAMP_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.500000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="RAMP_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ON_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ON_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RAMP_STOP">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="RAMP_STOP">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INHIBIT">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="INHIBIT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LOCK">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WORKING">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="DIRECTION">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NONE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>UP</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>DOWN</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>UNDEFINED</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="DIRECTION_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>DUAL_WHITE_BRIGHTNESS.ERROR_REDUCED</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>DUAL_WHITE_BRIGHTNESS.ERROR_OVERHEAT</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<readable>false</readable>
+					<internal>true</internal>
+					<casts>
+						<toggle>
+							<parameter>LEVEL</parameter>
+						</toggle>
+					</casts>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="TOGGLE_FLAG">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="TOGGLE_INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="dw_controller_brightness_ch_values--5">
+			<parameter id="LEVEL_REAL">
+				<properties>
+					<writeable>false</writeable>
+					<control>DUAL_WHITE_BRIGHTNESS.LEVEL_REAL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL_REAL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LEVEL">
+				<properties>
+					<control>DUAL_WHITE_BRIGHTNESS.LEVEL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="LEVEL_SET">
+						<type>set</type>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="OLD_LEVEL">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="OLD_LEVEL">
+						<type>set</type>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="RAMP_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.500000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="RAMP_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="ON_TIME">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+						<integerTinyFloat/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>85825945.600000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="ON_TIME">
+					<operationType>store</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RAMP_STOP">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
+				</properties>
+				<logicalAction/>
+				<physicalInteger>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="RAMP_STOP">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INHIBIT">
+				<properties>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="INHIBIT">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="SET_LOCK">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WORKING">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="DIRECTION">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NONE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>UP</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>DOWN</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>UNDEFINED</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="DIRECTION_FLAGS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>DUAL_WHITE_BRIGHTNESS.ERROR_REDUCED</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>DUAL_WHITE_BRIGHTNESS.ERROR_OVERHEAT</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="INSTALL_TEST">
+				<properties>
+					<readable>false</readable>
+					<internal>true</internal>
+					<casts>
+						<toggle>
+							<parameter>LEVEL</parameter>
+						</toggle>
+					</casts>
+				</properties>
+				<logicalAction/>
+				<physicalInteger groupId="TOGGLE_FLAG">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="TOGGLE_INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+		</variables>
+		<variables id="dw_controller_color_ch_values--2">
+			<parameter id="LEVEL_REAL">
+				<properties>
+					<writeable>false</writeable>
+					<control>DUAL_WHITE_COLOR.LEVEL_REAL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL_REAL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LEVEL">
+				<properties>
+					<control>DUAL_WHITE_COLOR.LEVEL</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="LEVEL_SET">
+						<type>set</type>
+						<autoReset>
+							<parameterId>RAMP_TIME</parameterId>
+							<parameterId>ON_TIME</parameterId>
+						</autoReset>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="OLD_LEVEL">
+				<properties>
+					<readable>false</readable>
+					<control>NONE</control>
 				</properties>
 				<logicalAction/>
 				<physicalInteger>
@@ -1779,11 +2877,11 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="dimmer_ch_values1--3">
+		<variables id="dw_controller_color_ch_values--4">
 			<parameter id="LEVEL_REAL">
 				<properties>
 					<writeable>false</writeable>
-					<control>DIMMER.LEVEL_REAL</control>
+					<control>DUAL_WHITE_COLOR.LEVEL_REAL</control>
 					<unit>100%</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -1822,7 +2920,7 @@
 			</parameter>
 			<parameter id="LEVEL">
 				<properties>
-					<control>DIMMER.LEVEL</control>
+					<control>DUAL_WHITE_COLOR.LEVEL</control>
 					<unit>100%</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -1869,7 +2967,7 @@
 			<parameter id="OLD_LEVEL">
 				<properties>
 					<readable>false</readable>
-					<control>DIMMER.OLD_LEVEL</control>
+					<control>NONE</control>
 				</properties>
 				<logicalAction/>
 				<physicalInteger>
@@ -2096,11 +3194,11 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="dimmer_ch_values1--5">
+		<variables id="dw_controller_color_ch_values--6">
 			<parameter id="LEVEL_REAL">
 				<properties>
 					<writeable>false</writeable>
-					<control>DIMMER.LEVEL_REAL</control>
+					<control>DUAL_WHITE_COLOR.LEVEL_REAL</control>
 					<unit>100%</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -2139,7 +3237,7 @@
 			</parameter>
 			<parameter id="LEVEL">
 				<properties>
-					<control>DIMMER.LEVEL</control>
+					<control>DUAL_WHITE_COLOR.LEVEL</control>
 					<unit>100%</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -2186,958 +3284,7 @@
 			<parameter id="OLD_LEVEL">
 				<properties>
 					<readable>false</readable>
-					<control>DIMMER.OLD_LEVEL</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="OLD_LEVEL">
-						<type>set</type>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="RAMP_TIME">
-				<properties>
-					<readable>false</readable>
 					<control>NONE</control>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10.000000</factor>
-						</decimalIntegerScale>
-						<integerTinyFloat/>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>85825945.600000</maximumValue>
-					<defaultValue>0.500000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="RAMP_TIME">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="ON_TIME">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10.000000</factor>
-						</decimalIntegerScale>
-						<integerTinyFloat/>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>85825945.600000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="ON_TIME">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="RAMP_STOP">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="RAMP_STOP">
-						<type>set</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="INHIBIT">
-				<properties>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean/>
-				<physicalInteger groupId="INHIBIT">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="SET_LOCK">
-						<type>set</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="WORKING">
-				<properties>
-					<writeable>false</writeable>
-					<internal>true</internal>
-					<casts>
-						<booleanInteger/>
-						<integerIntegerMap>
-							<direction>both</direction>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>2</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>3</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>4</physical>
-								<logical>1</logical>
-							</value>
-						</integerIntegerMap>
-					</casts>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="STATE_FLAGS">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="DIRECTION">
-				<properties>
-					<writeable>false</writeable>
-					<internal>true</internal>
-					<casts>
-						<optionInteger>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>2</physical>
-								<logical>2</logical>
-							</value>
-							<value>
-								<physical>3</physical>
-								<logical>3</logical>
-							</value>
-						</optionInteger>
-					</casts>
-				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>NONE</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>UP</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>DOWN</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>UNDEFINED</id>
-						<index>3</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="DIRECTION_FLAGS">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="INSTALL_TEST">
-				<properties>
-					<readable>false</readable>
-					<internal>true</internal>
-					<casts>
-						<toggle>
-							<parameter>LEVEL</parameter>
-						</toggle>
-					</casts>
-				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="TOGGLE_FLAG">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="TOGGLE_INSTALL_TEST">
-						<type>set</type>
-					</packet>
-				</packets>
-			</parameter>
-		</variables>
-		<variables id="dimmer_ch_values2--2">
-			<parameter id="LEVEL_REAL">
-				<properties>
-					<writeable>false</writeable>
-					<control>DIMMER.LEVEL_REAL</control>
-					<unit>100%</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>200.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>1.000000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="LEVEL_REAL">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="LEVEL">
-				<properties>
-					<control>DIMMER.LEVEL</control>
-					<unit>100%</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>200.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>1.000000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="LEVEL">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="LEVEL_SET">
-						<type>set</type>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="OLD_LEVEL">
-				<properties>
-					<readable>false</readable>
-					<control>DIMMER.OLD_LEVEL</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="OLD_LEVEL">
-						<type>set</type>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="RAMP_TIME">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10.000000</factor>
-						</decimalIntegerScale>
-						<integerTinyFloat/>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>85825945.600000</maximumValue>
-					<defaultValue>0.500000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="RAMP_TIME">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="ON_TIME">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10.000000</factor>
-						</decimalIntegerScale>
-						<integerTinyFloat/>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>85825945.600000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="ON_TIME">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="RAMP_STOP">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="RAMP_STOP">
-						<type>set</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="INHIBIT">
-				<properties>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean/>
-				<physicalInteger groupId="INHIBIT">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="SET_LOCK">
-						<type>set</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="WORKING">
-				<properties>
-					<writeable>false</writeable>
-					<internal>true</internal>
-					<casts>
-						<booleanInteger/>
-						<integerIntegerMap>
-							<direction>both</direction>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>2</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>3</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>4</physical>
-								<logical>1</logical>
-							</value>
-						</integerIntegerMap>
-					</casts>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="STATE_FLAGS">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="DIRECTION">
-				<properties>
-					<writeable>false</writeable>
-					<internal>true</internal>
-					<casts>
-						<optionInteger>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>2</physical>
-								<logical>2</logical>
-							</value>
-							<value>
-								<physical>3</physical>
-								<logical>3</logical>
-							</value>
-						</optionInteger>
-					</casts>
-				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>NONE</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>UP</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>DOWN</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>UNDEFINED</id>
-						<index>3</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="DIRECTION_FLAGS">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="INSTALL_TEST">
-				<properties>
-					<readable>false</readable>
-					<internal>true</internal>
-					<casts>
-						<toggle>
-							<parameter>LEVEL</parameter>
-						</toggle>
-					</casts>
-				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="TOGGLE_FLAG">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="TOGGLE_INSTALL_TEST">
-						<type>set</type>
-					</packet>
-				</packets>
-			</parameter>
-		</variables>
-		<variables id="dimmer_ch_values2--4">
-			<parameter id="LEVEL_REAL">
-				<properties>
-					<writeable>false</writeable>
-					<control>DIMMER.LEVEL_REAL</control>
-					<unit>100%</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>200.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>1.000000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="LEVEL_REAL">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="LEVEL">
-				<properties>
-					<control>DIMMER.LEVEL</control>
-					<unit>100%</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>200.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>1.000000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="LEVEL">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="LEVEL_SET">
-						<type>set</type>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="OLD_LEVEL">
-				<properties>
-					<readable>false</readable>
-					<control>DIMMER.OLD_LEVEL</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="OLD_LEVEL">
-						<type>set</type>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="RAMP_TIME">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10.000000</factor>
-						</decimalIntegerScale>
-						<integerTinyFloat/>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>85825945.600000</maximumValue>
-					<defaultValue>0.500000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="RAMP_TIME">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="ON_TIME">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-					<unit>s</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10.000000</factor>
-						</decimalIntegerScale>
-						<integerTinyFloat/>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>85825945.600000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="ON_TIME">
-					<operationType>store</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="RAMP_STOP">
-				<properties>
-					<readable>false</readable>
-					<control>NONE</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="RAMP_STOP">
-						<type>set</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="INHIBIT">
-				<properties>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean/>
-				<physicalInteger groupId="INHIBIT">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="SET_LOCK">
-						<type>set</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="WORKING">
-				<properties>
-					<writeable>false</writeable>
-					<internal>true</internal>
-					<casts>
-						<booleanInteger/>
-						<integerIntegerMap>
-							<direction>both</direction>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>2</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>3</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>4</physical>
-								<logical>1</logical>
-							</value>
-						</integerIntegerMap>
-					</casts>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="STATE_FLAGS">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="DIRECTION">
-				<properties>
-					<writeable>false</writeable>
-					<internal>true</internal>
-					<casts>
-						<optionInteger>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>2</physical>
-								<logical>2</logical>
-							</value>
-							<value>
-								<physical>3</physical>
-								<logical>3</logical>
-							</value>
-						</optionInteger>
-					</casts>
-				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>NONE</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>UP</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>DOWN</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>UNDEFINED</id>
-						<index>3</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="DIRECTION_FLAGS">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="INSTALL_TEST">
-				<properties>
-					<readable>false</readable>
-					<internal>true</internal>
-					<casts>
-						<toggle>
-							<parameter>LEVEL</parameter>
-						</toggle>
-					</casts>
-				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="TOGGLE_FLAG">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="TOGGLE_INSTALL_TEST">
-						<type>set</type>
-					</packet>
-				</packets>
-			</parameter>
-		</variables>
-		<variables id="dimmer_ch_values2--6">
-			<parameter id="LEVEL_REAL">
-				<properties>
-					<writeable>false</writeable>
-					<control>DIMMER.LEVEL_REAL</control>
-					<unit>100%</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>200.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>1.000000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="LEVEL_REAL">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="LEVEL">
-				<properties>
-					<control>DIMMER.LEVEL</control>
-					<unit>100%</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>200.000000</factor>
-						</decimalIntegerScale>
-					</casts>
-				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>1.000000</maximumValue>
-					<defaultValue>0.000000</defaultValue>
-				</logicalDecimal>
-				<physicalInteger groupId="LEVEL">
-					<size>1.0</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="LEVEL_GET">
-						<type>get</type>
-						<responseId>INFO_LEVEL</responseId>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="LEVEL_SET">
-						<type>set</type>
-						<autoReset>
-							<parameterId>RAMP_TIME</parameterId>
-							<parameterId>ON_TIME</parameterId>
-						</autoReset>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="OLD_LEVEL">
-				<properties>
-					<readable>false</readable>
-					<control>DIMMER.OLD_LEVEL</control>
 				</properties>
 				<logicalAction/>
 				<physicalInteger>
@@ -3478,7 +3625,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<linkParameters id="dimmer_ch_link--1">
+		<linkParameters id="dw_controller_brightness_ch_link--1">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -4258,6 +4405,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -5573,6 +5721,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -6123,7 +6272,7 @@
 				<parameter id="LCD_SYMBOL">1</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="dimmer_ch_link--2">
+		<linkParameters id="dw_controller_brightness_ch_link--3">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -6903,6 +7052,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -8218,6 +8368,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -8768,7 +8919,7 @@
 				<parameter id="LCD_SYMBOL">1</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="dimmer_ch_link--3">
+		<linkParameters id="dw_controller_brightness_ch_link--5">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -9548,6 +9699,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -10863,6 +11015,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -11413,7 +11566,7 @@
 				<parameter id="LCD_SYMBOL">1</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="dimmer_ch_link--4">
+		<linkParameters id="dw_controller_color_ch_link--2">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -12193,6 +12346,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -13508,6 +13662,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -14058,7 +14213,7 @@
 				<parameter id="LCD_SYMBOL">1</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="dimmer_ch_link--5">
+		<linkParameters id="dw_controller_color_ch_link--4">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -14838,6 +14993,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -16153,6 +16309,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -16703,7 +16860,7 @@
 				<parameter id="LCD_SYMBOL">1</parameter>
 			</scenario>
 		</linkParameters>
-		<linkParameters id="dimmer_ch_link--6">
+		<linkParameters id="dw_controller_color_ch_link--6">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -17483,6 +17640,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -18798,6 +18956,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>

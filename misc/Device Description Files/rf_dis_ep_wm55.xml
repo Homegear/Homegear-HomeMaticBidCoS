@@ -1,8 +1,9 @@
-<homegearDevice version="9">
+<homegearDevice version="11">
 	<supportedDevices>
 		<device id="HM-Dis-EP-WM55">
 			<description>HM Wireless Status Display with push button for 55mm frames</description>
 			<typeNumber>0xFB</typeNumber>
+			<minFirmwareVersion>0x11</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -158,21 +159,21 @@
 			</binaryPayload>
 		</packet>
 		<packet id="SEND_TEXT">
-			<direction>fromCentral</direction>
-			<type>0x11</type>
-			<subtype>0x80</subtype>
-			<subtypeIndex>9</subtypeIndex>
-			<channelIndex>10</channelIndex>
-			<splitAfter>17</splitAfter>
-			<maxPackets>8</maxPackets>
-			<binaryPayload>
-				<element>
-					<index>11.0</index>
-					<size>15.0</size>
-					<parameterId>SUBMIT</parameterId>
-				</element>
-			</binaryPayload>
-		</packet>
+ 			<direction>fromCentral</direction>
+ 			<type>0x11</type>
+ 			<subtype>0x80</subtype>
+ 			<subtypeIndex>9</subtypeIndex>
+ 			<channelIndex>10</channelIndex>
+ 			<splitAfter>17</splitAfter>
+ 			<maxPackets>8</maxPackets>
+ 			<binaryPayload>
+ 				<element>
+ 					<index>11.0</index>
+ 					<size>15.0</size>
+ 					<parameterId>SUBMIT</parameterId>
+ 				</element>
+ 			</binaryPayload>
+ 		</packet>
 	</packets>
 	<parameterGroups>
 		<configParameters id="remote_ch_master--1">
@@ -195,7 +196,7 @@
 			<parameter id="TEXTLINE_1">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>54.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -205,7 +206,7 @@
 			<parameter id="TEXTLINE_2">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>70.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -219,7 +220,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -252,7 +253,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>8.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -264,7 +265,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>33.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -276,8 +277,20 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>33.1</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="WAKEUP_BEHAVIOUR_STATUS_MSG_RESISTANCE">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>33.2</index>
 					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
@@ -288,8 +301,20 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>5.6</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUS_MESSAGE_TEXT_ALIGNMENT_LEFT_ALIGNED">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>true</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>5.7</index>
 					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
@@ -302,7 +327,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -313,7 +338,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -327,7 +352,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -354,7 +379,7 @@
 			<parameter id="TEXTLINE_1">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>54.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -364,7 +389,7 @@
 			<parameter id="TEXTLINE_2">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>70.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -599,13 +624,13 @@
 				</properties>
 				<logicalString/>
 				<physicalString groupId="SUBMIT">
-					<operationType>command</operationType>
-				</physicalString>
-				<packets>
-					<packet id="SEND_TEXT">
-						<type>set</type>
-					</packet>
-				</packets>
+ 					<operationType>command</operationType>
+ 				</physicalString>
+ 				<packets>
+ 					<packet id="SEND_TEXT">
+ 						<type>set</type>
+ 					</packet>
+ 				</packets>
 			</parameter>
 		</variables>
 		<linkParameters id="remote_ch_link--1">
@@ -614,7 +639,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -627,7 +652,7 @@
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

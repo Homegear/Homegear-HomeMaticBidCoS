@@ -169,7 +169,7 @@
 					<maximumValue>99</maximumValue>
 					<defaultValue>5</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>14.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -183,7 +183,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -192,7 +192,7 @@
 			<parameter id="TEXTLINE_1">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>54.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -202,7 +202,7 @@
 			<parameter id="TEXTLINE_2">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>70.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -214,7 +214,7 @@
 			<parameter id="TEXTLINE_1">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>54.0</index>
 					<size>12.0</size>
 					<list>1</list>
@@ -224,7 +224,7 @@
 			<parameter id="TEXTLINE_2">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>70.0</index>
 					<size>12.0</size>
 					<list>1</list>

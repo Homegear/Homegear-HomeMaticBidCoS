@@ -57,7 +57,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -71,7 +71,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>

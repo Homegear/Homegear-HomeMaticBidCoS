@@ -200,7 +200,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -221,7 +221,7 @@
 					<maximumValue>1.800000</maximumValue>
 					<defaultValue>0.400000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>4.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -242,7 +242,7 @@
 					<maximumValue>1.500000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>9.0</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -488,7 +488,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -501,7 +501,7 @@
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

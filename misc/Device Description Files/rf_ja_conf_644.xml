@@ -1,16 +1,9 @@
-<homegearDevice version="7">
+<homegearDevice version="3">
 	<supportedDevices>
-		<device id="HM-LC-Bl1PBU-FM">
-			<description>radio-controlled blind actuator 1-channel (flush-mount)</description>
-			<typeNumber>0x6A</typeNumber>
-			<minFirmwareVersion>0x20</minFirmwareVersion>
-			<maxFirmwareVersion>0x20</maxFirmwareVersion>
-		</device>
-		<device id="263 147">
-			<description>radio-controlled blind actuator 1-channel (flush-mount) Schueco</description>
-			<typeNumber>0x87</typeNumber>
-			<minFirmwareVersion>0x20</minFirmwareVersion>
-			<maxFirmwareVersion>0x20</maxFirmwareVersion>
+		<device id="HM-LC-Ja1PBU-FM">
+			<description>radio-controlled jalousie actuator 1-channel (flush-mount)</description>
+			<typeNumber>0x107</typeNumber>
+			<minFirmwareVersion>0x29</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -21,10 +14,10 @@
 			<properties>
 				<internal>true</internal>
 			</properties>
-			<configParameters>blind_dev_master--0</configParameters>
+			<configParameters>jalousie_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="BLIND">
+		<function channel="1" type="JALOUSIE">
 			<properties>
 				<dynamicChannelCount>23:1.0</dynamicChannelCount>
 				<linkReceiverFunctionTypes>
@@ -32,9 +25,9 @@
 					<type>WEATHER_CS</type>
 				</linkReceiverFunctionTypes>
 			</properties>
-			<configParameters>blind_ch_master--1</configParameters>
-			<variables>blind_ch_values--1</variables>
-			<linkParameters>blind_ch_link--1</linkParameters>
+			<configParameters>jalousie_ch_master--1</configParameters>
+			<variables>jalousie_ch_values--1</variables>
+			<linkParameters>jalousie_ch_link--1</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -59,6 +52,20 @@
 					<size>0.2</size>
 					<parameterId>DIRECTION_FLAGS</parameterId>
 				</element>
+				<element>
+					<index>14.0</index>
+					<parameterId>LEVEL_SLATS</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS_SLATS</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.2</size>
+					<parameterId>DIRECTION_FLAGS_SLATS</parameterId>
+				</element>
 			</binaryPayload>
 		</packet>
 		<packet id="INFO_LEVEL">
@@ -82,21 +89,33 @@
 					<size>0.2</size>
 					<parameterId>DIRECTION_FLAGS</parameterId>
 				</element>
+				<element>
+					<index>14.0</index>
+					<parameterId>LEVEL_SLATS</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.3</size>
+					<parameterId>STATE_FLAGS_SLATS</parameterId>
+				</element>
+				<element>
+					<index>15.0</index>
+					<size>0.2</size>
+					<parameterId>DIRECTION_FLAGS_SLATS</parameterId>
+				</element>
 			</binaryPayload>
 		</packet>
-		<packet id="INSTALL_TEST">
+		<packet id="LEVEL_COMBINED_SET">
 			<direction>fromCentral</direction>
 			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
 			<channelIndex>10</channelIndex>
 			<binaryPayload>
 				<element>
-					<index>9.0</index>
-					<constValueInteger>2</constValueInteger>
-				</element>
-				<element>
 					<index>11.0</index>
-					<parameterId>IT_LEVEL</parameterId>
-					<omitIf>255</omitIf>
+					<size>2.0</size>
+					<parameterId>LEVEL_COMBINED</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>
@@ -114,13 +133,34 @@
 		<packet id="LEVEL_SET">
 			<direction>fromCentral</direction>
 			<type>0x11</type>
-			<subtype>0x2</subtype>
+			<subtype>0x80</subtype>
 			<subtypeIndex>9</subtypeIndex>
 			<channelIndex>10</channelIndex>
 			<binaryPayload>
 				<element>
 					<index>11.0</index>
 					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.0</index>
+					<constValueInteger>202</constValueInteger>
+				</element>
+			</binaryPayload>
+		</packet>
+		<packet id="LEVEL_SLATS_SET">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<constValueInteger>202</constValueInteger>
+				</element>
+				<element>
+					<index>12.0</index>
+					<parameterId>LEVEL_SLATS</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>
@@ -143,9 +183,26 @@
 			<subtypeIndex>9</subtypeIndex>
 			<channelIndex>10</channelIndex>
 		</packet>
+		<packet id="TOGGLE_INSTALL_TEST">
+			<direction>fromCentral</direction>
+			<type>0x11</type>
+			<subtype>0x80</subtype>
+			<subtypeIndex>9</subtypeIndex>
+			<channelIndex>10</channelIndex>
+			<binaryPayload>
+				<element>
+					<index>11.0</index>
+					<constValueInteger>202</constValueInteger>
+				</element>
+				<element>
+					<index>12.0</index>
+					<parameterId>TOGGLE_FLAG</parameterId>
+				</element>
+			</binaryPayload>
+		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="blind_ch_master--1">
+		<configParameters id="jalousie_ch_master--1">
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
@@ -174,7 +231,7 @@
 				<logicalDecimal>
 					<minimumValue>0.100000</minimumValue>
 					<maximumValue>6000.000000</maximumValue>
-					<defaultValue>50.000000</defaultValue>
+					<defaultValue>90.000000</defaultValue>
 				</logicalDecimal>
 				<physicalInteger>
 					<index>11.0</index>
@@ -195,7 +252,7 @@
 				<logicalDecimal>
 					<minimumValue>0.100000</minimumValue>
 					<maximumValue>6000.000000</maximumValue>
-					<defaultValue>50.000000</defaultValue>
+					<defaultValue>90.000000</defaultValue>
 				</logicalDecimal>
 				<physicalInteger>
 					<index>13.0</index>
@@ -239,8 +296,109 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="TRANSMIT_TRY_MAX">
+				<properties/>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>6</defaultValue>
+				</logicalInteger>
+				<physicalInteger>
+					<index>48.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_MINDELAY">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>2.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.500000</minimumValue>
+					<maximumValue>15.500000</maximumValue>
+					<defaultValue>2.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NOT_USED">0.000000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>87.0</index>
+					<size>0.5</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="STATUSINFO_RANDOM">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>1.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>7.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>87.5</index>
+					<size>0.3</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="REFERENCE_RUNNING_TIME_SLATS">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>50.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>10.000000</maximumValue>
+					<defaultValue>2.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>179.0</index>
+					<size>2.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="POSITION_SAVE_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>10.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.100000</minimumValue>
+					<maximumValue>25.500000</maximumValue>
+					<defaultValue>2.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>181.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
 		</configParameters>
-		<configParameters id="blind_dev_master--0">
+		<configParameters id="jalousie_dev_master--0">
 			<parameter id="INTERNAL_KEYS_VISIBLE">
 				<properties>
 					<internal>true</internal>
@@ -250,6 +408,18 @@
 				</logicalBoolean>
 				<physicalInteger>
 					<index>2.7</index>
+					<size>0.1</size>
+					<list>0</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LOCAL_RESET_DISABLE">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
 					<operationType>config</operationType>
@@ -292,10 +462,10 @@
 				</physicalInteger>
 			</parameter>
 		</configParameters>
-		<variables id="blind_ch_values--1">
+		<variables id="jalousie_ch_values--1">
 			<parameter id="LEVEL">
 				<properties>
-					<control>BLIND.LEVEL</control>
+					<control>JALOUSIE.LEVEL</control>
 					<unit>100%</unit>
 					<casts>
 						<decimalIntegerScale>
@@ -307,6 +477,10 @@
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
 				</logicalDecimal>
 				<physicalInteger groupId="LEVEL">
 					<size>1.0</size>
@@ -331,7 +505,7 @@
 			<parameter id="STOP">
 				<properties>
 					<readable>false</readable>
-					<control>BLIND.STOP</control>
+					<control>JALOUSIE.STOP</control>
 				</properties>
 				<logicalAction/>
 				<physicalInteger>
@@ -472,17 +646,185 @@
 					<readable>false</readable>
 					<internal>true</internal>
 					<casts>
-						<blindTest>
-							<value>255</value>
-						</blindTest>
+						<toggle>
+							<parameter>LEVEL_SLATS</parameter>
+							<off>100</off>
+						</toggle>
 					</casts>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="IT_LEVEL">
+				<physicalInteger groupId="TOGGLE_FLAG">
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
-					<packet id="INSTALL_TEST">
+					<packet id="TOGGLE_INSTALL_TEST">
+						<type>set</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LEVEL_SLATS">
+				<properties>
+					<control>JALOUSIE.LEVEL_SLATS</control>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger groupId="LEVEL_SLATS">
+					<size>1.0</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="LEVEL_SLATS_SET">
+						<type>set</type>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="WORKING_SLATS">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+						<integerIntegerMap>
+							<direction>both</direction>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>1</logical>
+							</value>
+						</integerIntegerMap>
+					</casts>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="STATE_FLAGS_SLATS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="DIRECTION_SLATS">
+				<properties>
+					<writeable>false</writeable>
+					<internal>true</internal>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
+				<logicalEnumeration>
+					<defaultValue>0</defaultValue>
+					<value>
+						<id>NONE</id>
+						<index>0</index>
+					</value>
+					<value>
+						<id>UP</id>
+						<index>1</index>
+					</value>
+					<value>
+						<id>DOWN</id>
+						<index>2</index>
+					</value>
+					<value>
+						<id>UNDEFINED</id>
+						<index>3</index>
+					</value>
+				</logicalEnumeration>
+				<physicalInteger groupId="DIRECTION_FLAGS_SLATS">
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="LEVEL_GET">
+						<type>get</type>
+						<responseId>INFO_LEVEL</responseId>
+					</packet>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="LEVEL_COMBINED">
+				<properties>
+					<readable>false</readable>
+					<control>JALOUSIE.LEVEL_COMBINED</control>
+					<casts>
+						<hexStringByteArray/>
+					</casts>
+				</properties>
+				<logicalString/>
+				<physicalString groupId="LEVEL_COMBINED">
+					<operationType>command</operationType>
+				</physicalString>
+				<packets>
+					<packet id="LEVEL_COMBINED_SET">
 						<type>set</type>
 					</packet>
 				</packets>
@@ -560,6 +902,26 @@
 					<operationType>internal</operationType>
 				</physicalInteger>
 			</parameter>
+			<parameter id="DEVICE_IN_BOOTLOADER">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="DEVICE_IN_BOOTLOADER">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="UPDATE_PENDING">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+				</properties>
+				<logicalBoolean/>
+				<physicalInteger groupId="UPDATE_PENDING">
+					<operationType>internal</operationType>
+				</physicalInteger>
+			</parameter>
 			<parameter id="CENTRAL_ADDRESS_SPOOFED">
 				<properties>
 					<service>true</service>
@@ -582,7 +944,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<linkParameters id="blind_ch_link--1">
+		<linkParameters id="jalousie_ch_link--1">
 			<parameter id="UI_HINT">
 				<properties/>
 				<logicalString>
@@ -1783,6 +2145,10 @@
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
 				</logicalDecimal>
 				<physicalInteger>
 					<index>15.0</index>
@@ -1804,6 +2170,10 @@
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
 				</logicalDecimal>
 				<physicalInteger>
 					<index>17.0</index>
@@ -1859,6 +2229,56 @@
 				</logicalEnumeration>
 				<physicalInteger>
 					<index>31.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_OFF_LEVEL_2">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.010000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>51.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="SHORT_ON_LEVEL_2">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.010000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>52.0</index>
 					<size>1.0</size>
 					<list>3</list>
 					<operationType>config</operationType>
@@ -3075,6 +3495,10 @@
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>0.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
 				</logicalDecimal>
 				<physicalInteger>
 					<index>143.0</index>
@@ -3096,6 +3520,10 @@
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
 				</logicalDecimal>
 				<physicalInteger>
 					<index>145.0</index>
@@ -3151,6 +3579,56 @@
 				</logicalEnumeration>
 				<physicalInteger>
 					<index>159.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_OFF_LEVEL_2">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.010000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>179.0</index>
+					<size>1.0</size>
+					<list>3</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="LONG_ON_LEVEL_2">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.010000</defaultValue>
+					<specialValues>
+						<specialValue id="NO_MODIFICATION">1.010000</specialValue>
+						<specialValue id="OLD_LEVEL">1.005000</specialValue>
+					</specialValues>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>180.0</index>
 					<size>1.0</size>
 					<list>3</list>
 					<operationType>config</operationType>

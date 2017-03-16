@@ -1,8 +1,8 @@
-<homegearDevice version="18">
+<homegearDevice version="10">
 	<supportedDevices>
-		<device id="HM-MOD-EM-8">
-			<description>radio-controlled switch module</description>
-			<typeNumber>0xD9</typeNumber>
+		<device id="HM-MOD-EM-8Bit">
+			<description>Wireless Transmitter Module, 8-bit</description>
+			<typeNumber>0x106</typeNumber>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -20,9 +20,8 @@
 			<configParameters>remote_dev_master--0</configParameters>
 			<variables>maint_ch_values--0</variables>
 		</function>
-		<function channel="1" type="KEY">
+		<function channel="1" type="KEY" channelCount="2">
 			<properties>
-				<dynamicChannelCount>23:1.0</dynamicChannelCount>
 				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
 				<defaultGroupedLinkScenarioElementId1>B</defaultGroupedLinkScenarioElementId1>
 				<defaultGroupedLinkScenarioElementId2>A</defaultGroupedLinkScenarioElementId2>
@@ -33,41 +32,23 @@
 					<type>WINMATIC</type>
 				</linkSenderFunctionTypes>
 			</properties>
-			<configParameters>remoteModEM8_ch_master--1</configParameters>
-			<variables>remoteModEM8_ch_values--1</variables>
-			<linkParameters>remoteModEM8_ch_link--1</linkParameters>
-			<alternativeFunction channel="1" type="KEY">
-				<properties>
-					<linkSenderFunctionTypes>
-						<type>KEYMATIC</type>
-						<type>SWITCH</type>
-						<type>WINDOW_SWITCH_RECEIVER</type>
-						<type>WINMATIC</type>
-					</linkSenderFunctionTypes>
-				</properties>
-				<configParameters>remoteModEM8_ch_master_swi--1</configParameters>
-				<variables>remoteModEM8_ch_values_swi--1</variables>
-				<linkParameters>remoteModEM8_ch_link_swi--1</linkParameters>
-			</alternativeFunction>
-			<alternativeFunction channel="1" type="KEY">
-				<properties>
-					<linkSenderFunctionTypes>
-						<type>KEYMATIC</type>
-						<type>SWITCH</type>
-						<type>WINDOW_SWITCH_RECEIVER</type>
-						<type>WINMATIC</type>
-					</linkSenderFunctionTypes>
-				</properties>
-				<configParameters>remoteModEM8_ch_master_sc--1</configParameters>
-				<variables>remoteModEM8_ch_values_sc--1</variables>
-				<linkParameters>remoteModEM8_ch_link_sc--1</linkParameters>
-			</alternativeFunction>
-			<alternativeFunction channel="1" type="KEY">
-				<properties/>
-				<configParameters>remoteModEM8_ch_master_inactive--1</configParameters>
-				<variables>remoteModEM8_ch_values_inactive--1</variables>
-				<linkParameters>remoteModEM8_ch_link_inactive--1</linkParameters>
-			</alternativeFunction>
+			<configParameters>remoteModEM8bit_key_ch_master--1</configParameters>
+			<variables>remoteModEM8bit_key_ch_values--1</variables>
+			<linkParameters>remoteModEM8bit_key_ch_link--1</linkParameters>
+		</function>
+		<function channel="3" type="MOD_EM8BIT_TRANSMITTER">
+			<properties>
+				<defaultLinkScenarioElementId>A</defaultLinkScenarioElementId>
+				<linkSenderFunctionTypes>
+					<type>KEYMATIC</type>
+					<type>REMOTECONTROL_RECEIVER</type>
+					<type>SWITCH</type>
+					<type>WINMATIC</type>
+				</linkSenderFunctionTypes>
+			</properties>
+			<configParameters>remoteModEM8bit_transmitter_ch_master--3</configParameters>
+			<variables>remoteModEM8bit_transmitter_ch_values--3</variables>
+			<linkParameters>remoteModEM8bit_transmitter_ch_link--3</linkParameters>
 		</function>
 	</functions>
 	<packets>
@@ -105,10 +86,6 @@
 				<element>
 					<index>10.0</index>
 					<parameterId>SIM_COUNTER</parameterId>
-				</element>
-				<element>
-					<index>10.0</index>
-					<parameterId>COUNTER</parameterId>
 				</element>
 			</binaryPayload>
 		</packet>
@@ -259,7 +236,7 @@
 		</packet>
 	</packets>
 	<parameterGroups>
-		<configParameters id="remoteModEM8_ch_master--1">
+		<configParameters id="remoteModEM8bit_key_ch_master--1">
 			<parameter id="TRANSMIT_TRY_MAX">
 				<properties/>
 				<logicalInteger>
@@ -312,111 +289,8 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
-			<parameter id="CHANNEL_FUNCTION">
-				<properties>
-					<parameterGroupSelector>true</parameterGroupSelector>
-					<casts>
-						<integerIntegerMap>
-							<direction>both</direction>
-							<value>
-								<physical>32</physical>
-								<logical>3</logical>
-							</value>
-							<value>
-								<physical>33</physical>
-								<logical>2</logical>
-							</value>
-							<value>
-								<physical>34</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>35</physical>
-								<logical>0</logical>
-							</value>
-						</integerIntegerMap>
-					</casts>
-				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>BUTTON_BEHAVIOR</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>SWITCH_BEHAVIOR</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>BINARY_BEHAVIOR</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>INACTIVE</id>
-						<index>3</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="CHANNEL_FUNCTION">
-					<index>146.0</index>
-					<size>1.0</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
 		</configParameters>
-		<configParameters id="remoteModEM8_ch_master_inactive--1">
-			<parameter id="CHANNEL_FUNCTION">
-				<properties>
-					<casts>
-						<integerIntegerMap>
-							<direction>both</direction>
-							<value>
-								<physical>32</physical>
-								<logical>3</logical>
-							</value>
-							<value>
-								<physical>33</physical>
-								<logical>2</logical>
-							</value>
-							<value>
-								<physical>34</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>35</physical>
-								<logical>0</logical>
-							</value>
-						</integerIntegerMap>
-					</casts>
-				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>BUTTON_BEHAVIOR</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>SWITCH_BEHAVIOR</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>BINARY_BEHAVIOR</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>INACTIVE</id>
-						<index>3</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="CHANNEL_FUNCTION">
-					<index>146.0</index>
-					<size>1.0</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-		</configParameters>
-		<configParameters id="remoteModEM8_ch_master_sc--1">
+		<configParameters id="remoteModEM8bit_transmitter_ch_master--3">
 			<parameter id="TRANSMIT_TRY_MAX">
 				<properties/>
 				<logicalInteger>
@@ -431,50 +305,190 @@
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
-			<parameter id="MSG_FOR_POS_A">
-				<properties/>
+			<parameter id="DATA_TRANSMISSION_CONDITION">
+				<properties>
+					<casts>
+						<optionInteger>
+							<value>
+								<physical>0</physical>
+								<logical>0</logical>
+							</value>
+							<value>
+								<physical>1</physical>
+								<logical>1</logical>
+							</value>
+							<value>
+								<physical>2</physical>
+								<logical>2</logical>
+							</value>
+							<value>
+								<physical>3</physical>
+								<logical>3</logical>
+							</value>
+							<value>
+								<physical>4</physical>
+								<logical>4</logical>
+							</value>
+							<value>
+								<physical>5</physical>
+								<logical>5</logical>
+							</value>
+							<value>
+								<physical>6</physical>
+								<logical>6</logical>
+							</value>
+						</optionInteger>
+					</casts>
+				</properties>
 				<logicalEnumeration>
-					<defaultValue>1</defaultValue>
+					<defaultValue>0</defaultValue>
 					<value>
-						<id>NO_MSG</id>
+						<id>LEVEL_CHANGE_DATA[HIGH_to_LOW]</id>
 						<index>0</index>
 					</value>
 					<value>
-						<id>CLOSED</id>
+						<id>LEVEL_CHANGE_DATA[LOW_to_HIGH]</id>
 						<index>1</index>
 					</value>
 					<value>
-						<id>OPEN</id>
+						<id>LEVEL_CHANGE_DATA[LOW_to_HIGH_and_HIGH_to_LOW]</id>
 						<index>2</index>
+					</value>
+					<value>
+						<id>NEW_DATA_STABLE_FOR_TIME_DEFAULT_ENABLE</id>
+						<index>3</index>
+					</value>
+					<value>
+						<id>NEW_DATA_SEND_IMMEDIATELY_DEFAULT_ENABLE</id>
+						<index>4</index>
+					</value>
+					<value>
+						<id>NEW_DATA_STABLE_FOR_TIME_DEFAULT_DISABLE</id>
+						<index>5</index>
+					</value>
+					<value>
+						<id>NEW_DATA_SEND_IMMEDIATELY_DEFAULT_DISABLE</id>
+						<index>6</index>
 					</value>
 				</logicalEnumeration>
 				<physicalInteger>
-					<index>32.6</index>
-					<size>0.2</size>
+					<index>176.0</index>
+					<size>1.0</size>
 					<list>1</list>
 					<operationType>config</operationType>
 				</physicalInteger>
 			</parameter>
-			<parameter id="MSG_FOR_POS_B">
-				<properties/>
-				<logicalEnumeration>
-					<defaultValue>2</defaultValue>
-					<value>
-						<id>NO_MSG</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>CLOSED</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>OPEN</id>
-						<index>2</index>
-					</value>
-				</logicalEnumeration>
+			<parameter id="DATA_STABILITY_FILTER_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
 				<physicalInteger>
-					<index>32.4</index>
-					<size>0.2</size>
+					<index>177.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN0">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.0</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN1">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.1</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN2">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.2</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN3">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.3</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN4">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.4</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN5">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.5</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN6">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.6</index>
+					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="DATA_INPUT_PROPERTIE_IN7">
+				<properties/>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger>
+					<index>178.7</index>
+					<size>0.1</size>
 					<list>1</list>
 					<operationType>config</operationType>
 				</physicalInteger>
@@ -482,137 +496,15 @@
 			<parameter id="AES_ACTIVE">
 				<properties>
 					<internal>true</internal>
+					<casts>
+						<booleanInteger/>
+					</casts>
 				</properties>
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CHANNEL_FUNCTION">
-				<properties>
-					<casts>
-						<integerIntegerMap>
-							<direction>both</direction>
-							<value>
-								<physical>32</physical>
-								<logical>3</logical>
-							</value>
-							<value>
-								<physical>33</physical>
-								<logical>2</logical>
-							</value>
-							<value>
-								<physical>34</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>35</physical>
-								<logical>0</logical>
-							</value>
-						</integerIntegerMap>
-					</casts>
-				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>BUTTON_BEHAVIOR</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>SWITCH_BEHAVIOR</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>BINARY_BEHAVIOR</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>INACTIVE</id>
-						<index>3</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="CHANNEL_FUNCTION">
-					<index>146.0</index>
-					<size>1.0</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-		</configParameters>
-		<configParameters id="remoteModEM8_ch_master_swi--1">
-			<parameter id="TRANSMIT_TRY_MAX">
-				<properties/>
-				<logicalInteger>
-					<minimumValue>1</minimumValue>
-					<maximumValue>10</maximumValue>
-					<defaultValue>3</defaultValue>
-				</logicalInteger>
-				<physicalInteger>
-					<index>48.0</index>
-					<size>1.0</size>
-					<list>1</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="AES_ACTIVE">
-				<properties>
-					<internal>true</internal>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalBoolean groupId="AES">
-					<operationType>internal</operationType>
-				</physicalBoolean>
-			</parameter>
-			<parameter id="CHANNEL_FUNCTION">
-				<properties>
-					<casts>
-						<integerIntegerMap>
-							<direction>both</direction>
-							<value>
-								<physical>32</physical>
-								<logical>3</logical>
-							</value>
-							<value>
-								<physical>33</physical>
-								<logical>2</logical>
-							</value>
-							<value>
-								<physical>34</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>35</physical>
-								<logical>0</logical>
-							</value>
-						</integerIntegerMap>
-					</casts>
-				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>BUTTON_BEHAVIOR</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>SWITCH_BEHAVIOR</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>BINARY_BEHAVIOR</id>
-						<index>2</index>
-					</value>
-					<value>
-						<id>INACTIVE</id>
-						<index>3</index>
-					</value>
-				</logicalEnumeration>
-				<physicalInteger groupId="CHANNEL_FUNCTION">
-					<index>146.0</index>
-					<size>1.0</size>
+				<physicalInteger groupId="AES_ACTIVE">
+					<index>8.0</index>
 					<list>1</list>
 					<operationType>config</operationType>
 				</physicalInteger>
@@ -840,7 +732,7 @@
 				</physicalInteger>
 			</parameter>
 		</variables>
-		<variables id="remoteModEM8_ch_values--1">
+		<variables id="remoteModEM8bit_key_ch_values--1">
 			<parameter id="PRESS_SHORT">
 				<properties>
 					<writeable>false</writeable>
@@ -926,37 +818,18 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="remoteModEM8_ch_values_inactive--1">
-			<parameter id="LOWBAT">
-				<properties>
-					<writeable>false</writeable>
-					<control>CHANNEL_NOT_ACTIVE</control>
-				</properties>
-				<logicalBoolean/>
-				<physicalInteger groupId="LOWBAT">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="EVENT">
-						<type>event</type>
-					</packet>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-		</variables>
-		<variables id="remoteModEM8_ch_values_sc--1">
+		<variables id="remoteModEM8bit_transmitter_ch_values--3">
 			<parameter id="STATE">
 				<properties>
 					<writeable>false</writeable>
-					<control>DOOR_SENSOR.STATE</control>
+					<control>DIGITAL_STATE.STATE</control>
 				</properties>
-				<logicalBoolean/>
+				<logicalInteger>
+					<minimumValue>0</minimumValue>
+					<maximumValue>255</maximumValue>
+				</logicalInteger>
 				<physicalInteger groupId="STATE">
+					<size>1.0</size>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -974,10 +847,11 @@
 			<parameter id="LOWBAT">
 				<properties>
 					<writeable>false</writeable>
-					<control>NONE</control>
+					<control>BATTERIE.LOWBAT</control>
 				</properties>
 				<logicalBoolean/>
 				<physicalInteger groupId="LOWBAT">
+					<size>0.1</size>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -1011,41 +885,7 @@
 				</packets>
 			</parameter>
 		</variables>
-		<variables id="remoteModEM8_ch_values_swi--1">
-			<parameter id="PRESS">
-				<properties>
-					<control>EVENT_INTERFACE.TRIGGER</control>
-				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="COUNTER">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="EVENT_SIM">
-						<type>set</type>
-					</packet>
-					<packet id="SWITCH_EVENT">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="INSTALL_TEST">
-				<properties>
-					<writeable>false</writeable>
-					<internal>true</internal>
-				</properties>
-				<logicalAction/>
-				<physicalInteger groupId="TEST_COUNTER">
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="EVENT">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-		</variables>
-		<linkParameters id="remoteModEM8_ch_link--1">
+		<linkParameters id="remoteModEM8bit_key_ch_link--1">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>
@@ -1072,8 +912,7 @@
 				</physicalInteger>
 			</parameter>
 		</linkParameters>
-		<linkParameters id="remoteModEM8_ch_link_inactive--1"/>
-		<linkParameters id="remoteModEM8_ch_link_sc--1">
+		<linkParameters id="remoteModEM8bit_transmitter_ch_link--3">
 			<parameter id="PEER_NEEDS_BURST">
 				<properties/>
 				<logicalBoolean>
@@ -1106,12 +945,8 @@
 				<parameter id="SHORT_COND_VALUE_LO">50</parameter>
 				<parameter id="SHORT_CT_OFF">0</parameter>
 				<parameter id="SHORT_CT_OFFDELAY">0</parameter>
-				<parameter id="SHORT_CT_OFFDELAY_SIRARM">2</parameter>
-				<parameter id="SHORT_CT_OFF_SIRARM">2</parameter>
 				<parameter id="SHORT_CT_ON">2</parameter>
 				<parameter id="SHORT_CT_ONDELAY">2</parameter>
-				<parameter id="SHORT_CT_ONDELAY_SIRARM">0</parameter>
-				<parameter id="SHORT_CT_ON_SIRARM">0</parameter>
 				<parameter id="SHORT_CT_RAMPOFF">0</parameter>
 				<parameter id="SHORT_CT_RAMPON">2</parameter>
 				<parameter id="SHORT_JT_OFF">1</parameter>
@@ -1120,50 +955,6 @@
 				<parameter id="SHORT_JT_ONDELAY">4</parameter>
 				<parameter id="SHORT_JT_RAMPOFF">2</parameter>
 				<parameter id="SHORT_JT_RAMPON">4</parameter>
-			</scenario>
-		</linkParameters>
-		<linkParameters id="remoteModEM8_ch_link_swi--1">
-			<parameter id="PEER_NEEDS_BURST">
-				<properties/>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger>
-					<index>1.0</index>
-					<size>0.1</size>
-					<list>4</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<parameter id="EXPECT_AES">
-				<properties/>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-					<setToValueOnPairing>false</setToValueOnPairing>
-				</logicalBoolean>
-				<physicalInteger>
-					<index>1.7</index>
-					<size>0.1</size>
-					<list>4</list>
-					<operationType>config</operationType>
-				</physicalInteger>
-			</parameter>
-			<scenario id="default">
-				<parameter id="SHORT_ACTION_TYPE">1</parameter>
-				<parameter id="SHORT_JT_OFF">1</parameter>
-				<parameter id="SHORT_JT_OFFDELAY">4</parameter>
-				<parameter id="SHORT_JT_ON">4</parameter>
-				<parameter id="SHORT_JT_ONDELAY">2</parameter>
-				<parameter id="SHORT_JT_RAMPOFF">6</parameter>
-				<parameter id="SHORT_JT_RAMPON">3</parameter>
-				<parameter id="SHORT_OFFDELAY_STEP">0.05</parameter>
-				<parameter id="SHORT_OFFDELAY_TIME">0.0</parameter>
-				<parameter id="SHORT_OFF_TIME">111600.0</parameter>
-				<parameter id="SHORT_OFF_TIME_MODE">0</parameter>
-				<parameter id="SHORT_ONDELAY_MODE">0</parameter>
-				<parameter id="SHORT_ONDELAY_TIME">0.0</parameter>
-				<parameter id="SHORT_ON_TIME">111600.0</parameter>
-				<parameter id="SHORT_ON_TIME_MODE">0</parameter>
 			</scenario>
 		</linkParameters>
 	</parameterGroups>

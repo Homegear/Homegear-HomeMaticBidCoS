@@ -1,34 +1,9 @@
-<homegearDevice version="17">
+<homegearDevice version="4">
 	<supportedDevices>
-		<device id="HM-LC-Dim1T-Pl">
-			<description>1 channel dimmer T (plug)</description>
-			<typeNumber>0x71</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-CV">
-			<description>1 channel dimmer T (ceiling voids)</description>
-			<typeNumber>0x72</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-FM">
-			<description>1 channel dimmer T (flush mount)</description>
-			<typeNumber>0x73</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-Pl-3">
-			<description>1 channel dimmer T (plug)</description>
-			<typeNumber>0xB4</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-CV-2">
-			<description>1 channel dimmer T (ceiling voids)</description>
-			<typeNumber>0xB9</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-FM-2">
-			<description>1 channel dimmer T (flush mount)</description>
-			<typeNumber>0xBA</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
+		<device id="HM-LC-AO-SM">
+			<description>Setpoint Generator 0-10V, 1-channel, surface mount</description>
+			<typeNumber>0x104</typeNumber>
+			<minFirmwareVersion>0x10</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -85,21 +60,6 @@
 					<parameterId>ERROR</parameterId>
 				</element>
 				<element>
-					<index>12.1</index>
-					<size>0.1</size>
-					<parameterId>ERROR_OVERLOAD</parameterId>
-				</element>
-				<element>
-					<index>12.2</index>
-					<size>0.1</size>
-					<parameterId>ERROR_OVERHEAT</parameterId>
-				</element>
-				<element>
-					<index>12.3</index>
-					<size>0.1</size>
-					<parameterId>ERROR_REDUCED</parameterId>
-				</element>
-				<element>
 					<index>12.4</index>
 					<size>0.3</size>
 					<parameterId>STATE_FLAGS</parameterId>
@@ -143,21 +103,6 @@
 					<index>12.1</index>
 					<size>0.3</size>
 					<parameterId>ERROR</parameterId>
-				</element>
-				<element>
-					<index>12.1</index>
-					<size>0.1</size>
-					<parameterId>ERROR_OVERLOAD</parameterId>
-				</element>
-				<element>
-					<index>12.2</index>
-					<size>0.1</size>
-					<parameterId>ERROR_OVERHEAT</parameterId>
-				</element>
-				<element>
-					<index>12.3</index>
-					<size>0.1</size>
-					<parameterId>ERROR_REDUCED</parameterId>
 				</element>
 				<element>
 					<index>12.4</index>
@@ -366,6 +311,67 @@
 				<physicalInteger>
 					<index>86.0</index>
 					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="VOLTAGE_0">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>0.200000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>173.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="VOLTAGE_100">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.300000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>174.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RELAY_OFFDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>175.0</index>
+					<size>1.0</size>
 					<list>1</list>
 					<operationType>config</operationType>
 				</physicalInteger>
@@ -626,6 +632,67 @@
 				<physicalInteger>
 					<index>86.0</index>
 					<size>0.1</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="VOLTAGE_0">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>0.200000</maximumValue>
+					<defaultValue>0.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>173.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="VOLTAGE_100">
+				<properties>
+					<unit>100%</unit>
+					<casts>
+						<decimalIntegerScale>
+							<factor>200.000000</factor>
+						</decimalIntegerScale>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.300000</minimumValue>
+					<maximumValue>1.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>174.0</index>
+					<size>1.0</size>
+					<list>1</list>
+					<operationType>config</operationType>
+				</physicalInteger>
+			</parameter>
+			<parameter id="RELAY_OFFDELAY_TIME">
+				<properties>
+					<unit>s</unit>
+					<casts>
+						<decimalConfigTime/>
+					</casts>
+				</properties>
+				<logicalDecimal>
+					<minimumValue>0.000000</minimumValue>
+					<maximumValue>111600.000000</maximumValue>
+					<defaultValue>1.000000</defaultValue>
+				</logicalDecimal>
+				<physicalInteger>
+					<index>175.0</index>
+					<size>1.0</size>
 					<list>1</list>
 					<operationType>config</operationType>
 				</physicalInteger>
@@ -1052,72 +1119,6 @@
 					</packet>
 				</packets>
 			</parameter>
-			<parameter id="ERROR_REDUCED">
-				<properties>
-					<writeable>false</writeable>
-					<service>true</service>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="ERROR_REDUCED">
-					<size>0.1</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="ERROR_OVERLOAD">
-				<properties>
-					<writeable>false</writeable>
-					<service>true</service>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="ERROR_OVERLOAD">
-					<size>0.1</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="ERROR_OVERHEAT">
-				<properties>
-					<writeable>false</writeable>
-					<service>true</service>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="ERROR_OVERHEAT">
-					<size>0.1</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
 			<parameter id="INSTALL_TEST">
 				<properties>
 					<readable>false</readable>
@@ -1431,72 +1432,6 @@
 						<type>event</type>
 					</packet>
 					<packet id="INFO_POWERON">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="ERROR_REDUCED">
-				<properties>
-					<writeable>false</writeable>
-					<service>true</service>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="ERROR_REDUCED">
-					<size>0.1</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="ERROR_OVERLOAD">
-				<properties>
-					<writeable>false</writeable>
-					<service>true</service>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="ERROR_OVERLOAD">
-					<size>0.1</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
-						<type>event</type>
-					</packet>
-				</packets>
-			</parameter>
-			<parameter id="ERROR_OVERHEAT">
-				<properties>
-					<writeable>false</writeable>
-					<service>true</service>
-					<control>NONE</control>
-				</properties>
-				<logicalBoolean>
-					<defaultValue>false</defaultValue>
-				</logicalBoolean>
-				<physicalInteger groupId="ERROR_OVERHEAT">
-					<size>0.1</size>
-					<operationType>command</operationType>
-				</physicalInteger>
-				<packets>
-					<packet id="INFO_LEVEL">
-						<type>event</type>
-					</packet>
-					<packet id="ACK_STATUS">
 						<type>event</type>
 					</packet>
 				</packets>

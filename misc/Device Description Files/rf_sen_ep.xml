@@ -86,7 +86,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -125,7 +125,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>36.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -149,7 +149,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>37.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -173,7 +173,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>38.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -197,7 +197,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>39.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -221,7 +221,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>40.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -242,7 +242,7 @@
 					<maximumValue>4.080000</maximumValue>
 					<defaultValue>0.016000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>44.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -384,7 +384,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>

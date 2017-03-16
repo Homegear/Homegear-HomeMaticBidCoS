@@ -104,7 +104,7 @@
 					<maximumValue>1</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>31.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -118,7 +118,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -129,7 +129,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -143,7 +143,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -507,7 +507,7 @@
 						<writeable>false</writeable>
 					</properties>
 					<logicalString/>
-					<physicalString groupId="">
+					<physicalString>
 						<operationType>command</operationType>
 					</physicalString>
 				</parameter>
@@ -516,19 +516,20 @@
 						<writeable>false</writeable>
 					</properties>
 					<logicalInteger/>
-					<physicalInteger groupId="">
+					<physicalInteger>
 						<operationType>command</operationType>
 					</physicalInteger>
 				</parameter>
 				<parameter id="ALARM_COUNTER">
 					<properties>
-						<internal>true</internal>
+						<writeable>false</writeable>
 					</properties>
 					<logicalInteger>
 						<minimumValue>0</minimumValue>
 						<maximumValue>65535</maximumValue>
 					</logicalInteger>
-					<physicalInteger groupId="ALARM_COUNTER">
+					<physicalInteger>
+						<size>2.0</size>
 						<operationType>command</operationType>
 					</physicalInteger>
 					<packets>

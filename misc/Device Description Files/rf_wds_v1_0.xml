@@ -98,7 +98,7 @@
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>true</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>9.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -112,7 +112,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -131,7 +131,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>32.6</index>
 					<size>0.2</size>
 					<list>1</list>
@@ -159,7 +159,7 @@
 						<index>3</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>32.4</index>
 					<size>0.2</size>
 					<list>1</list>
@@ -183,7 +183,7 @@
 						<index>2</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>32.2</index>
 					<size>0.2</size>
 					<list>1</list>
@@ -226,7 +226,7 @@
 					<maximumValue>7620.000000</maximumValue>
 					<defaultValue>5.000000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>35.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -408,7 +408,7 @@
 					<internal>true</internal>
 				</properties>
 				<logicalAction/>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>command</operationType>
 				</physicalInteger>
 				<packets>
@@ -424,7 +424,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -437,7 +437,7 @@
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

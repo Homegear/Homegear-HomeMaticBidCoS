@@ -76,6 +76,7 @@
 			<channelIndex>9:0.6</channelIndex>
 			<binaryPayload>
 				<element>
+					<size>0.0</size>
 					<parameterId>MOTION</parameterId>
 					<constValueInteger>1</constValueInteger>
 				</element>
@@ -228,7 +229,7 @@
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -240,7 +241,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -252,7 +253,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>9.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -266,7 +267,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -279,7 +280,7 @@
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>48.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -300,7 +301,7 @@
 					<maximumValue>7.500000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -314,7 +315,7 @@
 					<maximumValue>15</maximumValue>
 					<defaultValue>1</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -326,7 +327,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>2.3</index>
 					<size>0.1</size>
 					<list>1</list>
@@ -340,7 +341,7 @@
 					<maximumValue>4</maximumValue>
 					<defaultValue>4</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>2.0</index>
 					<size>0.3</size>
 					<list>1</list>
@@ -354,7 +355,7 @@
 					<maximumValue>7</maximumValue>
 					<defaultValue>7</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>2.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -391,7 +392,7 @@
 					<maximumValue>1.275000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>34.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -407,7 +408,7 @@
 					<maximumValue>10</maximumValue>
 					<defaultValue>3</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>48.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -429,7 +430,7 @@
 					<maximumValue>1.800000</maximumValue>
 					<defaultValue>0.400000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>4.4</index>
 					<size>0.4</size>
 					<list>1</list>
@@ -466,7 +467,7 @@
 					<maximumValue>1.275000</maximumValue>
 					<defaultValue>0.500000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>34.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -770,7 +771,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -829,7 +830,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>0.1</size>
 					<list>4</list>
@@ -842,7 +843,7 @@
 					<defaultValue>false</defaultValue>
 					<setToValueOnPairing>false</setToValueOnPairing>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.7</index>
 					<size>0.1</size>
 					<list>4</list>

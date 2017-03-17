@@ -1,4 +1,4 @@
-<homegearDevice version="30">
+<homegearDevice version="32">
 	<supportedDevices>
 		<device id="HM-ES-TX-WM">
 			<description>Wireless sender for power meter sensor</description>
@@ -269,7 +269,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>124.0</index>
 					<size>3.0</size>
 					<list>1</list>
@@ -326,7 +326,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>149.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -342,7 +342,7 @@
 					<maximumValue>65536</maximumValue>
 					<defaultValue>100</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>150.0</index>
 					<size>2.0</size>
 					<list>1</list>
@@ -366,7 +366,7 @@
 					<maximumValue>99</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>156.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -387,7 +387,7 @@
 					<maximumValue>65.536000</maximumValue>
 					<defaultValue>0.010000</defaultValue>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>152.0</index>
 					<size>2.0</size>
 					<list>1</list>
@@ -403,7 +403,7 @@
 					<maximumValue>65536</maximumValue>
 					<defaultValue>10000</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>154.0</index>
 					<size>2.0</size>
 					<list>1</list>
@@ -413,7 +413,7 @@
 			<parameter id="POWER_STRING">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>54.0</index>
 					<size>16.0</size>
 					<list>1</list>
@@ -423,7 +423,7 @@
 			<parameter id="ENERGY_COUNTER_STRING">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>70.0</index>
 					<size>16.0</size>
 					<list>1</list>
@@ -465,7 +465,7 @@
 						<specialValue id="NOT_USED">0.000000</specialValue>
 					</specialValues>
 				</logicalDecimal>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>124.0</index>
 					<size>3.0</size>
 					<list>1</list>
@@ -522,7 +522,7 @@
 						<index>4</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>149.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -532,7 +532,7 @@
 			<parameter id="POWER_STRING">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>54.0</index>
 					<size>16.0</size>
 					<list>1</list>
@@ -542,7 +542,7 @@
 			<parameter id="ENERGY_COUNTER_STRING">
 				<properties/>
 				<logicalString/>
-				<physicalString groupId="">
+				<physicalString>
 					<index>70.0</index>
 					<size>16.0</size>
 					<list>1</list>
@@ -556,7 +556,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -629,7 +629,7 @@
 						<index>6</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>35.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -678,7 +678,7 @@
 						<index>3</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>36.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -711,7 +711,7 @@
 						<index>1</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>37.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -760,7 +760,7 @@
 						<index>3</index>
 					</value>
 				</logicalEnumeration>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>38.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -774,7 +774,7 @@
 					<maximumValue>10</maximumValue>
 					<defaultValue>4</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>39.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -788,7 +788,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -1053,20 +1053,15 @@
 					<writeable>false</writeable>
 					<control>POWERMETER_IEC1.IEC_ENERGY_COUNTER</control>
 					<unit>kWh</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10000.000000</factor>
-						</decimalIntegerScale>
-					</casts>
 				</properties>
 				<logicalDecimal>
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>109951162.777500</maximumValue>
 				</logicalDecimal>
-				<physicalInteger groupId="IEC_ENERGY_COUNTER">
+				<physicalString groupId="IEC_ENERGY_COUNTER">
 					<size>5.0</size>
 					<operationType>command</operationType>
-				</physicalInteger>
+				</physicalString>
 				<packets>
 					<packet id="IEC_POWER_EVENT_CYCLIC">
 						<type>event</type>
@@ -1111,20 +1106,15 @@
 					<writeable>false</writeable>
 					<control>POWERMETER_IEC2.IEC_ENERGY_COUNTER</control>
 					<unit>kWh</unit>
-					<casts>
-						<decimalIntegerScale>
-							<factor>10000.000000</factor>
-						</decimalIntegerScale>
-					</casts>
 				</properties>
 				<logicalDecimal>
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>109951162.777500</maximumValue>
 				</logicalDecimal>
-				<physicalInteger groupId="IEC_ENERGY_COUNTER">
+				<physicalString groupId="IEC_ENERGY_COUNTER">
 					<size>5.0</size>
 					<operationType>command</operationType>
-				</physicalInteger>
+				</physicalString>
 				<packets>
 					<packet id="IEC_POWER_EVENT_CYCLIC">
 						<type>event</type>

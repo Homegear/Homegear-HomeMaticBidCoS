@@ -1005,7 +1005,7 @@ void Hm_Mod_Rpi_Pcb::getResponse(const std::vector<char>& packet, std::vector<ui
 		_requestsMutex.unlock();
 		std::unique_lock<std::mutex> lock(request->mutex);
 		send(packet);
-		if(!request->conditionVariable.wait_for(lock, std::chrono::milliseconds(10000), [&] { return request->mutexReady; }))
+		if(!request->conditionVariable.wait_for(lock, std::chrono::milliseconds(5000), [&] { return request->mutexReady; }))
 		{
 			_out.printError("Error: No response received to packet: " + _bl->hf.getHexString(packet));
 		}
@@ -1742,23 +1742,24 @@ void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
 		}
 		else
 		{
-			_requestsMutex.lock();
-			if(_requests.find(packet.at(4)) != _requests.end())
 			{
-				std::shared_ptr<Request> request = _requests.at(packet.at(4));
-				_requestsMutex.unlock();
-				if(packet.at(3) == request->getResponseControlByte() && packet.at(5) == request->getResponseType())
+				std::unique_lock<std::mutex> requestsGuard(_requestsMutex);
+				if(_requests.find(packet.at(4)) != _requests.end())
 				{
-					request->response = packet;
+					std::shared_ptr<Request> request = _requests.at(packet.at(4));
+					requestsGuard.unlock();
+					if(packet.at(3) == request->getResponseControlByte() && packet.at(5) == request->getResponseType())
 					{
-						std::lock_guard<std::mutex> lock(request->mutex);
-						request->mutexReady = true;
+						request->response = packet;
+						{
+							std::lock_guard<std::mutex> lock(request->mutex);
+							request->mutexReady = true;
+						}
+						request->conditionVariable.notify_all();
+						return;
 					}
-					request->conditionVariable.notify_one();
-					return;
 				}
 			}
-			else _requestsMutex.unlock();
 			if(_initComplete) parsePacket(packet);
 		}
 	}

@@ -106,7 +106,7 @@
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>5.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -120,7 +120,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>1.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -134,7 +134,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -145,7 +145,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -159,7 +159,7 @@
 					<maximumValue>1440</maximumValue>
 					<defaultValue>360</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -472,7 +472,7 @@
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>6.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -485,7 +485,7 @@
 					<minimumValue>0</minimumValue>
 					<maximumValue>255</maximumValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>7.0</index>
 					<size>1.0</size>
 					<list>1</list>

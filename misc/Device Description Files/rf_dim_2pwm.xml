@@ -1,9 +1,9 @@
-<homegearDevice version="6">
+<homegearDevice version="1">
 	<supportedDevices>
-		<device id="OLIGO.smart.iq.HM">
-			<description>PWM dimmer module</description>
-			<typeNumber>0xFC</typeNumber>
-			<minFirmwareVersion>0x2A</minFirmwareVersion>
+		<device id="HM-DW-WM">
+			<description>2 channel dimmer PWM</description>
+			<typeNumber>0x109</typeNumber>
+			<minFirmwareVersion>0x2C</minFirmwareVersion>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -103,6 +103,26 @@
 					<parameterId>LEVEL</parameterId>
 				</element>
 				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERLOAD</parameterId>
+				</element>
+				<element>
+					<index>12.2</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERHEAT</parameterId>
+				</element>
+				<element>
+					<index>12.3</index>
+					<size>0.1</size>
+					<parameterId>ERROR_REDUCED</parameterId>
+				</element>
+				<element>
 					<index>12.4</index>
 					<size>0.3</size>
 					<parameterId>STATE_FLAGS</parameterId>
@@ -128,6 +148,26 @@
 				<element>
 					<index>11.0</index>
 					<parameterId>LEVEL</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.3</size>
+					<parameterId>ERROR</parameterId>
+				</element>
+				<element>
+					<index>12.1</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERLOAD</parameterId>
+				</element>
+				<element>
+					<index>12.2</index>
+					<size>0.1</size>
+					<parameterId>ERROR_OVERHEAT</parameterId>
+				</element>
+				<element>
+					<index>12.3</index>
+					<size>0.1</size>
+					<parameterId>ERROR_REDUCED</parameterId>
 				</element>
 				<element>
 					<index>12.4</index>
@@ -678,38 +718,13 @@
 			</parameter>
 			<parameter id="SPEED_MULTIPLIER">
 				<properties>
-					<casts>
-						<optionInteger>
-							<value>
-								<physical>0</physical>
-								<logical>0</logical>
-							</value>
-							<value>
-								<physical>1</physical>
-								<logical>1</logical>
-							</value>
-							<value>
-								<physical>40</physical>
-								<logical>2</logical>
-							</value>
-						</optionInteger>
-					</casts>
+					<unit>x 200Hz</unit>
 				</properties>
-				<logicalEnumeration>
-					<defaultValue>0</defaultValue>
-					<value>
-						<id>Hardware default</id>
-						<index>0</index>
-					</value>
-					<value>
-						<id>1 (400Hz)</id>
-						<index>1</index>
-					</value>
-					<value>
-						<id>40 (16kHz)</id>
-						<index>2</index>
-					</value>
-				</logicalEnumeration>
+				<logicalInteger>
+					<minimumValue>1</minimumValue>
+					<maximumValue>10</maximumValue>
+					<defaultValue>2</defaultValue>
+				</logicalInteger>
 				<physicalInteger>
 					<index>30.0</index>
 					<size>1.0</size>
@@ -1758,6 +1773,50 @@
 					</packet>
 				</packets>
 			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
 			<parameter id="INSTALL_TEST">
 				<properties>
 					<readable>false</readable>
@@ -2071,6 +2130,50 @@
 						<type>event</type>
 					</packet>
 					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
 						<type>event</type>
 					</packet>
 				</packets>
@@ -2392,6 +2495,50 @@
 					</packet>
 				</packets>
 			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
 			<parameter id="INSTALL_TEST">
 				<properties>
 					<readable>false</readable>
@@ -2705,6 +2852,50 @@
 						<type>event</type>
 					</packet>
 					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
 						<type>event</type>
 					</packet>
 				</packets>
@@ -3026,6 +3217,50 @@
 					</packet>
 				</packets>
 			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
 			<parameter id="INSTALL_TEST">
 				<properties>
 					<readable>false</readable>
@@ -3339,6 +3574,50 @@
 						<type>event</type>
 					</packet>
 					<packet id="INFO_POWERON">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_REDUCED">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_REDUCED">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
+						<type>event</type>
+					</packet>
+				</packets>
+			</parameter>
+			<parameter id="ERROR_OVERHEAT">
+				<properties>
+					<writeable>false</writeable>
+					<service>true</service>
+					<control>NONE</control>
+				</properties>
+				<logicalBoolean>
+					<defaultValue>false</defaultValue>
+				</logicalBoolean>
+				<physicalInteger groupId="ERROR_OVERHEAT">
+					<size>0.1</size>
+					<operationType>command</operationType>
+				</physicalInteger>
+				<packets>
+					<packet id="INFO_LEVEL">
+						<type>event</type>
+					</packet>
+					<packet id="ACK_STATUS">
 						<type>event</type>
 					</packet>
 				</packets>
@@ -4258,6 +4537,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -5573,6 +5853,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -6903,6 +7184,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -8218,6 +8500,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -9548,6 +9831,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -10863,6 +11147,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -12193,6 +12478,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -13508,6 +13794,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -14838,6 +15125,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -16153,6 +16441,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -17483,6 +17772,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>
@@ -18798,6 +19088,7 @@
 					<maximumValue>1.000000</maximumValue>
 					<defaultValue>1.000000</defaultValue>
 					<specialValues>
+						<specialValue id="ACT_LEVEL">1.275000</specialValue>
 						<specialValue id="OLD_LEVEL">1.005000</specialValue>
 					</specialValues>
 				</logicalDecimal>

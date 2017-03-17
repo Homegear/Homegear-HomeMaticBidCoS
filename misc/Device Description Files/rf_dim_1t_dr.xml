@@ -1,34 +1,8 @@
-<homegearDevice version="17">
+<homegearDevice version="1">
 	<supportedDevices>
-		<device id="HM-LC-Dim1T-Pl">
-			<description>1 channel dimmer T (plug)</description>
-			<typeNumber>0x71</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-CV">
-			<description>1 channel dimmer T (ceiling voids)</description>
-			<typeNumber>0x72</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-FM">
-			<description>1 channel dimmer T (flush mount)</description>
-			<typeNumber>0x73</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-Pl-3">
-			<description>1 channel dimmer T (plug)</description>
-			<typeNumber>0xB4</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-CV-2">
-			<description>1 channel dimmer T (ceiling voids)</description>
-			<typeNumber>0xB9</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
-		</device>
-		<device id="HM-LC-Dim1T-FM-2">
-			<description>1 channel dimmer T (flush mount)</description>
-			<typeNumber>0xBA</typeNumber>
-			<minFirmwareVersion>0x25</minFirmwareVersion>
+		<device id="HM-LC-Dim1T-DR">
+			<description>1 channel dimmer T (DIN rails)</description>
+			<typeNumber>0x105</typeNumber>
 		</device>
 	</supportedDevices>
 	<properties>
@@ -518,7 +492,7 @@
 				<logicalInteger>
 					<minimumValue>1</minimumValue>
 					<maximumValue>254</maximumValue>
-					<defaultValue>5</defaultValue>
+					<defaultValue>255</defaultValue>
 					<specialValues>
 						<specialValue id="PERMANENT">255</specialValue>
 					</specialValues>

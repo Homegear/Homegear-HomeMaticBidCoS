@@ -1,4 +1,4 @@
-<homegearDevice version="4">
+<homegearDevice version="5">
 	<supportedDevices>
 		<device id="HM-Sen-LI-O">
 			<description>Helligkeitsensor Auﬂen</description>
@@ -9,7 +9,7 @@
 		<receiveMode>config</receiveMode>
 		<receiveMode>wakeUp</receiveMode>
 		<encryption>true</encryption>
-		<timeout>600</timeout>
+		<timeout>88200</timeout>
 		<hasBattery>true</hasBattery>
 	</properties>
 	<functions>
@@ -95,7 +95,7 @@
 					<maximumValue>120</maximumValue>
 					<defaultValue>8</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>123.0</index>
 					<size>0.7</size>
 					<list>1</list>
@@ -114,7 +114,7 @@
 						<specialValue id="NOT_USED">0</specialValue>
 					</specialValues>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>172.0</index>
 					<size>1.0</size>
 					<list>1</list>
@@ -130,7 +130,7 @@
 					<maximumValue>255</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>17.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -142,7 +142,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>24.0</index>
 					<size>0.1</size>
 					<list>0</list>
@@ -156,7 +156,7 @@
 					<maximumValue>10</maximumValue>
 					<defaultValue>6</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>20.0</index>
 					<size>1.0</size>
 					<list>0</list>
@@ -170,7 +170,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>
@@ -189,7 +189,7 @@
 				</properties>
 				<logicalDecimal>
 					<minimumValue>0.000000</minimumValue>
-					<maximumValue>100000.000000</maximumValue>
+					<maximumValue>200000.000000</maximumValue>
 				</logicalDecimal>
 				<physicalInteger groupId="LUX">
 					<size>4.0</size>

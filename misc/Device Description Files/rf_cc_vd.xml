@@ -63,7 +63,7 @@
 					<maximumValue>25</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>9.0</index>
 					<size>0.5</size>
 					<list>5</list>
@@ -79,7 +79,7 @@
 					<maximumValue>99</maximumValue>
 					<defaultValue>0</defaultValue>
 				</logicalInteger>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<index>10.0</index>
 					<size>0.7</size>
 					<list>5</list>
@@ -95,7 +95,7 @@
 				<logicalBoolean>
 					<defaultValue>false</defaultValue>
 				</logicalBoolean>
-				<physicalInteger groupId="">
+				<physicalInteger>
 					<operationType>store</operationType>
 				</physicalInteger>
 			</parameter>

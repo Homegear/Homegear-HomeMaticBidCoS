@@ -277,7 +277,7 @@ void COC::lineReceived(const std::string& data)
 		}
 		else if(!packetHex.empty())
 		{
-			if(packetHex == "LOVF\n") _out.printWarning("Warning: COC with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
+			if(packetHex.compare(0, 4, "LOVF") == 0) _out.printWarning("Warning: COC with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
 			else if(packetHex == "A") return;
 			else _out.printWarning("Warning: Too short packet received: " + packetHex);
 		}

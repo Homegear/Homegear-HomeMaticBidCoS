@@ -1,7 +1,7 @@
 <homegearDevice version="5">
 	<supportedDevices>
 		<device id="HM-Sen-LI-O">
-			<description>Helligkeitsensor Auﬂen</description>
+			<description>Helligkeitsensor Au√üen</description>
 			<typeNumber>0xFD</typeNumber>
 		</device>
 	</supportedDevices>

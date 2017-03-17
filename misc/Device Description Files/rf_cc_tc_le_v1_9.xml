@@ -252,7 +252,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_COMFORT_VALUE">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -273,7 +273,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_LOWERING_VALUE">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -321,7 +321,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_PARTY_VALUE">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -440,7 +440,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_1">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -482,7 +482,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_2">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -524,7 +524,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_3">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -566,7 +566,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_4">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -608,7 +608,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_5">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -650,7 +650,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_6">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -692,7 +692,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_7">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -734,7 +734,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_8">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -776,7 +776,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_9">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -818,7 +818,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_10">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -860,7 +860,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_11">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -902,7 +902,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_12">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -944,7 +944,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_13">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -986,7 +986,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_14">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1028,7 +1028,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_15">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1070,7 +1070,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_16">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1112,7 +1112,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_17">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1154,7 +1154,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_18">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1196,7 +1196,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_19">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1238,7 +1238,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_20">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1280,7 +1280,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_21">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1322,7 +1322,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_22">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1364,7 +1364,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_23">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1406,7 +1406,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SATURDAY_24">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1448,7 +1448,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_1">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1490,7 +1490,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_2">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1532,7 +1532,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_3">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1574,7 +1574,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_4">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1616,7 +1616,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_5">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1658,7 +1658,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_6">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1700,7 +1700,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_7">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1742,7 +1742,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_8">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1784,7 +1784,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_9">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1826,7 +1826,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_10">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1868,7 +1868,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_11">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1910,7 +1910,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_12">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1952,7 +1952,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_13">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -1994,7 +1994,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_14">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2036,7 +2036,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_15">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2078,7 +2078,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_16">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2120,7 +2120,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_17">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2162,7 +2162,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_18">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2204,7 +2204,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_19">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2246,7 +2246,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_20">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2288,7 +2288,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_21">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2330,7 +2330,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_22">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2372,7 +2372,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_23">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2414,7 +2414,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_SUNDAY_24">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2456,7 +2456,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_1">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2498,7 +2498,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_2">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2540,7 +2540,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_3">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2582,7 +2582,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_4">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2624,7 +2624,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_5">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2666,7 +2666,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_6">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2708,7 +2708,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_7">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2750,7 +2750,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_8">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2792,7 +2792,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_9">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2834,7 +2834,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_10">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2876,7 +2876,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_11">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2918,7 +2918,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_12">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -2960,7 +2960,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_13">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3002,7 +3002,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_14">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3044,7 +3044,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_15">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3086,7 +3086,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_16">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3128,7 +3128,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_17">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3170,7 +3170,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_18">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3212,7 +3212,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_19">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3254,7 +3254,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_20">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3296,7 +3296,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_21">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3338,7 +3338,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_22">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3380,7 +3380,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_23">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3422,7 +3422,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_MONDAY_24">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3464,7 +3464,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_1">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3506,7 +3506,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_2">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3548,7 +3548,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_3">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3590,7 +3590,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_4">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3632,7 +3632,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_5">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3674,7 +3674,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_6">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3716,7 +3716,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_7">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3758,7 +3758,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_8">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3800,7 +3800,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_9">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3842,7 +3842,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_10">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3884,7 +3884,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_11">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3926,7 +3926,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_12">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -3968,7 +3968,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_13">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4010,7 +4010,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_14">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4052,7 +4052,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_15">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4094,7 +4094,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_16">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4136,7 +4136,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_17">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4178,7 +4178,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_18">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4220,7 +4220,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_19">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4262,7 +4262,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_20">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4304,7 +4304,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_21">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4346,7 +4346,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_22">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4388,7 +4388,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_23">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4430,7 +4430,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_TUESDAY_24">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4472,7 +4472,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_1">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4514,7 +4514,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_2">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4556,7 +4556,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_3">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4598,7 +4598,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_4">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4640,7 +4640,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_5">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4682,7 +4682,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_6">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4724,7 +4724,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_7">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4766,7 +4766,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_8">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4808,7 +4808,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_9">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4850,7 +4850,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_10">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4892,7 +4892,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_11">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4934,7 +4934,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_12">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -4976,7 +4976,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_13">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5018,7 +5018,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_14">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5060,7 +5060,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_15">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5102,7 +5102,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_16">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5144,7 +5144,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_17">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5186,7 +5186,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_18">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5228,7 +5228,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_19">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5270,7 +5270,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_20">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5312,7 +5312,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_21">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5354,7 +5354,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_22">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5396,7 +5396,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_23">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5438,7 +5438,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_WEDNESDAY_24">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5480,7 +5480,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_1">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5522,7 +5522,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_2">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5564,7 +5564,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_3">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5606,7 +5606,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_4">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5648,7 +5648,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_5">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5690,7 +5690,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_6">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5732,7 +5732,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_7">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5774,7 +5774,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_8">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5816,7 +5816,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_9">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5858,7 +5858,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_10">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5900,7 +5900,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_11">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5942,7 +5942,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_12">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -5984,7 +5984,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_13">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6026,7 +6026,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_14">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6068,7 +6068,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_15">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6110,7 +6110,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_16">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6152,7 +6152,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_17">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6194,7 +6194,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_18">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6236,7 +6236,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_19">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6278,7 +6278,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_20">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6320,7 +6320,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_21">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6362,7 +6362,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_22">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6404,7 +6404,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_23">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6446,7 +6446,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_THURSDAY_24">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6488,7 +6488,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_1">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6530,7 +6530,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_2">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6572,7 +6572,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_3">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6614,7 +6614,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_4">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6656,7 +6656,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_5">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6698,7 +6698,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_6">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6740,7 +6740,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_7">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6782,7 +6782,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_8">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6824,7 +6824,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_9">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6866,7 +6866,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_10">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6908,7 +6908,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_11">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6950,7 +6950,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_12">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -6992,7 +6992,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_13">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7034,7 +7034,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_14">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7076,7 +7076,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_15">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7118,7 +7118,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_16">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7160,7 +7160,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_17">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7202,7 +7202,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_18">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7244,7 +7244,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_19">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7286,7 +7286,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_20">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7328,7 +7328,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_21">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7370,7 +7370,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_22">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7412,7 +7412,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_23">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7454,7 +7454,7 @@
 			</parameter>
 			<parameter id="TEMPERATUR_FRIDAY_24">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7575,7 +7575,7 @@
 			<parameter id="SETPOINT">
 				<properties>
 					<control>TEMP.SETPOINT</control>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>
@@ -7676,7 +7676,7 @@
 				<properties>
 					<writeable>false</writeable>
 					<signed>true</signed>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>10.000000</factor>
@@ -7804,7 +7804,7 @@
 		<linkParameters id="cc_tc_ch_wsr_link--3">
 			<parameter id="TEMPERATUR_WINDOW_OPEN_VALUE">
 				<properties>
-					<unit>캜</unit>
+					<unit>째C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>2.000000</factor>

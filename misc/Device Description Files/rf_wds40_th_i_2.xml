@@ -205,7 +205,7 @@
 				<properties>
 					<writeable>false</writeable>
 					<signed>true</signed>
-					<unit>°C</unit>
+					<unit>Â°C</unit>
 					<casts>
 						<decimalIntegerScale>
 							<factor>10.000000</factor>

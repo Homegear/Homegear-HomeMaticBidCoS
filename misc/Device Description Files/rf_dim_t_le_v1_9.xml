@@ -274,7 +274,7 @@
 			</parameter>
 			<parameter id="REDUCE_TEMP_LEVEL">
 				<properties>
-					<unit>°C</unit>
+					<unit>Â°C</unit>
 				</properties>
 				<logicalInteger>
 					<minimumValue>30</minimumValue>
@@ -311,7 +311,7 @@
 			</parameter>
 			<parameter id="OVERTEMP_LEVEL">
 				<properties>
-					<unit>°C</unit>
+					<unit>Â°C</unit>
 				</properties>
 				<logicalInteger>
 					<minimumValue>30</minimumValue>

@@ -1,4 +1,4 @@
-/* Copyright 2013-2016 Sathya Laufer
+/* Copyright 2013-2017 Sathya Laufer
  *
  * Homegear is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1188,10 +1188,17 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			}
 			return _currentPeer->handleCliCommand(command);
 		}
-		else if(BaseLib::HelperFunctions::checkCliCommand(command, "test", "ts", "", 0, arguments, showHelp))
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "test1", "ts1", "", 0, arguments, showHelp))
 		{
 			std::vector<uint8_t> payload{2, 0};
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA2, 0x58, 0x39A07F, 0x1DA07F, payload));
+			GD::defaultPhysicalInterface->sendPacket(packet);
+			return "ok\n";
+		}
+		else if(BaseLib::HelperFunctions::checkCliCommand(command, "test2", "ts2", "", 0, arguments, showHelp))
+		{
+			std::vector<uint8_t> payload{ 0x80, 0x03, 0x02, 0x0A, 0x12, 0x81, 0x13, 0x85, 0x0A, 0x12, 0x80, 0x13, 0x85, 0x0A, 0x12, 0x0A, 0x0A };
+			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA2, 0x58, _address, 0x4BD22A, payload));
 			GD::defaultPhysicalInterface->sendPacket(packet);
 			return "ok\n";
 		}

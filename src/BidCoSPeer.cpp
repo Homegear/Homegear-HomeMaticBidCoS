@@ -3523,11 +3523,9 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		BaseLib::Systems::RPCConfigurationParameter* parameter = &valuesCentral[channel][valueKey];
 		std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string>());
 		std::shared_ptr<std::vector<PVariable>> values(new std::vector<PVariable>());
-		if(rpcParameter->readable)
-		{
-			valueKeys->push_back(valueKey);
-			values->push_back(value);
-		}
+		valueKeys->push_back(valueKey);
+		values->push_back(value);
+
 		if(rpcParameter->physical->operationType == IPhysical::OperationType::Enum::store)
 		{
 			rpcParameter->convertToPacket(value, parameter->data);

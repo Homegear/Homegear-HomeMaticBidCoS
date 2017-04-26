@@ -66,8 +66,9 @@ void BidCoSPeer::setDefaultValue(BaseLib::Systems::RpcConfigurationParameter& pa
 {
 	try
 	{
-		std::vector<uint8_t> parameterData = parameter.getBinaryData();
+		std::vector<uint8_t> parameterData;
 		parameter.rpcParameter->convertToPacket(parameter.rpcParameter->logical->getDefaultValue(), parameterData);
+		parameter.setBinaryData(parameterData);
 	}
 	catch(const std::exception& ex)
 	{

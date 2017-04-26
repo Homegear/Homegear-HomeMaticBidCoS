@@ -341,7 +341,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		/**
 		 * {@inheritDoc}
 		 */
-		virtual void setDefaultValue(BaseLib::Systems::RPCConfigurationParameter* parameter);
+		virtual void setDefaultValue(BaseLib::Systems::RpcConfigurationParameter& parameter);
 
 		void getValuesFromPacket(std::shared_ptr<BidCoSPacket> packet, std::vector<FrameValues>& frameValue);
 

@@ -3275,7 +3275,7 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 						GD::out.printError("Error: Packet position is negative. Device: " + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " Serial number: " + peer->getSerialNumber() + " Channel: " + std::to_string(channel) + " List: " + std::to_string((*i)->physical->list) + " Parameter index: " + std::to_string((*i)->physical->index));
 						continue;
 					}
-					BaseLib::Systems::RPCConfigurationParameter* parameter = nullptr;
+					BaseLib::Systems::RpcConfigurationParameter* parameter = nullptr;
 					if(type == ParameterGroup::Type::config) parameter = &peer->configCentral[channel][(*i)->id];
 					//type == link
 					else if(peer->getPeer(channel, remoteAddress, remoteChannel)) parameter = &peer->linksCentral[channel][remoteAddress][remoteChannel][(*i)->id];
@@ -3290,26 +3290,31 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 							GD::out.printError("Error: Device tried to set parameter with more bytes than specified. Device: " + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " Serial number: " + peer->getSerialNumber() + " Channel: " + std::to_string(channel) + " List: " + std::to_string((*i)->physical->list) + " Parameter index: " + std::to_string((*i)->physical->index));
 							continue;
 						}
-						while(parameter->partialData.size() < (*i)->physical->size) parameter->partialData.push_back(0);
+						std::vector<uint8_t> parameterData = parameter->getBinaryData();
+						std::vector<uint8_t> partialParameterData = parameter->getPartialBinaryData();
+						while(partialParameterData.size() < (*i)->physical->size) partialParameterData.push_back(0);
 						position = 9 + 8;
 						std::vector<uint8_t> data = packet->getPosition(position, missingBytes, (*i)->physical->mask);
-						for(uint32_t j = 0; j < byteOffset; j++) parameter->data.at(j) = parameter->partialData.at(j);
-						for(uint32_t j = byteOffset; j < (*i)->physical->size; j++) parameter->data.at(j) = data.at(j - byteOffset);
+						for(uint32_t j = 0; j < byteOffset; j++) parameterData.at(j) = partialParameterData.at(j);
+						for(uint32_t j = byteOffset; j < (*i)->physical->size; j++) parameterData.at(j) = data.at(j - byteOffset);
+						parameter->setPartialBinaryData(partialParameterData);
+						parameter->setBinaryData(parameterData);
 						//Don't clear partialData - packet might be resent
-						peer->saveParameter(parameter->databaseID, type, channel, (*i)->id, parameter->data, remoteAddress, remoteChannel);
-						if(_bl->debugLevel >= 4) GD::out.printInfo("Info: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameter->data) + " after being partially set in the last packet.");
+						peer->saveParameter(parameter->databaseId, type, channel, (*i)->id, parameterData, remoteAddress, remoteChannel);
+						if(_bl->debugLevel >= 4) GD::out.printInfo("Info: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameterData) + " after being partially set in the last packet.");
 					}
 					else if(position + (int32_t)(*i)->physical->size >= packet->length())
 					{
-						parameter->partialData.clear();
-						parameter->partialData = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
-						if(_bl->debugLevel >= 4) GD::out.printInfo("Info: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was partially set to 0x" + BaseLib::HelperFunctions::getHexString(parameter->partialData) + ".");
+						std::vector<uint8_t> partialParameterData = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
+						parameter->setPartialBinaryData(partialParameterData);
+						if(_bl->debugLevel >= 4) GD::out.printInfo("Info: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was partially set to 0x" + BaseLib::HelperFunctions::getHexString(partialParameterData) + ".");
 					}
 					else
 					{
-						parameter->data = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
-						peer->saveParameter(parameter->databaseID, type, channel, (*i)->id, parameter->data, remoteAddress, remoteChannel);
-						if(_bl->debugLevel >= 4) GD::out.printInfo("Info: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameter->data) + ".");
+						std::vector<uint8_t> parameterData = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
+						parameter->setBinaryData(parameterData);
+						peer->saveParameter(parameter->databaseId, type, channel, (*i)->id, parameterData, remoteAddress, remoteChannel);
+						if(_bl->debugLevel >= 4) GD::out.printInfo("Info: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameterData) + ".");
 					}
 				}
 				else GD::out.printError("Error: Device tried to set parameter without id. Device: " + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " Serial number: " + peer->getSerialNumber() + " Channel: " + std::to_string(channel) + " List: " + std::to_string((*i)->physical->list) + " Parameter index: " + std::to_string((*i)->physical->index));
@@ -3430,7 +3435,7 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 						if(!(*i)->id.empty())
 						{
 							double position = ((*i)->physical->index - startIndex) + 2 + 9;
-							BaseLib::Systems::RPCConfigurationParameter* parameter = nullptr;
+							BaseLib::Systems::RpcConfigurationParameter* parameter = nullptr;
 							if(type == ParameterGroup::Type::config) parameter = &peer->configCentral[channel][(*i)->id];
 							//type == link
 							else if(peer->getPeer(channel, remoteAddress, remoteChannel)) parameter = &peer->linksCentral[channel][remoteAddress][remoteChannel][(*i)->id];
@@ -3444,42 +3449,47 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 									GD::out.printError("Error: Device tried to set parameter with more bytes than specified. Device: " + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " Serial number: " + peer->getSerialNumber() + " Channel: " + std::to_string(channel) + " List: " + std::to_string((*i)->physical->list) + " Parameter index: " + std::to_string((*i)->physical->index));
 									continue;
 								}
-								while(parameter->partialData.size() < (*i)->physical->size) parameter->partialData.push_back(0);
+								std::vector<uint8_t> parameterData = parameter->getBinaryData();
+								std::vector<uint8_t> partialParameterData = parameter->getPartialBinaryData();
+								while(partialParameterData.size() < (*i)->physical->size) partialParameterData.push_back(0);
 								position = 9 + 2;
 								std::vector<uint8_t> data = packet->getPosition(position, missingBytes, (*i)->physical->mask);
 								for(uint32_t j = 0; j < byteOffset; j++)
 								{
-									if(j >= parameter->data.size()) parameter->data.push_back(parameter->partialData.at(j));
-									else parameter->data.at(j) = parameter->partialData.at(j);
+									if(j >= parameterData.size()) parameterData.push_back(partialParameterData.at(j));
+									else parameterData.at(j) = partialParameterData.at(j);
 								}
 								for(uint32_t j = byteOffset; j < (*i)->physical->size; j++)
 								{
-									if(j >= parameter->data.size()) parameter->data.push_back(data.at(j - byteOffset));
-									else parameter->data.at(j) = data.at(j - byteOffset);
+									if(j >= parameterData.size()) parameterData.push_back(data.at(j - byteOffset));
+									else parameterData.at(j) = data.at(j - byteOffset);
 								}
+								parameter->setBinaryData(parameterData);
+								parameter->setPartialBinaryData(partialParameterData);
 								//Don't clear partialData - packet might be resent
-								peer->saveParameter(parameter->databaseID, type, channel, (*i)->id, parameter->data, remoteAddress, remoteChannel);
+								peer->saveParameter(parameter->databaseId, type, channel, (*i)->id, parameterData, remoteAddress, remoteChannel);
 								if(type == ParameterGroup::Type::config && !peer->getPairingComplete() && (*i)->logical->setToValueOnPairingExists)
 								{
 									parametersToEnforce->structValue->insert(StructElement((*i)->id, (*i)->logical->getSetToValueOnPairing()));
 								}
-								if(_bl->debugLevel >= 5) GD::out.printDebug("Debug: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameter->data) + " after being partially set in the last packet.");
+								if(_bl->debugLevel >= 5) GD::out.printDebug("Debug: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameterData) + " after being partially set in the last packet.");
 							}
 							else if(position + (int32_t)(*i)->physical->size >= packet->length())
 							{
-								parameter->partialData.clear();
-								parameter->partialData = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
-								if(_bl->debugLevel >= 5) GD::out.printDebug("Debug: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was partially set to 0x" + BaseLib::HelperFunctions::getHexString(parameter->partialData) + ".");
+								std::vector<uint8_t> partialParameterData = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
+								parameter->setPartialBinaryData(partialParameterData);
+								if(_bl->debugLevel >= 5) GD::out.printDebug("Debug: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was partially set to 0x" + BaseLib::HelperFunctions::getHexString(partialParameterData) + ".");
 							}
 							else
 							{
-								parameter->data = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
-								peer->saveParameter(parameter->databaseID, type, channel, (*i)->id, parameter->data, remoteAddress, remoteChannel);
+								std::vector<uint8_t> parameterData = packet->getPosition(position, (*i)->physical->size, (*i)->physical->mask);
+								parameter->setBinaryData(parameterData);
+								peer->saveParameter(parameter->databaseId, type, channel, (*i)->id, parameterData, remoteAddress, remoteChannel);
 								if(type == ParameterGroup::Type::config && !peer->getPairingComplete() && (*i)->logical->setToValueOnPairingExists)
 								{
 									parametersToEnforce->structValue->insert(StructElement((*i)->id, (*i)->logical->getSetToValueOnPairing()));
 								}
-								if(_bl->debugLevel >= 5) GD::out.printDebug("Debug: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameter->data) + ".");
+								if(_bl->debugLevel >= 5) GD::out.printDebug("Debug: Parameter " + (*i)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*i)->physical->index) + " and packet index " + std::to_string(position) + " with size " + std::to_string((*i)->physical->size) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(parameterData) + ".");
 							}
 						}
 						else GD::out.printError("Error: Device tried to set parameter without id. Device: " + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " Serial number: " + peer->getSerialNumber() + " Channel: " + std::to_string(channel) + " List: " + std::to_string((*i)->physical->list) + " Parameter index: " + std::to_string((*i)->physical->index));
@@ -3511,7 +3521,7 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 								double size = (*j)->physical->size;
 								if(size > 1.0) size = 1.0; //Reading more than one byte doesn't make any sense
 								uint8_t data = packet->getPosition(position, size, (*j)->physical->mask).at(0);
-								BaseLib::Systems::RPCConfigurationParameter* configParam = nullptr;
+								BaseLib::Systems::RpcConfigurationParameter* configParam = nullptr;
 								if(type == ParameterGroup::Type::config)
 								{
 									configParam = &peer->configCentral[channel][(*j)->id];
@@ -3522,16 +3532,18 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 								}
 								if(configParam)
 								{
-									while(index - (*j)->physical->startIndex >= configParam->data.size())
+									std::vector<uint8_t> parameterData = configParam->getBinaryData();
+									while(index - (*j)->physical->startIndex >= parameterData.size())
 									{
-										configParam->data.push_back(0);
+										parameterData.push_back(0);
 									}
-									configParam->data.at(index - (*j)->physical->startIndex) = data;
+									parameterData.at(index - (*j)->physical->startIndex) = data;
 									if(!peer->getPairingComplete() && (*j)->logical->setToValueOnPairingExists)
 									{
 										parametersToEnforce->structValue->insert(StructElement((*j)->id, (*j)->logical->getSetToValueOnPairing()));
 									}
-									peer->saveParameter(configParam->databaseID, type, channel, (*j)->id, configParam->data, remoteAddress, remoteChannel);
+									configParam->setBinaryData(parameterData);
+									peer->saveParameter(configParam->databaseId, type, channel, (*j)->id, parameterData, remoteAddress, remoteChannel);
 									if(_bl->debugLevel >= 5) GD::out.printDebug("Debug: Parameter " + (*j)->id + " of device 0x" + BaseLib::HelperFunctions::getHexString(peer->getAddress()) + " at index " + std::to_string((*j)->physical->index) + " and packet index " + std::to_string(position) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(data) + ".");
 								}
 							}
@@ -4154,10 +4166,11 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			if(senderParameterGroup && !senderParameterGroup->parameters.empty())
 			{
 				PVariable paramset(new Variable(VariableType::tStruct));
-				std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>* linkConfig = &sender->linksCentral.at(senderChannelIndex).at(receiver->getAddress()).at(receiverChannelIndex);
-				for(std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
+				std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>* linkConfig = &sender->linksCentral.at(senderChannelIndex).at(receiver->getAddress()).at(receiverChannelIndex);
+				for(std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
 				{
-					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(i->second.data)));
+					std::vector<uint8_t> parameterData = i->second.getBinaryData();
+					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
 				sender->putParamset(clientInfo, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
@@ -4251,10 +4264,11 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			if(receiverParameterGroup && !receiverParameterGroup->parameters.empty())
 			{
 				PVariable paramset(new Variable(VariableType::tStruct));
-				std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>* linkConfig = &receiver->linksCentral.at(receiverChannelIndex).at(sender->getAddress()).at(senderChannelIndex);
-				for(std::unordered_map<std::string, BaseLib::Systems::RPCConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
+				std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>* linkConfig = &receiver->linksCentral.at(receiverChannelIndex).at(sender->getAddress()).at(senderChannelIndex);
+				for(std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
 				{
-					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(i->second.data)));
+					std::vector<uint8_t> parameterData = i->second.getBinaryData();
+					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
 				receiver->putParamset(clientInfo, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);

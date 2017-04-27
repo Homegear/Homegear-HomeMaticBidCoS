@@ -11,7 +11,7 @@
 			<arguments>
 				<dictionary>
 					<key>LaunchConfigHandle</key>
-					<value>&lt;project&gt;/.externalToolBuilders/homegear-homematicbidcos-builder-all.launch</value>
+					<value>&lt;project&gt;/.externalToolBuilders/homegear-homematicbidcos-builder.launch</value>
 				</dictionary>
 			</arguments>
 		</buildCommand>
@@ -22,8 +22,13 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
-			<name>org.eclipse.linuxtools.rpm.rpmlint.rpmlintBuilder</name>
+			<name>org.eclipse.ui.externaltools.ExternalToolBuilder</name>
+			<triggers>full,incremental,</triggers>
 			<arguments>
+				<dictionary>
+					<key>LaunchConfigHandle</key>
+					<value>&lt;project&gt;/.externalToolBuilders/org.eclipse.linuxtools.rpm.rpmlint.rpmlintBuilder.launch</value>
+				</dictionary>
 			</arguments>
 		</buildCommand>
 	</buildSpec>

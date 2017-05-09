@@ -38,8 +38,6 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
 	_out.init(GD::bl);
 	_out.setPrefix(GD::out.getPrefix() + "LAN-Konfigurationsadapter \"" + settings->id + "\": ");
 
-	signal(SIGPIPE, SIG_IGN);
-
 	_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
 
 	if(!settings)

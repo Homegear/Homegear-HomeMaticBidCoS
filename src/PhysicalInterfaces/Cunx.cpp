@@ -40,8 +40,6 @@ Cunx::Cunx(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings
 	_out.init(GD::bl);
 	_out.setPrefix(GD::out.getPrefix() + "CUNX \"" + settings->id + "\": ");
 
-	signal(SIGPIPE, SIG_IGN);
-
 	_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
 
 	if(settings->listenThreadPriority == -1)

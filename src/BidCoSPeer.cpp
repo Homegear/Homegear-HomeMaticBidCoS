@@ -861,13 +861,13 @@ void BidCoSPeer::removePeer(int32_t channel, int32_t address, int32_t remoteChan
 {
 	try
 	{
-		BaseLib::DisposableLockGuard peersGuard(_peersMutex);
+		std::unique_lock<std::mutex> peersGuard(_peersMutex);
 		for(std::vector<std::shared_ptr<BaseLib::Systems::BasicPeer>>::iterator i = _peers[channel].begin(); i != _peers[channel].end(); ++i)
 		{
 			if((*i)->address == address && (*i)->channel == remoteChannel)
 			{
 				_peers[channel].erase(i);
-				peersGuard.dispose();
+				peersGuard.unlock();
 				if(linksCentral[channel].find(address) != linksCentral[channel].end() && linksCentral[channel][address].find(remoteChannel) != linksCentral[channel][address].end()) linksCentral[channel][address].erase(linksCentral[channel][address].find(remoteChannel));
 				BaseLib::Database::DataRow data;
 				data.push_back(std::shared_ptr<BaseLib::Database::DataColumn>(new BaseLib::Database::DataColumn(_peerID)));

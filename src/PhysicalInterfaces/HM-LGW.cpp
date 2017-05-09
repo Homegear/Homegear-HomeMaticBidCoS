@@ -37,8 +37,6 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 	_out.init(GD::bl);
 	_out.setPrefix(_out.getPrefix() + "HM-LGW \"" + settings->id + "\": ");
 
-	signal(SIGPIPE, SIG_IGN);
-
 	_initCompleteKeepAlive = false;
 	_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
 	_socketKeepAlive = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));

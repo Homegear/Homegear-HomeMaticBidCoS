@@ -380,8 +380,9 @@ void HmCcTc::setDecalcification()
 	try
 	{
 		std::time_t time1 = std::time(nullptr);
-		std::tm* time2 = std::localtime(&time1);
-		if(time2->tm_wday == 6 && time2->tm_hour == 14 && time2->tm_min >= 0 && time2->tm_min <= 3)
+		std::tm time2;
+		localtime_r(&time1, &time2);
+		if(time2.tm_wday == 6 && time2.tm_hour == 14 && time2.tm_min >= 0 && time2.tm_min <= 3)
 		{
 			try
 			{

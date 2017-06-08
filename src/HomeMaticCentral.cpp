@@ -3135,9 +3135,10 @@ void HomeMaticCentral::handleTimeRequest(int32_t messageCounter, std::shared_ptr
 		payload.push_back(0x02);
 		const auto timePoint = std::chrono::system_clock::now();
 		time_t t = std::chrono::system_clock::to_time_t(timePoint);
-		tm* localTime = std::localtime(&t);
+		std::tm localTime;
+		localtime_r(&t, &localTime);
 		uint32_t time = (uint32_t)(t - 946684800);
-		payload.push_back(localTime->tm_gmtoff / 1800);
+		payload.push_back(localTime.tm_gmtoff / 1800);
 		payload.push_back(time >> 24);
 		payload.push_back((time >> 16) & 0xFF);
 		payload.push_back((time >> 8) & 0xFF);

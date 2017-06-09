@@ -1251,7 +1251,8 @@ void HM_LGW::doInit()
 		payload.clear();
 		const auto timePoint = std::chrono::system_clock::now();
 		time_t t = std::chrono::system_clock::to_time_t(timePoint);
-		tm* localTime = std::localtime(&t);
+		std::tm localTime;
+		localtime_r(&t, &localTime);
 		uint32_t time = (uint32_t)t;
 		payload.push_back(0);
 		payload.push_back(0xE);
@@ -1259,7 +1260,7 @@ void HM_LGW::doInit()
 		payload.push_back((time >> 16) & 0xFF);
 		payload.push_back((time >> 8) & 0xFF);
 		payload.push_back(time & 0xFF);
-		payload.push_back(localTime->tm_gmtoff / 1800);
+		payload.push_back(localTime.tm_gmtoff / 1800);
 		buildPacket(requestPacket, payload);
 		_packetIndex++;
 		getResponse(requestPacket, responsePacket, _packetIndex - 1, 0, 4);
@@ -1773,14 +1774,15 @@ void HM_LGW::sendTimePacket()
 		std::lock_guard<std::mutex> getResponseGuard(_getResponseMutex);
 		const auto timePoint = std::chrono::system_clock::now();
 		time_t t = std::chrono::system_clock::to_time_t(timePoint);
-		tm* localTime = std::localtime(&t);
+		std::tm localTime;
+		localtime_r(&t, &localTime);
 		uint32_t time = (uint32_t)t;
 		std::vector<char> payload{ 0, 0xE };
 		payload.push_back(time >> 24);
 		payload.push_back((time >> 16) & 0xFF);
 		payload.push_back((time >> 8) & 0xFF);
 		payload.push_back(time & 0xFF);
-		payload.push_back(localTime->tm_gmtoff / 1800);
+		payload.push_back(localTime.tm_gmtoff / 1800);
 		std::vector<char> packet;
 		buildPacket(packet, payload);
 		_packetIndex++;

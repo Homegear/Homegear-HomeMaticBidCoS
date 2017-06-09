@@ -373,6 +373,7 @@ void BidCoSPeer::worker()
 						std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string> {j->second->key});
 						std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable> { valuesCentral.at(j->second->channel).at(j->second->key).rpcParameter->convertFromPacket(j->second->data) });
 						GD::out.printInfo("Info: Domino event: " + j->second->key + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string(j->second->channel) + " was reset.");
+						raiseEvent(_peerID, j->second->channel, valueKeys, rpcValues);
 						raiseRPCEvent(_peerID, j->second->channel, _serialNumber + ":" + std::to_string(j->second->channel), valueKeys, rpcValues);
 					}
 					else

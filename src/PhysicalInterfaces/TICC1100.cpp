@@ -1125,6 +1125,7 @@ void TICC1100::mainThread()
 					}
 					_txMutex.unlock(); //Make sure _txMutex is unlocked
 
+					closeGPIO(1);
 					initDevice();
 					_stopped = false;
 					continue;
@@ -1168,7 +1169,17 @@ void TICC1100::mainThread()
 							uint8_t firstByte = readRegister(Registers::Enum::FIFO);
 							std::vector<uint8_t> encodedData = readRegisters(Registers::Enum::FIFO, firstByte + 1); //Read packet + RSSI
 							std::vector<uint8_t> decodedData(encodedData.size());
-							if(encodedData.size() >= 9)
+							if(decodedData.size() > 200)
+							{
+								if(!_firstPacket)
+								{
+									_out.printWarning("Warning: Too large packet received: " + BaseLib::HelperFunctions::getHexString(encodedData));
+									closeDevice();
+									_txMutex.unlock();
+									continue;
+								}
+							}
+							else if(encodedData.size() >= 9)
 							{
 								decodedData[0] = firstByte;
 								decodedData[1] = (~encodedData[1]) ^ 0x89;

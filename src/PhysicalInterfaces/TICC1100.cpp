@@ -1125,6 +1125,7 @@ void TICC1100::mainThread()
 					}
 					_txMutex.unlock(); //Make sure _txMutex is unlocked
 
+					closeGPIO(1);
 					initDevice();
 					closeGPIO(1);
 					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -1171,7 +1172,7 @@ void TICC1100::mainThread()
 							uint8_t firstByte = readRegister(Registers::Enum::FIFO);
 							std::vector<uint8_t> encodedData = readRegisters(Registers::Enum::FIFO, firstByte + 1); //Read packet + RSSI
 							std::vector<uint8_t> decodedData(encodedData.size());
-							if(decodedData.size() > 100)
+							if(decodedData.size() > 200)
 							{
 								if(!_firstPacket)
 								{

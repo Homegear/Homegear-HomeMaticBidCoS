@@ -429,7 +429,7 @@ void BidCoSPeer::worker()
 						_bl->hf.memcpyBigEndian(data, parameterData); //Shortcut to save resources. The normal way would be to call "convertFromPacket".
 						int64_t pollingInterval = data * 60000;
 						if(pollingInterval < 600000) pollingInterval = 600000;
-						if(time - _lastPing >= pollingInterval && ((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)))
+						if(time - _lastPing >= pollingInterval && (getRXModes() & HomegearDevice::ReceiveModes::Enum::always))
 						{
 							int64_t timeSinceLastPacket = time - ((int64_t)_lastPacketReceived * 1000);
 							if(timeSinceLastPacket > 0 && timeSinceLastPacket >= pollingInterval)

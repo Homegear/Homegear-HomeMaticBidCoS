@@ -403,7 +403,7 @@ void BidCoSPeer::worker()
 			serviceMessages->checkUnreach(_rpcDevice->timeout, getLastPacketReceived());
 			if(serviceMessages->getUnreach())
 			{
-				if(time - _lastPing > 600000 && ((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)))
+				if(time - _lastPing > 600000 && (getRXModes() & HomegearDevice::ReceiveModes::Enum::always))
 				{
 					if(!_disposing && !deleting && _lastPing < time) //Check that _lastPing wasn't set in putParamset after locking the mutex
 					{

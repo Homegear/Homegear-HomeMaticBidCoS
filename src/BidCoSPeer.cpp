@@ -403,7 +403,7 @@ void BidCoSPeer::worker()
 			serviceMessages->checkUnreach(_rpcDevice->timeout, getLastPacketReceived());
 			if(serviceMessages->getUnreach())
 			{
-				if(time - _lastPing > 600000 && ((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)))
+				if(time - _lastPing > 600000 && (getRXModes() & HomegearDevice::ReceiveModes::Enum::always))
 				{
 					if(!_disposing && !deleting && _lastPing < time) //Check that _lastPing wasn't set in putParamset after locking the mutex
 					{
@@ -709,6 +709,9 @@ bool BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
 	{
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		if(!central) return false;
+
+		if(!(getRXModes() & HomegearDevice::ReceiveModes::Enum::always)) return true;
+
 		uint32_t time = BaseLib::HelperFunctions::getTimeSeconds();
 		_lastPing = (int64_t)time * 1000;
 		if(_rpcDevice && !_rpcDevice->valueRequestPackets.empty())
@@ -737,14 +740,11 @@ bool BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
 			return true;
 		}
 
-		if(!(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) && !(getRXModes() & HomegearDevice::ReceiveModes::Enum::always)) return true;
-
 		//No get value frames
 		std::vector<uint8_t> payload;
 		payload.push_back(0x00);
 		payload.push_back(0x06);
 		std::shared_ptr<BidCoSPacket> ping(new BidCoSPacket(_messageCounter++, 0xA0, 0x01, central->getAddress(), _address, payload));
-		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) ping->setControlByte(0xB0);
 		for(int32_t i = 0; i < packetCount; i++)
 		{
 			central->sendPacket(getPhysicalInterface(), ping);

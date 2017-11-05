@@ -1745,7 +1745,8 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 							typeID.resize(typeWidth2 - 3);
 							typeID += "...";
 						}
-						stringStream << std::setw(typeWidth2) << typeID << bar;
+						else typeID.resize(typeWidth2, ' ');
+						stringStream << typeID << bar;
 					}
 					else stringStream << std::setw(typeWidth2) << " " << bar;
 					if(i->second->getFirmwareVersion() == 0) stringStream << std::setfill(' ') << std::setw(firmwareWidth) << "?" << bar;

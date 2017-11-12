@@ -2960,7 +2960,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 	{
 		if(packet->destinationAddress() != 0 && packet->destinationAddress() != _address)
 		{
-			GD::out.printError("Error: Pairing packet rejected, because this peer is already paired central with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ".");
+			GD::out.printError("Error: Pairing packet rejected, because this peer is already paired to central with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ".");
 			return;
 		}
 		if(packet->payload()->size() < 17)

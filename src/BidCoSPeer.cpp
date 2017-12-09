@@ -3684,7 +3684,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 				if(!(*i)->omitIfSet || intValue != (*i)->omitIf)
 				{
 					//Don't set ON_TIME when value is false
-					if((rpcParameter->physical->groupId == "STATE" && value->booleanValue) || (rpcParameter->physical->groupId == "LEVEL" && value->floatValue > 0)) packet->setPosition((*i)->index, (*i)->size, parameterData);
+					if(value->booleanValue || value->floatValue > 0 || value->integerValue > 0) packet->setPosition((*i)->index, (*i)->size, parameterData);
 				}
 			}
 			//param sometimes is ambiguous (e. g. LEVEL of HM-CC-TC), so don't search and use the given parameter when possible
@@ -3741,7 +3741,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 			{
 				if((rpcParameter->physical->groupId != "STATE" && rpcParameter->physical->groupId != "LEVEL") || (rpcParameter->physical->groupId == "STATE" && rpcParameter->logical->type != ILogical::Type::Enum::tBoolean) || (rpcParameter->physical->groupId == "LEVEL" && rpcParameter->logical->type != ILogical::Type::Enum::tFloat))
 				{
-					GD::out.printError("Error: Can't set \"ON_TIME\" for " + rpcParameter->physical->groupId + ". Currently \"ON_TIME\" is only supported for \"STATE\" of type \"boolean\" or \"LEVEL\" of type \"float\". Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frame->id);
+					GD::out.printInfo("Info: Not setting auto reset after \"ON_TIME\" for " + rpcParameter->physical->groupId + ". Currently this is only supported for \"STATE\" of type \"boolean\" or \"LEVEL\" of type \"float\". Peer: " + std::to_string(_peerID) + " Serial number: " + _serialNumber + " Frame: " + frame->id);
 					continue;
 				}
 				std::vector<uint8_t> parameterData = additionalParameter->getBinaryData();

@@ -91,9 +91,6 @@ class BidCoSQueue
         std::shared_ptr<PendingBidCoSQueues> _pendingQueues;
         std::mutex _queueMutex;
         BidCoSQueueType _queueType;
-        std::atomic_bool _stopPopWaitThread;
-        uint32_t _popWaitThreadId = 0;
-        std::thread _popWaitThread;
         std::thread _sendThread;
         std::mutex _sendThreadMutex;
         std::thread _startResendThread;
@@ -104,9 +101,6 @@ class BidCoSQueue
         int64_t _lastPop = 0;
         void (HomeMaticCentral::*_queueProcessed)() = nullptr;
         void pushPendingQueue();
-        void sleepAndPushPendingQueue();
-        void popWaitThread(uint32_t threadId, uint32_t waitingTime);
-        void stopPopWaitThread();
         void nextQueueEntry();
     public:
         uint32_t id = 0;
@@ -132,7 +126,6 @@ class BidCoSQueue
         BidCoSQueueEntry* front() { return &_queue.front(); }
         BidCoSQueueEntry* second() { if(_queue.size() > 1) return &(*(_queue.begin()++)); else return nullptr; }
         void pop();
-        void popWait(uint32_t waitingTime);
         bool isEmpty();
         bool pendingQueuesEmpty();
         void clear();

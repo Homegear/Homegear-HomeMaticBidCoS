@@ -40,6 +40,8 @@ Cul::Cul(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) 
 	_out.init(GD::bl);
 	_out.setPrefix(GD::out.getPrefix() + "CUL \"" + settings->id + "\": ");
 
+	_initComplete = true;
+
 	if(settings->listenThreadPriority == -1)
 	{
 		settings->listenThreadPriority = 45;

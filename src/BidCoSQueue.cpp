@@ -44,7 +44,6 @@ BidCoSQueue::BidCoSQueue()
 	_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 	_physicalInterface = GD::defaultPhysicalInterface;
 	_disposing = false;
-	_stopPopWaitThread = false;
 	_workingOnPendingQueue = false;
 	noSending = false;
 }
@@ -215,7 +214,6 @@ void BidCoSQueue::dispose()
 		_sendThreadMutex.lock();
 		GD::bl->threadManager.join(_sendThread);
         _sendThreadMutex.unlock();
-		stopPopWaitThread();
 		_queueMutex.lock();
 		_queue.clear();
 		_pendingQueues.reset();
@@ -413,7 +411,6 @@ void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy,
 		if(popBeforePushing)
 		{
 			GD::out.printDebug("Popping from BidCoSQueue and pushing packet at the front: " + std::to_string(id));
-			if(_popWaitThread.joinable()) _stopPopWaitThread = true;
 			_queueMutex.lock();
 			_queue.pop_front();
 			_queueMutex.unlock();
@@ -466,80 +463,6 @@ void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy,
     }
 }
 
-void BidCoSQueue::stopPopWaitThread()
-{
-	try
-	{
-		_stopPopWaitThread = true;
-		GD::bl->threadManager.join(_popWaitThread);
-		_stopPopWaitThread = false;
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void BidCoSQueue::popWait(uint32_t waitingTime)
-{
-	try
-	{
-		if(_disposing) return;
-		stopPopWaitThread();
-		GD::bl->threadManager.start(_popWaitThread, true, GD::bl->settings.packetQueueThreadPriority(), GD::bl->settings.packetQueueThreadPolicy(), &BidCoSQueue::popWaitThread, this, _popWaitThreadId++, waitingTime);
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
-void BidCoSQueue::popWaitThread(uint32_t threadId, uint32_t waitingTime)
-{
-	try
-	{
-		std::chrono::milliseconds sleepingTime(25);
-		uint32_t i = 0;
-		while(!_stopPopWaitThread && i < waitingTime)
-		{
-			std::this_thread::sleep_for(sleepingTime);
-			i += 25;
-		}
-		if(!_stopPopWaitThread)
-		{
-			pop();
-		}
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-}
-
 void BidCoSQueue::send(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
 {
 	try
@@ -589,28 +512,6 @@ void BidCoSQueue::clear()
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _queueMutex.unlock();
-}
-
-void BidCoSQueue::sleepAndPushPendingQueue()
-{
-	try
-	{
-		if(_disposing) return;
-		std::this_thread::sleep_for(std::chrono::milliseconds(_physicalInterface->responseDelay()));
-		pushPendingQueue();
-	}
-	catch(const std::exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void BidCoSQueue::pushPendingQueue()
@@ -792,7 +693,6 @@ void BidCoSQueue::pop()
 		if(_disposing) return;
 		keepAlive();
 		GD::out.printDebug("Popping from BidCoSQueue: " + std::to_string(id));
-		if(_popWaitThread.joinable()) _stopPopWaitThread = true;
 		_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 		_queueMutex.lock();
 		if(_queue.empty())

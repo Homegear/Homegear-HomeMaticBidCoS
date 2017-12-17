@@ -37,6 +37,7 @@
 #include "PhysicalInterfaces/HM-CFG-LAN.h"
 #include "PhysicalInterfaces/HM-LGW.h"
 #include "PhysicalInterfaces/Hm-Mod-Rpi-Pcb.h"
+#include "PhysicalInterfaces/HomegearGateway.h"
 
 namespace BidCoS
 {
@@ -68,6 +69,7 @@ void Interfaces::create()
 			else if(i->second->type == "hmcfglan") device.reset(new HM_CFG_LAN(i->second));
 			else if(i->second->type == "hmlgw") device.reset(new HM_LGW(i->second));
 			else if(i->second->type == "hm-mod-rpi-pcb") device.reset(new Hm_Mod_Rpi_Pcb(i->second));
+			else if(i->second->type == "homegeargateway") device.reset(new HomegearGateway(i->second));
 			else GD::out.printError("Error: Unsupported physical device type: " + i->second->type);
 			if(device)
 			{

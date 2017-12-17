@@ -27,38 +27,45 @@
  * files in the program, then also delete it here.
  */
 
-#ifndef COC_H
-#define COC_H
+#ifndef HOMEGEAR_HOMEMATICBIDCOS_HOMEGEARGATEWAY_H
+#define HOMEGEAR_HOMEMATICBIDCOS_HOMEGEARGATEWAY_H
 
 #include "IBidCoSInterface.h"
 
 namespace BidCoS
 {
 
-class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerialReaderWriterEventSink
+class HomegearGateway : public IBidCoSInterface
 {
-    public:
-		COC(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
-        virtual ~COC();
-        void startListening();
-        void stopListening();
-        virtual void setup(int32_t userID, int32_t groupID, bool setPermissions);
-        virtual void enableUpdateMode();
-        virtual void disableUpdateMode();
-        bool isOpen() { return _socket && _socket->isOpen(); }
-    protected:
-        // {{{ Event handling
-        BaseLib::PEventHandler _eventHandlerSelf;
-        virtual void lineReceived(const std::string& data);
-        // }}}
+public:
+    HomegearGateway(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
+    virtual ~HomegearGateway();
 
-        std::shared_ptr<BaseLib::SerialReaderWriter> _socket;
-        std::string stackPrefix;
+    virtual void startListening();
+    virtual void stopListening();
 
-        void writeToDevice(std::string data);
-        void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);
-    private:
+    virtual void enableUpdateMode();
+    virtual void disableUpdateMode();
+
+    virtual bool isOpen() { return !_stopped; }
+protected:
+    std::unique_ptr<BaseLib::TcpSocket> _tcpSocket;
+    std::unique_ptr<BaseLib::Rpc::BinaryRpc> _binaryRpc;
+    std::unique_ptr<BaseLib::Rpc::RpcEncoder> _rpcEncoder;
+    std::unique_ptr<BaseLib::Rpc::RpcDecoder> _rpcDecoder;
+
+    std::mutex _invokeMutex;
+    std::mutex _requestMutex;
+    std::atomic_bool _waitForResponse;
+    std::condition_variable _requestConditionVariable;
+    BaseLib::PVariable _rpcResponse;
+
+    void listen();
+    virtual void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);
+    BaseLib::PVariable invoke(std::string methodName, BaseLib::PArray& parameters);
+    void processPacket(std::string& data);
 };
 
 }
+
 #endif

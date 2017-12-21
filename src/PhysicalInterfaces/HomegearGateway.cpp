@@ -42,6 +42,7 @@ HomegearGateway::HomegearGateway(std::shared_ptr<BaseLib::Systems::PhysicalInter
 
     signal(SIGPIPE, SIG_IGN);
 
+    _stopped = true;
     _waitForResponse = false;
 
     _binaryRpc.reset(new BaseLib::Rpc::BinaryRpc(_bl));

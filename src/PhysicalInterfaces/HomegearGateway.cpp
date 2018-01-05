@@ -311,6 +311,8 @@ void HomegearGateway::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
         parameters->push_back(std::make_shared<BaseLib::Variable>(BIDCOS_FAMILY_ID));
         parameters->push_back(std::make_shared<BaseLib::Variable>(packet->hexString()));
 
+        if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending: " + parameters->back()->stringValue);
+
         auto result = invoke("sendPacket", parameters);
         if(result->errorStruct)
         {

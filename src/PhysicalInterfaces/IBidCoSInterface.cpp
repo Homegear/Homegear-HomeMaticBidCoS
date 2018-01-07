@@ -368,7 +368,7 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 						std::shared_ptr<BidCoSPacket> aFrame = _aesHandshake->getAFrame(packet, mFrame, peerIterator->second.keyIndex, wakeUp);
 						if(!aFrame)
 						{
-							if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
+							if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString() + ". Sender address: " + BaseLib::HelperFunctions::getHexString(mFrame->senderAddress(), 6));
 							else _out.printError("Error: No m-Frame found for r-Frame.");
 							return;
 						}
@@ -385,7 +385,7 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 						std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame, peerIterator->second.keyIndex);
 						if(!rFrame)
 						{
-							if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString());
+							if(mFrame) _out.printError("Error: AES handshake failed for packet: " + mFrame->hexString() + ". Sender address: " + BaseLib::HelperFunctions::getHexString(mFrame->senderAddress(), 6));
 							else _out.printError("Error: No m-Frame found for c-Frame.");
 							return;
 						}

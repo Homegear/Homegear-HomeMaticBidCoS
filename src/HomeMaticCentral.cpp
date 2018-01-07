@@ -1232,7 +1232,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			int32_t duration = arguments.size() > 0 ? BaseLib::Math::getNumber(arguments.at(0)) : 60;
 			if(duration < 5 || duration > 3600) return "Invalid duration. Duration has to be greater than 5 and less than 3600.\n";
 
-			setInstallMode(nullptr, true, duration, false);
+			setInstallMode(nullptr, true, duration, nullptr, false);
 			stringStream << "Pairing mode enabled for " + std::to_string(duration) + " seconds." << std::endl;
 			return stringStream.str();
 		}
@@ -1247,7 +1247,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				return stringStream.str();
 			}
 
-			setInstallMode(nullptr, false, -1, false);
+			setInstallMode(nullptr, false, -1, nullptr, false);
 			stringStream << "Pairing mode disabled." << std::endl;
 			return stringStream.str();
 		}
@@ -3865,7 +3865,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 						_peersMutex.unlock();
 						GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 					}
-					setInstallMode(nullptr, false, -1, false);
+					setInstallMode(nullptr, false, -1, nullptr, false);
 					if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) queue->setWakeOnRadioBit();
 					PVariable deviceDescriptions(new Variable(VariableType::tArray));
 					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
@@ -5000,7 +5000,7 @@ PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, uint
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::setInstallMode(BaseLib::PRpcClientInfo clientInfo, bool on, uint32_t duration, bool debugOutput)
+PVariable HomeMaticCentral::setInstallMode(BaseLib::PRpcClientInfo clientInfo, bool on, uint32_t duration, BaseLib::PVariable metadata, bool debugOutput)
 {
 	try
 	{

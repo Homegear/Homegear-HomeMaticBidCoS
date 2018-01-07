@@ -471,7 +471,7 @@ void Cul::listen()
         		continue;
         	}
         	std::string packetHex = readFromDevice();
-        	if(packetHex.size() > 100)
+        	if(packetHex.size() > 200)
 			{
         		if(_firstPacket) _firstPacket = false;
 				else

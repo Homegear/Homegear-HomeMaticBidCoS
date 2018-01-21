@@ -878,13 +878,19 @@ void Hm_Mod_Rpi_Pcb::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if((bidCoSPacket->controlByte() & 0x01) && packet->senderAddress() == _myAddress && (bidCoSPacket->payload()->empty() || (bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)))
+		else if((bidCoSPacket->controlByte() & 0x01) && packet->senderAddress() == _myAddress && (bidCoSPacket->payload()->empty() || (bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)))
 		{
 			_out.printDebug("Debug: Ignoring wake up packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key if necessary
+		else if((bidCoSPacket->messageType() & 0x3F) && packet->senderAddress() == _myAddress)
+		{
+			_out.printDebug("Debug: Ignoring time packet.", 6);
+			_lastPacketSent = BaseLib::HelperFunctions::getTime();
+			return;
+		}
+		else if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key if necessary
 		{
 			std::lock_guard<std::mutex> peersGuard(_peersMutex);
 			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->destinationAddress());

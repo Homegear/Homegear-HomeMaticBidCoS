@@ -884,7 +884,7 @@ void Hm_Mod_Rpi_Pcb::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		else if((bidCoSPacket->messageType() & 0x3F) && packet->senderAddress() == _myAddress)
+		else if((bidCoSPacket->messageType() == 0x3F) && packet->senderAddress() == _myAddress)
 		{
 			_out.printDebug("Debug: Ignoring time packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();

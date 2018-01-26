@@ -117,7 +117,7 @@ void BidCoS::createCentral()
     }
 }
 
-PVariable BidCoS::getPairingMethods()
+PVariable BidCoS::getPairingInfo()
 {
 	try
 	{

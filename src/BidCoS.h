@@ -47,7 +47,7 @@ public:
 	virtual ~BidCoS();
 	virtual void dispose();
 
-	virtual PVariable getPairingMethods();
+	virtual PVariable getPairingInfo();
 protected:
 	virtual void createCentral();
 	virtual std::shared_ptr<BaseLib::Systems::ICentral> initializeCentral(uint32_t deviceId, int32_t address, std::string serialNumber);

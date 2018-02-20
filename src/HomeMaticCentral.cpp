@@ -2805,14 +2805,30 @@ void HomeMaticCentral::deletePeer(uint64_t id)
 			channels->arrayValue->push_back(PVariable(new Variable(i->first)));
 		}
 		raiseRPCDeleteDevices(deviceAddresses, deviceInfo);
+
 		uint64_t virtualPeerId = peer->getVirtualPeerId();
 		peer->getPhysicalInterface()->removePeer(peer->getAddress());
-		_peersMutex.lock();
-		if(_peersBySerial.find(peer->getSerialNumber()) != _peersBySerial.end()) _peersBySerial.erase(peer->getSerialNumber());
-		if(_peersById.find(id) != _peersById.end()) _peersById.erase(id);
-		if(_peers.find(peer->getAddress()) != _peers.end()) _peers.erase(peer->getAddress());
-		_peersMutex.unlock();
+
+		{
+			std::lock_guard<std::mutex> peersGuard(_peersMutex);
+			if(_peersBySerial.find(peer->getSerialNumber()) != _peersBySerial.end()) _peersBySerial.erase(peer->getSerialNumber());
+			if(_peersById.find(id) != _peersById.end()) _peersById.erase(id);
+			if(_peers.find(peer->getAddress()) != _peers.end()) _peers.erase(peer->getAddress());
+		}
+
 		removePeerFromTeam(peer);
+
+		if(_currentPeer && _currentPeer->getID() == id) _currentPeer.reset();
+
+		int32_t i = 0;
+		while(peer.use_count() > 1 && i < 600)
+		{
+			if(_currentPeer && _currentPeer->getID() == id) _currentPeer.reset();
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+			i++;
+		}
+		if(i == 600) GD::out.printError("Error: Peer deletion took too long.");
+
 		peer->deleteFromDatabase();
 		GD::out.printMessage("Removed HomeMatic BidCoS peer " + std::to_string(peer->getID()));
 		peer.reset();
@@ -2820,17 +2836,14 @@ void HomeMaticCentral::deletePeer(uint64_t id)
 	}
 	catch(const std::exception& ex)
     {
-		_peersMutex.unlock();
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(BaseLib::Exception& ex)
     {
-    	_peersMutex.unlock();
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(...)
     {
-    	_peersMutex.unlock();
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }

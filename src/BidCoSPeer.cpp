@@ -3577,8 +3577,6 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[channel][valueKey];
 		std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string>());
 		std::shared_ptr<std::vector<PVariable>> values(new std::vector<PVariable>());
-		valueKeys->push_back(valueKey);
-		values->push_back(value);
 
 		if(rpcParameter->physical->operationType == IPhysical::OperationType::Enum::store)
 		{
@@ -3587,11 +3585,11 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 			parameter.setBinaryData(parameterData);
 			if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 			else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
-			if(!valueKeys->empty())
-			{
-				raiseEvent(_peerID, channel, valueKeys, values);
-				raiseRPCEvent(_peerID, channel, _serialNumber + ":" + std::to_string(channel), valueKeys, values);
-			}
+			value = rpcParameter->convertFromPacket(parameterData);
+			valueKeys->push_back(valueKey);
+			values->push_back(value);
+			raiseEvent(_peerID, channel, valueKeys, values);
+			raiseRPCEvent(_peerID, channel, _serialNumber + ":" + std::to_string(channel), valueKeys, values);
 			return PVariable(new Variable(VariableType::tVoid));
 		}
 		else if(rpcParameter->physical->operationType != IPhysical::OperationType::Enum::command) return Variable::createError(-6, "Parameter is not settable.");
@@ -3633,6 +3631,9 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		parameter.setBinaryData(parameterData);
 		if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 		else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
+		value = rpcParameter->convertFromPacket(parameterData);
+		valueKeys->push_back(valueKey);
+		values->push_back(value);
 		if(_bl->debugLevel > 4) GD::out.printDebug("Debug: " + valueKey + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string(channel) + " was set to " + BaseLib::HelperFunctions::getHexString(parameterData) + ".");
 
 		pendingBidCoSQueues->remove(BidCoSQueueType::PEER, valueKey, channel);

@@ -2826,7 +2826,7 @@ PVariable BidCoSPeer::getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, std::map
     return PVariable();
 }
 
-PVariable BidCoSPeer::getParamsetDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel)
+PVariable BidCoSPeer::getParamsetDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, bool checkAcls)
 {
 	try
 	{
@@ -2842,7 +2842,7 @@ PVariable BidCoSPeer::getParamsetDescription(BaseLib::PRpcClientInfo clientInfo,
 			if(!remotePeer) return Variable::createError(-2, "Unknown remote peer.");
 		}
 
-		return Peer::getParamsetDescription(clientInfo, parameterGroup);
+		return Peer::getParamsetDescription(clientInfo, channel, parameterGroup, checkAcls);
 	}
 	catch(const std::exception& ex)
     {
@@ -2859,7 +2859,7 @@ PVariable BidCoSPeer::getParamsetDescription(BaseLib::PRpcClientInfo clientInfo,
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool onlyPushing)
+PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool checkAcls, bool onlyPushing)
 {
 	try
 	{
@@ -2873,10 +2873,14 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 		if(!parameterGroup) return Variable::createError(-3, "Unknown parameter set");
 		if(variables->structValue->empty()) return PVariable(new Variable(VariableType::tVoid));
 
-		_pingThreadMutex.lock();
-		_lastPing = BaseLib::HelperFunctions::getTime(); //No ping now
-		if(_pingThread.joinable()) _pingThread.join();
-		_pingThreadMutex.unlock();
+		auto central = getCentral();
+		if(!central) return Variable::createError(-32500, "Could not get central.");
+
+		{
+			std::lock_guard<std::mutex> pingThreadGuard(_pingThreadMutex);
+			_lastPing = BaseLib::HelperFunctions::getTime(); //No ping now
+			if(_pingThread.joinable()) _pingThread.join();
+		}
 
 		if(type == ParameterGroup::Type::Enum::config)
 		{
@@ -2968,7 +2972,6 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 			queue->noSending = true;
 			std::vector<uint8_t> payload;
 			std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
-			bool firstPacket = true;
 
 			for(std::map<int32_t, std::map<int32_t, std::vector<uint8_t>>>::iterator i = changedParameters.begin(); i != changedParameters.end(); ++i)
 			{
@@ -2981,9 +2984,8 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				payload.push_back(0);
 				payload.push_back(i->first);
 				uint8_t controlByte = 0xA0;
-				//Only send first packet as burst packet
-				if(firstPacket && (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)) controlByte |= 0x10;
-				firstPacket = false;
+				//Always send config start packet as burst packet => no ACK otherwise for some devices
+				if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, controlByte, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
 				queue->push(central->getMessages()->find(0x02));
@@ -3051,6 +3053,9 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 			for(Struct::iterator i = variables->structValue->begin(); i != variables->structValue->end(); ++i)
 			{
 				if(i->first.empty() || !i->second) continue;
+
+				if(checkAcls && !clientInfo->acls->checkVariableWriteAccess(central->getPeer(_peerID), channel, i->first)) continue;
+
 				setValue(clientInfo, channel, i->first, i->second, false);
 			}
 		}
@@ -3229,7 +3234,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable BidCoSPeer::getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel)
+PVariable BidCoSPeer::getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, bool checkAcls)
 {
 	try
 	{

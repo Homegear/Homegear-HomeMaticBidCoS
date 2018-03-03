@@ -2804,7 +2804,8 @@ void HomeMaticCentral::deletePeer(uint64_t id)
 		{
 			channels->arrayValue->push_back(PVariable(new Variable(i->first)));
 		}
-		raiseRPCDeleteDevices(deviceAddresses, deviceInfo);
+        std::vector<uint64_t> newIds{ id };
+		raiseRPCDeleteDevices(newIds, deviceAddresses, deviceInfo);
 
 		uint64_t virtualPeerId = peer->getVirtualPeerId();
 		peer->getPhysicalInterface()->removePeer(peer->getAddress());
@@ -3655,7 +3656,8 @@ void HomeMaticCentral::resetTeam(std::shared_ptr<BidCoSPeer> peer, uint32_t chan
 		{
 			PVariable deviceDescriptions(new Variable(VariableType::tArray));
 			deviceDescriptions->arrayValue = team->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
-			raiseRPCNewDevices(deviceDescriptions);
+			std::vector<uint64_t> newIds{ team->getID() };
+			raiseRPCNewDevices(newIds, deviceDescriptions);
 		}
 		else raiseRPCUpdateDevice(team->getID(), peer->getTeamRemoteChannel(), team->getSerialNumber() + ":" + std::to_string(peer->getTeamRemoteChannel()), 2);
 	}
@@ -3801,7 +3803,8 @@ void HomeMaticCentral::removePeerFromTeam(std::shared_ptr<BidCoSPeer> peer)
 				channels->arrayValue->push_back(PVariable(new Variable(i->first)));
 			}
 
-			raiseRPCDeleteDevices(deviceAddresses, deviceInfo);
+			std::vector<uint64_t> deletedIds{ oldTeam->getID() };
+			raiseRPCDeleteDevices(deletedIds, deviceAddresses, deviceInfo);
 		}
 		else raiseRPCUpdateDevice(oldTeam->getID(), peer->getTeamRemoteChannel(), oldTeam->getSerialNumber() + ":" + std::to_string(peer->getTeamRemoteChannel()), 2);
 		peer->setTeamRemoteSerialNumber("");
@@ -3882,7 +3885,8 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 					if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) queue->setWakeOnRadioBit();
 					PVariable deviceDescriptions(new Variable(VariableType::tArray));
 					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
-					raiseRPCNewDevices(deviceDescriptions);
+					std::vector<uint64_t> newIds{ queue->peer->getID() };
+					raiseRPCNewDevices(newIds, deviceDescriptions);
 					GD::out.printMessage("Added peer 0x" + BaseLib::HelperFunctions::getHexString(queue->peer->getAddress()) + ".");
 					std::shared_ptr<HomegearDevice> rpcDevice = queue->peer->getRpcDevice();
 					for(Functions::iterator i = rpcDevice->functions.begin(); i != rpcDevice->functions.end(); ++i)

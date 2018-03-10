@@ -128,6 +128,51 @@ PVariable BidCoS::getPairingInfo()
 		info->structValue->emplace("searchInterfaces", std::make_shared<BaseLib::Variable>(false));
 		//}}}
 
+		//{{{ Family settings
+		PVariable familySettings = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
+
+		PVariable field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
+		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.centraladdress")));
+		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
+		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(true));
+		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(std::string("0xFD0001")));
+		familySettings->structValue->emplace("centralAddress", field);
+
+		PVariable field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
+		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.aeskey")));
+		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
+		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(true));
+		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(std::string("00112233445566778899AABBCCDDEEFF")));
+		familySettings->structValue->emplace("rfKey", field);
+
+		PVariable field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
+		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.currentrfkeyindex")));
+		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
+		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(true));
+		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(1));
+		familySettings->structValue->emplace("currentRfKeyIndex", field);
+
+		PVariable field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
+		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(3));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.oldaeskey")));
+		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
+		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(false));
+		familySettings->structValue->emplace("oldRfKey", field);
+
+		PVariable field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
+		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(4));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.processbroadcastwithaesenabled")));
+		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
+		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(false));
+		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(false));
+		familySettings->structValue->emplace("processBroadcastWithAesEnabled", field);
+
+		info->structValue->emplace("familySettings", familySettings);
+		//}}}
+
 		//{{{ Pairing methods
 		PVariable pairingMethods = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 

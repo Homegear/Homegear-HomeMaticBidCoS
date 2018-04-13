@@ -287,8 +287,10 @@ void IBidCoSInterface::processQueueEntry(int32_t index, int64_t id, std::shared_
 		std::shared_ptr<QueueEntry> queueEntry;
 		queueEntry = std::dynamic_pointer_cast<QueueEntry>(entry);
 		if(!queueEntry || !queueEntry->packet) return;
-		queueEntry->packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 		forceSendPacket(queueEntry->packet);
+
+        if(queueEntry->packet->controlByte() & 0x10) queueEntry->packet->setTimeSending(queueEntry->packet->timeSending() + 560);
+        else queueEntry->packet->setTimeSending(queueEntry->packet->timeSending() + 200);
 
 		// {{{ Remove packet from queue id map
 			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
@@ -654,21 +656,23 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 			return;
 		}
 
-		packet->setTimeSending(BaseLib::HelperFunctions::getTime());
 		forceSendPacket(bidCoSPacket);
 		_aesHandshake->setMFrame(bidCoSPacket);
 		if(!_updateMode &&
 				!(bidCoSPacket->messageType() == 0x41 && ((bidCoSPacket->controlByte() == 0x14 && bidCoSPacket->payload()->size() == 10) || (bidCoSPacket->controlByte() == 0x94 && bidCoSPacket->payload()->size() == 3)))) //HM-Sec-SD(-2)
 		{
+            int64_t timeSending = bidCoSPacket->timeSending();
 			if(bidCoSPacket->controlByte() & 0x10)
 			{
-				queuePacket(bidCoSPacket, packet->timeSending() + 560);
-				queuePacket(bidCoSPacket, packet->timeSending() + 1120);
+                bidCoSPacket->setTimeSending(timeSending + 560);
+				queuePacket(bidCoSPacket, timeSending + 560);
+				queuePacket(bidCoSPacket, timeSending + 1120);
 			}
 			else
 			{
-				queuePacket(bidCoSPacket, packet->timeSending() + 200);
-				queuePacket(bidCoSPacket, packet->timeSending() + 400);
+                bidCoSPacket->setTimeSending(timeSending + 200);
+				queuePacket(bidCoSPacket, timeSending + 200);
+				queuePacket(bidCoSPacket, timeSending + 400);
 			}
 		}
 	}

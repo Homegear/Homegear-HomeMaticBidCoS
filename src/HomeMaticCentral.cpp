@@ -2804,7 +2804,8 @@ void HomeMaticCentral::deletePeer(uint64_t id)
 		{
 			channels->arrayValue->push_back(PVariable(new Variable(i->first)));
 		}
-		raiseRPCDeleteDevices(deviceAddresses, deviceInfo);
+        std::vector<uint64_t> newIds{ id };
+		raiseRPCDeleteDevices(newIds, deviceAddresses, deviceInfo);
 
 		uint64_t virtualPeerId = peer->getVirtualPeerId();
 		peer->getPhysicalInterface()->removePeer(peer->getAddress());
@@ -3655,7 +3656,8 @@ void HomeMaticCentral::resetTeam(std::shared_ptr<BidCoSPeer> peer, uint32_t chan
 		{
 			PVariable deviceDescriptions(new Variable(VariableType::tArray));
 			deviceDescriptions->arrayValue = team->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
-			raiseRPCNewDevices(deviceDescriptions);
+			std::vector<uint64_t> newIds{ team->getID() };
+			raiseRPCNewDevices(newIds, deviceDescriptions);
 		}
 		else raiseRPCUpdateDevice(team->getID(), peer->getTeamRemoteChannel(), team->getSerialNumber() + ":" + std::to_string(peer->getTeamRemoteChannel()), 2);
 	}
@@ -3801,7 +3803,8 @@ void HomeMaticCentral::removePeerFromTeam(std::shared_ptr<BidCoSPeer> peer)
 				channels->arrayValue->push_back(PVariable(new Variable(i->first)));
 			}
 
-			raiseRPCDeleteDevices(deviceAddresses, deviceInfo);
+			std::vector<uint64_t> deletedIds{ oldTeam->getID() };
+			raiseRPCDeleteDevices(deletedIds, deviceAddresses, deviceInfo);
 		}
 		else raiseRPCUpdateDevice(oldTeam->getID(), peer->getTeamRemoteChannel(), oldTeam->getSerialNumber() + ":" + std::to_string(peer->getTeamRemoteChannel()), 2);
 		peer->setTeamRemoteSerialNumber("");
@@ -3882,7 +3885,8 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 					if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) queue->setWakeOnRadioBit();
 					PVariable deviceDescriptions(new Variable(VariableType::tArray));
 					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
-					raiseRPCNewDevices(deviceDescriptions);
+					std::vector<uint64_t> newIds{ queue->peer->getID() };
+					raiseRPCNewDevices(newIds, deviceDescriptions);
 					GD::out.printMessage("Added peer 0x" + BaseLib::HelperFunctions::getHexString(queue->peer->getAddress()) + ".");
 					std::shared_ptr<HomegearDevice> rpcDevice = queue->peer->getRpcDevice();
 					for(Functions::iterator i = rpcDevice->functions.begin(); i != rpcDevice->functions.end(); ++i)
@@ -4775,60 +4779,6 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
     return Variable::createError(-32500, "Unknown application error.");
 }*/
 
-PVariable HomeMaticCentral::getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, uint64_t id, std::map<std::string, bool> fields)
-{
-	try
-	{
-		if(id > 0)
-		{
-			std::shared_ptr<BidCoSPeer> peer(getPeer(id));
-			if(!peer) return Variable::createError(-2, "Unknown device.");
-
-			return peer->getDeviceInfo(clientInfo, fields);
-		}
-		else
-		{
-			PVariable array(new Variable(VariableType::tArray));
-
-			std::vector<std::shared_ptr<BidCoSPeer>> peers;
-			//Copy all peers first, because listDevices takes very long and we don't want to lock _peersMutex too long
-			_peersMutex.lock();
-			for(std::map<uint64_t, std::shared_ptr<BaseLib::Systems::Peer>>::iterator i = _peersById.begin(); i != _peersById.end(); ++i)
-			{
-				peers.push_back(std::dynamic_pointer_cast<BidCoSPeer>(i->second));
-			}
-			_peersMutex.unlock();
-
-			for(std::vector<std::shared_ptr<BidCoSPeer>>::iterator i = peers.begin(); i != peers.end(); ++i)
-			{
-				//listDevices really needs a lot of resources, so wait a little bit after each device
-				std::this_thread::sleep_for(std::chrono::milliseconds(3));
-				PVariable info = (*i)->getDeviceInfo(clientInfo, fields);
-				if(!info) continue;
-				array->arrayValue->push_back(info);
-			}
-
-			return array;
-		}
-	}
-	catch(const std::exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-        _peersMutex.unlock();
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-        _peersMutex.unlock();
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-        _peersMutex.unlock();
-    }
-    return Variable::createError(-32500, "Unknown application error.");
-}
-
 PVariable HomeMaticCentral::getInstallMode(BaseLib::PRpcClientInfo clientInfo)
 {
 	try
@@ -4955,7 +4905,7 @@ PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, std:
 			}
 			else remoteID = remotePeer->getID();
 		}
-		PVariable result = peer->putParamset(clientInfo, channel, type, remoteID, remoteChannel, paramset);
+		PVariable result = peer->putParamset(clientInfo, channel, type, remoteID, remoteChannel, paramset, false);
 		if(result->errorStruct) return result;
 		int32_t waitIndex = 0;
 		while(_bidCoSQueueManager.get(peer->getAddress()) && waitIndex < 50)
@@ -4981,13 +4931,13 @@ PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, std:
     return Variable::createError(-32500, "Unknown application error.");
 }
 
-PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable paramset)
+PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable paramset, bool checkAcls)
 {
 	try
 	{
 		std::shared_ptr<BidCoSPeer> peer(getPeer(peerID));
 		if(!peer) return Variable::createError(-2, "Unknown device.");
-		PVariable result = peer->putParamset(clientInfo, channel, type, remoteID, remoteChannel, paramset);
+		PVariable result = peer->putParamset(clientInfo, channel, type, remoteID, remoteChannel, paramset, checkAcls);
 		if(result->errorStruct) return result;
 		int32_t waitIndex = 0;
 		while(_bidCoSQueueManager.get(peer->getAddress()) && waitIndex < 50)

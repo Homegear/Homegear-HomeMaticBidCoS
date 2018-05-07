@@ -1022,7 +1022,7 @@ void HomeMaticCentral::sendPacket(std::shared_ptr<IBidCoSInterface> physicalInte
 			{
 				int64_t sleepingTime = responseDelay - timeDifference;
 				if(sleepingTime > 1) sleepingTime -= 1;
-				packet->setTimeSending(time + sleepingTime + 1);
+				packet->setTimeSending(time + sleepingTime);
 				std::this_thread::sleep_for(std::chrono::milliseconds(sleepingTime));
 			}
 			//Set time to now. This is necessary if two packets are sent after each other without a response in between

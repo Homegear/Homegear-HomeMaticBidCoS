@@ -659,9 +659,11 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 		forceSendPacket(bidCoSPacket);
 		_aesHandshake->setMFrame(bidCoSPacket);
 		if(!_updateMode &&
+                !(bidCoSPacket->messageType() == 0x01 && bidCoSPacket->controlByte() == 0x84) && //addDevice pairing packet
 				!(bidCoSPacket->messageType() == 0x41 && ((bidCoSPacket->controlByte() == 0x14 && bidCoSPacket->payload()->size() == 10) || (bidCoSPacket->controlByte() == 0x94 && bidCoSPacket->payload()->size() == 3)))) //HM-Sec-SD(-2)
 		{
             int64_t timeSending = bidCoSPacket->timeSending();
+			if(timeSending < BaseLib::HelperFunctions::getTime() - 100) timeSending = BaseLib::HelperFunctions::getTime();
 			if(bidCoSPacket->controlByte() & 0x10)
 			{
                 bidCoSPacket->setTimeSending(timeSending + 560);

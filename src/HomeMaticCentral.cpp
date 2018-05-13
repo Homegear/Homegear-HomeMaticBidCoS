@@ -4017,11 +4017,14 @@ PVariable HomeMaticCentral::addDevice(BaseLib::PRpcClientInfo clientInfo, std::s
 		while(!peer && i < 3)
 		{
 			packet->setMessageCounter(getMessageCounter());
-			_sendPacketThreadMutex.lock();
-			_bl->threadManager.join(_sendPacketThread);
-			_bl->threadManager.start(_sendPacketThread, false, &HomeMaticCentral::sendPacket, this, GD::defaultPhysicalInterface, packet, false);
-			_sendPacketThreadMutex.unlock();
-			std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+            {
+                std::lock_guard<std::mutex> sendPacketThreadGuard(_sendPacketThreadMutex);
+                _bl->threadManager.join(_sendPacketThread);
+                _bl->threadManager.start(_sendPacketThread, false, &HomeMaticCentral::sendPacket, this, GD::defaultPhysicalInterface, packet, false);
+            }
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 			peer = getPeer(serialNumber);
 			i++;
 		}

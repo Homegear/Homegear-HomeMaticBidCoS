@@ -44,6 +44,10 @@ TICC1100::TICC1100(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> 
 		_out.init(GD::bl);
 		_out.setPrefix(GD::out.getPrefix() + "TI CC110X \"" + settings->id + "\": ");
 
+		_sending = false;
+		_sendingPending = false;
+		_firstPacket = true;
+
 		if(settings->listenThreadPriority == -1)
 		{
 			settings->listenThreadPriority = 45;
@@ -315,8 +319,8 @@ void TICC1100::disableUpdateMode()
 	{
 		setConfig();
 		stopListening();
+        _updateMode = false;
 		startListening();
-		_updateMode = false;
 	}
     catch(const std::exception& ex)
     {
@@ -523,8 +527,8 @@ void TICC1100::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 	try
 	{
 		if(_fileDescriptor->descriptor == -1 || _gpioDescriptors[1]->descriptor == -1 || _stopped) return;
-		bool burst = packet->controlByte() & 0x10;
 		if(!packet) return;
+        bool burst = packet->controlByte() & 0x10;
 		std::vector<uint8_t> decodedPacket = packet->byteArray();
 		std::vector<uint8_t> encodedPacket(decodedPacket.size());
 		encodedPacket[0] = decodedPacket[0];
@@ -625,33 +629,28 @@ void TICC1100::readwrite(std::vector<uint8_t>& data)
 {
 	try
 	{
-		_sendMutex.lock();
+		std::lock_guard<std::mutex> sendGuard(_sendMutex);
 		_transfer.tx_buf = (uint64_t)&data[0];
 		_transfer.rx_buf = (uint64_t)&data[0];
 		_transfer.len = (uint32_t)data.size();
 		if(_bl->debugLevel >= 6) _out.printDebug("Debug: Sending: " + _bl->hf.getHexString(data));
 		if(!ioctl(_fileDescriptor->descriptor, SPI_IOC_MESSAGE(1), &_transfer))
 		{
-			_sendMutex.unlock();
 			_out.printError("Couldn't write to device " + _settings->device + ": " + std::string(strerror(errno)));
 			return;
 		}
 		if(_bl->debugLevel >= 6) _out.printDebug("Debug: Received: " + _bl->hf.getHexString(data));
-		_sendMutex.unlock();
 	}
 	catch(const std::exception& ex)
     {
-		_sendMutex.unlock();
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(BaseLib::Exception& ex)
     {
-    	_sendMutex.unlock();
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     catch(...)
     {
-    	_sendMutex.unlock();
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
@@ -839,7 +838,7 @@ void TICC1100::enableRX(bool flushRXFIFO)
 	try
 	{
 		if(_fileDescriptor->descriptor == -1) return;
-		_txMutex.lock();
+		std::lock_guard<std::timed_mutex> txGuard(_txMutex);
 		if(flushRXFIFO) sendCommandStrobe(CommandStrobes::Enum::SFRX);
 		sendCommandStrobe(CommandStrobes::Enum::SRX);
 	}
@@ -855,7 +854,6 @@ void TICC1100::enableRX(bool flushRXFIFO)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
-    _txMutex.unlock();
 }
 
 void TICC1100::initChip()

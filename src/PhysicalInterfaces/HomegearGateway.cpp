@@ -63,7 +63,7 @@ void HomegearGateway::startListening()
 
         if(_settings->host.empty() || _settings->port.empty() || _settings->caFile.empty() || _settings->certFile.empty() || _settings->keyFile.empty())
         {
-            _out.printError("Error: Configuration of Homegear Gateway is incomplete. Please correct it in \"homematic.conf\".");
+            _out.printError("Error: Configuration of Homegear Gateway is incomplete. Please correct it in \"homematicbidcos.conf\".");
             return;
         }
 

@@ -209,9 +209,9 @@ protected:
 	std::vector<uint8_t> _patable;
 	struct spi_ioc_transfer _transfer;
 	std::timed_mutex _txMutex;
-	bool _sending = false;
-	bool _sendingPending = false;
-	bool _firstPacket = true;
+	std::atomic_bool _sending;
+	std::atomic_bool _sendingPending;
+	std::atomic_bool _firstPacket;
 
 	void setConfig();
 	void setupDevice();

@@ -63,7 +63,7 @@ void HomegearGateway::startListening()
 
         if(_settings->host.empty() || _settings->port.empty() || _settings->caFile.empty() || _settings->certFile.empty() || _settings->keyFile.empty())
         {
-            _out.printError("Error: Configuration of Homegear Gateway is incomplete. Please correct it in \"homematic.conf\".");
+            _out.printError("Error: Configuration of Homegear Gateway is incomplete. Please correct it in \"homematicbidcos.conf\".");
             return;
         }
 
@@ -71,6 +71,7 @@ void HomegearGateway::startListening()
         _tcpSocket->setConnectionRetries(1);
         _tcpSocket->setReadTimeout(5000000);
         _tcpSocket->setWriteTimeout(5000000);
+        if(_settings->useIdForHostnameVerification) _tcpSocket->setVerificationHostname(_settings->id);
         _stopCallbackThread = false;
         if(_settings->listenThreadPriority > -1) _bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HomegearGateway::listen, this);
         else _bl->threadManager.start(_listenThread, true, &HomegearGateway::listen, this);

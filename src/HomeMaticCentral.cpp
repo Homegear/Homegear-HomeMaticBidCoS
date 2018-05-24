@@ -3952,7 +3952,12 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 			if((sentPacket && sentPacket->messageType() == 0x01 && sentPacket->payload()->at(0) == 0x00 && sentPacket->payload()->at(1) == 0x06) || (sentPacket && sentPacket->messageType() == 0x11 && sentPacket->payload()->at(0) == 0x04 && sentPacket->payload()->at(1) == 0x00))
 			{
 				std::shared_ptr<BidCoSPeer> peer = getPeer(packet->senderAddress());
-				if(peer) deletePeer(peer->getID());
+				if(peer)
+                {
+                    uint64_t peerId = peer->getID();
+                    peer.reset();
+                    deletePeer(peerId);
+                }
 			}
 		}
 		else if(queue->getQueueType() == BidCoSQueueType::SETAESKEY)
@@ -4555,7 +4560,12 @@ PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, uin
 			_bl->threadManager.start(_resetThread, false, &HomeMaticCentral::unpair, this, id, defer);
 		}
 		//Force delete
-		if(force) deletePeer(peer->getID());
+		if(force)
+        {
+            uint64_t peerId = peer->getID();
+            peer.reset();
+            deletePeer(peerId);
+        }
 		else
 		{
 			int32_t waitIndex = 0;

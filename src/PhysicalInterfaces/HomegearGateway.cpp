@@ -107,12 +107,12 @@ void HomegearGateway::stopListening()
 {
     try
     {
+        IBidCoSInterface::stopListening();
         _stopCallbackThread = true;
         if(_tcpSocket) _tcpSocket->close();
         _bl->threadManager.join(_listenThread);
         _stopped = true;
         _tcpSocket.reset();
-        IPhysicalInterface::stopListening();
     }
     catch(const std::exception& ex)
     {

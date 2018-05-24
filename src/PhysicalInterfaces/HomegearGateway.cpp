@@ -61,11 +61,24 @@ void HomegearGateway::startListening()
     {
         stopListening();
 
+        if(!_aesHandshake) return; //AES is not initialized
+
+        if(!GD::family->getCentral())
+        {
+            _stopCallbackThread = true;
+            _out.printError("Error: Could not get central address. Stopping listening.");
+            return;
+        }
+        _myAddress = GD::family->getCentral()->getAddress();
+        _aesHandshake->setMyAddress(_myAddress);
+
         if(_settings->host.empty() || _settings->port.empty() || _settings->caFile.empty() || _settings->certFile.empty() || _settings->keyFile.empty())
         {
             _out.printError("Error: Configuration of Homegear Gateway is incomplete. Please correct it in \"homematicbidcos.conf\".");
             return;
         }
+
+        IBidCoSInterface::startListening();
 
         _tcpSocket.reset(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, true, _settings->caFile, true, _settings->certFile, _settings->keyFile));
         _tcpSocket->setConnectionRetries(1);
@@ -75,7 +88,6 @@ void HomegearGateway::startListening()
         _stopCallbackThread = false;
         if(_settings->listenThreadPriority > -1) _bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HomegearGateway::listen, this);
         else _bl->threadManager.start(_listenThread, true, &HomegearGateway::listen, this);
-        IPhysicalInterface::startListening();
     }
     catch(const std::exception& ex)
     {

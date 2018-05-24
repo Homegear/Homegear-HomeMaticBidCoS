@@ -71,7 +71,7 @@ class AesHandshake
 
         BaseLib::SharedObjects* _bl = nullptr;
         BaseLib::Output _out;
-        int32_t _myAddress = 0x1C6940;
+        int32_t _myAddress = -1;
         std::vector<uint8_t> _rfKey;
         std::vector<uint8_t> _oldRfKey;
         uint32_t _currentRfKeyIndex = 0;

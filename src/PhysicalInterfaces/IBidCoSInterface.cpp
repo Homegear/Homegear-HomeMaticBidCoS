@@ -414,7 +414,7 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 								queuePacket(mFrame, mFrame->timeSending() + 1200);
 							}
 						// }}}
-
+                        
 						queuePacket(rFrame);
 						return;
 					}

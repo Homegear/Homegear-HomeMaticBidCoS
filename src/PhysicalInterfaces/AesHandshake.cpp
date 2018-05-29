@@ -136,6 +136,8 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getCFrame(std::shared_ptr<BidCoSPack
 	std::shared_ptr<BidCoSPacket> cFrame;
 	try
 	{
+		if(_myAddress == -1) _out.printWarning("Warning: address is unset in AesHandshake.");
+
 		std::vector<uint8_t> cPayload;
 		cPayload.reserve(8);
 		cPayload.push_back(0x04);
@@ -203,6 +205,8 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 
     try
 	{
+		if(_myAddress == -1) _out.printWarning("Warning: address is unset in AesHandshake.");
+
     	std::lock_guard<std::mutex> decryptGuard(_decryptMutex);
     	if(_bl->debugLevel >= 4)_out.printInfo("Info: r-Frame is: " + rFrame->hexString());
     	std::vector<uint8_t> rfKey;
@@ -348,6 +352,7 @@ void AesHandshake::setMFrame(std::shared_ptr<BidCoSPacket> mFrame)
 
 std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPacket> cFrame, std::shared_ptr<BidCoSPacket>& mFrame, uint32_t keyIndex)
 {
+	if(_myAddress == -1) _out.printWarning("Warning: address is unset in AesHandshake.");
 	if(_bl->debugLevel >= 4) _out.printInfo("Info: c-Frame is: " + cFrame->hexString());
 
 	std::shared_ptr<BidCoSPacket> rFrame;

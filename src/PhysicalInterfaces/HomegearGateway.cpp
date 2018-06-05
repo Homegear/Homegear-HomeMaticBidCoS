@@ -262,7 +262,7 @@ void HomegearGateway::listen()
                 {
                     try
                     {
-                        processedBytes += _binaryRpc->process(buffer.data(), bytesRead);
+                        processedBytes += _binaryRpc->process(buffer.data() + processedBytes, bytesRead - processedBytes);
                         if(_binaryRpc->isFinished())
                         {
                             if(_binaryRpc->getType() == BaseLib::Rpc::BinaryRpc::Type::request)

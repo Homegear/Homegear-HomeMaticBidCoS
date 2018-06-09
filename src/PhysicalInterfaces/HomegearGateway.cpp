@@ -223,6 +223,7 @@ void HomegearGateway::listen()
         }
 
         std::vector<char> buffer(1024);
+        int32_t processedBytes = 0;
         while(!_stopCallbackThread)
         {
             try
@@ -256,32 +257,44 @@ void HomegearGateway::listen()
 
                 if(GD::bl->debugLevel >= 5) _out.printDebug("Debug: TCP packet received: " + BaseLib::HelperFunctions::getHexString(buffer.data(), bytesRead));
 
-                _binaryRpc->process(buffer.data(), bytesRead);
-                if(_binaryRpc->isFinished())
+                processedBytes = 0;
+                while(processedBytes < bytesRead)
                 {
-                    if(_binaryRpc->getType() == BaseLib::Rpc::BinaryRpc::Type::request)
+                    try
                     {
-                        std::string method;
-                        BaseLib::PArray parameters = _rpcDecoder->decodeRequest(_binaryRpc->getData(), method);
-
-                        if(method == "packetReceived" && parameters && parameters->size() == 2 && parameters->at(0)->integerValue64 == BIDCOS_FAMILY_ID && !parameters->at(1)->stringValue.empty())
+                        processedBytes += _binaryRpc->process(buffer.data() + processedBytes, bytesRead - processedBytes);
+                        if(_binaryRpc->isFinished())
                         {
-                            processPacket(parameters->at(1)->stringValue);
-                        }
+                            if(_binaryRpc->getType() == BaseLib::Rpc::BinaryRpc::Type::request)
+                            {
+                                std::string method;
+                                BaseLib::PArray parameters = _rpcDecoder->decodeRequest(_binaryRpc->getData(), method);
 
-                        BaseLib::PVariable response = std::make_shared<BaseLib::Variable>();
-                        std::vector<char> data;
-                        _rpcEncoder->encodeResponse(response, data);
-                        _tcpSocket->proofwrite(data);
+                                if(method == "packetReceived" && parameters && parameters->size() == 2 && parameters->at(0)->integerValue64 == BIDCOS_FAMILY_ID && !parameters->at(1)->stringValue.empty())
+                                {
+                                    processPacket(parameters->at(1)->stringValue);
+                                }
+
+                                BaseLib::PVariable response = std::make_shared<BaseLib::Variable>();
+                                std::vector<char> data;
+                                _rpcEncoder->encodeResponse(response, data);
+                                _tcpSocket->proofwrite(data);
+                            }
+                            else if(_binaryRpc->getType() == BaseLib::Rpc::BinaryRpc::Type::response && _waitForResponse)
+                            {
+                                std::unique_lock<std::mutex> requestLock(_requestMutex);
+                                _rpcResponse = _rpcDecoder->decodeResponse(_binaryRpc->getData());
+                                requestLock.unlock();
+                                _requestConditionVariable.notify_all();
+                            }
+                            _binaryRpc->reset();
+                        }
                     }
-                    else if(_binaryRpc->getType() == BaseLib::Rpc::BinaryRpc::Type::response && _waitForResponse)
+                    catch(BaseLib::Rpc::BinaryRpcException& ex)
                     {
-                        std::unique_lock<std::mutex> requestLock(_requestMutex);
-                        _rpcResponse = _rpcDecoder->decodeResponse(_binaryRpc->getData());
-                        requestLock.unlock();
-                        _requestConditionVariable.notify_all();
+                        _binaryRpc->reset();
+                        _out.printError("Error processing packet: " + ex.what());
                     }
-                    _binaryRpc->reset();
                 }
             }
             catch(BaseLib::Exception& ex)

@@ -373,8 +373,10 @@ void BidCoSPeer::worker()
 						std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string> {j->second->key});
 						std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable> { valuesCentral.at(j->second->channel).at(j->second->key).rpcParameter->convertFromPacket(j->second->data) });
 						GD::out.printInfo("Info: Domino event: " + j->second->key + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string(j->second->channel) + " was reset.");
-						raiseEvent(_peerID, j->second->channel, valueKeys, rpcValues);
-						raiseRPCEvent(_peerID, j->second->channel, _serialNumber + ":" + std::to_string(j->second->channel), valueKeys, rpcValues);
+                        std::string eventSource = "device-" + std::to_string(_peerID);
+                        std::string address(_serialNumber + ":" + std::to_string(j->second->channel));
+                        raiseEvent(eventSource, _peerID, j->second->channel, valueKeys, rpcValues);
+                        raiseRPCEvent(eventSource, _peerID, j->second->channel, address, valueKeys, rpcValues);
 					}
 					else
 					{
@@ -2210,8 +2212,10 @@ void BidCoSPeer::setRSSIDevice(uint8_t rssi)
 			std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable>());
 			rpcValues->push_back(parameter.rpcParameter->convertFromPacket(parameterData));
 
-			raiseEvent(_peerID, 0, valueKeys, rpcValues);
-			raiseRPCEvent(_peerID, 0, _serialNumber + ":0", valueKeys, rpcValues);
+            std::string eventSource = "device-" + std::to_string(_peerID);
+            std::string address = _serialNumber + ":0";
+			raiseEvent(eventSource, _peerID, 0, valueKeys, rpcValues);
+			raiseRPCEvent(eventSource, _peerID, 0, address, valueKeys, rpcValues);
 		}
 	}
 	catch(const std::exception& ex)
@@ -2667,12 +2671,13 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 		//if(!rpcValues.empty() && !resendPacket)
 		if(!rpcValues.empty())
 		{
-			for(std::map<uint32_t, std::shared_ptr<std::vector<std::string>>>::const_iterator j = valueKeys.begin(); j != valueKeys.end(); ++j)
+			for(std::map<uint32_t, std::shared_ptr<std::vector<std::string>>>::iterator j = valueKeys.begin(); j != valueKeys.end(); ++j)
 			{
 				if(j->second->empty()) continue;
+                std::string eventSource = "device-" + std::to_string(_peerID);
 				std::string address(_serialNumber + ":" + std::to_string(j->first));
-				raiseEvent(_peerID, j->first, j->second, rpcValues.at(j->first));
-				raiseRPCEvent(_peerID, j->first, address, j->second, rpcValues.at(j->first));
+				raiseEvent(eventSource, _peerID, j->first, j->second, rpcValues.at(j->first));
+				raiseRPCEvent(eventSource, _peerID, j->first, address, j->second, rpcValues.at(j->first));
 			}
 		}
 	}
@@ -3592,8 +3597,9 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 			value = rpcParameter->convertFromPacket(parameterData);
 			valueKeys->push_back(valueKey);
 			values->push_back(value);
-			raiseEvent(_peerID, channel, valueKeys, values);
-			raiseRPCEvent(_peerID, channel, _serialNumber + ":" + std::to_string(channel), valueKeys, values);
+			std::string address(_serialNumber + ":" + std::to_string(channel));
+			raiseEvent(clientInfo->initInterfaceId, _peerID, channel, valueKeys, values);
+			raiseRPCEvent(clientInfo->initInterfaceId, _peerID, channel, address, valueKeys, values);
 			return PVariable(new Variable(VariableType::tVoid));
 		}
 		else if(rpcParameter->physical->operationType != IPhysical::OperationType::Enum::command) return Variable::createError(-6, "Parameter is not settable.");
@@ -3835,8 +3841,9 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 
 		if(!valueKeys->empty())
 		{
-			raiseEvent(_peerID, channel, valueKeys, values);
-			raiseRPCEvent(_peerID, channel, _serialNumber + ":" + std::to_string(channel), valueKeys, values);
+			std::string address(_serialNumber + ":" + std::to_string(channel));
+			raiseEvent(clientInfo->initInterfaceId, _peerID, channel, valueKeys, values);
+			raiseRPCEvent(clientInfo->initInterfaceId, _peerID, channel, address, valueKeys, values);
 		}
 
 		return PVariable(new Variable(VariableType::tVoid));

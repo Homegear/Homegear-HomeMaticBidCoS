@@ -785,7 +785,9 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 				peer->serviceMessages->set("CENTRAL_ADDRESS_SPOOFED", 1, 0);
 				std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string> { "CENTRAL_ADDRESS_SPOOFED" });
 				std::shared_ptr<std::vector<PVariable>> values(new std::vector<PVariable> { PVariable(new Variable((int32_t)1)) });
-				raiseRPCEvent(peer->getID(), 0, peer->getSerialNumber() + ":0", valueKeys, values);
+                std::string eventSource = "device-" + std::to_string(peer->getID());
+                std::string address = peer->getSerialNumber() + ":0";
+				raiseRPCEvent(eventSource, peer->getID(), 0, address, valueKeys, values);
 				return true;
 			}
 			return false;

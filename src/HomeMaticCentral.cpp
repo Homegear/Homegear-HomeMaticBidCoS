@@ -4519,9 +4519,16 @@ PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, std
 	{
 		if(serialNumber.empty()) return Variable::createError(-2, "Unknown device.");
 		if(serialNumber[0] == '*') return Variable::createError(-2, "Cannot delete virtual device.");
-		std::shared_ptr<BidCoSPeer> peer = getPeer(serialNumber);
-		if(!peer) return PVariable(new Variable(VariableType::tVoid));
-		return deleteDevice(clientInfo, peer->getID(), flags);
+
+        uint64_t peerId = 0;
+
+        {
+            std::shared_ptr<BidCoSPeer> peer = getPeer(serialNumber);
+            if(!peer) return PVariable(new Variable(VariableType::tVoid));
+            peerId = peer->getID();
+        }
+
+		return deleteDevice(clientInfo, peerId, flags);
 	}
 	catch(const std::exception& ex)
     {

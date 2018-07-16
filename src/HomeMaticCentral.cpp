@@ -1181,16 +1181,7 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 		std::ostringstream stringStream;
 		std::vector<std::string> arguments;
 		bool showHelp = false;
-		if(_currentPeer)
-		{
-			if(BaseLib::HelperFunctions::checkCliCommand(command, "unselect", "u", "", 0, arguments, showHelp))
-			{
-				_currentPeer.reset();
-				return "Peer unselected.\n";
-			}
-			return _currentPeer->handleCliCommand(command);
-		}
-		else if(BaseLib::HelperFunctions::checkCliCommand(command, "test1", "ts1", "", 0, arguments, showHelp))
+		if(BaseLib::HelperFunctions::checkCliCommand(command, "test1", "ts1", "", 0, arguments, showHelp))
 		{
 			std::vector<uint8_t> payload{2, 0};
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA2, 0x58, 0x39A07F, 0x1DA07F, payload));
@@ -1395,7 +1386,6 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			if(!peerExists(peerID)) stringStream << "This peer is not paired to this central." << std::endl;
 			else
 			{
-				if(_currentPeer && _currentPeer->getID() == peerID) _currentPeer.reset();
 				deletePeer(peerID);
 				stringStream << "Removed peer " << std::to_string(peerID) << "." << std::endl;
 			}
@@ -1439,7 +1429,6 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			{
 				bool isVirtual = peer->isVirtual();
 				peer.reset();
-				if(_currentPeer && _currentPeer->getID() == peerID) _currentPeer.reset();
 				stringStream << "Unpairing peer " << peerID << std::endl;
 				if(isVirtual) deletePeer(peerID);
 				else unpair(peerID, true);
@@ -1484,7 +1473,6 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 			{
 				bool isVirtual = peer->isVirtual();
 				peer.reset();
-				if(_currentPeer && _currentPeer->getID() == peerID) _currentPeer.reset();
 				stringStream << "Resetting peer " << std::to_string(peerID) << std::endl;
 				if(isVirtual) deletePeer(peerID);
 				else reset(peerID, true);
@@ -1790,47 +1778,6 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				_peersMutex.unlock();
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 			}
-		}
-		else if(command.compare(0, 12, "peers select") == 0 || command.compare(0, 2, "ps") == 0)
-		{
-			uint64_t peerID = 0;
-
-			std::stringstream stream(command);
-			std::string element;
-			int32_t offset = (command.at(1) == 's') ? 0 : 1;
-			int32_t index = 0;
-			while(std::getline(stream, element, ' '))
-			{
-				if(index < 1 + offset)
-				{
-					index++;
-					continue;
-				}
-				else if(index == 1 + offset)
-				{
-					if(element == "help") break;
-					peerID = BaseLib::Math::getNumber(element, false);
-					if(peerID == 0) return "Invalid id.\n";
-				}
-				index++;
-			}
-			if(index == 1 + offset)
-			{
-				stringStream << "Description: This command selects a peer." << std::endl;
-				stringStream << "Usage: peers select PEERID" << std::endl << std::endl;
-				stringStream << "Parameters:" << std::endl;
-				stringStream << "  PEERID:\tThe id of the peer to select. Example: 513" << std::endl;
-				return stringStream.str();
-			}
-
-			_currentPeer = getPeer(peerID);
-			if(!_currentPeer) stringStream << "This peer is not paired to this central." << std::endl;
-			else
-			{
-				stringStream << "Peer with id " << peerID << " and device type 0x" << _bl->hf.getHexString(_currentPeer->getDeviceType()) << " selected." << std::dec << std::endl;
-				stringStream << "For information about the peer's commands type: \"help\"" << std::endl;
-			}
-			return stringStream.str();
 		}
 		else return "Unknown command.\n";
 	}
@@ -2821,12 +2768,9 @@ void HomeMaticCentral::deletePeer(uint64_t id)
 
 		removePeerFromTeam(peer);
 
-		if(_currentPeer && _currentPeer->getID() == id) _currentPeer.reset();
-
 		int32_t i = 0;
 		while(peer.use_count() > 1 && i < 600)
 		{
-			if(_currentPeer && _currentPeer->getID() == id) _currentPeer.reset();
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			i++;
 		}

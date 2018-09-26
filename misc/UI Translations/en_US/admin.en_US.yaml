@@ -1,0 +1,19 @@
+---
+# {{{ Pairing info
+l10n.homematicBidcos.pairingInfo.centraladdress: 'Address of central'
+l10n.homematicBidcos.pairingInfo.aeskey: 'AES key'
+l10n.homematicBidcos.pairingInfo.currentrfkeyindex: 'Current AES key index'
+l10n.homematicBidcos.pairingInfo.oldaeskey: 'Last AES key index'
+l10n.homematicBidcos.pairingInfo.processbroadcastwithaesenabled: 'Process insecure status messages'
+l10n.homematicBidcos.pairingInfo.id: 'ID'
+l10n.homematicBidcos.pairingInfo.hostname: 'Hostname'
+l10n.homematicBidcos.pairingInfo.password: 'Password'
+l10n.homematicBidcos.pairingInfo.default: 'Default'
+l10n.homematicBidcos.pairingInfo.device: 'Device'
+l10n.homematicBidcos.pairingInfo.gpio1: 'GPIO 1'
+l10n.homematicBidcos.pairingInfo.gpio2: 'GPIO 2'
+l10n.homematicBidcos.pairingInfo.stackposition: 'Stack position'
+l10n.homematicBidcos.pairingInfo.interruptpin: 'Interrupt pin'
+l10n.homematicBidcos.pairingInfo.key: 'Key'
+l10n.homematicBidcos.pairingInfo.sendfix: 'Send fix'
+# }}}

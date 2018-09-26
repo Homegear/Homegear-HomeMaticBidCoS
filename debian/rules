@@ -18,6 +18,11 @@ override_dh_auto_install:
 	chown -R root:root $(CURDIR)/debian/homegear-homematicbidcos/usr/share/homegear
 	chmod -R 550 $(CURDIR)/debian/homegear-homematicbidcos/usr/share/homegear
 
+	mkdir -p $(CURDIR)/debian/homegear-homematicbidcos/var/lib/homegear/admin-ui/translations/modules/homematicbidcos
+	cp -R $(CURDIR)/misc/UI\ Translations/* $(CURDIR)/debian/homegear-homematicbidcos/var/lib/homegear/admin-ui/translations/modules/homematicbidcos
+	chown -R root:root $(CURDIR)/debian/homegear-homematicbidcos/var/lib/homegear/admin-ui/translations/modules/homematicbidcos
+	chmod -R 555 $(CURDIR)/debian/homegear-homematicbidcos/var/lib/homegear/admin-ui/translations/modules/homematicbidcos
+
 override_dh_strip:
 	dh_strip --dbg-package=homegear-homematicbidcos
 

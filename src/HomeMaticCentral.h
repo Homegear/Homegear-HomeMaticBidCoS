@@ -122,6 +122,7 @@ public:
 	virtual BaseLib::PVariable deleteDevice(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t flags);
 	virtual BaseLib::PVariable deleteDevice(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t flags);
 	virtual BaseLib::PVariable getInstallMode(BaseLib::PRpcClientInfo clientInfo);
+    virtual BaseLib::PVariable getPairingState(BaseLib::PRpcClientInfo clientInfo);
 	virtual BaseLib::PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, ParameterGroup::Type::Enum type, std::string remoteSerialNumber, int32_t remoteChannel, BaseLib::PVariable paramset);
 	virtual BaseLib::PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, uint64_t peerID, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, BaseLib::PVariable paramset, bool checkAcls);
 	virtual BaseLib::PVariable removeLink(BaseLib::PRpcClientInfo clientInfo, std::string senderSerialNumber, int32_t senderChannel, std::string receiverSerialNumber, int32_t receiverChannel);
@@ -150,13 +151,12 @@ protected:
     std::thread _sendPacketThread;
     std::thread _resetThread;
 
-    std::atomic_bool _pairing;
-	uint32_t _timeLeftInPairingMode = 0;
 	void pairingModeTimer(int32_t duration, bool debugOutput = true);
 	std::atomic_bool _stopPairingModeThread;
 	std::mutex _pairingModeThreadMutex;
 	std::thread _pairingModeThread;
 	std::mutex _enqueuePendingQueuesMutex;
+    std::list<std::string> _pairingMessages;
 
 	//Updates:
 	std::atomic_bool _updateMode;

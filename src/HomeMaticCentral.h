@@ -156,7 +156,6 @@ protected:
 	std::mutex _pairingModeThreadMutex;
 	std::thread _pairingModeThread;
 	std::mutex _enqueuePendingQueuesMutex;
-    std::list<std::string> _pairingMessages;
 
 	//Updates:
 	std::atomic_bool _updateMode;

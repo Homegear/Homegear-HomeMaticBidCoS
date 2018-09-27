@@ -17,3 +17,10 @@ l10n.homematicBidcos.pairingInfo.interruptpin: 'Interrupt pin'
 l10n.homematicBidcos.pairingInfo.key: 'Key'
 l10n.homematicBidcos.pairingInfo.sendfix: 'Send fix'
 # }}}
+
+# {{{ Pairing
+l10n.homematicBidcos.pairing.alreadyPaired: 'This peer is already paired to central with address 0x%variable0%.'
+l10n.homematicBidcos.pairing.samePeer: 'A peer with the same address but different serial number or device type is already paired to this central.'
+l10n.homematicBidcos.pairing.unsupportedDeviceType: 'Device type 0x%variable0% is not supported.'
+l10n.homematicBidcos.pairing.unknownError: 'Unknown error during pairing.'
+# }}}

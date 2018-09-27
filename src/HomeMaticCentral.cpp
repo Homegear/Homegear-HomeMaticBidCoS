@@ -2921,7 +2921,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 		if(packet->destinationAddress() != 0 && packet->destinationAddress() != _address)
 		{
             std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
-            _pairingMessages.emplace_back("This peer is already paired to central with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ".");
+            _pairingMessages.emplace_back(std::make_shared<PairingMessage>("l10n.homematicBidcos.pairing.alreadyPaired", std::list<std::string>{ BaseLib::HelperFunctions::getHexString(packet->destinationAddress()) }));
 			GD::out.printError("Error: Pairing packet rejected, because this peer is already paired to central with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ".");
 			return;
 		}
@@ -2943,7 +2943,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 		if(peer && (peer->getSerialNumber() != serialNumber || peer->getDeviceType() != deviceType))
 		{
             std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
-            _pairingMessages.emplace_back("A peer with the same address but different serial number or device type is already paired to this central.");
+            _pairingMessages.emplace_back(std::make_shared<PairingMessage>("l10n.homematicBidcos.pairing.samePeer"));
 			GD::out.printError("Error: Pairing packet rejected, because a peer with the same address but different serial number or device type is already paired to this central.");
 			return;
 		}
@@ -2963,7 +2963,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			if(!queue->peer)
 			{
                 std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
-                _pairingMessages.emplace_back("Device type 0x" + BaseLib::HelperFunctions::getHexString(deviceType, 4) + " is not supported.");
+                _pairingMessages.emplace_back(std::make_shared<PairingMessage>("l10n.homematicBidcos.pairing.unsupportedDeviceType", std::list<std::string>{ BaseLib::HelperFunctions::getHexString(deviceType, 4) }));
 				GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType, 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload()->at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 				return;
 			}
@@ -2972,7 +2972,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			if(!rpcDevice)
 			{
                 std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
-                _pairingMessages.emplace_back("Device type 0x" + BaseLib::HelperFunctions::getHexString(deviceType, 4) + " is not supported.");
+                _pairingMessages.emplace_back(std::make_shared<PairingMessage>("l10n.homematicBidcos.pairing.unsupportedDeviceType", std::list<std::string>{ BaseLib::HelperFunctions::getHexString(deviceType, 4) }));
 				GD::out.printWarning("Warning: Device type not supported. Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 				return;
 			}
@@ -3076,7 +3076,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 		if(!peer)
 		{
             std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
-            _pairingMessages.emplace_back("Unknown error during pairing.");
+            _pairingMessages.emplace_back(std::make_shared<PairingMessage>("l10n.homematicBidcos.pairing.unknownError"));
 			GD::out.printError("Error handling pairing packet: Peer is nullptr. This shouldn't have happened. Something went very wrong.");
 			return;
 		}
@@ -4574,9 +4574,6 @@ PVariable HomeMaticCentral::getPairingState(BaseLib::PRpcClientInfo clientInfo)
     {
         auto states = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 
-        states->structValue->emplace("pairingModeEnabled", std::make_shared<BaseLib::Variable>(_pairing));
-        states->structValue->emplace("pairingModeEndTime", std::make_shared<BaseLib::Variable>(BaseLib::HelperFunctions::getTimeSeconds() + _timeLeftInPairingMode));
-
         {
             std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
 
@@ -4584,7 +4581,16 @@ PVariable HomeMaticCentral::getPairingState(BaseLib::PRpcClientInfo clientInfo)
             pairingMessages->arrayValue->reserve(_pairingMessages.size());
             for(auto& message : _pairingMessages)
             {
-                pairingMessages->arrayValue->push_back(std::make_shared<BaseLib::Variable>(message));
+                auto pairingMessage = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
+                pairingMessage->structValue->emplace("messageId", std::make_shared<BaseLib::Variable>(message->messageId));
+                auto variables = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tArray);
+                variables->arrayValue->reserve(message->variables.size());
+                for(auto& variable : message->variables)
+                {
+                    variables->arrayValue->emplace_back(std::make_shared<BaseLib::Variable>(variable));
+                }
+                pairingMessage->structValue->emplace("variables", variables);
+                pairingMessages->arrayValue->push_back(pairingMessage);
             }
             states->structValue->emplace("general", std::move(pairingMessages));
 
@@ -4594,7 +4600,14 @@ PVariable HomeMaticCentral::getPairingState(BaseLib::PRpcClientInfo clientInfo)
                 {
                     auto peerState = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
                     peerState->structValue->emplace("state", std::make_shared<BaseLib::Variable>(peer->state));
-                    peerState->structValue->emplace("message", std::make_shared<BaseLib::Variable>(peer->message));
+                    peerState->structValue->emplace("messageId", std::make_shared<BaseLib::Variable>(peer->messageId));
+                    auto variables = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tArray);
+                    variables->arrayValue->reserve(peer->variables.size());
+                    for(auto& variable : peer->variables)
+                    {
+                        variables->arrayValue->emplace_back(std::make_shared<BaseLib::Variable>(variable));
+                    }
+                    peerState->structValue->emplace("variables", variables);
                     states->structValue->emplace(std::to_string(peer->peerId), std::move(peerState));
                 }
             }

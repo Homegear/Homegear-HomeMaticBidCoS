@@ -4574,6 +4574,9 @@ PVariable HomeMaticCentral::getPairingState(BaseLib::PRpcClientInfo clientInfo)
     {
         auto states = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 
+		states->structValue->emplace("pairingModeEnabled", std::make_shared<BaseLib::Variable>(_pairing));
+		states->structValue->emplace("pairingModeEndTime", std::make_shared<BaseLib::Variable>(BaseLib::HelperFunctions::getTimeSeconds() + _timeLeftInPairingMode));
+
         {
             std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
 

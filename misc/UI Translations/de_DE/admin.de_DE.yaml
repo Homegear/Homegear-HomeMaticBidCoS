@@ -6,7 +6,7 @@ l10n.homematicBidcos.pairingInfo.currentrfkeyindex: 'Aktueller AES-Schlüsselind
 l10n.homematicBidcos.pairingInfo.oldaeskey: 'Letzter AES-Schlüsselindex'
 l10n.homematicBidcos.pairingInfo.processbroadcastwithaesenabled: 'Verarbeite unsichere Statusmeldungen'
 l10n.homematicBidcos.pairingInfo.id: 'ID'
-l10n.homematicBidcos.pairingInfo.hostname: 'Hostname'
+l10n.homematicBidcos.pairingInfo.hostname: 'IP-Adresse'
 l10n.homematicBidcos.pairingInfo.password: 'Kennwort'
 l10n.homematicBidcos.pairingInfo.default: 'Standard'
 l10n.homematicBidcos.pairingInfo.device: 'Gerät'

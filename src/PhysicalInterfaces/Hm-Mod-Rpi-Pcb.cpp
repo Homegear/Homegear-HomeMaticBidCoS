@@ -1743,6 +1743,18 @@ void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
 		_out.printDebug(std::string("Debug: Packet received from HM-MOD-RPI-PCB: " + _bl->hf.getHexString(packet)));
 		if(packet.size() < 8) return;
 		uint16_t crc = _crc.calculate(packet, true);
+
+		if(packet.at(3) == 0xFE && packet.at(5) == 0)
+		{
+			std::string packetString;
+			packetString.insert(packetString.end(), packet.begin() + 6, packet.end() - 2);
+			if(packetString == "DualCoPro_App")
+			{
+				_out.printError("Error: HM-MOD-RPI-PCB has wrong firmware. Please install a firmware without HomeMatic IP support.");
+				_bl->globalServiceMessages.set(BIDCOS_FAMILY_ID, 0, _settings->id, BaseLib::HelperFunctions::getTimeSeconds(), "l10n.homematicbidcos.serviceMessage.hmModRpiPcbDualFirmware", std::list<std::string>{ _settings->id }, PVariable(), 1);
+			}
+		}
+
 		if((packet.at(packet.size() - 2) != (crc >> 8) || packet.at(packet.size() - 1) != (crc & 0xFF)))
 		{
 			_out.printError("Error: CRC (" + BaseLib::HelperFunctions::getHexString(crc, 4) + ") failed on packet received from HM-MOD-RPI-PCB: " + _bl->hf.getHexString(packet));

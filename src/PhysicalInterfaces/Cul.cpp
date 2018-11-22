@@ -106,7 +106,7 @@ void Cul::enableUpdateMode()
 	try
 	{
 		_updateMode = true;
-		writeToDevice("AR\n", false);
+		writeToDevice("AR\n");
 	}
     catch(const std::exception& ex)
     {
@@ -285,8 +285,8 @@ std::string Cul::readFromDevice()
 			std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 			openDevice();
 			if(!isOpen()) return "";
-			if(_updateMode) writeToDevice("X21\nAR\n", false);
-			else writeToDevice("X21\nAr\n", false);
+			if(_updateMode) writeToDevice("X21\nAR\n");
+			else writeToDevice("X21\nAr\n");
 		}
 		std::string packet;
 		int32_t i;
@@ -404,7 +404,7 @@ void Cul::startListening()
 		openDevice();
 		if(_fileDescriptor->descriptor == -1) return;
 		_stopped = false;
-		writeToDevice("X21\nAr\n", false);
+		writeToDevice("X21\nAr\n");
 		std::this_thread::sleep_for(std::chrono::milliseconds(400));
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Cul::listen, this);
 		else GD::bl->threadManager.start(_listenThread, true, &Cul::listen, this);
@@ -434,7 +434,7 @@ void Cul::stopListening()
 		if(_fileDescriptor->descriptor > -1)
 		{
 			//Other X commands than 00 seem to slow down data processing
-			writeToDevice("Ax\nX00\n", false);
+			writeToDevice("Ax\nX00\n");
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 			closeDevice();
 		}

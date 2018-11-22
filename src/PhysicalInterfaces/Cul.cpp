@@ -83,7 +83,7 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 			return;
 		}
 		std::string packetString = packet->hexString();
-		writeToDevice("As" + packet->hexString() + "\n", true);
+		writeToDevice("As" + packet->hexString() + "\nAr" + (_updateMode ? "" : "Ar\n"), true);
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
 	catch(const std::exception& ex)

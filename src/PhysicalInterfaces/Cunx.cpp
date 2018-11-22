@@ -76,7 +76,7 @@ void Cunx::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 	{
 		std::string packetString = packet->hexString();
 		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
-		send("As" + packet->hexString() + "\n");
+		send("As" + packet->hexString() + "\n" + (_updateMode ? "" : "Ar\n"));
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
 	catch(const std::exception& ex)

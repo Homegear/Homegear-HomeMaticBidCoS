@@ -71,7 +71,7 @@ class Cul : public IBidCoSInterface
         void openDevice();
         void closeDevice();
         void setupDevice();
-        void writeToDevice(std::string, bool);
+        void writeToDevice(std::string);
         std::string readFromDevice();
         void listen();
         void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);

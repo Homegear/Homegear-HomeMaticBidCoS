@@ -83,7 +83,8 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 			return;
 		}
 		std::string packetString = packet->hexString();
-		writeToDevice("As" + packet->hexString() + "\nAr" + (_updateMode ? "" : "Ar\n"), true);
+		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
+		writeToDevice("As" + packet->hexString() + "\n" + (_updateMode ? "" : "Ar\n"));
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
 	catch(const std::exception& ex)
@@ -346,7 +347,7 @@ std::string Cul::readFromDevice()
 	return "";
 }
 
-void Cul::writeToDevice(std::string data, bool printSending)
+void Cul::writeToDevice(std::string data)
 {
     try
     {
@@ -354,10 +355,6 @@ void Cul::writeToDevice(std::string data, bool printSending)
         if(_fileDescriptor->descriptor == -1) throw(BaseLib::Exception("Couldn't write to CUL device, because the file descriptor is not valid: " + _settings->device));
         int32_t bytesWritten = 0;
         int32_t i;
-        if(_bl->debugLevel > 3 && printSending)
-        {
-            _out.printInfo("Info: Sending (" + _settings->id + "): " + data.substr(2, data.size() - 3));
-        }
         _sendMutex.lock();
         while(bytesWritten < (signed)data.length())
         {

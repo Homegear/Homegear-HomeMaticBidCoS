@@ -133,7 +133,7 @@ PVariable BidCoS::getPairingInfo()
 
 		PVariable field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.centraladdress")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.centraladdress")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(true));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(std::string("0xFD0001")));
@@ -141,7 +141,7 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.aeskey")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.aeskey")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(true));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(std::string("00112233445566778899AABBCCDDEEFF")));
@@ -149,7 +149,7 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.currentrfkeyindex")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.currentrfkeyindex")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(true));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(1));
@@ -157,14 +157,14 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(3));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.oldaeskey")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.oldaeskey")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(false));
 		familySettings->structValue->emplace("oldRfKey", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(4));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.processbroadcastwithaesenabled")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.processbroadcastwithaesenabled")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
 		field->structValue->emplace("required", std::make_shared<BaseLib::Variable>(false));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(false));
@@ -198,25 +198,25 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("id", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.hostname")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.hostname")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("host", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.password")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.password")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("password", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
 		interface->structValue->emplace("default", field);
 
@@ -255,19 +255,19 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("id", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.device")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.device")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("device", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
 		interface->structValue->emplace("default", field);
 
@@ -286,40 +286,40 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("id", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.device")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.device")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("device", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.gpio1")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.gpio1")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(17));
 		interface->structValue->emplace("gpio1", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(3));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.gpio2")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.gpio2")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(18));
 		interface->structValue->emplace("gpio2", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(4));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.stackposition")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.stackposition")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(0));
 		interface->structValue->emplace("stackPosition", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(5));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
 		interface->structValue->emplace("default", field);
 
@@ -338,26 +338,26 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("id", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.device")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.device")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("device", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.gpio1")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.gpio1")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(17));
 		interface->structValue->emplace("gpio1", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(3));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
 		interface->structValue->emplace("default", field);
 
@@ -376,41 +376,41 @@ PVariable BidCoS::getPairingInfo()
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
 		interface->structValue->emplace("id", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.device")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.device")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(std::string("/dev/spidev0.0")));
 		interface->structValue->emplace("device", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.interruptpin")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.interruptpin")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(2));
 		interface->structValue->emplace("interruptPin", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(3));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.gpio1")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.gpio1")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(24));
 		interface->structValue->emplace("gpio1", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(4));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.gpio2")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.gpio2")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("integer")));
 		field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(5));
 		interface->structValue->emplace("gpio2", field);
 
 		field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
 		field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(5));
-		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+		field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
 		field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
 		interface->structValue->emplace("default", field);
 
@@ -429,19 +429,19 @@ PVariable BidCoS::getPairingInfo()
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("id", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.hostname")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.hostname")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("host", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
         interface->structValue->emplace("default", field);
 
@@ -465,25 +465,25 @@ PVariable BidCoS::getPairingInfo()
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("id", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.hostname")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.hostname")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("host", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.aeskey")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.aeskey")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("lanKey", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(3));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
         interface->structValue->emplace("default", field);
 
@@ -507,32 +507,32 @@ PVariable BidCoS::getPairingInfo()
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(0));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.id")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.id")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("id", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(1));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.hostname")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.hostname")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("host", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(2));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.key")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.key")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("string")));
         interface->structValue->emplace("lanKey", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(3));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.sendfix")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.sendfix")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
         field->structValue->emplace("default", std::make_shared<BaseLib::Variable>(true));
         interface->structValue->emplace("sendFix", field);
 
         field = std::make_shared<BaseLib::Variable>(BaseLib::VariableType::tStruct);
         field->structValue->emplace("pos", std::make_shared<BaseLib::Variable>(4));
-        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.common.default")));
+        field->structValue->emplace("label", std::make_shared<BaseLib::Variable>(std::string("l10n.homematicBidcos.pairingInfo.default")));
         field->structValue->emplace("type", std::make_shared<BaseLib::Variable>(std::string("boolean")));
         interface->structValue->emplace("default", field);
 

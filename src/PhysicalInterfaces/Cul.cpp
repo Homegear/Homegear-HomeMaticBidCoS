@@ -83,7 +83,8 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 			return;
 		}
 		std::string packetString = packet->hexString();
-		writeToDevice("As" + packet->hexString() + "\n", true);
+		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
+		writeToDevice("As" + packet->hexString() + "\n" + (_updateMode ? "" : "Ar\n"));
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
 	catch(const std::exception& ex)
@@ -105,7 +106,7 @@ void Cul::enableUpdateMode()
 	try
 	{
 		_updateMode = true;
-		writeToDevice("AR\n", false);
+		writeToDevice("AR\n");
 	}
     catch(const std::exception& ex)
     {
@@ -284,8 +285,8 @@ std::string Cul::readFromDevice()
 			std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 			openDevice();
 			if(!isOpen()) return "";
-			if(_updateMode) writeToDevice("X21\nAR\n", false);
-			else writeToDevice("X21\nAr\n", false);
+			if(_updateMode) writeToDevice("X21\nAR\n");
+			else writeToDevice("X21\nAr\n");
 		}
 		std::string packet;
 		int32_t i;
@@ -346,7 +347,7 @@ std::string Cul::readFromDevice()
 	return "";
 }
 
-void Cul::writeToDevice(std::string data, bool printSending)
+void Cul::writeToDevice(std::string data)
 {
     try
     {
@@ -354,10 +355,6 @@ void Cul::writeToDevice(std::string data, bool printSending)
         if(_fileDescriptor->descriptor == -1) throw(BaseLib::Exception("Couldn't write to CUL device, because the file descriptor is not valid: " + _settings->device));
         int32_t bytesWritten = 0;
         int32_t i;
-        if(_bl->debugLevel > 3 && printSending)
-        {
-            _out.printInfo("Info: Sending (" + _settings->id + "): " + data.substr(2, data.size() - 3));
-        }
         _sendMutex.lock();
         while(bytesWritten < (signed)data.length())
         {
@@ -407,7 +404,7 @@ void Cul::startListening()
 		openDevice();
 		if(_fileDescriptor->descriptor == -1) return;
 		_stopped = false;
-		writeToDevice("X21\nAr\n", false);
+		writeToDevice("X21\nAr\n");
 		std::this_thread::sleep_for(std::chrono::milliseconds(400));
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Cul::listen, this);
 		else GD::bl->threadManager.start(_listenThread, true, &Cul::listen, this);
@@ -437,7 +434,7 @@ void Cul::stopListening()
 		if(_fileDescriptor->descriptor > -1)
 		{
 			//Other X commands than 00 seem to slow down data processing
-			writeToDevice("Ax\nX00\n", false);
+			writeToDevice("Ax\nX00\n");
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 			closeDevice();
 		}

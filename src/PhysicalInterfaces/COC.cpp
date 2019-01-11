@@ -298,14 +298,20 @@ void COC::lineReceived(const std::string& data)
 void COC::setup(int32_t userID, int32_t groupID, bool setPermissions)
 {
     try
-    {
-    	if(setPermissions) setDevicePermission(userID, groupID);
-    	exportGPIO(1);
-		if(setPermissions) setGPIOPermission(1, userID, groupID, false);
-		setGPIODirection(1, GPIODirection::OUT);
-		exportGPIO(2);
-		if(setPermissions) setGPIOPermission(2, userID, groupID, false);
-		setGPIODirection(2, GPIODirection::OUT);
+	{
+		if(setPermissions) setDevicePermission(userID, groupID);
+		if(gpioDefined(1))
+		{
+			exportGPIO(1);
+			if(setPermissions) setGPIOPermission(1, userID, groupID, false);
+			setGPIODirection(1, GPIODirection::OUT);
+		}
+		if(gpioDefined(2))
+		{
+			exportGPIO(2);
+			if(setPermissions) setGPIOPermission(2, userID, groupID, false);
+			setGPIODirection(2, GPIODirection::OUT);
+		}
     }
     catch(const std::exception& ex)
     {

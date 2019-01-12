@@ -36,7 +36,7 @@
 
 namespace BidCoS
 {
-BidCoS::BidCoS(BaseLib::SharedObjects* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSink* eventHandler) : BaseLib::Systems::DeviceFamily(bl, eventHandler, BIDCOS_FAMILY_ID, BIDCOS_FAMILY_NAME)
+BidCoS::BidCoS(BaseLib::SharedObjects* bl, BaseLib::Systems::IFamilyEventSink* eventHandler) : BaseLib::Systems::DeviceFamily(bl, eventHandler, BIDCOS_FAMILY_ID, BIDCOS_FAMILY_NAME)
 {
 	GD::bl = bl;
 	GD::family = this;

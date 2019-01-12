@@ -43,7 +43,7 @@ using namespace BaseLib;
 class BidCoS : public BaseLib::Systems::DeviceFamily
 {
 public:
-	BidCoS(BaseLib::SharedObjects* bl, BaseLib::Systems::DeviceFamily::IFamilyEventSink* eventHandler);
+	BidCoS(BaseLib::SharedObjects* bl, BaseLib::Systems::IFamilyEventSink* eventHandler);
 	virtual ~BidCoS();
 	virtual void dispose();
 

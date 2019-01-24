@@ -543,7 +543,7 @@ void HM_CFG_LAN::createInitCommandQueue()
 		std::tm localTime;
 		localtime_r(&t, &localTime);
 		uint32_t time = (uint32_t)(t - 946684800) + 1; //I add one second for processing time
-		hexString = "T" + BaseLib::HelperFunctions::getHexString(time, 8) + ',' + BaseLib::HelperFunctions::getHexString(localTime.tm_gmtoff / 1800, 2) + ",00,00000000\r\n";
+		hexString = "T" + BaseLib::HelperFunctions::getHexString(time, 8) + ',' + BaseLib::HelperFunctions::getHexString((int32_t)localTime.tm_gmtoff / 1800, 2) + ",00,00000000\r\n";
 		packet.insert(packet.end(), hexString.begin(), hexString.end());
 		_initCommandQueue.push_back(packet);
 	}
@@ -712,7 +712,7 @@ void HM_CFG_LAN::sendTimePacket()
 		std::tm localTime;
 		localtime_r(&t, &localTime);
 		uint32_t time = (uint32_t)(t - 946684800);
-		std::string hexString = "T" + BaseLib::HelperFunctions::getHexString(time, 8) + ',' + BaseLib::HelperFunctions::getHexString(localTime.tm_gmtoff / 1800, 2) + ",00,00000000\r\n";
+		std::string hexString = "T" + BaseLib::HelperFunctions::getHexString(time, 8) + ',' + BaseLib::HelperFunctions::getHexString((int32_t)localTime.tm_gmtoff / 1800, 2) + ",00,00000000\r\n";
 		send(hexString, false);
 		_lastTimePacket = BaseLib::HelperFunctions::getTimeSeconds();
 	}

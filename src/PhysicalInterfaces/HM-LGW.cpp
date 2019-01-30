@@ -47,11 +47,7 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
 		return;
 	}
 
-	if(settings->lanKey.empty())
-	{
-		_out.printError("Error: No security key specified in homematicbidcos.conf.");
-		return;
-	}
+	if(settings->lanKey.empty()) _out.printInfo("Info: No security key specified in homematicbidcos.conf.");
 }
 
 HM_LGW::~HM_LGW()
@@ -960,7 +956,7 @@ void HM_LGW::send(const std::vector<char>& data, bool raw)
     {
     	if(data.size() < 3) return; //Otherwise error in printInfo
     	std::vector<char> encryptedData;
-    	if(!raw) encryptedData = encrypt(data);
+    	if(!raw) encryptedData = _settings->lanKey.empty() ? data : encrypt(data);
     	_sendMutex.lock();
     	if(!_socket->connected() || _stopped)
     	{
@@ -1002,7 +998,7 @@ void HM_LGW::sendKeepAlive(std::vector<char>& data, bool raw)
     {
     	if(data.size() < 3) return; //Otherwise error in printInfo
     	std::vector<char> encryptedData;
-    	if(!raw) encryptedData = encryptKeepAlive(data);
+    	if(!raw) encryptedData = _settings->lanKey.empty() ? data : encryptKeepAlive(data);
     	_sendMutexKeepAlive.lock();
     	if(!_socketKeepAlive->connected() || _stopped)
     	{
@@ -1389,7 +1385,12 @@ void HM_LGW::startListening()
 			_out.printError("Error: Cannot start listening, because rfKey is not specified.");
 			return;
 		}
-		if(!aesInit()) return;
+		if(_settings->lanKey.empty())
+		{
+			_aesExchangeComplete = true;
+			_aesExchangeKeepAliveComplete = true;
+		}
+		else if(!aesInit()) return;
 		_socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
 		_socket->setReadTimeout(1000000);
 		_socketKeepAlive = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->portKeepAlive, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
@@ -1505,7 +1506,7 @@ bool HM_LGW::aesInit()
 
 	if(_settings->lanKey.empty())
 	{
-		_out.printError("Error: No AES key specified in homematicbidcos.conf for communication with your HM-LGW.");
+		_out.printInfo("Info: No AES key specified in homematicbidcos.conf for communication with your HM-LGW. Disabling AES.");
 		return false;
 	}
 
@@ -2397,7 +2398,7 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
 			aesKeyExchange(data);
 			return;
 		}
-		std::vector<uint8_t> decryptedData = decrypt(data);
+		std::vector<uint8_t> decryptedData = _settings->lanKey.empty() ? data : decrypt(data);
 		if(decryptedData.size() < 8) //8 is minimum size fd
 		{
 			_out.printWarning("Warning: Too small packet received on port " + _settings->port + ": " + _bl->hf.getHexString(decryptedData));
@@ -2485,7 +2486,7 @@ void HM_LGW::processDataKeepAlive(std::vector<uint8_t>& data)
 			aesKeyExchangeKeepAlive(data);
 			return;
 		}
-		std::vector<uint8_t> decryptedData = decryptKeepAlive(data);
+		std::vector<uint8_t> decryptedData = _settings->lanKey.empty() ? data : decryptKeepAlive(data);
 		if(decryptedData.empty()) return;
 		packets.insert(packets.end(), decryptedData.begin(), decryptedData.end());
 

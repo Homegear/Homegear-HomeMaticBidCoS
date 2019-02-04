@@ -2451,7 +2451,7 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
 		}
 		int32_t size = (packet.size() > 5) ? (((int32_t)packet.at(1)) << 8) + packet.at(2) + 5 : 0;
 		if(size < 0) size = 0;
-		if(size > 0 && size < 8) _out.printWarning("Warning: Too small packet received on port " + _settings->port + ": " + _bl->hf.getHexString(data));
+		if(size > 0 && size < 8) _out.printInfo("Info: Ignoring too small packet on port " + _settings->port + ": " + _bl->hf.getHexString(data));
 		else if(size > 255) _out.printWarning("Warning: Too large packet received: " + _bl->hf.getHexString(data));
 		else if(packet.size() < 8 || packet.size() < (unsigned)size) _packetBuffer = packet;
 		else

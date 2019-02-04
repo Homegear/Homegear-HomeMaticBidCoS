@@ -2404,27 +2404,36 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
 			_out.printWarning("Warning: Too small packet received on port " + _settings->port + ": " + _bl->hf.getHexString(decryptedData));
 			return;
 		}
-		if(!_initComplete && _packetIndex == 0 && decryptedData.at(0) == 'S')
+		if(!_initComplete && _packetIndex == 0)
 		{
-			std::string packetString((char*)&decryptedData.at(0), decryptedData.size());
-			if(_bl->debugLevel >= 5)
-			{
-				std::string temp = packetString;
-				_bl->hf.stringReplace(temp, "\r\n", "\\r\\n");
-				_out.printDebug(std::string("Debug: Packet received on port " + _settings->port + ": " + temp));
-			}
-			_requestsMutex.lock();
-			if(_requests.find(0) != _requests.end())
-			{
-				_requests.at(0)->response = decryptedData;
-				{
-					std::lock_guard<std::mutex> lock(_requests.at(0)->mutex);
-					_requests.at(0)->mutexReady = true;
-				}
-				_requests.at(0)->conditionVariable.notify_one();
-			}
-			_requestsMutex.unlock();
-			return;
+            if(decryptedData.at(0) == 'H')
+            {
+                std::string initPacket(decryptedData.begin(), decryptedData.end());
+                BaseLib::HelperFunctions::trim(initPacket);
+                _out.printInfo("Info: Init packet received: " + initPacket);
+            }
+		    else if(decryptedData.at(0) == 'S')
+		    {
+                std::string packetString((char*)&decryptedData.at(0), decryptedData.size());
+                if(_bl->debugLevel >= 5)
+                {
+                    std::string temp = packetString;
+                    _bl->hf.stringReplace(temp, "\r\n", "\\r\\n");
+                    _out.printDebug(std::string("Debug: Packet received on port " + _settings->port + ": " + temp));
+                }
+                _requestsMutex.lock();
+                if(_requests.find(0) != _requests.end())
+                {
+                    _requests.at(0)->response = decryptedData;
+                    {
+                        std::lock_guard<std::mutex> lock(_requests.at(0)->mutex);
+                        _requests.at(0)->mutexReady = true;
+                    }
+                    _requests.at(0)->conditionVariable.notify_one();
+                }
+                _requestsMutex.unlock();
+                return;
+		    }
 		}
 
 		std::vector<uint8_t> packet;
@@ -2518,7 +2527,12 @@ void HM_LGW::processInitKeepAlive(std::string& packet)
 	{
 		if(packet.empty()) return;
 		std::vector<std::string> parts = BaseLib::HelperFunctions::splitAll(packet, ',');
-		if(parts.size() != 2 || parts.at(0).size() != 3 || parts.at(0).at(0) != 'S' || parts.at(1).size() < 6 || parts.at(1).compare(0, 6, "SysCom") != 0)
+        if(parts.size() == 2 && parts.at(0).size() == 3 && parts.at(0).at(0) == 'H')
+        {
+            _out.printInfo("Info: Keep alive init packet received: " + packet);
+            return;
+        }
+		else if(parts.size() != 2 || parts.at(0).size() != 3 || parts.at(0).at(0) != 'S' || parts.at(1).size() < 6 || parts.at(1).compare(0, 6, "SysCom") != 0)
 		{
 			_stopCallbackThread = true;
 			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please check your AES key in homematicbidcos.conf. Stopping listening.");

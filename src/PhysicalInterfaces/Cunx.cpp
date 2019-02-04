@@ -364,7 +364,7 @@ void Cunx::processData(std::vector<uint8_t>& data)
         	{
         		if(packetHex.compare(0, 4, "LOVF") == 0) _out.printWarning("Warning: CUNX with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
         		else if(packetHex == "A") continue;
-        		else _out.printWarning("Warning: Too short packet received: " + packetHex);
+        		else _out.printInfo("Info: Ignoring too small packet: " + packetHex);
         	}
 		}
 	}

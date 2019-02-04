@@ -1135,7 +1135,7 @@ void HM_CFG_LAN::parsePacket(std::string& packet)
 
 				raisePacketReceived(bidCoSPacket);
         	}
-        	else if(!parts.at(5).empty()) _out.printWarning("Warning: Too short packet received: " + parts.at(5));
+        	else if(!parts.at(5).empty()) _out.printInfo("Info: Ignoring too small packet: " + parts.at(5));
 		}
 		else _out.printInfo("Info: Packet received: " + packet);
 	}

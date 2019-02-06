@@ -2411,6 +2411,7 @@ void HM_LGW::processData(std::vector<uint8_t>& data)
                 std::string initPacket(decryptedData.begin(), decryptedData.end());
                 BaseLib::HelperFunctions::trim(initPacket);
                 _out.printInfo("Info: Init packet received: " + initPacket);
+                return;
             }
 		    else if(decryptedData.at(0) == 'S')
 		    {

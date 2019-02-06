@@ -2527,7 +2527,7 @@ void HM_LGW::processInitKeepAlive(std::string& packet)
 	{
 		if(packet.empty()) return;
 		std::vector<std::string> parts = BaseLib::HelperFunctions::splitAll(packet, ',');
-        if(parts.size() == 2 && parts.at(0).size() == 3 && parts.at(0).at(0) == 'H')
+        if(parts.size() > 2 && parts.at(0).size() == 3 && parts.at(0).at(0) == 'H')
         {
             _out.printInfo("Info: Keep alive init packet received: " + packet);
             return;

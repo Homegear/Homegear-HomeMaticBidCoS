@@ -195,6 +195,8 @@ class BidCoSPeer : public BaseLib::Systems::Peer
          */
         virtual PVariable activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, uint64_t remoteID, int32_t remoteChannel, bool longPress);
 
+		virtual PVariable forceConfigUpdate(BaseLib::PRpcClientInfo clientInfo);
+
         /**
          * {@inheritDoc}
          */

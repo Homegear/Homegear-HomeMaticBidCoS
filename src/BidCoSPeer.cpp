@@ -2752,6 +2752,79 @@ PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, i
     return Variable::createError(-32500, "Unknown application error.");
 }
 
+PVariable BidCoSPeer::forceConfigUpdate(BaseLib::PRpcClientInfo clientInfo)
+{
+	try
+	{
+		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::CONFIG));
+		queue->noSending = true;
+		std::vector<uint8_t> payload;
+		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
+
+		uint8_t controlByte = 0xA0;
+		//Always send config start packet as burst packet => no ACK otherwise for some devices
+		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
+
+		for(Functions::iterator i = _rpcDevice->functions.begin(); i != _rpcDevice->functions.end(); ++i)
+		{
+			std::shared_ptr<BidCoSQueue> pendingQueue;
+			int32_t channel = i->first;
+			//Walk through all lists to request master config if necessary
+			if(!_rpcDevice->functions.at(channel)->configParameters->parameters.empty())
+			{
+				PParameterGroup masterSet = _rpcDevice->functions.at(channel)->configParameters;
+				for(Lists::iterator k = masterSet->lists.begin(); k != masterSet->lists.end(); ++k)
+				{
+					pendingQueue.reset(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::CONFIG));
+					pendingQueue->noSending = true;
+					payload.push_back(channel);
+					payload.push_back(0x04);
+					payload.push_back(0);
+					payload.push_back(0);
+					payload.push_back(0);
+					payload.push_back(0);
+					payload.push_back(k->first);
+					auto configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), controlByte, 0x01, central->getAddress(), getAddress(), payload));
+					pendingQueue->push(configPacket);
+					pendingQueue->push(central->getMessages()->find(0x10));
+					payload.clear();
+					pendingBidCoSQueues->push(pendingQueue);
+					serviceMessages->setConfigPending(true);
+				}
+			}
+
+			if(!_rpcDevice->functions[channel]->linkReceiverFunctionTypes.empty() || !_rpcDevice->functions[channel]->linkSenderFunctionTypes.empty())
+			{
+				pendingQueue.reset(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::CONFIG));
+				pendingQueue->noSending = true;
+				payload.push_back(channel);
+				payload.push_back(0x03);
+				auto configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), controlByte, 0x01, central->getAddress(), getAddress(), payload));
+				pendingQueue->push(configPacket);
+				pendingQueue->push(central->getMessages()->find(0x10));
+				payload.clear();
+				pendingBidCoSQueues->push(pendingQueue);
+				serviceMessages->setConfigPending(true);
+			}
+		}
+
+		central->enqueuePendingQueues(_address);
+	}
+	catch(const std::exception& ex)
+	{
+		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+	}
+	catch(BaseLib::Exception& ex)
+	{
+		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+	}
+	catch(...)
+	{
+		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+	}
+	return Variable::createError(-32500, "Unknown application error.");
+}
+
 PVariable BidCoSPeer::getDeviceDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, std::map<std::string, bool> fields)
 {
 	try
@@ -3865,4 +3938,5 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
     }
     return Variable::createError(-32500, "Unknown application error. See error log for more details.");
 }
+
 }

@@ -160,16 +160,16 @@ if [ $? -eq 0 ]; then
 	[ $? -ne 0 ] && exit 1
 fi
 
-wget -P $FIRMWAREDIR https://www.eq-3.de/Downloads/Software/Firmware/HM-LC-Bl1PBU-FM_update_V2_8_2_150713.tgz
+wget -P $FIRMWAREDIR https://www.eq-3.de/Downloads/Software/Firmware/HM-LC-Bl1PBU-FM_update_V2_11_1_161212.tgz
 if [ $? -eq 0 ]; then
-	tar -zxf $FIRMWAREDIR/HM-LC-Bl1PBU-FM_update_V2_8_2_150713.tgz -C $FIRMWAREDIR
+	tar -zxf $FIRMWAREDIR/HM-LC-Bl1PBU-FM_update_V2_11_1_161212.tgz -C $FIRMWAREDIR
 	[ $? -ne 0 ] && exit 1
-	mv $FIRMWAREDIR/HM-LC-Bl1PBU-FM_update_V2_8_2_150713.eq3 $SCRIPTDIR/0000.0000006A.fw
+	mv $FIRMWAREDIR/HM-LC-Bl1PBU-FM_update_V2_11_1_161212.eq3 $SCRIPTDIR/0000.0000006A.fw
 	[ $? -ne 0 ] && exit 1
-	rm $FIRMWAREDIR/HM-LC-Bl1PBU-FM_update_V2_8_2_150713.tgz
+	rm $FIRMWAREDIR/HM-LC-Bl1PBU-FM_update_V2_11_1_161212.tgz
 	rm $FIRMWAREDIR/changelog.txt
 	rm $FIRMWAREDIR/info
-	echo "28" > $SCRIPTDIR/0000.0000006A.version
+	echo "2B" > $SCRIPTDIR/0000.0000006A.version
 	[ $? -ne 0 ] && exit 1
 fi
 

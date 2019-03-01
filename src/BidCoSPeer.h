@@ -215,11 +215,6 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         /**
          * {@inheritDoc}
          */
-        virtual PVariable getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, bool checkAcls);
-
-        /**
-         * {@inheritDoc}
-         */
         virtual PVariable putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, PVariable variables, bool checkAcls, bool onlyPushing = false);
 
         /**

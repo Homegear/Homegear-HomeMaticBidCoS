@@ -2752,6 +2752,79 @@ PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, i
     return Variable::createError(-32500, "Unknown application error.");
 }
 
+PVariable BidCoSPeer::forceConfigUpdate(BaseLib::PRpcClientInfo clientInfo)
+{
+	try
+	{
+		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::CONFIG));
+		queue->noSending = true;
+		std::vector<uint8_t> payload;
+		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
+
+		uint8_t controlByte = 0xA0;
+		//Always send config start packet as burst packet => no ACK otherwise for some devices
+		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
+
+		for(Functions::iterator i = _rpcDevice->functions.begin(); i != _rpcDevice->functions.end(); ++i)
+		{
+			std::shared_ptr<BidCoSQueue> pendingQueue;
+			int32_t channel = i->first;
+			//Walk through all lists to request master config if necessary
+			if(!_rpcDevice->functions.at(channel)->configParameters->parameters.empty())
+			{
+				PParameterGroup masterSet = _rpcDevice->functions.at(channel)->configParameters;
+				for(Lists::iterator k = masterSet->lists.begin(); k != masterSet->lists.end(); ++k)
+				{
+					pendingQueue.reset(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::CONFIG));
+					pendingQueue->noSending = true;
+					payload.push_back(channel);
+					payload.push_back(0x04);
+					payload.push_back(0);
+					payload.push_back(0);
+					payload.push_back(0);
+					payload.push_back(0);
+					payload.push_back(k->first);
+					auto configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), controlByte, 0x01, central->getAddress(), getAddress(), payload));
+					pendingQueue->push(configPacket);
+					pendingQueue->push(central->getMessages()->find(0x10));
+					payload.clear();
+					pendingBidCoSQueues->push(pendingQueue);
+					serviceMessages->setConfigPending(true);
+				}
+			}
+
+			if(!_rpcDevice->functions[channel]->linkReceiverFunctionTypes.empty() || !_rpcDevice->functions[channel]->linkSenderFunctionTypes.empty())
+			{
+				pendingQueue.reset(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::CONFIG));
+				pendingQueue->noSending = true;
+				payload.push_back(channel);
+				payload.push_back(0x03);
+				auto configPacket = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(getMessageCounter(), controlByte, 0x01, central->getAddress(), getAddress(), payload));
+				pendingQueue->push(configPacket);
+				pendingQueue->push(central->getMessages()->find(0x10));
+				payload.clear();
+				pendingBidCoSQueues->push(pendingQueue);
+				serviceMessages->setConfigPending(true);
+			}
+		}
+
+		central->enqueuePendingQueues(_address);
+	}
+	catch(const std::exception& ex)
+	{
+		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+	}
+	catch(BaseLib::Exception& ex)
+	{
+		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+	}
+	catch(...)
+	{
+		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
+	}
+	return Variable::createError(-32500, "Unknown application error.");
+}
+
 PVariable BidCoSPeer::getDeviceDescription(BaseLib::PRpcClientInfo clientInfo, int32_t channel, std::map<std::string, bool> fields)
 {
 	try
@@ -3223,78 +3296,6 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 			raiseRPCUpdateDevice(_peerID, channel, _serialNumber + ":" + std::to_string(channel), 0);
 		}
 		return PVariable(new Variable(VariableType::tVoid));
-	}
-	catch(const std::exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    return Variable::createError(-32500, "Unknown application error.");
-}
-
-PVariable BidCoSPeer::getParamset(BaseLib::PRpcClientInfo clientInfo, int32_t channel, ParameterGroup::Type::Enum type, uint64_t remoteID, int32_t remoteChannel, bool checkAcls)
-{
-	try
-	{
-		if(_disposing) return Variable::createError(-32500, "Peer is disposing.");
-		if(channel < 0) channel = 0;
-		if(remoteChannel < 0) remoteChannel = 0;
-		Functions::iterator functionIterator = _rpcDevice->functions.find(channel);
-		if(functionIterator == _rpcDevice->functions.end()) return Variable::createError(-2, "Unknown channel");
-		if(type == ParameterGroup::Type::none) type = ParameterGroup::Type::link;
-		PParameterGroup parameterGroup = getParameterSet(channel, type);
-		if(!parameterGroup) return Variable::createError(-3, "Unknown parameter set");
-		PVariable variables(new Variable(VariableType::tStruct));
-
-		for(Parameters::iterator i = parameterGroup->parameters.begin(); i != parameterGroup->parameters.end(); ++i)
-		{
-			if(!i->second || i->second->id.empty() || !i->second->visible) continue;
-			if(!i->second->visible && !i->second->service && !i->second->internal && !i->second->transform)
-			{
-				GD::out.printDebug("Debug: Omitting parameter " + i->second->id + " because of it's ui flag.");
-				continue;
-			}
-			PVariable element;
-			if(type == ParameterGroup::Type::Enum::variables)
-			{
-				if(!i->second->readable) continue;
-				if(valuesCentral.find(channel) == valuesCentral.end()) continue;
-				if(valuesCentral[channel].find(i->second->id) == valuesCentral[channel].end()) continue;
-				std::vector<uint8_t> parameterData = valuesCentral[channel][i->second->id].getBinaryData();
-				element = i->second->convertFromPacket(parameterData);
-			}
-			else if(type == ParameterGroup::Type::Enum::config)
-			{
-				if(configCentral.find(channel) == configCentral.end()) continue;
-				if(configCentral[channel].find(i->second->id) == configCentral[channel].end()) continue;
-				std::vector<uint8_t> parameterData = configCentral[channel][i->second->id].getBinaryData();
-				element = i->second->convertFromPacket(parameterData);
-			}
-			else if(type == ParameterGroup::Type::Enum::link)
-			{
-				std::shared_ptr<BaseLib::Systems::BasicPeer> remotePeer;
-				if(remoteID == 0) remoteID = 0xFFFFFFFFFFFFFFFF; //Remote peer is central
-				remotePeer = getPeer(channel, remoteID, remoteChannel);
-				if(!remotePeer) return Variable::createError(-3, "Not paired to this peer.");
-				if(linksCentral.find(channel) == linksCentral.end()) continue;
-				if(linksCentral[channel][remotePeer->address][remotePeer->channel].find(i->second->id) == linksCentral[channel][remotePeer->address][remotePeer->channel].end()) continue;
-				if(remotePeer->channel != remoteChannel) continue;
-				std::vector<uint8_t> parameterData = linksCentral[channel][remotePeer->address][remotePeer->channel][i->second->id].getBinaryData();
-				element = i->second->convertFromPacket(parameterData);
-			}
-
-			if(!element) continue;
-			if(element->type == VariableType::tVoid) continue;
-			variables->structValue->insert(StructElement(i->second->id, element));
-		}
-		return variables;
 	}
 	catch(const std::exception& ex)
     {
@@ -3865,4 +3866,5 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
     }
     return Variable::createError(-32500, "Unknown application error. See error log for more details.");
 }
+
 }

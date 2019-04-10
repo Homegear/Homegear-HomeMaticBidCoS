@@ -1861,14 +1861,14 @@ void HM_LGW::listen()
 				catch(const BaseLib::SocketClosedException& ex)
 				{
 					_stopped = true;
-					_out.printWarning("Warning: " + ex.what());
+					_out.printWarning("Warning: " + std::string(ex.what()));
 					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 					continue;
 				}
 				catch(const BaseLib::SocketOperationException& ex)
 				{
 					_stopped = true;
-					_out.printError("Error: " + ex.what());
+					_out.printError("Error: " + std::string(ex.what()));
 					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 					continue;
 				}
@@ -1975,13 +1975,13 @@ void HM_LGW::listenKeepAlive()
 				catch(const BaseLib::SocketClosedException& ex)
 				{
 					_stopped = true;
-					_out.printWarning("Warning: " + ex.what());
+					_out.printWarning("Warning: " + std::string(ex.what()));
 					continue;
 				}
 				catch(const BaseLib::SocketOperationException& ex)
 				{
 					_stopped = true;
-					_out.printError("Error: " + ex.what());
+					_out.printError("Error: " + std::string(ex.what()));
 					continue;
 				}
 				if(data.empty() || data.size() > 1000000) continue;

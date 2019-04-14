@@ -1075,7 +1075,7 @@ void HM_LGW::doInit()
 			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please double check the setting \"lanKey\" in homematicbidcos.conf. The key is most probably wrong. Stopping listening.");
 			return;
 		}
-		uint8_t packetIndex = (_math.getNumber(parts.at(0).at(1)) << 4) + _math.getNumber(parts.at(0).at(2));
+		uint8_t packetIndex = (BaseLib::Math::getNumber(parts.at(0).at(1)) << 4) + BaseLib::Math::getNumber(parts.at(0).at(2));
 		std::vector<char> response = { '>', _bl->hf.getHexChar(packetIndex >> 4), _bl->hf.getHexChar(packetIndex & 0xF), ',', '0', '0', '0', '0', '\r', '\n' };
 		send(response, false);
 
@@ -2057,7 +2057,7 @@ bool HM_LGW::aesKeyExchange(std::vector<uint8_t>& data)
 		}
 		if(data.at(startPos - 4) == 'V' && data.at(startPos - 1) == ',')
 		{
-			uint8_t packetIndex = (_math.getNumber(data.at(startPos - 3)) << 4) + _math.getNumber(data.at(startPos - 2));
+			uint8_t packetIndex = (BaseLib::Math::getNumber(data.at(startPos - 3)) << 4) + BaseLib::Math::getNumber(data.at(startPos - 2));
 			packetIndex++;
 			if(length != 32)
 			{
@@ -2174,7 +2174,7 @@ bool HM_LGW::aesKeyExchangeKeepAlive(std::vector<uint8_t>& data)
 		}
 		if(data.at(startPos - 4) == 'V' && data.at(startPos - 1) == ',')
 		{
-			_packetIndexKeepAlive = (_math.getNumber(data.at(startPos - 3)) << 4) + _math.getNumber(data.at(startPos - 2));
+			_packetIndexKeepAlive = (BaseLib::Math::getNumber(data.at(startPos - 3)) << 4) + BaseLib::Math::getNumber(data.at(startPos - 2));
 			_packetIndexKeepAlive++;
 			if(length != 32)
 			{

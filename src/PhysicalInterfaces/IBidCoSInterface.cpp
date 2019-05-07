@@ -582,6 +582,7 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 {
 	try
 	{
+        std::lock_guard<std::mutex> sendPacketGuard(_sendPacketMutex);
 		if(!packet)
 		{
 			_out.printWarning("Warning: Packet was nullptr.");

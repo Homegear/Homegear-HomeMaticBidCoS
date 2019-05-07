@@ -85,6 +85,8 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 		std::string packetString = packet->hexString();
 		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
 		writeToDevice("As" + packet->hexString() + "\n" + (_updateMode ? "" : "Ar\n"));
+        if(packet->controlByte() & 0x10) std::this_thread::sleep_for(std::chrono::milliseconds(360));
+        else std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
 	catch(const std::exception& ex)
@@ -404,8 +406,8 @@ void Cul::startListening()
 		openDevice();
 		if(_fileDescriptor->descriptor == -1) return;
 		_stopped = false;
-		writeToDevice("X21\nAr\n");
 		std::this_thread::sleep_for(std::chrono::milliseconds(400));
+        writeToDevice("X21\nAr\n");
 		if(_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Cul::listen, this);
 		else GD::bl->threadManager.start(_listenThread, true, &Cul::listen, this);
 	}

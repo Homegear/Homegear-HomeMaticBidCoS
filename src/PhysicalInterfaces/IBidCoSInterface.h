@@ -94,6 +94,7 @@ protected:
 	std::map<int32_t, std::set<int64_t>> _queueIds;
 	std::mutex _peersMutex;
 	std::map<int32_t, PeerInfo> _peers;
+	std::mutex _sendPacketMutex;
 
 	BaseLib::Output _out;
 	bool _initComplete = false;

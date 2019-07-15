@@ -760,8 +760,8 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 	{
 		if(_disposing) return false;
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
-		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->timeReceived() + 5000) GD::out.printError("Error: Packet was processed more than 5 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
-		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->timeReceived()) << " HomeMatic BidCoS packet received (" << senderID << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
+		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->getTimeReceived() + 5000) GD::out.printError("Error: Packet was processed more than 5 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
+		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->getTimeReceived()) << " HomeMatic BidCoS packet received (" << senderID << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
 		if(!bidCoSPacket) return false;
 
 		// {{{ Intercept packet
@@ -792,11 +792,11 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 			}
 			return false;
 		}*/
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Getting peer for packet " + packet->hexString() + ".");
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Getting peer for packet " + bidCoSPacket->hexString() + ".");
 		std::shared_ptr<BidCoSPeer> peer(getPeer(bidCoSPacket->senderAddress()));
 		if(peer && bidCoSPacket->messageType() != 0x02 && bidCoSPacket->messageType() != 0x03)
 		{
-			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + packet->hexString() + " is now passed to checkForBestInterface.");
+			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + bidCoSPacket->hexString() + " is now passed to checkForBestInterface.");
 			peer->checkForBestInterface(senderID, bidCoSPacket->rssiDevice(), bidCoSPacket->messageCounter()); //Ignore ACK and AES handshake packets.
 			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): checkForBestInterface finished.");
 		}
@@ -804,9 +804,9 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 		if(physicalInterface->getID() != senderID) return true;
 
 		// {{{ Handle wrong ACKs
-			if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->destinationAddress() != 0 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
+			if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->destinationAddress() != 0 && bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)
 			{
-				std::shared_ptr<BidCoSPacket> sentPacket(_sentPackets.get(packet->senderAddress()));
+				std::shared_ptr<BidCoSPacket> sentPacket(_sentPackets.get(bidCoSPacket->senderAddress()));
 				if(sentPacket && sentPacket->messageCounter() != bidCoSPacket->messageCounter())
 				{
 					_bl->out.printInfo("Info: Ignoring ACK with wrong message counter.");
@@ -816,8 +816,8 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 		// }}}
 
 		bool handled = false;
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + packet->hexString() + " is now passed to _receivedPackets.set.");
-		if(_receivedPackets.set(bidCoSPacket->senderAddress(), bidCoSPacket, bidCoSPacket->timeReceived())) handled = true;
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + bidCoSPacket->hexString() + " is now passed to _receivedPackets.set.");
+		if(_receivedPackets.set(bidCoSPacket->senderAddress(), bidCoSPacket, bidCoSPacket->getTimeReceived())) handled = true;
 		else
 		{
 			std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.get(bidCoSPacket->senderAddress());
@@ -849,7 +849,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 				return true; //Packet is handled by queue. Don't check if queue is empty!
 			}
 		}
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + packet->hexString() + " is now passed to the peer.");
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + bidCoSPacket->hexString() + " is now passed to the peer.");
 		if(team)
 		{
 			team->packetReceived(bidCoSPacket);
@@ -997,8 +997,8 @@ void HomeMaticCentral::sendPacket(std::shared_ptr<IBidCoSInterface> physicalInte
 		/*int64_t time = _bl->hf.getTime();
 		if(_physicalInterface->autoResend())
 		{
-			if((packet->messageType() == 0x02 && packet->controlByte() == 0x80 && packet->payload()->size() == 1 && packet->payload()->at(0) == 0)
-				|| !((packet->controlByte() & 0x01) && (packet->payload()->empty() || (packet->payload()->size() == 1 && packet->payload()->at(0) == 0))))
+			if((packet->messageType() == 0x02 && packet->controlByte() == 0x80 && packet->payload().size() == 1 && packet->payload().at(0) == 0)
+				|| !((packet->controlByte() & 0x01) && (packet->payload().empty() || (packet->payload().size() == 1 && packet->payload().at(0) == 0))))
 			{
 				time -= 80;
 			}
@@ -1272,9 +1272,9 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 						packet.reset(new BidCoSPacket());
 						packet->import(element, false);
 						peerAddress = packet->senderAddress();
-						deviceType = (packet->payload()->at(1) << 8) + packet->payload()->at(2);
-						firmwareVersion = packet->payload()->at(0);
-						serialNumber.insert(serialNumber.end(), &packet->payload()->at(3), &packet->payload()->at(3) + 10);
+						deviceType = (packet->payload().at(1) << 8) + packet->payload().at(2);
+						firmwareVersion = packet->payload().at(0);
+						serialNumber.insert(serialNumber.end(), &packet->payload().at(3), &packet->payload().at(3) + 10);
 						break;
 					}
 					else
@@ -1982,7 +1982,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 				while(waitIndex < 100) //Wait, wait, wait. The WOR preamble alone needs 360ms with the CUL! And AES handshakes need time, too.
 				{
 					receivedPacket = _receivedPackets.get(peer->getAddress());
-					if(receivedPacket && receivedPacket->timeReceived() > time && receivedPacket->payload()->size() >= 1 && receivedPacket->destinationAddress() == _address && receivedPacket->messageType() == 2)
+					if(receivedPacket && receivedPacket->getTimeReceived() > time && receivedPacket->payload().size() >= 1 && receivedPacket->destinationAddress() == _address && receivedPacket->messageType() == 2)
 					{
 						GD::out.printInfo("Info: Enter bootloader packet was accepted by peer.");
 						responseReceived = true;
@@ -2015,9 +2015,9 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			while(waitIndex < 1000)
 			{
 				receivedPacket = _receivedPackets.get(peer->getAddress());
-				if(receivedPacket && receivedPacket->timeReceived() > time && receivedPacket->payload()->size() > 1 && receivedPacket->payload()->at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->messageType() == 0x10)
+				if(receivedPacket && receivedPacket->getTimeReceived() > time && receivedPacket->payload().size() > 1 && receivedPacket->payload().at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->messageType() == 0x10)
 				{
-					std::string serialNumber((char*)&receivedPacket->payload()->at(1), receivedPacket->payload()->size() - 1);
+					std::string serialNumber((char*)&receivedPacket->payload().at(1), receivedPacket->payload().size() - 1);
 					if(serialNumber == peer->getSerialNumber())
 					{
 						GD::out.printInfo("Info: Update request received from peer " + std::to_string(peer->getID()) + ".");
@@ -2026,7 +2026,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 					}
 					else GD::out.printWarning("Warning: Update request received, but serial number does not match. Serial number in update packet: " + serialNumber + ". Expected serial number: " + peer->getSerialNumber());
 				}
-				else if(receivedPacket && receivedPacket->timeReceived() > time && receivedPacket->messageType() != 0x02) GD::out.printWarning("Warning: Received packet is no update request: " + receivedPacket->hexString());
+				else if(receivedPacket && receivedPacket->getTimeReceived() > time && receivedPacket->messageType() != 0x02) GD::out.printWarning("Warning: Received packet is no update request: " + receivedPacket->hexString());
 				std::this_thread::sleep_for(std::chrono::milliseconds(50));
 				waitIndex++;
 			}
@@ -2060,7 +2060,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			while(waitIndex < 100)
 			{
 				receivedPacket = _receivedPackets.get(peer->getAddress());
-				if(receivedPacket && receivedPacket->payload()->size() == 1 && receivedPacket->payload()->at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->controlByte() == 0 && receivedPacket->messageType() == 2)
+				if(receivedPacket && receivedPacket->payload().size() == 1 && receivedPacket->payload().at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->controlByte() == 0 && receivedPacket->messageType() == 2)
 				{
 					requestReceived = true;
 					break;
@@ -2129,7 +2129,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 				while(waitIndex < 15)
 				{
 					receivedPacket = _receivedPackets.get(peer->getAddress());
-					if(receivedPacket && receivedPacket->messageCounter() == messageCounter && receivedPacket->payload()->size() == 1 && receivedPacket->payload()->at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->controlByte() == 0 && receivedPacket->messageType() == 2)
+					if(receivedPacket && receivedPacket->messageCounter() == messageCounter && receivedPacket->payload().size() == 1 && receivedPacket->payload().at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->controlByte() == 0 && receivedPacket->messageType() == 2)
 					{
 						messageCounter++;
 						okReceived = true;
@@ -2925,7 +2925,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			GD::out.printError("Error: Pairing packet rejected, because this peer is already paired to central with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ".");
 			return;
 		}
-		if(packet->payload()->size() < 17)
+		if(packet->payload().size() < 17)
 		{
 			GD::out.printError("Error: Pairing packet is too small (payload size has to be at least 17).");
 			return;
@@ -2935,9 +2935,9 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 		serialNumber.reserve(10);
 		for(uint32_t i = 3; i < 13; i++)
 		{
-			serialNumber.push_back((char)packet->payload()->at(i));
+			serialNumber.push_back((char)packet->payload().at(i));
 		}
-		uint32_t deviceType = (packet->payload()->at(1) << 8) + packet->payload()->at(2);
+		uint32_t deviceType = (packet->payload().at(1) << 8) + packet->payload().at(2);
 
 		std::shared_ptr<BidCoSPeer> peer(getPeer(packet->senderAddress()));
 		if(peer && (peer->getSerialNumber() != serialNumber || peer->getDeviceType() != deviceType))
@@ -2959,12 +2959,12 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 			queue = _bidCoSQueueManager.createQueue(getPhysicalInterface(packet->senderAddress()), BidCoSQueueType::PAIRING, packet->senderAddress());
 
 			//Do not save here
-			queue->peer = createPeer(packet->senderAddress(), packet->payload()->at(0), deviceType, serialNumber, 0, 0, packet, false);
+			queue->peer = createPeer(packet->senderAddress(), packet->payload().at(0), deviceType, serialNumber, 0, 0, packet, false);
 			if(!queue->peer)
 			{
                 std::lock_guard<std::mutex> newPeersGuard(_newPeersMutex);
                 _pairingMessages.emplace_back(std::make_shared<PairingMessage>("l10n.homematicBidcos.pairing.unsupportedDeviceType", std::list<std::string>{ BaseLib::HelperFunctions::getHexString(deviceType, 4) }));
-				GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType, 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload()->at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
+				GD::out.printWarning("Warning: Device type not supported: 0x" + BaseLib::HelperFunctions::getHexString(deviceType, 4) + ", firmware version: 0x" + BaseLib::HelperFunctions::getHexString(packet->payload().at(0), 2) + ". Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 				return;
 			}
 			peer = queue->peer;
@@ -3212,17 +3212,17 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 		if(!peer) return;
 		PHomegearDevice rpcDevice = peer->getRpcDevice();
 		//Config changed in device
-		if(packet->payload()->size() > 7 && packet->payload()->at(0) == 0x05)
+		if(packet->payload().size() > 7 && packet->payload().at(0) == 0x05)
 		{
 			if(packet->controlByte() & 0x20) sendOK(packet->messageCounter(), packet->senderAddress());
-			if(packet->payload()->size() == 8) return; //End packet
-			int32_t list = packet->payload()->at(6);
-			int32_t channel = packet->payload()->at(1); //??? Not sure if this really is the channel
-			int32_t remoteAddress = (packet->payload()->at(2) << 16) + (packet->payload()->at(3) << 8) + packet->payload()->at(4);
-			int32_t remoteChannel = (remoteAddress == 0) ? 0 : packet->payload()->at(5);
+			if(packet->payload().size() == 8) return; //End packet
+			int32_t list = packet->payload().at(6);
+			int32_t channel = packet->payload().at(1); //??? Not sure if this really is the channel
+			int32_t remoteAddress = (packet->payload().at(2) << 16) + (packet->payload().at(3) << 8) + packet->payload().at(4);
+			int32_t remoteChannel = (remoteAddress == 0) ? 0 : packet->payload().at(5);
 			ParameterGroup::Type::Enum type = (remoteAddress != 0) ? ParameterGroup::Type::link : ParameterGroup::Type::config;
-			int32_t startIndex = packet->payload()->at(7);
-			int32_t endIndex = startIndex + packet->payload()->size() - 9;
+			int32_t startIndex = packet->payload().at(7);
+			int32_t endIndex = startIndex + packet->payload().size() - 9;
 			Functions::iterator functionIterator = rpcDevice->functions.find(channel);
 			if(functionIterator == rpcDevice->functions.end())
 			{
@@ -3302,20 +3302,20 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 		bool multiPacket = false;
 		bool multiPacketEnd = false;
 		//Peer request
-		if(sentPacket && sentPacket->payload()->size() >= 2 && sentPacket->payload()->at(1) == 0x03)
+		if(sentPacket && sentPacket->payload().size() >= 2 && sentPacket->payload().at(1) == 0x03)
 		{
-			int32_t localChannel = sentPacket->payload()->at(0);
+			int32_t localChannel = sentPacket->payload().at(0);
 			PFunction rpcFunction = rpcDevice->functions[localChannel];
 			bool peerFound = false;
-			if(packet->payload()->size() >= 5)
+			if(packet->payload().size() >= 5)
 			{
-				for(uint32_t i = 1; i < packet->payload()->size() - 1; i += 4)
+				for(uint32_t i = 1; i < packet->payload().size() - 1; i += 4)
 				{
-					int32_t peerAddress = (packet->payload()->at(i) << 16) + (packet->payload()->at(i + 1) << 8) + packet->payload()->at(i + 2);
+					int32_t peerAddress = (packet->payload().at(i) << 16) + (packet->payload().at(i + 1) << 8) + packet->payload().at(i + 2);
 					if(peerAddress != 0)
 					{
 						peerFound = true;
-						int32_t remoteChannel = packet->payload()->at(i + 3);
+						int32_t remoteChannel = packet->payload().at(i + 3);
 						if(rpcFunction->hasGroup) //Peer is team
 						{
 							//Don't add team if address is peer's, because then the team already exists
@@ -3354,7 +3354,7 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 				//Peer has no team yet so set it needs to be defined
 				setTeam(nullptr, peer->getSerialNumber(), localChannel, "", 0, true, false);
 			}
-			if(packet->payload()->size() >= 2 && packet->payload()->at(0) == 0x03 && packet->payload()->at(1) == 0x00)
+			if(packet->payload().size() >= 2 && packet->payload().at(0) == 0x03 && packet->payload().at(1) == 0x00)
 			{
 				//multiPacketEnd was received unexpectedly. Because of the delay it was received after the peer request packet was sent.
 				//As the peer request is popped already, queue it again.
@@ -3372,25 +3372,25 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 				}
 			}
 		}
-		else if(sentPacket && sentPacket->payload()->size() >= 7 && sentPacket->payload()->at(1) == 0x04) //Config request
+		else if(sentPacket && sentPacket->payload().size() >= 7 && sentPacket->payload().at(1) == 0x04) //Config request
 		{
-			int32_t channel = sentPacket->payload()->at(0);
-			int32_t list = sentPacket->payload()->at(6);
-			int32_t remoteAddress = (sentPacket->payload()->at(2) << 16) + (sentPacket->payload()->at(3) << 8) + sentPacket->payload()->at(4);
-			int32_t remoteChannel = (remoteAddress == 0) ? 0 : sentPacket->payload()->at(5);
+			int32_t channel = sentPacket->payload().at(0);
+			int32_t list = sentPacket->payload().at(6);
+			int32_t remoteAddress = (sentPacket->payload().at(2) << 16) + (sentPacket->payload().at(3) << 8) + sentPacket->payload().at(4);
+			int32_t remoteChannel = (remoteAddress == 0) ? 0 : sentPacket->payload().at(5);
 			ParameterGroup::Type::Enum type = (remoteAddress != 0) ? ParameterGroup::Type::link : ParameterGroup::Type::config;
 			PVariable parametersToEnforce;
 			if(!peer->getPairingComplete()) parametersToEnforce.reset(new Variable(VariableType::tStruct));
-			if((packet->controlByte() & 0x20) && (packet->payload()->at(0) == 3)) continuousData = true;
-			if(!continuousData && (packet->payload()->at(packet->payload()->size() - 2) != 0 || packet->payload()->at(packet->payload()->size() - 1) != 0)) multiPacket = true;
+			if((packet->controlByte() & 0x20) && (packet->payload().at(0) == 3)) continuousData = true;
+			if(!continuousData && (packet->payload().at(packet->payload().size() - 2) != 0 || packet->payload().at(packet->payload().size() - 1) != 0)) multiPacket = true;
 			//Some devices have a payload size of 3
-			if(continuousData && packet->payload()->size() == 3 && packet->payload()->at(1) == 0 && packet->payload()->at(2) == 0) multiPacketEnd = true;
+			if(continuousData && packet->payload().size() == 3 && packet->payload().at(1) == 0 && packet->payload().at(2) == 0) multiPacketEnd = true;
 			//And some a payload size of 2
-			if(continuousData && packet->payload()->size() == 2 && packet->payload()->at(1) == 0) multiPacketEnd = true;
+			if(continuousData && packet->payload().size() == 2 && packet->payload().at(1) == 0) multiPacketEnd = true;
 			if(continuousData && !multiPacketEnd)
 			{
-				int32_t startIndex = packet->payload()->at(1);
-				int32_t endIndex = startIndex + packet->payload()->size() - 3;
+				int32_t startIndex = packet->payload().at(1);
+				int32_t endIndex = startIndex + packet->payload().size() - 3;
 				Functions::iterator functionIterator = rpcDevice->functions.find(channel);
 				PParameterGroup parameterGroup;
 				if(functionIterator != rpcDevice->functions.end()) parameterGroup = functionIterator->second->getParameterGroup(type);
@@ -3479,10 +3479,10 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
 				}
 				else
 				{
-					int32_t length = multiPacket ? packet->payload()->size() : packet->payload()->size() - 2;
+					int32_t length = multiPacket ? packet->payload().size() : packet->payload().size() - 2;
 					for(int32_t i = 1; i < length; i += 2)
 					{
-						int32_t index = packet->payload()->at(i);
+						int32_t index = packet->payload().at(i);
 						std::vector<PParameter> packetParameters;
 						parameterGroup->getIndices(index, index, list, packetParameters);
 						for(std::vector<PParameter>::iterator j = packetParameters.begin(); j != packetParameters.end(); ++j)
@@ -3790,7 +3790,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 		std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.get(packet->senderAddress());
 		if(!queue) return;
 		std::shared_ptr<BidCoSPacket> sentPacket(_sentPackets.get(packet->senderAddress()));
-		if(packet->payload()->at(0) == 0x80 || packet->payload()->at(0) == 0x84)
+		if(packet->payload().at(0) == 0x80 || packet->payload().at(0) == 0x84)
 		{
 			if(_bl->debugLevel >= 2)
 			{
@@ -3805,7 +3805,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 		bool aesKeyChanged = false;
 		if(queue->getQueueType() == BidCoSQueueType::PAIRING)
 		{
-			if(sentPacket && sentPacket->messageType() == 0x01 && sentPacket->payload()->at(0) == 0x00 && sentPacket->payload()->at(1) == 0x06)
+			if(sentPacket && sentPacket->messageType() == 0x01 && sentPacket->payload().at(0) == 0x00 && sentPacket->payload().at(1) == 0x06)
 			{
 				if(!peerExists(packet->senderAddress()))
 				{
@@ -3914,7 +3914,7 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 		}
 		else if(queue->getQueueType() == BidCoSQueueType::UNPAIRING)
 		{
-			if((sentPacket && sentPacket->messageType() == 0x01 && sentPacket->payload()->at(0) == 0x00 && sentPacket->payload()->at(1) == 0x06) || (sentPacket && sentPacket->messageType() == 0x11 && sentPacket->payload()->at(0) == 0x04 && sentPacket->payload()->at(1) == 0x00))
+			if((sentPacket && sentPacket->messageType() == 0x01 && sentPacket->payload().at(0) == 0x00 && sentPacket->payload().at(1) == 0x06) || (sentPacket && sentPacket->messageType() == 0x11 && sentPacket->payload().at(0) == 0x04 && sentPacket->payload().at(1) == 0x00))
 			{
 				std::shared_ptr<BidCoSPeer> peer = getPeer(packet->senderAddress());
 				if(peer)

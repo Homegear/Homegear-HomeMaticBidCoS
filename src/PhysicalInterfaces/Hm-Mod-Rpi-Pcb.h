@@ -118,7 +118,6 @@ class Hm_Mod_Rpi_Pcb  : public IBidCoSInterface
 
         struct termios _termios;
 
-        BaseLib::Math _math;
         std::thread _initThread;
 
         std::mutex _getResponseMutex;

@@ -97,7 +97,7 @@ void AesHandshake::collectGarbage()
 		int64_t time = _bl->hf.getTime();
 		for(std::map<int32_t, HandshakeInfo>::iterator i = _handshakeInfoRequest.begin(); i != _handshakeInfoRequest.end(); ++i)
 		{
-			if(!i->second.mFrame || time - i->second.mFrame->timeReceived() > 5000) toDelete.push_back(i->first);
+			if(!i->second.mFrame || time - i->second.mFrame->getTimeReceived() > 5000) toDelete.push_back(i->first);
 		}
 		for(std::vector<int32_t>::iterator i = toDelete.begin(); i != toDelete.end(); ++i)
 		{
@@ -107,7 +107,7 @@ void AesHandshake::collectGarbage()
 		toDelete.clear();
 		for(std::map<int32_t, HandshakeInfo>::iterator i = _handshakeInfoResponse.begin(); i != _handshakeInfoResponse.end(); ++i)
 		{
-			if(!i->second.mFrame || time - i->second.mFrame->timeSending() > 5000) toDelete.push_back(i->first);
+			if(!i->second.mFrame || time - i->second.mFrame->getTimeSending() > 5000) toDelete.push_back(i->first);
 		}
 		for(std::vector<int32_t>::iterator i = toDelete.begin(); i != toDelete.end(); ++i)
 		{
@@ -149,7 +149,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getCFrame(std::shared_ptr<BidCoSPack
 		cPayload.push_back(BaseLib::HelperFunctions::getRandomNumber(0, 255));
 		cPayload.push_back(0);
 		cFrame.reset(new BidCoSPacket(mFrame->messageCounter(), 0xA0, 0x02, _myAddress, mFrame->senderAddress(), cPayload));
-		cFrame->setTimeReceived(mFrame->timeReceived());
+		cFrame->setTimeReceived(mFrame->getTimeReceived());
 	}
     catch(const std::exception& ex)
     {
@@ -197,7 +197,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		std::lock_guard<std::mutex> hanshakeInfoGuard(_handshakeInfoMutex);
 		HandshakeInfo* handshakeInfo = &_handshakeInfoRequest[rFrame->senderAddress()];
 		int64_t time = BaseLib::HelperFunctions::getTime();
-		if(!handshakeInfo->mFrame || !handshakeInfo->cFrame || time - handshakeInfo->mFrame->timeReceived() > 1000) return aFrame;
+		if(!handshakeInfo->mFrame || !handshakeInfo->cFrame || time - handshakeInfo->mFrame->getTimeReceived() > 1000) return aFrame;
 		handshakeInfo->handshakeStarted = true;
 		mFrame = handshakeInfo->mFrame;
 		cFrame = handshakeInfo->cFrame;
@@ -220,7 +220,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		uint32_t j = 0;
 		for(std::vector<uint8_t>::iterator i = rfKey.begin(); i != rfKey.end(); ++i, ++j)
 		{
-			if(j < 6) tempKey.push_back(*i ^ cFrame->payload()->at(j + 1));
+			if(j < 6) tempKey.push_back(*i ^ cFrame->payload().at(j + 1));
 			else tempKey.push_back(*i);
 		}
 
@@ -233,7 +233,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 
 		std::vector<uint8_t> pd(tempKey.size());
 		if(!_decryptHandle) return aFrame;
-		if((result = gcry_cipher_decrypt(_decryptHandle, &pd.at(0), pd.size(), &rFrame->payload()->at(0), rFrame->payload()->size())) != GPG_ERR_NO_ERROR)
+		if((result = gcry_cipher_decrypt(_decryptHandle, &pd.at(0), pd.size(), rFrame->payload().data(), rFrame->payload().size())) != GPG_ERR_NO_ERROR)
 		{
 			_out.printError("Error decrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 			return aFrame;
@@ -242,7 +242,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		j = 1;
 		for(std::vector<uint8_t>::iterator i = pd.begin(); i != pd.end(); ++i, ++j)
 		{
-			if(j < mFrame->payload()->size()) *i = *i ^ mFrame->payload()->at(j);
+			if(j < mFrame->payload().size()) *i = *i ^ mFrame->payload().at(j);
 			else break;
 		}
 
@@ -294,7 +294,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 			}
 			else if(i == 15)
 			{
-				if(!mFrame->payload()->empty() && pdd[i] != mFrame->payload()->at(0)) return aFrame;
+				if(!mFrame->payload().empty() && pdd[i] != mFrame->payload().at(0)) return aFrame;
 			}
 		}
 
@@ -306,7 +306,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getAFrame(std::shared_ptr<BidCoSPack
 		aPayload.push_back(pd.at(2));
 		aPayload.push_back(pd.at(3));
 		aFrame.reset(new BidCoSPacket(mFrame->messageCounter(), ((mFrame->controlByte() & 2) && wakeUp && mFrame->messageType() != 0) ? 0x81 : 0x80, 0x02, _myAddress, mFrame->senderAddress(), aPayload));
-		aFrame->setTimeReceived(rFrame->timeReceived());
+		aFrame->setTimeReceived(rFrame->getTimeReceived());
 	}
     catch(const std::exception& ex)
     {
@@ -361,7 +361,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 	{
 		HandshakeInfo* handshakeInfo = &_handshakeInfoResponse[cFrame->senderAddress()];
 		int64_t time = BaseLib::HelperFunctions::getTime();
-		if(!handshakeInfo->mFrame || time - handshakeInfo->mFrame->timeSending() > 1000)
+		if(!handshakeInfo->mFrame || time - handshakeInfo->mFrame->getTimeSending() > 1000)
 		{
 			_handshakeInfoMutex.unlock();
 			return rFrame;
@@ -398,7 +398,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 		uint32_t j = 0;
 		for(std::vector<uint8_t>::iterator i = rfKey.begin(); i != rfKey.end(); ++i, ++j)
 		{
-			if(j < 6) tempKey.push_back(*i ^ cFrame->payload()->at(j + 1));
+			if(j < 6) tempKey.push_back(*i ^ cFrame->payload().at(j + 1));
 			else tempKey.push_back(*i);
 		}
 
@@ -429,7 +429,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 		pdd[12] = mFrame->destinationAddress() >> 16;
 		pdd[13] = (mFrame->destinationAddress() >> 8) & 0xFF;
 		pdd[14] = mFrame->destinationAddress() & 0xFF;
-		pdd[15] = mFrame->payload()->empty() ? 0 : mFrame->payload()->at(0);
+		pdd[15] = mFrame->payload().empty() ? 0 : mFrame->payload().at(0);
 
 		std::vector<uint8_t> pd(tempKey.size());
 		if((result = gcry_cipher_encrypt(_encryptHandle, &pd.at(0), pd.size(), &pdd.at(0), pdd.size())) != GPG_ERR_NO_ERROR)
@@ -463,7 +463,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 		j = 1;
 		for(std::vector<uint8_t>::iterator i = pd.begin(); i != pd.end(); ++i, ++j)
 		{
-			if(j < mFrame->payload()->size()) *i = *i ^ mFrame->payload()->at(j);
+			if(j < mFrame->payload().size()) *i = *i ^ mFrame->payload().at(j);
 			else break;
 		}
 
@@ -476,7 +476,7 @@ std::shared_ptr<BidCoSPacket> AesHandshake::getRFrame(std::shared_ptr<BidCoSPack
 		}
 
 		rFrame.reset(new BidCoSPacket(mFrame->messageCounter(), 0xA0, 0x03, _myAddress, mFrame->destinationAddress(), rPayload));
-		rFrame->setTimeReceived(cFrame->timeReceived());
+		rFrame->setTimeReceived(cFrame->getTimeReceived());
 		_encryptMutex.unlock();
 		return rFrame;
     }
@@ -502,7 +502,7 @@ bool AesHandshake::handshakeStarted(int32_t address)
 	{
 		std::lock_guard<std::mutex> handshakeInfoGuard(_handshakeInfoMutex);
 		HandshakeInfo* handshakeInfo = &_handshakeInfoResponse[address];
-		if(!handshakeInfo->handshakeStarted || !handshakeInfo->mFrame || BaseLib::HelperFunctions::getTime() - handshakeInfo->mFrame->timeSending() > 1000)
+		if(!handshakeInfo->handshakeStarted || !handshakeInfo->mFrame || BaseLib::HelperFunctions::getTime() - handshakeInfo->mFrame->getTimeSending() > 1000)
 		{
 			return false;
 		}
@@ -532,7 +532,7 @@ bool AesHandshake::checkAFrame(std::shared_ptr<BidCoSPacket> aFrame)
 		{
 			HandshakeInfo* handshakeInfo = &_handshakeInfoResponse[aFrame->senderAddress()];
 			int64_t time = BaseLib::HelperFunctions::getTime();
-			if(!handshakeInfo->mFrame || time - handshakeInfo->mFrame->timeSending() > 1000)
+			if(!handshakeInfo->mFrame || time - handshakeInfo->mFrame->getTimeSending() > 1000)
 			{
 				_handshakeInfoMutex.unlock();
 				return false;
@@ -559,7 +559,7 @@ bool AesHandshake::checkAFrame(std::shared_ptr<BidCoSPacket> aFrame)
 		_handshakeInfoMutex.unlock();
 
 		if(!pd) return false;
-		if(aFrame->payload()->size() >= 5 && aFrame->payload()->at(aFrame->payload()->size() - 4) == pd->at(0) && aFrame->payload()->at(aFrame->payload()->size() - 3) == pd->at(1) && aFrame->payload()->at(aFrame->payload()->size() - 2) == pd->at(2) && aFrame->payload()->at(aFrame->payload()->size() - 1) == pd->at(3))
+		if(aFrame->payload().size() >= 5 && aFrame->payload().at(aFrame->payload().size() - 4) == pd->at(0) && aFrame->payload().at(aFrame->payload().size() - 3) == pd->at(1) && aFrame->payload().at(aFrame->payload().size() - 2) == pd->at(2) && aFrame->payload().at(aFrame->payload().size() - 1) == pd->at(3))
 		{
 			aFrame->setValidAesAck(true);
 			if(_bl->debugLevel >= 5) _out.printDebug("Debug: ACK AES signature is valid.");
@@ -584,13 +584,13 @@ bool AesHandshake::checkAFrame(std::shared_ptr<BidCoSPacket> aFrame)
 
 bool AesHandshake::generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChangeTemplate)
 {
-	std::vector<uint8_t>* payload = keyChangeTemplate->payload();
+	std::vector<uint8_t>& payload = keyChangeTemplate->payload();
 	std::vector<uint8_t> oldRfKey;
 	try
 	{
-		payload->at(1) += 2;
-		uint32_t index = (payload->at(1) / 2);
-		uint32_t subindex = payload->at(1) % 2;
+		payload.at(1) += 2;
+		uint32_t index = (payload.at(1) / 2);
+		uint32_t subindex = payload.at(1) % 2;
 		std::vector<uint8_t> key;
 		if(_currentRfKeyIndex != index)
 		{
@@ -606,14 +606,14 @@ bool AesHandshake::generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChan
 			return false;
 		}
 
-		if(subindex == 0) payload->insert(payload->end(), key.begin(), key.begin() + 8);
-		else payload->insert(payload->end(), key.begin() + 8, key.end());
-		payload->push_back((uint8_t)BaseLib::HelperFunctions::getRandomNumber(0, 255));
-		payload->push_back((uint8_t)BaseLib::HelperFunctions::getRandomNumber(0, 255));
-		payload->push_back(0x7E);
-		payload->push_back(0x29);
-		payload->push_back(0x6F);
-		payload->push_back(0xA5);
+		if(subindex == 0) payload.insert(payload.end(), key.begin(), key.begin() + 8);
+		else payload.insert(payload.end(), key.begin() + 8, key.end());
+		payload.push_back((uint8_t)BaseLib::HelperFunctions::getRandomNumber(0, 255));
+		payload.push_back((uint8_t)BaseLib::HelperFunctions::getRandomNumber(0, 255));
+		payload.push_back(0x7E);
+		payload.push_back(0x29);
+		payload.push_back(0x6F);
+		payload.push_back(0xA5);
 	}
 	catch(const std::exception& ex)
     {
@@ -645,14 +645,14 @@ bool AesHandshake::generateKeyChangePacket(std::shared_ptr<BidCoSPacket> keyChan
 		}
 
 		std::vector<uint8_t> encryptedPayload(oldRfKey.size());
-		if((result = gcry_cipher_encrypt(_encryptHandleKeyChange, &encryptedPayload.at(0), encryptedPayload.size(), &payload->at(0), payload->size())) != GPG_ERR_NO_ERROR)
+		if((result = gcry_cipher_encrypt(_encryptHandleKeyChange, &encryptedPayload.at(0), encryptedPayload.size(), payload.data(), payload.size())) != GPG_ERR_NO_ERROR)
 		{
 			_out.printError("Error encrypting data: " + BaseLib::Security::Gcrypt::getError(result));
 			_keyChangeMutex.unlock();
 			return false;
 		}
 
-		*keyChangeTemplate->payload() = encryptedPayload;
+		keyChangeTemplate->payload() = encryptedPayload;
 
 		_keyChangeMutex.unlock();
 		return true;
@@ -702,7 +702,7 @@ void AesHandshake::appendSignature(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
-		if(packet->payload()->size() < 6) return;
+		if(packet->payload().size() < 6) return;
 
 		std::vector<uint8_t> iv(16, 0);
 		iv.at(0) = 0x49;
@@ -714,8 +714,8 @@ void AesHandshake::appendSignature(std::shared_ptr<BidCoSPacket> packet)
 		iv.at(4) = destinationAddress >> 16;
 		iv.at(5) = (destinationAddress >> 8) & 0xFF;
 		iv.at(6) = destinationAddress & 0xFF;
-		iv.at(7) = packet->payload()->at(4);
-		iv.at(8) = packet->payload()->at(5);
+		iv.at(7) = packet->payload().at(4);
+		iv.at(8) = packet->payload().at(5);
 		iv.at(9) = packet->messageCounter();
 		iv.at(15) = 5;
 
@@ -741,7 +741,7 @@ void AesHandshake::appendSignature(std::shared_ptr<BidCoSPacket> packet)
 		plain.reserve(16);
 		plain.at(0) = packet->messageCounter();
 		plain.at(1) = packet->controlByte();
-		plain.insert(plain.end(), packet->payload()->begin(), packet->payload()->end() - 2);
+		plain.insert(plain.end(), packet->payload().begin(), packet->payload().end() - 2);
 		plain.resize(16, 0);
 
 		for(int32_t i = 0; i < 16; i++)
@@ -757,11 +757,11 @@ void AesHandshake::appendSignature(std::shared_ptr<BidCoSPacket> packet)
 			return;
 		}
 
-		packet->payload()->reserve(packet->payload()->size() + 4);
-		packet->payload()->push_back(signature.at(12));
-		packet->payload()->push_back(signature.at(13));
-		packet->payload()->push_back(signature.at(14));
-		packet->payload()->push_back(signature.at(15));
+		packet->payload().reserve(packet->payload().size() + 4);
+		packet->payload().push_back(signature.at(12));
+		packet->payload().push_back(signature.at(13));
+		packet->payload().push_back(signature.at(14));
+		packet->payload().push_back(signature.at(15));
 	}
 	catch(const std::exception& ex)
     {

@@ -599,9 +599,9 @@ void TICC1100::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 
 		if(_bl->debugLevel > 3)
 		{
-			if(packet->timeSending() > 0)
+			if(packet->getTimeSending() > 0)
 			{
-				_out.printInfo("Info: Sending (" + _settings->id + "): " + packet->hexString() + " Planned sending time: " + BaseLib::HelperFunctions::getTimeString(packet->timeSending()));
+				_out.printInfo("Info: Sending (" + _settings->id + "): " + packet->hexString() + " Planned sending time: " + BaseLib::HelperFunctions::getTimeString(packet->getTimeSending()));
 			}
 			else
 			{

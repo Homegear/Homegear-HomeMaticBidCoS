@@ -765,28 +765,28 @@ void HM_LGW::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 		if(!bidCoSPacket) return;
 		if(_updateMode && !bidCoSPacket->isUpdatePacket())
 		{
-			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ", because update mode is enabled.");
+			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(bidCoSPacket->destinationAddress(), 6) + ", because update mode is enabled.");
 			return;
 		}
-		if(bidCoSPacket->messageType() == 0x02 && packet->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
+		if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)
 		{
 			_out.printDebug("Debug: Ignoring ACK packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if((bidCoSPacket->controlByte() & 0x01) && packet->senderAddress() == _myAddress && (bidCoSPacket->payload()->empty() || (bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)))
+		if((bidCoSPacket->controlByte() & 0x01) && bidCoSPacket->senderAddress() == _myAddress && (bidCoSPacket->payload().empty() || (bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)))
 		{
 			_out.printDebug("Debug: Ignoring wake up packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key if necessary
+		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload().size() == 2 && bidCoSPacket->payload().at(0) == 1) //Set new AES key if necessary
 		{
 			std::lock_guard<std::mutex> peersGuard(_peersMutex);
 			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->destinationAddress());
 			if(peerIterator != _peers.end())
 			{
-				if((bidCoSPacket->payload()->at(1) + 2) / 2 <= peerIterator->second.keyIndex)
+				if((bidCoSPacket->payload().at(1) + 2) / 2 <= peerIterator->second.keyIndex)
 				{
 					_out.printInfo("Info: Ignoring AES key update packet, because a key with this index is already set.");
 					std::vector<uint8_t> payload { 0 };
@@ -1075,7 +1075,7 @@ void HM_LGW::doInit()
 			_out.printError("Error: First packet does not start with \"S\" or has wrong structure. Please double check the setting \"lanKey\" in homematicbidcos.conf. The key is most probably wrong. Stopping listening.");
 			return;
 		}
-		uint8_t packetIndex = (_math.getNumber(parts.at(0).at(1)) << 4) + _math.getNumber(parts.at(0).at(2));
+		uint8_t packetIndex = (BaseLib::Math::getNumber(parts.at(0).at(1)) << 4) + BaseLib::Math::getNumber(parts.at(0).at(2));
 		std::vector<char> response = { '>', _bl->hf.getHexChar(packetIndex >> 4), _bl->hf.getHexChar(packetIndex & 0xF), ',', '0', '0', '0', '0', '\r', '\n' };
 		send(response, false);
 
@@ -1861,14 +1861,14 @@ void HM_LGW::listen()
 				catch(const BaseLib::SocketClosedException& ex)
 				{
 					_stopped = true;
-					_out.printWarning("Warning: " + ex.what());
+					_out.printWarning("Warning: " + std::string(ex.what()));
 					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 					continue;
 				}
 				catch(const BaseLib::SocketOperationException& ex)
 				{
 					_stopped = true;
-					_out.printError("Error: " + ex.what());
+					_out.printError("Error: " + std::string(ex.what()));
 					std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 					continue;
 				}
@@ -1975,13 +1975,13 @@ void HM_LGW::listenKeepAlive()
 				catch(const BaseLib::SocketClosedException& ex)
 				{
 					_stopped = true;
-					_out.printWarning("Warning: " + ex.what());
+					_out.printWarning("Warning: " + std::string(ex.what()));
 					continue;
 				}
 				catch(const BaseLib::SocketOperationException& ex)
 				{
 					_stopped = true;
-					_out.printError("Error: " + ex.what());
+					_out.printError("Error: " + std::string(ex.what()));
 					continue;
 				}
 				if(data.empty() || data.size() > 1000000) continue;
@@ -2057,7 +2057,7 @@ bool HM_LGW::aesKeyExchange(std::vector<uint8_t>& data)
 		}
 		if(data.at(startPos - 4) == 'V' && data.at(startPos - 1) == ',')
 		{
-			uint8_t packetIndex = (_math.getNumber(data.at(startPos - 3)) << 4) + _math.getNumber(data.at(startPos - 2));
+			uint8_t packetIndex = (BaseLib::Math::getNumber(data.at(startPos - 3)) << 4) + BaseLib::Math::getNumber(data.at(startPos - 2));
 			packetIndex++;
 			if(length != 32)
 			{
@@ -2174,7 +2174,7 @@ bool HM_LGW::aesKeyExchangeKeepAlive(std::vector<uint8_t>& data)
 		}
 		if(data.at(startPos - 4) == 'V' && data.at(startPos - 1) == ',')
 		{
-			_packetIndexKeepAlive = (_math.getNumber(data.at(startPos - 3)) << 4) + _math.getNumber(data.at(startPos - 2));
+			_packetIndexKeepAlive = (BaseLib::Math::getNumber(data.at(startPos - 3)) << 4) + BaseLib::Math::getNumber(data.at(startPos - 2));
 			_packetIndexKeepAlive++;
 			if(length != 32)
 			{
@@ -2590,7 +2590,7 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 			{
 				//Accept pairing packets from HM-TC-IT-WM-W-EU (version 1.0) and maybe other devices.
 				//For these devices the handshake is never executed, but the "failed bit" set anyway: Bug
-				if(!(bidCoSPacket->controlByte() & 0x4) || bidCoSPacket->messageType() != 0 || bidCoSPacket->payload()->size() != 17)
+				if(!(bidCoSPacket->controlByte() & 0x4) || bidCoSPacket->messageType() != 0 || bidCoSPacket->payload().size() != 17)
 				{
 					_out.printWarning("Warning: AES handshake failed for packet: " + _bl->hf.getHexString(binaryPacket));
 					return;
@@ -2608,9 +2608,9 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->senderAddress());
 			if(peerIterator != _peers.end())
 			{
-				if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->payload()->size() == 8 && bidCoSPacket->payload()->at(0) == 0x04)
+				if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->payload().size() == 8 && bidCoSPacket->payload().at(0) == 0x04)
 				{
-					peerIterator->second.keyIndex = bidCoSPacket->payload()->back() / 2;
+					peerIterator->second.keyIndex = bidCoSPacket->payload().back() / 2;
 				}
 			}
 			// }}}
@@ -2622,7 +2622,7 @@ void HM_LGW::parsePacket(std::vector<uint8_t>& packet)
 				std::vector<uint8_t> payload;
 				payload.push_back(0x00);
 				std::shared_ptr<BidCoSPacket> ok(new BidCoSPacket(bidCoSPacket->messageCounter(), 0x80, 0x02, bidCoSPacket->senderAddress(), _myAddress, payload));
-				ok->setTimeReceived(bidCoSPacket->timeReceived() + 1);
+				ok->setTimeReceived(bidCoSPacket->getTimeReceived() + 1);
 				std::this_thread::sleep_for(std::chrono::milliseconds(30));
 				raisePacketReceived(ok);
 			}

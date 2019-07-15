@@ -242,25 +242,25 @@ void HM_CFG_LAN::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(!bidCoSPacket) return;
-		if(bidCoSPacket->messageType() == 0x02 && packet->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
+		if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)
 		{
 			_out.printDebug("Debug: Ignoring ACK packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if((bidCoSPacket->controlByte() & 0x01) && packet->senderAddress() == _myAddress && (bidCoSPacket->payload()->empty() || (bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)))
+		if((bidCoSPacket->controlByte() & 0x01) && bidCoSPacket->senderAddress() == _myAddress && (bidCoSPacket->payload().empty() || (bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)))
 		{
 			_out.printDebug("Debug: Ignoring wake up packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key if necessary
+		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload().size() == 2 && bidCoSPacket->payload().at(0) == 1) //Set new AES key if necessary
 		{
 			std::lock_guard<std::mutex> peersGuard(_peersMutex);
 			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->destinationAddress());
 			if(peerIterator != _peers.end())
 			{
-				if((bidCoSPacket->payload()->at(1) + 2) / 2 <= peerIterator->second.keyIndex)
+				if((bidCoSPacket->payload().at(1) + 2) / 2 <= peerIterator->second.keyIndex)
 				{
 					_out.printInfo("Info: Ignoring AES key update packet, because a key with this index is already set.");
 					std::vector<uint8_t> payload { 0 };
@@ -281,7 +281,7 @@ void HM_CFG_LAN::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 
 		int64_t currentTimeMilliseconds = BaseLib::HelperFunctions::getTime();
 		uint32_t currentTime = currentTimeMilliseconds & 0xFFFFFFFF;
-		std::string packetString = packet->hexString();
+		std::string packetString = bidCoSPacket->hexString();
 		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
 		std::string hexString = "S" + BaseLib::HelperFunctions::getHexString(currentTime, 8) + ",00,00000000,01," + BaseLib::HelperFunctions::getHexString(currentTimeMilliseconds - _startUpTime, 8) + "," + packetString.substr(2) + "\r\n";
 		send(hexString, false);
@@ -794,14 +794,14 @@ void HM_CFG_LAN::listen()
 					catch(const BaseLib::SocketClosedException& ex)
 					{
 						_stopped = true;
-						_out.printWarning("Warning: " + ex.what());
+						_out.printWarning("Warning: " + std::string(ex.what()));
 						std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 						continue;
 					}
 					catch(const BaseLib::SocketOperationException& ex)
 					{
 						_stopped = true;
-						_out.printError("Error: " + ex.what());
+						_out.printError("Error: " + std::string(ex.what()));
 						std::this_thread::sleep_for(std::chrono::milliseconds(10000));
 						continue;
 					}
@@ -1126,9 +1126,9 @@ void HM_CFG_LAN::parsePacket(std::string& packet)
 				std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->senderAddress());
 				if(peerIterator != _peers.end())
 				{
-					if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->payload()->size() == 8 && bidCoSPacket->payload()->at(0) == 0x04)
+					if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->payload().size() == 8 && bidCoSPacket->payload().at(0) == 0x04)
 					{
-						peerIterator->second.keyIndex = bidCoSPacket->payload()->back() / 2;
+						peerIterator->second.keyIndex = bidCoSPacket->payload().back() / 2;
 					}
 				}
 				// }}}

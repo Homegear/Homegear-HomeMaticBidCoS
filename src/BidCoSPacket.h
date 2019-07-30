@@ -47,6 +47,9 @@ class BidCoSPacket : public BaseLib::Systems::Packet
 {
     public:
         //Properties
+        int32_t senderAddress() { return _senderAddress; }
+        int32_t destinationAddress() { return _destinationAddress; }
+        uint8_t length() { return _length; }
         uint8_t messageCounter() { return _messageCounter; }
         void setMessageCounter(uint8_t counter) { _messageCounter = counter; }
         uint8_t messageType() { return _messageType; }
@@ -54,10 +57,12 @@ class BidCoSPacket : public BaseLib::Systems::Packet
         bool isUpdatePacket() { return _updatePacket; }
         bool validAesAck() { return _validAesAck; }
         void setValidAesAck(bool value) { _validAesAck = value; }
-        virtual void setControlByte(uint8_t value) { _controlByte = value; }
-        virtual std::string hexString();
-        virtual std::vector<uint8_t> byteArray();
-        virtual std::vector<char> byteArraySigned();
+        uint8_t controlByte() { return _controlByte; }
+        void setControlByte(uint8_t value) { _controlByte = value; }
+        std::vector<uint8_t>& payload() { return _payload; }
+        std::string hexString();
+        std::vector<uint8_t> byteArray();
+        std::vector<char> byteArraySigned();
 
         BidCoSPacket();
         BidCoSPacket(std::string& packet, int64_t timeReceived = 0);
@@ -72,9 +77,16 @@ class BidCoSPacket : public BaseLib::Systems::Packet
         bool equals(std::shared_ptr<BidCoSPacket>& rhs);
     protected:
     private:
+        static const std::array<uint8_t, 9> _bitmask;
+
+        int32_t _senderAddress = 0;
+        int32_t _destinationAddress = 0;
+        uint8_t _length = 0;
+        uint8_t _controlByte = 0;
         uint8_t _messageCounter = 0;
         uint8_t _messageType = 0;
         uint8_t _rssiDevice = 0;
+        std::vector<uint8_t> _payload;
         bool _updatePacket = false;
         bool _validAesAck = false;
 

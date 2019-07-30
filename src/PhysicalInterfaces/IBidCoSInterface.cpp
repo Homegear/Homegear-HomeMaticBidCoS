@@ -289,8 +289,8 @@ void IBidCoSInterface::processQueueEntry(int32_t index, int64_t id, std::shared_
 		if(!queueEntry || !queueEntry->packet) return;
 		forceSendPacket(queueEntry->packet);
 
-        if(queueEntry->packet->controlByte() & 0x10) queueEntry->packet->setTimeSending(queueEntry->packet->timeSending() + 560);
-        else queueEntry->packet->setTimeSending(queueEntry->packet->timeSending() + 200);
+        if(queueEntry->packet->controlByte() & 0x10) queueEntry->packet->setTimeSending(queueEntry->packet->getTimeSending() + 560);
+        else queueEntry->packet->setTimeSending(queueEntry->packet->getTimeSending() + 200);
 
 		// {{{ Remove packet from queue id map
 			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
@@ -320,7 +320,7 @@ void IBidCoSInterface::queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t
 	{
 		if(sendingTime == 0)
 		{
-			sendingTime = packet->timeReceived();
+			sendingTime = packet->getTimeReceived();
 			if(sendingTime <= 0) sendingTime = BaseLib::HelperFunctions::getTime();
 			sendingTime = sendingTime + _settings->responseDelay;
 		}
@@ -380,9 +380,9 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 						raisePacketReceived(mFrame);
 						return;
 					}
-					else if(packet->messageType() == 0x02 && packet->payload()->size() == 8 && packet->payload()->at(0) == 0x04)
+					else if(packet->messageType() == 0x02 && packet->payload().size() == 8 && packet->payload().at(0) == 0x04)
 					{
-						peerIterator->second.keyIndex = packet->payload()->back() / 2;
+						peerIterator->second.keyIndex = packet->payload().back() / 2;
 						std::shared_ptr<BidCoSPacket> mFrame;
 						std::shared_ptr<BidCoSPacket> rFrame = _aesHandshake->getRFrame(packet, mFrame, peerIterator->second.keyIndex);
 						if(!rFrame)
@@ -398,7 +398,7 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 								std::lock_guard<std::mutex> idGuard(_queueIdsMutex);
 								std::map<int32_t, std::set<int64_t>>::iterator idIterator = _queueIds.find(packet->senderAddress());
 
-								if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->timeSending() + 595)
+								if(idIterator != _queueIds.end() && *(idIterator->second.begin()) < mFrame->getTimeSending() + 595)
 								{
 									requeue = true;
 									for(std::set<int64_t>::iterator queueId = idIterator->second.begin(); queueId != idIterator->second.end(); ++queueId)
@@ -410,8 +410,8 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 							}
 							if(requeue)
 							{
-								queuePacket(mFrame, mFrame->timeSending() + 600);
-								queuePacket(mFrame, mFrame->timeSending() + 1200);
+								queuePacket(mFrame, mFrame->getTimeSending() + 600);
+								queuePacket(mFrame, mFrame->getTimeSending() + 1200);
 							}
 						// }}}
                         
@@ -458,13 +458,13 @@ void IBidCoSInterface::processReceivedPacket(std::shared_ptr<BidCoSPacket> packe
 						}
 						// }}}
 
-						if(packet->payload()->size() > 1)
+						if(packet->payload().size() > 1)
 						{
 							//Packet type 0x4X has channel at index 0 all other types at index 1
-							if((packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
-							else if(peerIterator->second.aesChannels[packet->payload()->at(1) & 0x3F]) aesHandshake = true;
+							if((packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload().at(0) & 0x3F]) aesHandshake = true;
+							else if(peerIterator->second.aesChannels[packet->payload().at(1) & 0x3F]) aesHandshake = true;
 						}
-						else if(packet->payload()->size() == 1 && (packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload()->at(0) & 0x3F]) aesHandshake = true;
+						else if(packet->payload().size() == 1 && (packet->messageType() & 0xF0) == 0x40 && peerIterator->second.aesChannels[packet->payload().at(0) & 0x3F]) aesHandshake = true;
 						else if(peerIterator->second.aesChannels[0]) aesHandshake = true;
 					}
 				}
@@ -582,18 +582,19 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 {
 	try
 	{
+        std::lock_guard<std::mutex> sendPacketGuard(_sendPacketMutex);
 		if(!packet)
 		{
 			_out.printWarning("Warning: Packet was nullptr.");
 			return;
 		}
-		if(packet->payload()->size() > 54)
+        std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
+        if(!bidCoSPacket) return;
+		if(bidCoSPacket->payload().size() > 54)
 		{
 			_out.printError("Error: Tried to send packet larger than 64 bytes. That is not supported.");
 			return;
 		}
-		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
-		if(!bidCoSPacket) return;
 
 		// {{{ Remove packet from queue id map
 		{
@@ -612,28 +613,28 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 
 		if(_updateMode && !bidCoSPacket->isUpdatePacket())
 		{
-			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(packet->destinationAddress(), 6) + ", because update mode is enabled.");
+			_out.printInfo("Info: Can't send packet to BidCoS peer with address 0x" + BaseLib::HelperFunctions::getHexString(bidCoSPacket->destinationAddress(), 6) + ", because update mode is enabled.");
 			return;
 		}
-		if(bidCoSPacket->messageType() == 0x02 && packet->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)
+		if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->senderAddress() == _myAddress && bidCoSPacket->controlByte() == 0x80 && bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)
 		{
 			_out.printDebug("Debug: Ignoring ACK packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if((bidCoSPacket->controlByte() & 0x01) && packet->senderAddress() == _myAddress && (bidCoSPacket->payload()->empty() || (bidCoSPacket->payload()->size() == 1 && bidCoSPacket->payload()->at(0) == 0)))
+		if((bidCoSPacket->controlByte() & 0x01) && bidCoSPacket->senderAddress() == _myAddress && (bidCoSPacket->payload().empty() || (bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)))
 		{
 			_out.printDebug("Debug: Ignoring wake up packet.", 6);
 			_lastPacketSent = BaseLib::HelperFunctions::getTime();
 			return;
 		}
-		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload()->size() == 2 && bidCoSPacket->payload()->at(0) == 1) //Set new AES key
+		if(bidCoSPacket->messageType() == 0x04 && bidCoSPacket->payload().size() == 2 && bidCoSPacket->payload().at(0) == 1) //Set new AES key
 		{
 			std::lock_guard<std::mutex> peersGuard(_peersMutex);
 			std::map<int32_t, PeerInfo>::iterator peerIterator = _peers.find(bidCoSPacket->destinationAddress());
 			if(peerIterator != _peers.end())
 			{
-				if((bidCoSPacket->payload()->at(1) + 2) / 2 > peerIterator->second.keyIndex)
+				if((bidCoSPacket->payload().at(1) + 2) / 2 > peerIterator->second.keyIndex)
 				{
 					if(!_aesHandshake->generateKeyChangePacket(bidCoSPacket)) return;
 				}
@@ -660,9 +661,9 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 		_aesHandshake->setMFrame(bidCoSPacket);
 		if(!_updateMode &&
                 !(bidCoSPacket->messageType() == 0x01 && bidCoSPacket->controlByte() == 0x84) && //addDevice pairing packet
-				!(bidCoSPacket->messageType() == 0x41 && ((bidCoSPacket->controlByte() == 0x14 && bidCoSPacket->payload()->size() == 10) || (bidCoSPacket->controlByte() == 0x94 && bidCoSPacket->payload()->size() == 3)))) //HM-Sec-SD(-2)
+				!(bidCoSPacket->messageType() == 0x41 && ((bidCoSPacket->controlByte() == 0x14 && bidCoSPacket->payload().size() == 10) || (bidCoSPacket->controlByte() == 0x94 && bidCoSPacket->payload().size() == 3)))) //HM-Sec-SD(-2)
 		{
-            int64_t timeSending = bidCoSPacket->timeSending();
+            int64_t timeSending = bidCoSPacket->getTimeSending();
 			if(timeSending < BaseLib::HelperFunctions::getTime() - 100) timeSending = BaseLib::HelperFunctions::getTime();
 			if(bidCoSPacket->controlByte() & 0x10)
 			{

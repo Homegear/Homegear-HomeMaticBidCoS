@@ -114,7 +114,6 @@ class HM_LGW  : public IBidCoSInterface
         	uint8_t _responseType;
         };
 
-        BaseLib::Math _math;
         std::thread _listenThreadKeepAlive;
         std::thread _initThread;
         std::string _port;

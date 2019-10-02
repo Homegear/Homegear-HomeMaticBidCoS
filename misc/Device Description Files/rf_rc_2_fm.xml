@@ -4,6 +4,10 @@
 			<description>HM Wireless Sender 2-channel for brand switch systems, flush mount</description>
 			<typeNumber>0xE0</typeNumber>
 		</device>
+		<device id="HM-RC-2-PBU-FM-2">
+			<description>HM Wireless Sender 2-channel for brand switch systems, flush mount</description
+			<typeNumber>0x010C</typeNumber>
+		</device>
 	</supportedDevices>
 	<properties>
 		<encryption>true</encryption>

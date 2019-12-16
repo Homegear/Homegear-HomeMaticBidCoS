@@ -107,10 +107,10 @@ public:
 	void addHomegearFeaturesMotionDetector(std::shared_ptr<BidCoSPeer> peer, int32_t channel, bool pushPendingBidCoSQueues);
 	void addHomegearFeaturesHMCCRTDN(std::shared_ptr<BidCoSPeer> peer, int32_t channel, bool pushPendingBidCoSQueues);
 
-	void handlePairingRequest(int32_t messageCounter, std::shared_ptr<BidCoSPacket>);
-	void handleAck(int32_t messageCounter, std::shared_ptr<BidCoSPacket>);
-	void handleConfigParamResponse(int32_t messageCounter, std::shared_ptr<BidCoSPacket>);
-	void handleTimeRequest(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet);
+	void handlePairingRequest(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet);
+	void handleAck(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet);
+	void handleConfigParamResponse(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet);
+	void handleTimeRequest(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet);
 	void sendRequestConfig(int32_t address, uint8_t localChannel, uint8_t list = 0, int32_t remoteAddress = 0, uint8_t remoteChannel = 0);
 	void sendOK(int32_t messageCounter, int32_t destinationAddress, std::vector<uint8_t> payload = std::vector<uint8_t>());
 

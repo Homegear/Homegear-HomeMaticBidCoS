@@ -68,14 +68,6 @@ BidCoSQueue::~BidCoSQueue()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void BidCoSQueue::serialize(std::vector<uint8_t>& encodedData)
@@ -123,14 +115,6 @@ void BidCoSQueue::serialize(std::vector<uint8_t>& encodedData)
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 	_queueMutex.unlock();
 }
@@ -187,14 +171,6 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _queue.clear();
     if(!_physicalInterface) _physicalInterface = GD::defaultPhysicalInterface;
 }
@@ -221,20 +197,6 @@ void BidCoSQueue::dispose()
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    	_sendThreadMutex.unlock();
-    	_pushPendingQueueThreadMutex.unlock();
-    	_startResendThreadMutex.unlock();
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    	_sendThreadMutex.unlock();
-    	_pushPendingQueueThreadMutex.unlock();
-    	_startResendThreadMutex.unlock();
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     	_sendThreadMutex.unlock();
     	_pushPendingQueueThreadMutex.unlock();
     	_startResendThreadMutex.unlock();
@@ -290,18 +252,6 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
 		_sendThreadMutex.unlock();
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void BidCoSQueue::push(std::shared_ptr<PendingBidCoSQueues>& pendingQueues)
@@ -323,17 +273,6 @@ void BidCoSQueue::push(std::shared_ptr<PendingBidCoSQueues>& pendingQueues)
 		 _queueMutex.unlock();
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	 _queueMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	 _queueMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-
 }
 
 void BidCoSQueue::push(std::shared_ptr<BidCoSQueue> pendingQueue, bool popImmediately, bool clearPendingQueues)
@@ -359,14 +298,6 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSQueue> pendingQueue, bool popImmedi
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _queueMutex.unlock();
 }
 
@@ -387,18 +318,6 @@ void BidCoSQueue::push(std::shared_ptr<BidCoSMessage> message)
 		_queueMutex.unlock();
 		_sendThreadMutex.unlock();
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -449,18 +368,6 @@ void BidCoSQueue::pushFront(std::shared_ptr<BidCoSPacket> packet, bool stealthy,
 		_sendThreadMutex.unlock();
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void BidCoSQueue::send(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
@@ -481,14 +388,6 @@ void BidCoSQueue::send(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void BidCoSQueue::clear()
@@ -502,14 +401,6 @@ void BidCoSQueue::clear()
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _queueMutex.unlock();
 }
@@ -582,18 +473,6 @@ void BidCoSQueue::pushPendingQueue()
 		_queueMutex.unlock();
 		_sendThreadMutex.unlock();
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -670,20 +549,6 @@ void BidCoSQueue::nextQueueEntry()
 		_pushPendingQueueThreadMutex.unlock();
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	_pushPendingQueueThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	_sendThreadMutex.unlock();
-    	_pushPendingQueueThreadMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void BidCoSQueue::pop()
@@ -714,16 +579,6 @@ void BidCoSQueue::pop()
 		_queueMutex.unlock();
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_queueMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_queueMutex.unlock();
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void BidCoSQueue::setWakeOnRadioBit()
@@ -736,14 +591,6 @@ void BidCoSQueue::setWakeOnRadioBit()
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 }
 }

@@ -63,14 +63,6 @@ Cul::~Cul()
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
@@ -93,14 +85,6 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 }
 
 void Cul::enableUpdateMode()
@@ -113,14 +97,6 @@ void Cul::enableUpdateMode()
     catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -136,14 +112,6 @@ void Cul::disableUpdateMode()
     catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -199,14 +167,6 @@ void Cul::openDevice()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Cul::closeDevice()
@@ -219,14 +179,6 @@ void Cul::closeDevice()
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -247,8 +199,16 @@ void Cul::setupDevice()
 		cfsetispeed(&_termios, B38400);
 		cfsetospeed(&_termios, B38400);
 
-		if(tcflush(_fileDescriptor->descriptor, TCIFLUSH) == -1) throw(BaseLib::Exception("Couldn't flush CUL device " + _settings->device));
-		if(tcsetattr(_fileDescriptor->descriptor, TCSANOW, &_termios) == -1) throw(BaseLib::Exception("Couldn't set CUL device settings: " + _settings->device));
+		if(tcflush(_fileDescriptor->descriptor, TCIFLUSH) == -1)
+        {
+		    _out.printError("Couldn't flush CUL device " + _settings->device);
+            return;
+        }
+		if(tcsetattr(_fileDescriptor->descriptor, TCSANOW, &_termios) == -1)
+        {
+            _out.printError("Couldn't set CUL device settings: " + _settings->device);
+            return;
+        }
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
@@ -257,21 +217,13 @@ void Cul::setupDevice()
 		{
 			if(fcntl(_fileDescriptor->descriptor, F_SETFL, flags | O_NONBLOCK) == -1)
 			{
-				throw(BaseLib::Exception("Couldn't set CUL device to non blocking mode: " + _settings->device));
+				_out.printError("Couldn't set CUL device to non blocking mode: " + _settings->device);
 			}
 		}
 	}
 	catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -373,14 +325,6 @@ void Cul::writeToDevice(std::string data)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _sendMutex.unlock();
     _lastPacketSent = BaseLib::HelperFunctions::getTime();
 }
@@ -415,14 +359,6 @@ void Cul::startListening()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Cul::stopListening()
@@ -445,14 +381,6 @@ void Cul::stopListening()
 	catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -502,14 +430,6 @@ void Cul::listen()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Cul::setup(int32_t userID, int32_t groupID, bool setPermissions)
@@ -521,14 +441,6 @@ void Cul::setup(int32_t userID, int32_t groupID, bool setPermissions)
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 

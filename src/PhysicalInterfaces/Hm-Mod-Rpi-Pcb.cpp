@@ -65,14 +65,6 @@ Hm_Mod_Rpi_Pcb::~Hm_Mod_Rpi_Pcb()
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::setup(int32_t userID, int32_t groupID, bool setPermissions)
@@ -90,14 +82,6 @@ void Hm_Mod_Rpi_Pcb::setup(int32_t userID, int32_t groupID, bool setPermissions)
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -163,14 +147,6 @@ void Hm_Mod_Rpi_Pcb::enableUpdateMode()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::disableUpdateMode()
@@ -184,14 +160,6 @@ void Hm_Mod_Rpi_Pcb::disableUpdateMode()
     catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -243,14 +211,6 @@ void Hm_Mod_Rpi_Pcb::openDevice()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::closeDevice()
@@ -263,14 +223,6 @@ void Hm_Mod_Rpi_Pcb::closeDevice()
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -309,14 +261,6 @@ void Hm_Mod_Rpi_Pcb::setupDevice()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::addPeer(PeerInfo peerInfo)
@@ -338,14 +282,6 @@ void Hm_Mod_Rpi_Pcb::addPeer(PeerInfo peerInfo)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _peersMutex.unlock();
 }
 
@@ -364,14 +300,6 @@ void Hm_Mod_Rpi_Pcb::addPeers(std::vector<PeerInfo>& peerInfos)
     catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _peersMutex.unlock();
 }
@@ -480,14 +408,6 @@ void Hm_Mod_Rpi_Pcb::processQueueEntry(int32_t index, int64_t id, std::shared_pt
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 }
 
 void Hm_Mod_Rpi_Pcb::sendPeers()
@@ -505,14 +425,6 @@ void Hm_Mod_Rpi_Pcb::sendPeers()
     catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _peersMutex.unlock();
 
@@ -721,14 +633,6 @@ void Hm_Mod_Rpi_Pcb::sendPeer(PeerInfo& peerInfo)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::setAES(PeerInfo peerInfo, int32_t channel)
@@ -745,14 +649,6 @@ void Hm_Mod_Rpi_Pcb::setAES(PeerInfo peerInfo, int32_t channel)
 		{
 			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 		}
-		catch(BaseLib::Exception& ex)
-		{
-			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-		}
-		catch(...)
-		{
-			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-		}
 		_peersMutex.unlock();
 
 		if(_initComplete)
@@ -765,14 +661,6 @@ void Hm_Mod_Rpi_Pcb::setAES(PeerInfo peerInfo, int32_t channel)
     catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -790,14 +678,6 @@ void Hm_Mod_Rpi_Pcb::setWakeUp(PeerInfo peerInfo)
 		{
 			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 		}
-		catch(BaseLib::Exception& ex)
-		{
-			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-		}
-		catch(...)
-		{
-			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-		}
 		_peersMutex.unlock();
 
 		if(_initComplete)
@@ -810,14 +690,6 @@ void Hm_Mod_Rpi_Pcb::setWakeUp(PeerInfo peerInfo)
     catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -843,14 +715,6 @@ void Hm_Mod_Rpi_Pcb::removePeer(int32_t address)
     catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _peersMutex.unlock();
 }
@@ -989,14 +853,6 @@ void Hm_Mod_Rpi_Pcb::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::getResponse(const std::vector<char>& packet, std::vector<uint8_t>& response, uint8_t messageCounter, uint8_t responseControlByte, uint8_t responseType)
@@ -1026,16 +882,6 @@ void Hm_Mod_Rpi_Pcb::getResponse(const std::vector<char>& packet, std::vector<ui
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
         _requestsMutex.unlock();
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-        _requestsMutex.unlock();
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-        _requestsMutex.unlock();
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::send(std::string hexString)
@@ -1049,14 +895,6 @@ void Hm_Mod_Rpi_Pcb::send(std::string hexString)
 	catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -1097,14 +935,6 @@ void Hm_Mod_Rpi_Pcb::send(const std::vector<char>& data)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _stopped = true;
 }
 
@@ -1134,7 +964,7 @@ void Hm_Mod_Rpi_Pcb::doInit()
 			setGPIO(1, true);
 			closeGPIO(1);
 		}
-		catch(BaseLib::Exception& ex)
+		catch(const std::exception& ex)
 		{
 			_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 		}
@@ -1390,14 +1220,6 @@ void Hm_Mod_Rpi_Pcb::doInit()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _stopped = true;
 }
 
@@ -1426,14 +1248,6 @@ void Hm_Mod_Rpi_Pcb::startListening()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::reconnect()
@@ -1458,14 +1272,6 @@ void Hm_Mod_Rpi_Pcb::reconnect()
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::stopListening()
@@ -1489,14 +1295,6 @@ void Hm_Mod_Rpi_Pcb::stopListening()
 	catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -1525,14 +1323,6 @@ void Hm_Mod_Rpi_Pcb::sendTimePacket()
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -1648,29 +1438,11 @@ void Hm_Mod_Rpi_Pcb::listen()
 				_stopped = true;
 				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(BaseLib::Exception& ex)
-			{
-				_stopped = true;
-				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-			}
-			catch(...)
-			{
-				_stopped = true;
-				_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-			}
         }
     }
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -1695,14 +1467,6 @@ void Hm_Mod_Rpi_Pcb::buildPacket(std::vector<char>& packet, const std::vector<ch
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::escapePacket(const std::vector<char>& unescapedPacket, std::vector<char>& escapedPacket)
@@ -1725,14 +1489,6 @@ void Hm_Mod_Rpi_Pcb::escapePacket(const std::vector<char>& unescapedPacket, std:
 	catch(const std::exception& ex)
     {
     	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -1787,14 +1543,6 @@ void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
@@ -1838,14 +1586,6 @@ void Hm_Mod_Rpi_Pcb::processData(std::vector<uint8_t>& data)
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -1912,14 +1652,6 @@ void Hm_Mod_Rpi_Pcb::parsePacket(std::vector<uint8_t>& packet)
     catch(const std::exception& ex)
     {
         _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 

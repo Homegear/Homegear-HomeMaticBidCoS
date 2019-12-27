@@ -42,14 +42,6 @@ void BidCoSMessages::add(std::shared_ptr<BidCoSMessage> message)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 }
 
 std::shared_ptr<BidCoSMessage> BidCoSMessages::find(std::shared_ptr<BidCoSPacket> packet)
@@ -67,14 +59,6 @@ std::shared_ptr<BidCoSMessage> BidCoSMessages::find(std::shared_ptr<BidCoSPacket
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 	return std::shared_ptr<BidCoSMessage>();
 }
 
@@ -90,14 +74,6 @@ std::shared_ptr<BidCoSMessage> BidCoSMessages::find(int32_t messageType)
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
     return std::shared_ptr<BidCoSMessage>();
 }

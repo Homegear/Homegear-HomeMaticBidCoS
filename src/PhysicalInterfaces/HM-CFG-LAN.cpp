@@ -283,7 +283,7 @@ void HM_CFG_LAN::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet)
 		uint32_t currentTime = currentTimeMilliseconds & 0xFFFFFFFF;
 		std::string packetString = bidCoSPacket->hexString();
 		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
-		std::string hexString = "S" + BaseLib::HelperFunctions::getHexString(currentTime, 8) + ",00,00000000,01," + BaseLib::HelperFunctions::getHexString(currentTimeMilliseconds - _startUpTime, 8) + "," + packetString.substr(2) + "\r\n";
+		std::string hexString = "S" + BaseLib::HelperFunctions::getHexString(currentTime, 8) + ",00,00000000,01," + BaseLib::HelperFunctions::getHexString((uint32_t)(currentTimeMilliseconds - _startUpTime), 8) + "," + packetString.substr(2) + "\r\n";
 		send(hexString, false);
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
@@ -991,7 +991,7 @@ void HM_CFG_LAN::processInit(std::string& packet)
 			reconnect();
 			return;
 		}
-		_startUpTime = BaseLib::HelperFunctions::getTime() - (int64_t)BaseLib::Math::getNumber(parts.at(5), true);
+		_startUpTime = BaseLib::HelperFunctions::getTime() - BaseLib::Math::getNumber64(parts.at(5), true);
 		send(_initCommandQueue.front(), false);
 		_initCommandQueue.pop_front();
 		send(_initCommandQueue.front(), false);

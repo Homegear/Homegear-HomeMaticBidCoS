@@ -37,11 +37,11 @@ BidCoSMessage::BidCoSMessage()
 {
 }
 
-BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _messageHandler(messageHandler)
+BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, void (HomeMaticCentral::*messageHandler)(const std::string&, int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _messageHandler(messageHandler)
 {
 }
 
-BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _accessPairing(accessPairing), _messageHandler(messageHandler)
+BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(const std::string&, int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _accessPairing(accessPairing), _messageHandler(messageHandler)
 {
 }
 
@@ -49,13 +49,13 @@ BidCoSMessage::~BidCoSMessage()
 {
 }
 
-void BidCoSMessage::invokeMessageHandler(std::shared_ptr<BidCoSPacket> packet)
+void BidCoSMessage::invokeMessageHandler(const std::string& interfaceId, const std::shared_ptr<BidCoSPacket>& packet)
 {
 	try
 	{
 		std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
 		if(!central || _messageHandler == nullptr || packet == nullptr) return;
-		((central.get())->*(_messageHandler))(packet->messageCounter(), packet);
+		((central.get())->*(_messageHandler))(interfaceId, packet->messageCounter(), packet);
 	}
 	catch(const std::exception& ex)
 	{

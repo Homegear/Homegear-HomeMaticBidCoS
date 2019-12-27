@@ -50,8 +50,8 @@ class BidCoSMessage
 {
     public:
         BidCoSMessage();
-        BidCoSMessage(int32_t messageType, int32_t access, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>));
-        BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>));
+        BidCoSMessage(int32_t messageType, int32_t access, void (HomeMaticCentral::*messageHandler)(const std::string&, int32_t, std::shared_ptr<BidCoSPacket>));
+        BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(const std::string&, int32_t, std::shared_ptr<BidCoSPacket>));
         virtual ~BidCoSMessage();
 
         int32_t getMessageType() { return _messageType; }
@@ -60,7 +60,7 @@ class BidCoSMessage
         void setMessageAccess(int32_t access) { _access = access; }
         int32_t getMessageAccessPairing() { return _accessPairing; }
         void setMessageAccessPairing(int32_t accessPairing) { _accessPairing = accessPairing; }
-        void invokeMessageHandler(std::shared_ptr<BidCoSPacket> packet);
+        void invokeMessageHandler(const std::string& interfaceId, const std::shared_ptr<BidCoSPacket>& packet);
         bool checkAccess(std::shared_ptr<BidCoSPacket> packet, std::shared_ptr<BidCoSQueue> queue);
         void setMessageCounter(std::shared_ptr<BidCoSPacket> packet);
         bool typeIsEqual(std::shared_ptr<BidCoSPacket> packet);
@@ -71,7 +71,7 @@ class BidCoSMessage
         int32_t _messageType = -1;
         int32_t _access = 0;
         int32_t _accessPairing = 0;
-        void (HomeMaticCentral::*_messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>) = nullptr;
+        void (HomeMaticCentral::*_messageHandler)(const std::string&, int32_t, std::shared_ptr<BidCoSPacket>) = nullptr;
     private:
 };
 }

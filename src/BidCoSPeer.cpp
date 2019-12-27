@@ -615,14 +615,14 @@ std::string BidCoSPeer::handleCliCommand(std::string command)
     return "Error executing command. See log file for more details.\n";
 }
 
-bool BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
+int32_t BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
 {
 	try
 	{
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
-		if(!central) return false;
+		if(!central) return -1;
 
-		if(!(getRXModes() & HomegearDevice::ReceiveModes::Enum::always)) return true;
+		if(!(getRXModes() & HomegearDevice::ReceiveModes::Enum::always)) return 1;
 
 		uint32_t time = BaseLib::HelperFunctions::getTimeSeconds();
 		_lastPing = (int64_t)time * 1000;
@@ -646,10 +646,10 @@ bool BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
 					if(associatedVariablesIndex == -1) continue;
 					PVariable result = getValueFromDevice(j->second->associatedVariables.at(associatedVariablesIndex), i->first, !waitForResponse);
 					if(result && result->errorStruct) GD::out.printError("Error: getValueFromDevice in ping returned RPC error: " + result->structValue->at("faultString")->stringValue);
-					if(!result || result->errorStruct || result->type == VariableType::tVoid) return false;
+					if(!result || result->errorStruct || result->type == VariableType::tVoid) return -1;
+                    return 0;
 				}
 			}
-			return true;
 		}
 
 		//No get value frames
@@ -673,20 +673,21 @@ bool BidCoSPeer::ping(int32_t packetCount, bool waitForResponse)
 				std::this_thread::sleep_for(std::chrono::milliseconds(200));
 				waitIndex++;
 			}
-			if(responseReceived) return true;
+			if(responseReceived) return 0;
 		}
 	}
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    return false;
+    return -1;
 }
 
 void BidCoSPeer::pingThread()
 {
-	if(ping(3, true)) serviceMessages->endUnreach();
-	else serviceMessages->setUnreach(true, false);
+    auto result = ping(3, true);
+	if(result == 0) serviceMessages->endUnreach();
+	else if(result == -1) serviceMessages->setUnreach(true, false);
 }
 
 void BidCoSPeer::addPeer(int32_t channel, std::shared_ptr<BaseLib::Systems::BasicPeer> peer)

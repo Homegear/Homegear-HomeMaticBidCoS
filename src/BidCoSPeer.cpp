@@ -1308,7 +1308,10 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 
 		pendingBidCoSQueues->push(queue);
 		if(serviceMessages) serviceMessages->setConfigPending(true);
-		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
+        if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) ||
+            ((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))))
 		{
 			if(!onlyPushing) central->enqueuePendingQueues(_address);
 		}
@@ -1869,7 +1872,10 @@ PVariable BidCoSPeer::getValueFromDevice(PParameter& parameter, int32_t channel,
 	try
 	{
 		if(!parameter) return Variable::createError(-32500, "parameter is nullptr.");
-		if(!(getRXModes() & HomegearDevice::ReceiveModes::Enum::always) && !(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)) return Variable::createError(-6, "Parameter can't be requested actively, because the device isn't reachable all the time.");
+		if(!(getRXModes() & HomegearDevice::ReceiveModes::Enum::always) &&
+		    (!(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) ||
+		    (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+		    (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))) return Variable::createError(-6, "Parameter can't be requested actively, because the device isn't reachable all the time.");
 		if(parameter->getPackets.empty()) return Variable::createError(-6, "Parameter can't be requested actively.");
 		std::string getRequest = parameter->getPackets.front()->id;
 		std::string getResponse = parameter->getPackets.front()->responseId;
@@ -1898,7 +1904,12 @@ PVariable BidCoSPeer::getValueFromDevice(PParameter& parameter, int32_t channel,
 			payload.at(frame->channelIndex - 9) = (uint8_t)channel;
 		}
 		uint8_t controlByte = 0xA0;
-		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
+        if((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            controlByte |= 0x10;
+        }
 		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->getAddress(), _address, payload));
 
 		for(BinaryPayloads::iterator i = frame->binaryPayloads.begin(); i != frame->binaryPayloads.end(); ++i)
@@ -2290,7 +2301,12 @@ PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, i
 		setGeneralCounter(_generalCounter + 1);
 
 		uint8_t controlByte = 0xA0;
-		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
+		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+		    !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+		    (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            controlByte |= 0x10;
+        }
 		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, 0x3E, getCentral()->getAddress(), _address, payload));
 		setMessageCounter(_messageCounter + 1);
 
@@ -2300,7 +2316,10 @@ PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, i
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		queue->push(central->getMessages()->find(0x02));
 		pendingBidCoSQueues->push(queue);
-		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
+		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) ||
+		    ((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+		    !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))))
 		{
 			central->enqueuePendingQueues(_address);
 		}
@@ -2330,7 +2349,12 @@ PVariable BidCoSPeer::forceConfigUpdate(BaseLib::PRpcClientInfo clientInfo)
 
 		uint8_t controlByte = 0xA0;
 		//Always send config start packet as burst packet => no ACK otherwise for some devices
-		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
+        if((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            controlByte |= 0x10;
+        }
 
 		for(Functions::iterator i = _rpcDevice->functions.begin(); i != _rpcDevice->functions.end(); ++i)
 		{
@@ -2598,7 +2622,12 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				payload.push_back(i->first);
 				uint8_t controlByte = 0xA0;
 				//Always send config start packet as burst packet => no ACK otherwise for some devices
-				if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
+                if((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                    !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                    (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+                {
+                    controlByte |= 0x10;
+                }
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, controlByte, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
 				queue->push(central->getMessages()->find(0x02));
@@ -2767,7 +2796,12 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				payload.push_back(i->first);
 				uint8_t controlByte = 0xA0;
 				//Only send first packet as burst packet
-				if(firstPacket && (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)) controlByte |= 0x10;
+				if(firstPacket && (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                                  !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                                  (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+                {
+                    controlByte |= 0x10;
+                }
 				firstPacket = false;
 				std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(_messageCounter, controlByte, 0x01, central->getAddress(), _address, payload));
 				queue->push(configPacket);
@@ -3169,7 +3203,12 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		}
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
 		uint8_t controlByte = 0xA0;
-		if(getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) controlByte |= 0x10;
+        if((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            controlByte |= 0x10;
+        }
 		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, (uint8_t)frame->type, getCentral()->getAddress(), _address, payload));
 
 		for(BinaryPayloads::iterator i = frame->binaryPayloads.begin(); i != frame->binaryPayloads.end(); ++i)
@@ -3312,7 +3351,10 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		queue->push(packet);
 		queue->push(central->getMessages()->find(0x02));
 		pendingBidCoSQueues->push(queue);
-		if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio))
+        if((getRXModes() & HomegearDevice::ReceiveModes::Enum::always) ||
+           ((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+              (getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))))
 		{
 			bool result = false;
 			central->enqueuePendingQueues(_address, wait, &result);

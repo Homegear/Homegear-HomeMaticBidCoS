@@ -758,7 +758,12 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t devi
 		if(!queue->peer) queue->peer = peer;
 		if(queue->pendingQueuesEmpty())
 		{
-			if(peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) peer->pendingBidCoSQueues->setWakeOnRadioBit();
+            if((queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                peer->pendingBidCoSQueues->setWakeOnRadioBit();
+            }
 			queue->push(peer->pendingBidCoSQueues);
 		}
 		_enqueuePendingQueuesMutex.unlock();
@@ -2468,7 +2473,12 @@ void HomeMaticCentral::reset(uint64_t id, bool defer)
 		pendingQueue->noSending = true;
 
 		uint8_t configByte = 0xA0;
-		if(peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+        if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            configByte |= 0x10;
+        }
 
 		std::vector<uint8_t> payload;
 
@@ -2505,7 +2515,12 @@ void HomeMaticCentral::unpair(uint64_t id, bool defer)
 		pendingQueue->noSending = true;
 
 		uint8_t configByte = 0xA0;
-		if(peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+        if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            configByte |= 0x10;
+        }
 		std::vector<uint8_t> payload;
 
 		//CONFIG_START
@@ -3393,7 +3408,10 @@ void HomeMaticCentral::handleAck(const std::string& interfaceId, int32_t message
 						GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 					}
 					setInstallMode(nullptr, false, -1, nullptr, false);
-					if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) queue->setWakeOnRadioBit();
+                    if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) //Don't check for wakeUp and wakeUp2 during pairing
+                    {
+                        queue->setWakeOnRadioBit();
+                    }
 					PVariable deviceDescriptions(new Variable(VariableType::tArray));
 					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
 					std::vector<uint64_t> newIds{ queue->peer->getID() };
@@ -3638,7 +3656,12 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			std::vector<uint8_t> payload;
 
 			uint8_t configByte = 0xA0;
-			if(sender->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 			std::shared_ptr<BaseLib::Systems::BasicPeer> hiddenPeer(sender->getVirtualPeer(senderChannelIndex));
 			if(hiddenPeer)
 			{
@@ -3728,7 +3751,12 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			std::vector<uint8_t> payload;
 
 			uint8_t configByte = 0xA0;
-			if(receiver->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 
 			if(receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDN &&
 				receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDNBOM &&
@@ -3885,7 +3913,12 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 			pendingQueue->noSending = true;
 
 			uint8_t configByte = 0xA0;
-			if(sender->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 
 			std::vector<uint8_t> payload;
 			payload.push_back(senderChannelIndex);
@@ -3924,7 +3957,12 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 			pendingQueue->noSending = true;
 
 			uint8_t configByte = 0xA0;
-			if(receiver->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 
 			std::vector<uint8_t> payload;
 			payload.clear();
@@ -4189,7 +4227,12 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		queue->noSending = true;
 
 		uint8_t configByte = 0xA0;
-		if(burst && (peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio)) configByte |= 0x10;
+		if(burst && (peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) &&
+                    !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                    (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            configByte |= 0x10;
+        }
 
 		std::vector<uint8_t> payload;
 		if(oldTeamAddress != 0 && oldTeamAddress != peer->getTeamRemoteAddress())
@@ -4223,7 +4266,13 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 
 		peer->pendingBidCoSQueues->push(queue);
 		peer->serviceMessages->setConfigPending(true);
-		if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)) enqueuePendingQueues(peer->getAddress());
+		if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::always) ||
+		    ((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))))
+        {
+            enqueuePendingQueues(peer->getAddress());
+        }
 		else GD::out.printDebug("Debug: Packet was queued and will be sent with next wake me up packet.");
 		raiseRPCUpdateDevice(peer->getID(), channel, peer->getSerialNumber() + ":" + std::to_string(channel), 2);
 		return PVariable(new Variable(VariableType::tVoid));

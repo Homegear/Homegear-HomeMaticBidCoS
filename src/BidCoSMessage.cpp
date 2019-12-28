@@ -37,11 +37,11 @@ BidCoSMessage::BidCoSMessage()
 {
 }
 
-BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _messageHandler(messageHandler)
+BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, void (HomeMaticCentral::*messageHandler)(const std::string&, int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _messageHandler(messageHandler)
 {
 }
 
-BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _accessPairing(accessPairing), _messageHandler(messageHandler)
+BidCoSMessage::BidCoSMessage(int32_t messageType, int32_t access, int32_t accessPairing, void (HomeMaticCentral::*messageHandler)(const std::string&, int32_t, std::shared_ptr<BidCoSPacket>)) : _messageType(messageType), _access(access), _accessPairing(accessPairing), _messageHandler(messageHandler)
 {
 }
 
@@ -49,25 +49,17 @@ BidCoSMessage::~BidCoSMessage()
 {
 }
 
-void BidCoSMessage::invokeMessageHandler(std::shared_ptr<BidCoSPacket> packet)
+void BidCoSMessage::invokeMessageHandler(const std::string& interfaceId, const std::shared_ptr<BidCoSPacket>& packet)
 {
 	try
 	{
 		std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
 		if(!central || _messageHandler == nullptr || packet == nullptr) return;
-		((central.get())->*(_messageHandler))(packet->messageCounter(), packet);
+		((central.get())->*(_messageHandler))(interfaceId, packet->messageCounter(), packet);
 	}
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 }
 
@@ -83,14 +75,6 @@ bool BidCoSMessage::typeIsEqual(int32_t messageType)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 	return false;
 }
 
@@ -104,14 +88,6 @@ bool BidCoSMessage::typeIsEqual(std::shared_ptr<BidCoSPacket> packet)
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 	return false;
 }
@@ -127,14 +103,6 @@ bool BidCoSMessage::typeIsEqual(std::shared_ptr<BidCoSMessage> message)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 	return false;
 }
 
@@ -148,14 +116,6 @@ bool BidCoSMessage::typeIsEqual(std::shared_ptr<BidCoSMessage> message, std::sha
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 	return false;
 }
@@ -212,14 +172,6 @@ bool BidCoSMessage::checkAccess(std::shared_ptr<BidCoSPacket> packet, std::share
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 	return false;
 }

@@ -185,9 +185,9 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		 * @param packetCount The maximum number of ping packets to send if there is no response.
 		 * @param waitForResponse Wait for the response packet.
 		 * @see _lastPing
-		 * @return Returns true, when the execution was successful. If "waitForResponse" is true, then true is returned when the device sent a response packet and false when there was no response.
+		 * @return Returns 0, when the execution was successful or 1 when a ping is not possible. Returns -1 on error. If "waitForResponse" is true, then 0 is returned when the device sent a response packet and -1 when there was no response.
 		 */
-        virtual bool ping(int32_t packetCount, bool waitForResponse);
+        virtual int32_t ping(int32_t packetCount, bool waitForResponse);
 
         //RPC methods
         /**

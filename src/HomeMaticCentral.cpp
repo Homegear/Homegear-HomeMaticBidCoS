@@ -56,14 +56,6 @@ HomeMaticCentral::~HomeMaticCentral()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::dispose(bool wait)
@@ -90,14 +82,6 @@ void HomeMaticCentral::dispose(bool wait)
 			{
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(BaseLib::Exception& ex)
-			{
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-			}
-			catch(...)
-			{
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-			}
 		}
 		_peersMutex.unlock();
 
@@ -111,14 +95,6 @@ void HomeMaticCentral::dispose(bool wait)
     catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -153,14 +129,6 @@ void HomeMaticCentral::stopThreads()
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::init()
@@ -191,39 +159,23 @@ void HomeMaticCentral::init()
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::setUpBidCoSMessages()
 {
 	try
 	{
-		_messages->add(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(0x00, ACCESSPAIREDTOSENDER, FULLACCESS, &HomeMaticCentral::handlePairingRequest)));
+		_messages->add(std::make_shared<BidCoSMessage>(0x00, ACCESSPAIREDTOSENDER, FULLACCESS, &HomeMaticCentral::handlePairingRequest));
 
-		_messages->add(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(0x02, ACCESSPAIREDTOSENDER | ACCESSDESTISME, ACCESSPAIREDTOSENDER | ACCESSDESTISME, &HomeMaticCentral::handleAck)));
+		_messages->add(std::make_shared<BidCoSMessage>(0x02, ACCESSPAIREDTOSENDER | ACCESSDESTISME, ACCESSPAIREDTOSENDER | ACCESSDESTISME, &HomeMaticCentral::handleAck));
 
-		_messages->add(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(0x10, ACCESSPAIREDTOSENDER | ACCESSDESTISME, ACCESSPAIREDTOSENDER | ACCESSDESTISME, &HomeMaticCentral::handleConfigParamResponse)));
+		_messages->add(std::make_shared<BidCoSMessage>(0x10, ACCESSPAIREDTOSENDER | ACCESSDESTISME, ACCESSPAIREDTOSENDER | ACCESSDESTISME, &HomeMaticCentral::handleConfigParamResponse));
 
-		_messages->add(std::shared_ptr<BidCoSMessage>(new BidCoSMessage(0x3F, ACCESSPAIREDTOSENDER | ACCESSDESTISME, ACCESSPAIREDTOSENDER | ACCESSDESTISME, &HomeMaticCentral::handleTimeRequest)));
+		_messages->add(std::make_shared<BidCoSMessage>(0x3F, ACCESSPAIREDTOSENDER | ACCESSDESTISME, ACCESSPAIREDTOSENDER | ACCESSDESTISME, &HomeMaticCentral::handleTimeRequest));
 	}
     catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -292,16 +244,6 @@ void HomeMaticCentral::loadPeers()
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     	_peersMutex.unlock();
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    	_peersMutex.unlock();
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    	_peersMutex.unlock();
-    }
 }
 
 void HomeMaticCentral::saveVariables()
@@ -314,14 +256,6 @@ void HomeMaticCentral::saveVariables()
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -345,14 +279,6 @@ void HomeMaticCentral::loadVariables()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 uint8_t HomeMaticCentral::getMessageCounter()
@@ -373,14 +299,6 @@ void HomeMaticCentral::saveMessageCounters()
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::serializeMessageCounters(std::vector<uint8_t>& encodedData)
@@ -398,14 +316,6 @@ void HomeMaticCentral::serializeMessageCounters(std::vector<uint8_t>& encodedDat
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -426,14 +336,6 @@ void HomeMaticCentral::unserializeMessageCounters(std::shared_ptr<std::vector<ch
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::savePeers(bool full)
@@ -453,14 +355,6 @@ void HomeMaticCentral::savePeers(bool full)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 	_peersMutex.unlock();
 }
 
@@ -479,14 +373,6 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::getPeer(int32_t address)
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _peersMutex.unlock();
     return std::shared_ptr<BidCoSPeer>();
@@ -508,14 +394,6 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::getPeer(uint64_t id)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _peersMutex.unlock();
     return std::shared_ptr<BidCoSPeer>();
 }
@@ -535,14 +413,6 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::getPeer(std::string serialNumber)
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     _peersMutex.unlock();
     return std::shared_ptr<BidCoSPeer>();
@@ -726,42 +596,24 @@ void HomeMaticCentral::worker()
 				_peersMutex.unlock();
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(BaseLib::Exception& ex)
-			{
-				_peersMutex.unlock();
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-			}
-			catch(...)
-			{
-				_peersMutex.unlock();
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-			}
 		}
 	}
     catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 bool deleteThis = false;
 
-bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<BaseLib::Systems::Packet> packet)
+bool HomeMaticCentral::onPacketReceived(std::string& senderId, std::shared_ptr<BaseLib::Systems::Packet> packet)
 {
 	try
 	{
 		if(_disposing) return false;
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->getTimeReceived() + 5000) GD::out.printError("Error: Packet was processed more than 5 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
-		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->getTimeReceived()) << " HomeMatic BidCoS packet received (" << senderID << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
+		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->getTimeReceived()) << " HomeMatic BidCoS packet received (" << senderId << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
 		if(!bidCoSPacket) return false;
 
 		// {{{ Intercept packet
@@ -792,16 +644,16 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 			}
 			return false;
 		}*/
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Getting peer for packet " + bidCoSPacket->hexString() + ".");
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderId + "): Getting peer for packet " + bidCoSPacket->hexString() + ".");
 		std::shared_ptr<BidCoSPeer> peer(getPeer(bidCoSPacket->senderAddress()));
 		if(peer && bidCoSPacket->messageType() != 0x02 && bidCoSPacket->messageType() != 0x03)
 		{
-			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + bidCoSPacket->hexString() + " is now passed to checkForBestInterface.");
-			peer->checkForBestInterface(senderID, bidCoSPacket->rssiDevice(), bidCoSPacket->messageCounter()); //Ignore ACK and AES handshake packets.
-			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): checkForBestInterface finished.");
+			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderId + "): Packet " + bidCoSPacket->hexString() + " is now passed to checkForBestInterface.");
+			peer->checkForBestInterface(senderId, bidCoSPacket->rssiDevice(), bidCoSPacket->messageCounter()); //Ignore ACK and AES handshake packets.
+			if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderId + "): checkForBestInterface finished.");
 		}
 		std::shared_ptr<IBidCoSInterface> physicalInterface = getPhysicalInterface(bidCoSPacket->senderAddress());
-		if(physicalInterface->getID() != senderID) return true;
+		if(physicalInterface->getID() != senderId) return true;
 
 		// {{{ Handle wrong ACKs
 			if(bidCoSPacket->messageType() == 0x02 && bidCoSPacket->destinationAddress() != 0 && bidCoSPacket->payload().size() == 1 && bidCoSPacket->payload().at(0) == 0)
@@ -816,7 +668,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 		// }}}
 
 		bool handled = false;
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + bidCoSPacket->hexString() + " is now passed to _receivedPackets.set.");
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderId + "): Packet " + bidCoSPacket->hexString() + " is now passed to _receivedPackets.set.");
 		if(_receivedPackets.set(bidCoSPacket->senderAddress(), bidCoSPacket, bidCoSPacket->getTimeReceived())) handled = true;
 		else
 		{
@@ -828,12 +680,12 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 				if(message && message->checkAccess(bidCoSPacket, queue))
 				{
 					if(_bl->debugLevel >= 6) GD::out.printDebug("Debug: Device " + std::to_string(_deviceId) + ": Access granted for packet " + bidCoSPacket->hexString());
-					message->invokeMessageHandler(bidCoSPacket);
+					message->invokeMessageHandler(senderId, bidCoSPacket);
 					handled = true;
 				}
 			}
 		}
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): _receivedPackets.set finished.");
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderId + "): _receivedPackets.set finished.");
 		if(!peer) return false;
 		std::shared_ptr<BidCoSPeer> team;
 		if(peer->hasTeam() && bidCoSPacket->senderAddress() == peer->getTeamRemoteAddress()) team = getPeer(peer->getTeamRemoteSerialNumber());
@@ -849,7 +701,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 				return true; //Packet is handled by queue. Don't check if queue is empty!
 			}
 		}
-		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderID + "): Packet " + bidCoSPacket->hexString() + " is now passed to the peer.");
+		if(_bl->settings.devLog()) _bl->out.printMessage("Devlog (" + senderId + "): Packet " + bidCoSPacket->hexString() + " is now passed to the peer.");
 		if(team)
 		{
 			team->packetReceived(bidCoSPacket);
@@ -863,14 +715,6 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderID, std::shared_ptr<B
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return false;
 }
@@ -887,14 +731,6 @@ std::shared_ptr<IBidCoSInterface> HomeMaticCentral::getPhysicalInterface(int32_t
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return GD::defaultPhysicalInterface;
 }
@@ -922,7 +758,12 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t devi
 		if(!queue->peer) queue->peer = peer;
 		if(queue->pendingQueuesEmpty())
 		{
-			if(peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) peer->pendingBidCoSQueues->setWakeOnRadioBit();
+            if((queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                peer->pendingBidCoSQueues->setWakeOnRadioBit();
+            }
 			queue->push(peer->pendingBidCoSQueues);
 		}
 		_enqueuePendingQueuesMutex.unlock();
@@ -947,14 +788,6 @@ std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t devi
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _enqueuePendingQueuesMutex.unlock();
     if(result) *result = false;
     return std::shared_ptr<BidCoSQueue>();
@@ -976,14 +809,6 @@ void HomeMaticCentral::enqueuePackets(int32_t deviceAddress, std::shared_ptr<Bid
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -1037,14 +862,6 @@ void HomeMaticCentral::sendPacket(std::shared_ptr<IBidCoSInterface> physicalInte
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface> physicalInterface, std::shared_ptr<BidCoSPacket> packet, int32_t peerAddress, int32_t count, int32_t delay, bool incrementMessageCounter, bool useCentralMessageCounter, bool isThread)
@@ -1088,14 +905,6 @@ void HomeMaticCentral::sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface>
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_t firmwareVersion, uint32_t deviceType, std::string serialNumber, int32_t remoteChannel, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet, bool save)
@@ -1137,14 +946,6 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createPeer(int32_t address, int32_
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     return std::shared_ptr<BidCoSPeer>();
 }
 
@@ -1162,14 +963,6 @@ std::shared_ptr<BidCoSPeer> HomeMaticCentral::createTeam(int32_t address, uint32
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return std::shared_ptr<BidCoSPeer>();
 }
@@ -1335,16 +1128,6 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				{
 					_peersMutex.unlock();
 					GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-				}
-				catch(BaseLib::Exception& ex)
-				{
-					_peersMutex.unlock();
-					GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-				}
-				catch(...)
-				{
-					_peersMutex.unlock();
-					GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 				}
 
 				stringStream << "Added peer " + std::to_string(peer->getID()) + " with address 0x" << std::hex << peerAddress << " of type 0x" << BaseLib::HelperFunctions::getHexString(deviceType) << " with serial number " << serialNumber << " and firmware version 0x" << firmwareVersion << "." << std::dec << std::endl;
@@ -1768,30 +1551,12 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				_peersMutex.unlock();
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(BaseLib::Exception& ex)
-			{
-				_peersMutex.unlock();
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-			}
-			catch(...)
-			{
-				_peersMutex.unlock();
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-			}
 		}
 		else return "Unknown command.\n";
 	}
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return "Error executing command. See log file for more details.\n";
 }
@@ -1815,14 +1580,6 @@ void HomeMaticCentral::updateFirmwares(std::vector<uint64_t> ids)
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 	_bl->deviceUpdateInfo.reset();
 	_bl->deviceUpdateInfo.updateMutex.unlock();
@@ -2171,14 +1928,6 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _bl->deviceUpdateInfo.results[id].first = 1;
 	_bl->deviceUpdateInfo.results[id].second = "Unknown error.";
     GD::out.printInfo("Info: Disabling update mode.");
@@ -2203,14 +1952,6 @@ int32_t HomeMaticCentral::getUniqueAddress(int32_t seed)
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 	return seed;
 }
@@ -2240,14 +1981,6 @@ std::string HomeMaticCentral::getUniqueSerialNumber(std::string seedPrefix, uint
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 	return "";
 }
@@ -2293,16 +2026,6 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 				_peersMutex.unlock();
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(BaseLib::Exception& ex)
-			{
-				_peersMutex.unlock();
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-			}
-			catch(...)
-			{
-				_peersMutex.unlock();
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-			}
 			std::shared_ptr<BaseLib::Systems::BasicPeer> hmccvd(new BaseLib::Systems::BasicPeer());
 			hmccvd->id = peer->getID();
 			hmccvd->address = peer->getAddress();
@@ -2346,14 +2069,6 @@ void HomeMaticCentral::addHomegearFeaturesHMCCVD(std::shared_ptr<BidCoSPeer> pee
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -2468,14 +2183,6 @@ void HomeMaticCentral::addHomegearFeaturesRemote(std::shared_ptr<BidCoSPeer> pee
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::addHomegearFeaturesSwitch(std::shared_ptr<BidCoSPeer> peer, int32_t channel, bool pushPendingBidCoSQueues)
@@ -2574,14 +2281,6 @@ void HomeMaticCentral::addHomegearFeaturesSwitch(std::shared_ptr<BidCoSPeer> pee
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::addHomegearFeaturesMotionDetector(std::shared_ptr<BidCoSPeer> peer, int32_t channel, bool pushPendingBidCoSQueues)
@@ -2593,14 +2292,6 @@ void HomeMaticCentral::addHomegearFeaturesMotionDetector(std::shared_ptr<BidCoSP
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -2649,14 +2340,6 @@ void HomeMaticCentral::addHomegearFeaturesHMCCRTDN(std::shared_ptr<BidCoSPeer> p
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -2721,14 +2404,6 @@ void HomeMaticCentral::addHomegearFeatures(std::shared_ptr<BidCoSPeer> peer, int
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::deletePeer(uint64_t id)
@@ -2785,14 +2460,6 @@ void HomeMaticCentral::deletePeer(uint64_t id)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::reset(uint64_t id, bool defer)
@@ -2806,7 +2473,12 @@ void HomeMaticCentral::reset(uint64_t id, bool defer)
 		pendingQueue->noSending = true;
 
 		uint8_t configByte = 0xA0;
-		if(peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+        if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            configByte |= 0x10;
+        }
 
 		std::vector<uint8_t> payload;
 
@@ -2830,14 +2502,6 @@ void HomeMaticCentral::reset(uint64_t id, bool defer)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::unpair(uint64_t id, bool defer)
@@ -2851,7 +2515,12 @@ void HomeMaticCentral::unpair(uint64_t id, bool defer)
 		pendingQueue->noSending = true;
 
 		uint8_t configByte = 0xA0;
-		if(peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+        if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            configByte |= 0x10;
+        }
 		std::vector<uint8_t> payload;
 
 		//CONFIG_START
@@ -2904,17 +2573,9 @@ void HomeMaticCentral::unpair(uint64_t id, bool defer)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
-void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
+void HomeMaticCentral::handlePairingRequest(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
@@ -2976,6 +2637,7 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
 				GD::out.printWarning("Warning: Device type not supported. Sender address 0x" + BaseLib::HelperFunctions::getHexString(packet->senderAddress(), 6) + ".");
 				return;
 			}
+			peer->setInterface(std::make_shared<RpcClientInfo>(), interfaceId);
 			peer->getPhysicalInterface()->addPeer(peer->getPeerInfo());
 
 			//CONFIG_START
@@ -3088,17 +2750,9 @@ void HomeMaticCentral::handlePairingRequest(int32_t messageCounter, std::shared_
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
-void HomeMaticCentral::handleTimeRequest(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
+void HomeMaticCentral::handleTimeRequest(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
@@ -3121,14 +2775,6 @@ void HomeMaticCentral::handleTimeRequest(int32_t messageCounter, std::shared_ptr
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::sendOK(int32_t messageCounter, int32_t destinationAddress, std::vector<uint8_t> payload)
@@ -3142,14 +2788,6 @@ void HomeMaticCentral::sendOK(int32_t messageCounter, int32_t destinationAddress
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -3194,17 +2832,9 @@ void HomeMaticCentral::sendRequestConfig(int32_t address, uint8_t localChannel, 
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
-void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
+void HomeMaticCentral::handleConfigParamResponse(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
@@ -3561,14 +3191,6 @@ void HomeMaticCentral::handleConfigParamResponse(int32_t messageCounter, std::sh
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::resetTeam(std::shared_ptr<BidCoSPeer> peer, uint32_t channel)
@@ -3622,16 +3244,6 @@ void HomeMaticCentral::resetTeam(std::shared_ptr<BidCoSPeer> peer, uint32_t chan
 		_peersMutex.unlock();
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-    	_peersMutex.unlock();
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-    	_peersMutex.unlock();
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::addPeerToTeam(std::shared_ptr<BidCoSPeer> peer, int32_t channel, int32_t teamAddress, uint32_t teamChannel)
@@ -3659,14 +3271,6 @@ void HomeMaticCentral::addPeerToTeam(std::shared_ptr<BidCoSPeer> peer, int32_t c
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 void HomeMaticCentral::addPeerToTeam(std::shared_ptr<BidCoSPeer> peer, int32_t channel, uint32_t teamChannel, std::string teamSerialNumber)
@@ -3693,14 +3297,6 @@ void HomeMaticCentral::addPeerToTeam(std::shared_ptr<BidCoSPeer> peer, int32_t c
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -3734,14 +3330,6 @@ void HomeMaticCentral::removePeerFromTeam(std::shared_ptr<BidCoSPeer> peer)
 			{
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
-			catch(BaseLib::Exception& ex)
-			{
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-			}
-			catch(...)
-			{
-				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-			}
 			_peersMutex.unlock();
 
 			PVariable deviceAddresses(new Variable(VariableType::tArray));
@@ -3773,17 +3361,9 @@ void HomeMaticCentral::removePeerFromTeam(std::shared_ptr<BidCoSPeer> peer)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
-void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
+void HomeMaticCentral::handleAck(const std::string& interfaceId, int32_t messageCounter, std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
@@ -3827,18 +3407,11 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 						_peersMutex.unlock();
 						GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 					}
-					catch(BaseLib::Exception& ex)
-					{
-						_peersMutex.unlock();
-						GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-					}
-					catch(...)
-					{
-						_peersMutex.unlock();
-						GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-					}
 					setInstallMode(nullptr, false, -1, nullptr, false);
-					if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) queue->setWakeOnRadioBit();
+                    if(queue->peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) //Don't check for wakeUp and wakeUp2 during pairing
+                    {
+                        queue->setWakeOnRadioBit();
+                    }
 					PVariable deviceDescriptions(new Variable(VariableType::tArray));
 					deviceDescriptions->arrayValue = queue->peer->getDeviceDescriptions(nullptr, true, std::map<std::string, bool>());
 					std::vector<uint64_t> newIds{ queue->peer->getID() };
@@ -3896,16 +3469,6 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 								_peersMutex.unlock();
 								GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 							}
-							catch(BaseLib::Exception& ex)
-							{
-								_peersMutex.unlock();
-								GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-							}
-							catch(...)
-							{
-								_peersMutex.unlock();
-								GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-							}
 							break;
 						}
 					}
@@ -3955,14 +3518,6 @@ void HomeMaticCentral::handleAck(int32_t messageCounter, std::shared_ptr<BidCoSP
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
 }
 
@@ -4014,14 +3569,6 @@ PVariable HomeMaticCentral::addDevice(BaseLib::PRpcClientInfo clientInfo, std::s
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
@@ -4040,14 +3587,6 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, std::str
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 	return Variable::createError(-32500, "Unknown application error.");
 }
@@ -4117,7 +3656,12 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			std::vector<uint8_t> payload;
 
 			uint8_t configByte = 0xA0;
-			if(sender->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 			std::shared_ptr<BaseLib::Systems::BasicPeer> hiddenPeer(sender->getVirtualPeer(senderChannelIndex));
 			if(hiddenPeer)
 			{
@@ -4207,7 +3751,12 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 			std::vector<uint8_t> payload;
 
 			uint8_t configByte = 0xA0;
-			if(receiver->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 
 			if(receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDN &&
 				receiver->getDeviceType() != (uint32_t)DeviceType::HMCCRTDNBOM &&
@@ -4312,14 +3861,6 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
@@ -4338,14 +3879,6 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, std::
 	catch(const std::exception& ex)
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
 	}
 	return Variable::createError(-32500, "Unknown application error.");
 }
@@ -4380,7 +3913,12 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 			pendingQueue->noSending = true;
 
 			uint8_t configByte = 0xA0;
-			if(sender->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (sender->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 
 			std::vector<uint8_t> payload;
 			payload.push_back(senderChannelIndex);
@@ -4419,7 +3957,12 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 			pendingQueue->noSending = true;
 
 			uint8_t configByte = 0xA0;
-			if(receiver->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) configByte |= 0x10;
+            if((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+                !((receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                (receiver->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+            {
+                configByte |= 0x10;
+            }
 
 			std::vector<uint8_t> payload;
 			payload.clear();
@@ -4465,14 +4008,6 @@ PVariable HomeMaticCentral::removeLink(BaseLib::PRpcClientInfo clientInfo, uint6
 	{
 		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 	}
-	catch(BaseLib::Exception& ex)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-	}
-	catch(...)
-	{
-		GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-	}
 	return Variable::createError(-32500, "Unknown application error.");
 }
 
@@ -4496,14 +4031,6 @@ PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, std
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -4556,14 +4083,6 @@ PVariable HomeMaticCentral::deleteDevice(BaseLib::PRpcClientInfo clientInfo, uin
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -4622,14 +4141,6 @@ PVariable HomeMaticCentral::getPairingState(BaseLib::PRpcClientInfo clientInfo)
     {
         _bl->out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        _bl->out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        _bl->out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     return Variable::createError(-32500, "Unknown application error.");
 }
 
@@ -4651,14 +4162,6 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, std::str
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -4724,7 +4227,12 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		queue->noSending = true;
 
 		uint8_t configByte = 0xA0;
-		if(burst && (peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio)) configByte |= 0x10;
+		if(burst && (peer->getRXModes() & HomegearDevice::ReceiveModes::wakeOnRadio) &&
+                    !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+                    (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))
+        {
+            configByte |= 0x10;
+        }
 
 		std::vector<uint8_t> payload;
 		if(oldTeamAddress != 0 && oldTeamAddress != peer->getTeamRemoteAddress())
@@ -4758,7 +4266,13 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
 
 		peer->pendingBidCoSQueues->push(queue);
 		peer->serviceMessages->setConfigPending(true);
-		if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)) enqueuePendingQueues(peer->getAddress());
+		if((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::always) ||
+		    ((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
+            !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
+            (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2))))
+        {
+            enqueuePendingQueues(peer->getAddress());
+        }
 		else GD::out.printDebug("Debug: Packet was queued and will be sent with next wake me up packet.");
 		raiseRPCUpdateDevice(peer->getID(), channel, peer->getSerialNumber() + ":" + std::to_string(channel), 2);
 		return PVariable(new Variable(VariableType::tVoid));
@@ -4767,67 +4281,8 @@ PVariable HomeMaticCentral::setTeam(BaseLib::PRpcClientInfo clientInfo, uint64_t
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     return Variable::createError(-32500, "Unknown application error.");
 }
-
-/*PVariable HomeMaticCentral::getDeviceDescriptionCentral()
-{
-	try
-	{
-		PVariable description(new Variable(VariableType::rpcStruct));
-
-		description->structValue->insert(StructElement("ID", PVariable(new Variable(_deviceId))));
-		description->structValue->insert(StructElement("ADDRESS", PVariable(new Variable(_serialNumber))));
-
-		PVariable variable = PVariable(new Variable(VariableType::rpcArray));
-		description->structValue->insert(StructElement("CHILDREN", variable));
-
-		description->structValue->insert(StructElement("FIRMWARE", PVariable(new Variable(std::string(VERSION)))));
-
-		int32_t uiFlags = (int32_t)BaseLib::Rpc::Device::UIFlags::dontdelete | (int32_t)BaseLib::Rpc::Device::UIFlags::visible;
-		description->structValue->insert(StructElement("FLAGS", PVariable(new Variable(uiFlags))));
-
-		description->structValue->insert(StructElement("INTERFACE", PVariable(new Variable(_serialNumber))));
-
-		variable = PVariable(new Variable(VariableType::rpcArray));
-		description->structValue->insert(StructElement("PARAMSETS", variable));
-		variable->arrayValue->push_back(PVariable(new Variable(std::string("MASTER")))); //Always MASTER
-
-		description->structValue->insert(StructElement("PARENT", PVariable(new Variable(std::string("")))));
-
-		description->structValue->insert(StructElement("PHYSICAL_ADDRESS", PVariable(new Variable(std::to_string(_address)))));
-		description->structValue->insert(StructElement("RF_ADDRESS", PVariable(new Variable(std::to_string(_address)))));
-
-		description->structValue->insert(StructElement("ROAMING", PVariable(new Variable(0))));
-
-		description->structValue->insert(StructElement("TYPE", PVariable(new Variable(std::string("Homegear HomeMatic BidCoS Central")))));
-
-		description->structValue->insert(StructElement("VERSION", PVariable(new Variable((int32_t)10))));
-
-		return description;
-	}
-	catch(const std::exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
-    return Variable::createError(-32500, "Unknown application error.");
-}*/
 
 PVariable HomeMaticCentral::getInstallMode(BaseLib::PRpcClientInfo clientInfo)
 {
@@ -4838,14 +4293,6 @@ PVariable HomeMaticCentral::getInstallMode(BaseLib::PRpcClientInfo clientInfo)
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -4873,14 +4320,6 @@ void HomeMaticCentral::pairingModeTimer(int32_t duration, bool debugOutput)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
 }
 
 PVariable HomeMaticCentral::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, std::string serialNumber, int32_t channel, std::string remoteSerialNumber, int32_t remoteChannel, bool longPress)
@@ -4905,14 +4344,6 @@ PVariable HomeMaticCentral::activateLinkParamset(BaseLib::PRpcClientInfo clientI
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     return Variable::createError(-32500, "Unknown application error.");
 }
 
@@ -4927,14 +4358,6 @@ PVariable HomeMaticCentral::activateLinkParamset(BaseLib::PRpcClientInfo clientI
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -4970,14 +4393,6 @@ PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, std:
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     return Variable::createError(-32500, "Unknown application error.");
 }
 
@@ -5001,14 +4416,6 @@ PVariable HomeMaticCentral::putParamset(BaseLib::PRpcClientInfo clientInfo, uint
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -5045,14 +4452,6 @@ PVariable HomeMaticCentral::setInstallMode(BaseLib::PRpcClientInfo clientInfo, b
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _pairingModeThreadMutex.unlock();
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -5077,14 +4476,6 @@ PVariable HomeMaticCentral::updateFirmware(BaseLib::PRpcClientInfo clientInfo, s
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
-    }
     _updateFirmwareThreadMutex.unlock();
     return Variable::createError(-32500, "Unknown application error.");
 }
@@ -5100,14 +4491,6 @@ PVariable HomeMaticCentral::setInterface(BaseLib::PRpcClientInfo clientInfo, uin
 	catch(const std::exception& ex)
     {
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(BaseLib::Exception& ex)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-    catch(...)
-    {
-        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__);
     }
     return Variable::createError(-32500, "Unknown application error.");
 }

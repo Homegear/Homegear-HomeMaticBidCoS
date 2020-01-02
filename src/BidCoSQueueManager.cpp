@@ -229,11 +229,7 @@ void BidCoSQueueManager::resetQueue(int32_t address, uint32_t id)
 			if(!queue->queue->isEmpty() && queue->queue->getQueueType() != BidCoSQueueType::PAIRING)
 			{
 				peer = queue->queue->peer;
-				if(peer && peer->getRpcDevice() &&
-				    ((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::always) ||
-				    ((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio) &&
-                    !((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp) ||
-                    (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeUp2)))))
+				if(peer && peer->getRpcDevice() && ((peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::always) || (peer->getRXModes() & HomegearDevice::ReceiveModes::Enum::wakeOnRadio)))
 				{
 					setUnreach = true;
 				}

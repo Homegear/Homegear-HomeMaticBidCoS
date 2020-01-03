@@ -17,13 +17,13 @@ if [ $? -eq 0 ]; then
 	[ $? -ne 0 ] && exit 1
 fi
 
-wget -P $FIRMWAREDIR https://www.eq-3.de/downloads/software/firmware/HM-ES-TX-WM_update_V2_2_190619_1.tgz
+wget -P $FIRMWAREDIR https://www.eq-3.de/downloads/software/firmware/HM-ES-TX-WM_update_V2_5_191209.tgz
 if [ $? -eq 0 ]; then
-	tar -zxf $FIRMWAREDIR/HM-ES-TX-WM_update_V2_2_190619_1.tgz -C $FIRMWAREDIR
+	tar -zxf $FIRMWAREDIR/HM-ES-TX-WM_update_V2_5_191209.tgz -C $FIRMWAREDIR
 	[ $? -ne 0 ] && exit 1
-	mv $FIRMWAREDIR/update_application_eQ3-HM-ES-TX-WM.eq3 $SCRIPTDIR/0000.000000DE.fw
+	mv $FIRMWAREDIR/HM-ES-TX-WM_update_V2_5_191209.eq3 $SCRIPTDIR/0000.000000DE.fw
 	[ $? -ne 0 ] && exit 1
-	rm $FIRMWAREDIR/HM-ES-TX-WM_update_V1_2_160628.tgz
+	rm $FIRMWAREDIR/HM-ES-TX-WM_update_V2_5_191209.tgz
 	rm $FIRMWAREDIR/changelog.txt
 	rm $FIRMWAREDIR/info
 	echo "22" > $SCRIPTDIR/0000.000000DE.version

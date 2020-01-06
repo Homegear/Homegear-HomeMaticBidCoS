@@ -65,6 +65,7 @@ class Cul : public IBidCoSInterface
         void enableUpdateMode();
         void disableUpdateMode();
     protected:
+        std::mutex _sendMutex;
         bool _firstPacket = true;
         struct termios _termios;
 

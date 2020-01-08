@@ -69,7 +69,7 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
-	    std::lock_guard<std::mutex> sendGuard(_sendMutex);
+	    std::lock_guard<std::mutex> sendGuard(_forceSendPacketMutex);
 		if(_fileDescriptor->descriptor == -1)
 		{
 			_bl->out.printError("Error: Couldn't write to CUL device, because the file descriptor is not valid: " + _settings->device);

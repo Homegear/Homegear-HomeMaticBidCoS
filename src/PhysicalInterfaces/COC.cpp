@@ -69,6 +69,7 @@ void COC::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
+        std::lock_guard<std::mutex> sendGuard(_forceSendPacketMutex);
 		if(!_socket)
 		{
 			_out.printError("Error: Couldn't write to COC device, because the device descriptor is not valid: " + _settings->device);

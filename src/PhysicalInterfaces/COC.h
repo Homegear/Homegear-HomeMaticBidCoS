@@ -54,6 +54,7 @@ class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerial
 
         std::shared_ptr<BaseLib::SerialReaderWriter> _socket;
         std::string stackPrefix;
+    std::mutex _forceSendPacketMutex;
 
         void writeToDevice(std::string data);
         void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);

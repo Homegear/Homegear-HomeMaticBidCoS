@@ -130,7 +130,11 @@ void HomegearGateway::enableUpdateMode()
         {
             _out.printError(result->structValue->at("faultString")->stringValue);
         }
-        else _out.printInfo("Info: Update mode enabled.");
+        else
+        {
+            _updateMode = true;
+            _out.printInfo("Info: Update mode enabled.");
+        }
     }
     catch(const std::exception& ex)
     {
@@ -156,7 +160,11 @@ void HomegearGateway::disableUpdateMode()
         {
             _out.printError(result->structValue->at("faultString")->stringValue);
         }
-        else _out.printInfo("Info: Update mode disabled.");
+        else
+        {
+            _updateMode = false;
+            _out.printInfo("Info: Update mode disabled.");
+        }
     }
     catch(const std::exception& ex)
     {

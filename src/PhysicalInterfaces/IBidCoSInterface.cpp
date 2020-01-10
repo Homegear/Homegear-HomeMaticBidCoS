@@ -572,6 +572,8 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 		forceSendPacket(bidCoSPacket);
 		_aesHandshake->setMFrame(bidCoSPacket);
 		if(!_updateMode &&
+                (bidCoSPacket->controlByte() & 0x20) &&
+                bidCoSPacket->messageType() != 0xCA &&
                 !(bidCoSPacket->messageType() == 0x01 && bidCoSPacket->controlByte() == 0x84) && //addDevice pairing packet
 				!(bidCoSPacket->messageType() == 0x41 && ((bidCoSPacket->controlByte() == 0x14 && bidCoSPacket->payload().size() == 10) || (bidCoSPacket->controlByte() == 0x94 && bidCoSPacket->payload().size() == 3)))) //HM-Sec-SD(-2)
 		{
@@ -590,6 +592,11 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 				queuePacket(bidCoSPacket, timeSending + 400);
 			}
 		}
+
+        if(bidCoSPacket->controlByte() & 0x10) //Wake-on-Radio packet
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(200)); //Don't block ether too much
+        }
 	}
 	catch(const std::exception& ex)
     {

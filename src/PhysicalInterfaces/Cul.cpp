@@ -69,6 +69,7 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 {
 	try
 	{
+	    std::lock_guard<std::mutex> sendGuard(_forceSendPacketMutex);
 		if(_fileDescriptor->descriptor == -1)
 		{
 			_bl->out.printError("Error: Couldn't write to CUL device, because the file descriptor is not valid: " + _settings->device);
@@ -77,8 +78,8 @@ void Cul::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
 		std::string packetString = packet->hexString();
 		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
 		writeToDevice("As" + packet->hexString() + "\n" + (_updateMode ? "" : "Ar\n"));
-        if(packet->controlByte() & 0x10) std::this_thread::sleep_for(std::chrono::milliseconds(360));
-        else std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        if(packet->controlByte() & 0x10) std::this_thread::sleep_for(std::chrono::milliseconds(380)); //360ms preamble + 20ms sending
+        else std::this_thread::sleep_for(std::chrono::milliseconds(20)); //20ms sending
 		_lastPacketSent = BaseLib::HelperFunctions::getTime();
 	}
 	catch(const std::exception& ex)

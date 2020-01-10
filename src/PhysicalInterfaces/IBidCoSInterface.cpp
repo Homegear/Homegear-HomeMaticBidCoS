@@ -573,6 +573,7 @@ void IBidCoSInterface::sendPacket(std::shared_ptr<BaseLib::Systems::Packet> pack
 		_aesHandshake->setMFrame(bidCoSPacket);
 		if(!_updateMode &&
                 (bidCoSPacket->controlByte() & 0x20) &&
+                bidCoSPacket->messageType() != 0xCA &&
                 !(bidCoSPacket->messageType() == 0x01 && bidCoSPacket->controlByte() == 0x84) && //addDevice pairing packet
 				!(bidCoSPacket->messageType() == 0x41 && ((bidCoSPacket->controlByte() == 0x14 && bidCoSPacket->payload().size() == 10) || (bidCoSPacket->controlByte() == 0x94 && bidCoSPacket->payload().size() == 3)))) //HM-Sec-SD(-2)
 		{

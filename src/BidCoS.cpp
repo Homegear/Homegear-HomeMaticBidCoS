@@ -44,7 +44,8 @@ BidCoS::BidCoS(BaseLib::SharedObjects* bl, BaseLib::Systems::IFamilyEventSink* e
 	GD::out.init(bl);
 	GD::out.setPrefix("Module HomeMatic BidCoS: ");
 	GD::out.printDebug("Debug: Loading module...");
-	_physicalInterfaces.reset(new Interfaces(bl, _settings->getPhysicalInterfaceSettings()));
+    GD::interfaces = std::make_shared<Interfaces>(bl, _settings->getPhysicalInterfaceSettings());
+    _physicalInterfaces = GD::interfaces;
 }
 
 BidCoS::~BidCoS()
@@ -56,9 +57,9 @@ void BidCoS::dispose()
 {
 	if(_disposed) return;
 	DeviceFamily::dispose();
-
-	GD::physicalInterfaces.clear();
-	GD::defaultPhysicalInterface.reset();
+	_central.reset();
+    GD::interfaces.reset();
+    _physicalInterfaces.reset();
 }
 
 std::shared_ptr<BaseLib::Systems::ICentral> BidCoS::initializeCentral(uint32_t deviceId, int32_t address, std::string serialNumber)

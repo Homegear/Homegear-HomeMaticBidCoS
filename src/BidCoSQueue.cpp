@@ -42,7 +42,7 @@ BidCoSQueue::BidCoSQueue()
 {
 	_queueType = BidCoSQueueType::EMPTY;
 	_lastPop = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-	_physicalInterface = GD::defaultPhysicalInterface;
+	_physicalInterface = GD::interfaces->getDefaultInterface();
 	_disposing = false;
 	_workingOnPendingQueue = false;
 	noSending = false;
@@ -124,7 +124,7 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 	std::lock_guard<std::mutex> queueGuard(_queueMutex);
 	try
 	{
-		_physicalInterface = GD::defaultPhysicalInterface;
+		_physicalInterface = GD::interfaces->getDefaultInterface();
 		BaseLib::BinaryDecoder decoder(GD::bl);
 		_queueType = (BidCoSQueueType)decoder.decodeByte(*serializedData, position);
 		uint32_t queueSize = decoder.decodeInteger(*serializedData, position);
@@ -156,7 +156,7 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
 			parameterName = decoder.decodeString(*serializedData, position);
 			channel = decoder.decodeInteger(*serializedData, position);
 			std::string physicalInterfaceID = decoder.decodeString(*serializedData, position);
-			if(GD::physicalInterfaces.find(physicalInterfaceID) != GD::physicalInterfaces.end()) _physicalInterface = GD::physicalInterfaces.at(physicalInterfaceID);
+			if(GD::interfaces->hasInterface(physicalInterfaceID)) _physicalInterface = GD::interfaces->getInterface(physicalInterfaceID);
 			if((entry.getType() == QueueEntryType::PACKET && !entry.getPacket()) || (entry.getType() == QueueEntryType::MESSAGE && !entry.getMessage()))
 			{
 				GD::out.printError("Error unserializing queue of type " + std::to_string((int32_t)_queueType) + ". Clearing it...");
@@ -172,7 +172,7 @@ void BidCoSQueue::unserialize(std::shared_ptr<std::vector<char>> serializedData,
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     _queue.clear();
-    if(!_physicalInterface) _physicalInterface = GD::defaultPhysicalInterface;
+    if(!_physicalInterface) _physicalInterface = GD::interfaces->getDefaultInterface();
 }
 
 void BidCoSQueue::dispose()

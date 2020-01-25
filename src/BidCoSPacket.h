@@ -66,11 +66,11 @@ class BidCoSPacket : public BaseLib::Systems::Packet
 
         BidCoSPacket();
         BidCoSPacket(std::string& packet, int64_t timeReceived = 0);
-        BidCoSPacket(std::vector<uint8_t>& packet, bool rssiByte, int64_t timeReceived = 0);
+        BidCoSPacket(const std::vector<uint8_t>& packet, bool rssiByte, int64_t timeReceived = 0);
         BidCoSPacket(uint8_t messageCounter, uint8_t controlByte, uint8_t messageType, int32_t senderAddress, int32_t destinationAddress, std::vector<uint8_t>& payload, bool updatePacket = false);
         virtual ~BidCoSPacket();
         void import(std::string& packet, bool removeFirstCharacter = true);
-        void import(std::vector<uint8_t>& packet, bool rssiByte);
+        void import(const std::vector<uint8_t>& packet, bool rssiByte);
         virtual std::vector<uint8_t> getPosition(double index, double size, int32_t mask);
         virtual void setPosition(double index, double size, std::vector<uint8_t>& value);
 

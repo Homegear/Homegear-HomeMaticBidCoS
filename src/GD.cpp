@@ -34,7 +34,6 @@ namespace BidCoS
 	BaseLib::SharedObjects* GD::bl = nullptr;
 	BidCoS* GD::family = nullptr;
 	std::shared_ptr<Systems::FamilySettings> GD::settings;
+    std::shared_ptr<Interfaces> GD::interfaces;
 	BaseLib::Output GD::out;
-	std::map<std::string, std::shared_ptr<IBidCoSInterface>> GD::physicalInterfaces;
-	std::shared_ptr<IBidCoSInterface> GD::defaultPhysicalInterface;
 }

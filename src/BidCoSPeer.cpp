@@ -206,11 +206,11 @@ void BidCoSPeer::setAESKeyIndex(int32_t value)
 
 void BidCoSPeer::setPhysicalInterfaceID(std::string id)
 {
-	if(id.empty() || (GD::physicalInterfaces.find(id) != GD::physicalInterfaces.end() && GD::physicalInterfaces.at(id)))
+	if(id.empty() || GD::interfaces->hasInterface(id))
 	{
 		_physicalInterfaceID = id;
 		if(peerInfoPacketsEnabled) _physicalInterface->removePeer(_address);
-		setPhysicalInterface(id.empty() ? GD::defaultPhysicalInterface : GD::physicalInterfaces.at(_physicalInterfaceID));
+		setPhysicalInterface(id.empty() ? GD::interfaces->getDefaultInterface() : GD::interfaces->getInterface(_physicalInterfaceID));
 		uint64_t virtualPeerId = getVirtualPeerId();
 		if(virtualPeerId > 0)
 		{
@@ -245,7 +245,7 @@ BidCoSPeer::BidCoSPeer(uint32_t parentID, IPeerEventSink* eventHandler) : Peer(G
 	{
 		_team.address = 0;
 		pendingBidCoSQueues.reset(new PendingBidCoSQueues());
-		setPhysicalInterface(GD::defaultPhysicalInterface);
+		setPhysicalInterface(GD::interfaces->getDefaultInterface());
 		_lastPing = BaseLib::HelperFunctions::getTime() - (BaseLib::HelperFunctions::getRandomNumber(1, 60) * 10000);
 		_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
 		_bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
@@ -258,7 +258,7 @@ BidCoSPeer::BidCoSPeer(uint32_t parentID, IPeerEventSink* eventHandler) : Peer(G
 
 BidCoSPeer::BidCoSPeer(int32_t id, int32_t address, std::string serialNumber, uint32_t parentID, IPeerEventSink* eventHandler) : Peer(GD::bl, id, address, serialNumber, parentID, eventHandler)
 {
-	setPhysicalInterface(GD::defaultPhysicalInterface);
+	setPhysicalInterface(GD::interfaces->getDefaultInterface());
 	_lastPing = BaseLib::HelperFunctions::getTime() - (BaseLib::HelperFunctions::getRandomNumber(1, 60) * 10000);
 	_bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
 	_bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(-1, 0, "");
@@ -1151,7 +1151,7 @@ void BidCoSPeer::loadVariables(BaseLib::Systems::ICentral* device, std::shared_p
 				break;
 			case 19:
 				_physicalInterfaceID = row->second.at(4)->textValue;
-				if(!_physicalInterfaceID.empty() && GD::physicalInterfaces.find(_physicalInterfaceID) != GD::physicalInterfaces.end()) setPhysicalInterface(GD::physicalInterfaces.at(_physicalInterfaceID));
+				if(!_physicalInterfaceID.empty() && GD::interfaces->hasInterface(_physicalInterfaceID)) setPhysicalInterface(GD::interfaces->getInterface(_physicalInterfaceID));
 				_bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(-1, 0, _physicalInterfaceID);
 				break;
 			case 20:
@@ -1780,7 +1780,7 @@ void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi, ui
 		if(configCentral.find(0) == configCentral.end() || configCentral.at(0).find("ROAMING") == configCentral.at(0).end()) return;
 		std::vector<uint8_t> parameterData = configCentral.at(0).at("ROAMING").getBinaryData();
 		if(parameterData.size() == 0 || parameterData.at(0) == 0) return;
-		if(interfaceID.empty() || GD::physicalInterfaces.find(interfaceID) == GD::physicalInterfaces.end()) return;
+		if(interfaceID.empty() || !GD::interfaces->hasInterface(interfaceID)) return;
 
 		if(std::get<0>(_bestInterfaceCurrent) != messageCounter && !std::get<2>(_bestInterfaceCurrent).empty())
 		{
@@ -1799,8 +1799,8 @@ void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi, ui
 		}
 		if(std::get<2>(_bestInterfaceCurrent).empty() || std::get<1>(_bestInterfaceCurrent) == 0 || std::get<1>(_bestInterfaceCurrent) > rssi)
 		{
-			std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator interfaceIterator = GD::physicalInterfaces.find(interfaceID);
-			if(interfaceIterator != GD::physicalInterfaces.end() && interfaceIterator->second->isOpen()) _bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID);
+		    auto interface = GD::interfaces->getInterface(interfaceID);
+			if(interface && interface->isOpen()) _bestInterfaceCurrent = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID);
 		}
 		if(std::get<2>(_bestInterfaceLast) == interfaceID) _bestInterfaceLast = std::tuple<int32_t, int32_t, std::string>(messageCounter, rssi, interfaceID); //Update message counter and rssi
 	}
@@ -3050,21 +3050,21 @@ void BidCoSPeer::addVariableToResetCallback(std::shared_ptr<CallbackFunctionPara
     }
 }
 
-PVariable BidCoSPeer::setInterface(BaseLib::PRpcClientInfo clientInfo, std::string interfaceID)
+PVariable BidCoSPeer::setInterface(BaseLib::PRpcClientInfo clientInfo, std::string interfaceId)
 {
 	try
 	{
-		if(!interfaceID.empty() && GD::physicalInterfaces.find(interfaceID) == GD::physicalInterfaces.end())
+		if(!interfaceId.empty() && !GD::interfaces->hasInterface(interfaceId))
 		{
 			return Variable::createError(-5, "Unknown physical interface.");
 		}
-		std::shared_ptr<IBidCoSInterface> interface = interfaceID.empty() ? GD::defaultPhysicalInterface : GD::physicalInterfaces.at(interfaceID);
+		std::shared_ptr<IBidCoSInterface> interface = interfaceId.empty() ? GD::interfaces->getDefaultInterface() : GD::interfaces->getInterface(interfaceId);
 		if(configCentral.find(0) != configCentral.end() && configCentral.at(0).find("ROAMING") != configCentral.at(0).end())
 		{
 			std::vector<uint8_t> parameterData = configCentral.at(0).at("ROAMING").getBinaryData();
 			if(parameterData.size() > 0 && parameterData.at(0) == 1) return Variable::createError(-104, "Can't set physical interface, because ROAMING is enabled. Please disable ROAMING to manually select the interface.");
 		}
-		setPhysicalInterfaceID(interfaceID);
+		setPhysicalInterfaceID(interfaceId);
 		return PVariable(new Variable(VariableType::tVoid));
 	}
 	catch(const std::exception& ex)

@@ -86,11 +86,7 @@ void HomeMaticCentral::dispose(bool wait)
 		_peersMutex.unlock();
 
 		GD::out.printDebug("Removing device " + std::to_string(_deviceId) + " from physical device's event queue...");
-		for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
-		{
-			//Just to make sure cycle through all physical devices. If event handler is not removed => segfault
-			i->second->removeEventHandler(_physicalInterfaceEventhandlers[i->first]);
-		}
+		GD::interfaces->removeEventHandlers();
 	}
     catch(const std::exception& ex)
     {
@@ -148,10 +144,7 @@ void HomeMaticCentral::init()
 
 		setUpBidCoSMessages();
 
-		for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
-		{
-			_physicalInterfaceEventhandlers[i->first] = i->second->addEventHandler((BaseLib::Systems::IPhysicalInterface::IPhysicalInterfaceEventSink*)this);
-		}
+        GD::interfaces->addEventHandlers((BaseLib::Systems::IPhysicalInterface::IPhysicalInterfaceEventSink*)this);
 
 		_bl->threadManager.start(_workerThread, true, _bl->settings.workerThreadPriority(), _bl->settings.workerThreadPolicy(), &HomeMaticCentral::worker, this);
 	}
@@ -589,6 +582,7 @@ void HomeMaticCentral::worker()
 				_peersMutex.unlock();
 				std::shared_ptr<BidCoSPeer> peer(getPeer(lastPeer));
 				if(peer && !peer->deleting) peer->worker();
+                GD::interfaces->worker();
 				counter++;
 			}
 			catch(const std::exception& ex)
@@ -726,13 +720,13 @@ std::shared_ptr<IBidCoSInterface> HomeMaticCentral::getPhysicalInterface(int32_t
 		std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.get(peerAddress);
 		if(queue) return queue->getPhysicalInterface();
 		std::shared_ptr<BidCoSPeer> peer = getPeer(peerAddress);
-		return peer ? peer->getPhysicalInterface() : GD::defaultPhysicalInterface;
+		return peer ? peer->getPhysicalInterface() : GD::interfaces->getDefaultInterface();
 	}
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    return GD::defaultPhysicalInterface;
+    return GD::interfaces->getDefaultInterface();
 }
 
 std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t deviceAddress, bool wait, bool* result)
@@ -973,14 +967,14 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 		{
 			std::vector<uint8_t> payload{2, 0};
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA2, 0x58, 0x39A07F, 0x1DA07F, payload));
-			GD::defaultPhysicalInterface->sendPacket(packet);
+            GD::interfaces->getDefaultInterface()->sendPacket(packet);
 			return "ok\n";
 		}
 		else if(BaseLib::HelperFunctions::checkCliCommand(command, "test2", "ts2", "", 0, arguments, showHelp))
 		{
 			std::vector<uint8_t> payload{ 0x80, 0x03, 0x02, 0x0A, 0x12, 0x81, 0x13, 0x85, 0x0A, 0x12, 0x80, 0x13, 0x85, 0x0A, 0x12, 0x0A, 0x0A };
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA2, 0x58, _address, 0x4BD22A, payload));
-			GD::defaultPhysicalInterface->sendPacket(packet);
+            GD::interfaces->getDefaultInterface()->sendPacket(packet);
 			return "ok\n";
 		}
 		else if(BaseLib::HelperFunctions::checkCliCommand(command, "help", "h", "", 0, arguments, showHelp))
@@ -1594,19 +1588,20 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 		physicalInterface = peer->getPhysicalInterface();
 		if(!physicalInterface->firmwareUpdatesSupported())
 		{
-			if(GD::defaultPhysicalInterface->firmwareUpdatesSupported())
+			if(GD::interfaces->getDefaultInterface()->firmwareUpdatesSupported())
 			{
-				GD::out.printInfo("Info: Using the default physical interface " + GD::defaultPhysicalInterface->getID() + " because the peer's interface doesn't support firmware updates.");
-				physicalInterface = GD::defaultPhysicalInterface;
+				GD::out.printInfo("Info: Using the default physical interface " + GD::interfaces->getDefaultInterface()->getID() + " because the peer's interface doesn't support firmware updates.");
+				physicalInterface = GD::interfaces->getDefaultInterface();
 			}
 			else
 			{
-				for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
+			    auto interfaces = GD::interfaces->getInterfaces();
+				for(auto& interface : interfaces)
 				{
-					if(i->second->firmwareUpdatesSupported())
+					if(interface->firmwareUpdatesSupported())
 					{
-						GD::out.printInfo("Info: Using physical interface " + i->second->getID() + " because the peer's interface doesn't support firmware updates.");
-						physicalInterface = i->second;
+						GD::out.printInfo("Info: Using physical interface " + interface->getID() + " because the peer's interface doesn't support firmware updates.");
+						physicalInterface = interface;
 						break;
 					}
 				}
@@ -3528,7 +3523,7 @@ PVariable HomeMaticCentral::addDevice(BaseLib::PRpcClientInfo clientInfo, std::s
             {
                 std::lock_guard<std::mutex> sendPacketThreadGuard(_sendPacketThreadMutex);
                 _bl->threadManager.join(_sendPacketThread);
-                _bl->threadManager.start(_sendPacketThread, false, &HomeMaticCentral::sendPacket, this, GD::defaultPhysicalInterface, packet, false);
+                _bl->threadManager.start(_sendPacketThread, false, &HomeMaticCentral::sendPacket, this, GD::interfaces->getDefaultInterface(), packet, false);
             }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));

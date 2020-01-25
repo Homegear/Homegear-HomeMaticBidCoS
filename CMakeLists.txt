@@ -15,6 +15,8 @@ set(SOURCE_FILES
         src/PhysicalInterfaces/Cul.h
         src/PhysicalInterfaces/Cunx.cpp
         src/PhysicalInterfaces/Cunx.h
+        src/PhysicalInterfaces/Hgdc.cpp
+        src/PhysicalInterfaces/Hgdc.h
         src/PhysicalInterfaces/HM-CFG-LAN.cpp
         src/PhysicalInterfaces/HM-CFG-LAN.h
         src/PhysicalInterfaces/HM-LGW.cpp

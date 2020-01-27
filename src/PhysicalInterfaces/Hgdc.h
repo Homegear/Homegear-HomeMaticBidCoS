@@ -22,11 +22,9 @@ public:
     void enableUpdateMode() override;
     void disableUpdateMode() override;
 
-    bool isOpen() override { return !_stopped && _initComplete; }
+    bool isOpen() override { return !_stopped; }
 protected:
     int32_t _packetReceivedEventHandlerId = -1;
-    std::atomic_bool _initComplete{false};
-    std::thread _initThread;
 
     void forceSendPacket(std::shared_ptr<BidCoSPacket> packet) override;
     void processPacket(int64_t familyId, const std::string& serialNumber, const std::vector<uint8_t>& data);

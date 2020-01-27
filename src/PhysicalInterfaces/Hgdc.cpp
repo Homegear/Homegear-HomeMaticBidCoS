@@ -20,7 +20,6 @@ Hgdc::Hgdc(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings
 Hgdc::~Hgdc()
 {
     stopListening();
-    _bl->threadManager.join(_initThread);
 }
 
 void Hgdc::startListening()

@@ -74,6 +74,18 @@ void Hgdc::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
         {
             _out.printError("Error sending packet " + BaseLib::HelperFunctions::getHexString(binaryPacket) + ".");
         }
+
+        if(_bl->debugLevel > 3)
+        {
+            if(packet->getTimeSending() > 0)
+            {
+                _out.printInfo("Info: Sending (" + _settings->id + "): " + BaseLib::HelperFunctions::getHexString(binaryPacket) + " Planned sending time: " + BaseLib::HelperFunctions::getTimeString(packet->getTimeSending()));
+            }
+            else
+            {
+                _out.printInfo("Info: Sending (" + _settings->id + "): " + BaseLib::HelperFunctions::getHexString(binaryPacket));
+            }
+        }
     }
     catch(const std::exception& ex)
     {

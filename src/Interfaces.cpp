@@ -254,6 +254,7 @@ void Interfaces::createHgdcInterfaces(bool reconnected)
                     settings->type = "hgdc";
                     settings->id = deviceId;
                     settings->serialNumber = settings->id;
+                    settings->responseDelay = 89;
                     device = std::make_shared<Hgdc>(settings);
                     _physicalInterfaces[settings->id] = device;
                     if(settings->isDefault || !_defaultPhysicalInterface || _defaultPhysicalInterface->getID().empty()) _defaultPhysicalInterface = device;

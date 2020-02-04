@@ -1451,16 +1451,19 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					else if(filterType == "address")
 					{
 						int32_t address = BaseLib::Math::getNumber(filterValue, true);
-						if(i->second->getAddress() != address) continue;
+						std::string addressHex = BaseLib::HelperFunctions::getHexString(i->second->getAddress(), 6);
+						if((i->second->getAddress() != address) && ((signed)BaseLib::HelperFunctions::toLower(addressHex).find(filterValue) == (signed)std::string::npos)) continue;
 					}
 					else if(filterType == "serial")
 					{
-						if(i->second->getSerialNumber() != filterValue) continue;
+						std::string serial = i->second->getSerialNumber();
+						if((signed)BaseLib::HelperFunctions::toLower(serial).find(filterValue) == (signed)std::string::npos) continue;
 					}
 					else if(filterType == "type")
 					{
 						int32_t deviceType = BaseLib::Math::getNumber(filterValue, true);
-						if((int32_t)i->second->getDeviceType() != deviceType) continue;
+						std::string deviceTypeHex = BaseLib::HelperFunctions::getHexString(i->second->getDeviceType(), 4);
+						if(((int32_t)i->second->getDeviceType() != deviceType) && ((signed)BaseLib::HelperFunctions::toLower(deviceTypeHex).find(filterValue) == (signed)std::string::npos)) continue;
 					}
 					else if(filterType == "configpending")
 					{

@@ -10,7 +10,7 @@ Hgdc::Hgdc(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings
 {
     _settings = settings;
     _out.init(GD::bl);
-    _out.setPrefix(GD::out.getPrefix() + "EnOcean HGDC \"" + settings->id + "\": ");
+    _out.setPrefix(GD::out.getPrefix() + "BidCoS HGDC \"" + settings->id + "\": ");
 
     signal(SIGPIPE, SIG_IGN);
 

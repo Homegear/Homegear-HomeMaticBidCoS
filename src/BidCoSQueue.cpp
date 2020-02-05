@@ -381,7 +381,7 @@ void BidCoSQueue::send(std::shared_ptr<BidCoSPacket> packet, bool stealthy)
 			_setWakeOnRadioBit = false;
 		}
 		std::shared_ptr<HomeMaticCentral> central(std::dynamic_pointer_cast<HomeMaticCentral>(GD::family->getCentral()));
-		if(central) central->sendPacket(_physicalInterface, packet, stealthy);
+		if(central) central->sendPacket(getPhysicalInterface(), packet, stealthy);
 		else GD::out.printError("Error: Device pointer of queue " + std::to_string(id) + " is null.");
 	}
 	catch(const std::exception& ex)

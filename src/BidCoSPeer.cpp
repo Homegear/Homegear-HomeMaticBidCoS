@@ -209,7 +209,7 @@ void BidCoSPeer::setPhysicalInterfaceID(std::string id)
 	if(id.empty() || GD::interfaces->hasInterface(id))
 	{
 		_physicalInterfaceID = id;
-		if(peerInfoPacketsEnabled) _physicalInterface->removePeer(_address);
+		if(peerInfoPacketsEnabled) getPhysicalInterface()->removePeer(_address);
 		setPhysicalInterface(id.empty() ? GD::interfaces->getDefaultInterface() : GD::interfaces->getInterface(_physicalInterfaceID));
 		uint64_t virtualPeerId = getVirtualPeerId();
 		if(virtualPeerId > 0)
@@ -222,7 +222,7 @@ void BidCoSPeer::setPhysicalInterfaceID(std::string id)
 			}
 		}
 		saveVariable(19, _physicalInterfaceID);
-		if(peerInfoPacketsEnabled) _physicalInterface->addPeer(getPeerInfo());
+		if(peerInfoPacketsEnabled) getPhysicalInterface()->addPeer(getPeerInfo());
 	}
 }
 
@@ -1268,25 +1268,25 @@ void BidCoSPeer::checkAESKey(bool onlyPushing)
 	{
 		if(!_rpcDevice || !_rpcDevice->encryption) return;
 		if(!aesEnabled()) return;
-		if(_aesKeyIndex == (signed)_physicalInterface->getCurrentRFKeyIndex())
+		if(_aesKeyIndex == (signed)getPhysicalInterface()->getCurrentRFKeyIndex())
 		{
 			GD::out.printDebug("Debug: AES key of peer " + std::to_string(_peerID) + " is current.");
 			return;
 		}
 		GD::out.printInfo("Info: Updating AES key of peer " + std::to_string(_peerID) + ".");
-		if(_aesKeyIndex > (signed)_physicalInterface->getCurrentRFKeyIndex())
+		if(_aesKeyIndex > (signed)getPhysicalInterface()->getCurrentRFKeyIndex())
 		{
 			GD::out.printError("Error: Can't update AES key of peer " + std::to_string(_peerID) + ". Peer's AES key index is larger than the key index defined in homematicbidcos.conf.");
 			return;
 		}
-		if(_aesKeyIndex > 0 && _physicalInterface->getCurrentRFKeyIndex() - _aesKeyIndex > 1)
+		if(_aesKeyIndex > 0 && getPhysicalInterface()->getCurrentRFKeyIndex() - _aesKeyIndex > 1)
 		{
 			GD::out.printError("Error: Can't update AES key of peer " + std::to_string(_peerID) + ". AES key seems to be updated more than once since this peer's config was last updated (key indexes differ by more than 1).");
 			return;
 		}
 		if(pendingBidCoSQueues->find(BidCoSQueueType::SETAESKEY)) return;
 
-		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::SETAESKEY));
+		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::SETAESKEY));
 		queue->noSending = true;
 		std::vector<uint8_t> payload;
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
@@ -1498,7 +1498,7 @@ void BidCoSPeer::onConfigPending(bool configPending)
 			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Setting physical device's wake up flag.");
-				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
+				if(peerInfoPacketsEnabled) getPhysicalInterface()->setWakeUp(getPeerInfo());
 			}
 		}
 		else
@@ -1506,7 +1506,7 @@ void BidCoSPeer::onConfigPending(bool configPending)
 			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Removing physical device's wake up flag.");
-				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
+				if(peerInfoPacketsEnabled) getPhysicalInterface()->setWakeUp(getPeerInfo());
 			}
 		}
 	}
@@ -1529,7 +1529,7 @@ void BidCoSPeer::setValuePending(bool value)
 			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Setting physical device's wake up flag.");
-				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
+				if(peerInfoPacketsEnabled) getPhysicalInterface()->setWakeUp(getPeerInfo());
 			}
 		}
 		else
@@ -1537,7 +1537,7 @@ void BidCoSPeer::setValuePending(bool value)
 			if((rxModes & HomegearDevice::ReceiveModes::Enum::wakeUp) || (rxModes & HomegearDevice::ReceiveModes::Enum::lazyConfig))
 			{
 				GD::out.printDebug("Debug: Removing physical device's wake up flag.");
-				if(peerInfoPacketsEnabled) _physicalInterface->setWakeUp(getPeerInfo());
+				if(peerInfoPacketsEnabled) getPhysicalInterface()->setWakeUp(getPeerInfo());
 			}
 		}
 	}
@@ -1787,11 +1787,11 @@ void BidCoSPeer::checkForBestInterface(std::string interfaceID, int32_t rssi, ui
 			if(_lastPacketMessageCounterFromAnyInterface != messageCounter) _lastPacketMessageCounterFromAnyInterface = _currentPacketMessageCounterFromAnyInterface;
 			_currentPacketMessageCounterFromAnyInterface = messageCounter;
 			int32_t rssiDifference = std::get<1>(_bestInterfaceLast) - std::get<1>(_bestInterfaceCurrent);
-			if((rssiDifference > 10 || std::get<0>(_bestInterfaceLast) != _lastPacketMessageCounterFromAnyInterface) && std::get<2>(_bestInterfaceCurrent) != _physicalInterfaceID)
+			if((rssiDifference > 10 || std::get<0>(_bestInterfaceLast) != _lastPacketMessageCounterFromAnyInterface) && std::get<2>(_bestInterfaceCurrent) != getPhysicalInterfaceID())
 			{
 				_bestInterfaceLast = _bestInterfaceCurrent;
 				GD::bl->out.printInfo("Info: Changing interface of peer " + std::to_string(_peerID) + " to " + std::get<2>(_bestInterfaceLast) + ", because the reception is better.");
-				if(_bl->settings.devLog()) GD::bl->out.printMessage("Devlog: Changing physical interface from " + _physicalInterfaceID + " to " + std::get<2>(_bestInterfaceLast) + " start.");
+				if(_bl->settings.devLog()) GD::bl->out.printMessage("Devlog: Changing physical interface from " + getPhysicalInterfaceID() + " to " + std::get<2>(_bestInterfaceLast) + " start.");
 				setPhysicalInterfaceID(std::get<2>(_bestInterfaceLast));
 				if(_bl->settings.devLog()) GD::bl->out.printMessage("Devlog: Changing physical interface end.");
 			}
@@ -1883,7 +1883,7 @@ PVariable BidCoSPeer::getValueFromDevice(PParameter& parameter, int32_t channel,
 		if(valuesCentral.find(channel) == valuesCentral.end()) return Variable::createError(-2, "Unknown channel.");
 		if(valuesCentral[channel].find(parameter->id) == valuesCentral[channel].end()) return Variable::createError(-5, "Unknown parameter.");
 
-		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::GETVALUE));
+		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::GETVALUE));
 		queue->noSending = true;
 
 		std::vector<uint8_t> payload;
@@ -2224,12 +2224,12 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 					std::vector<uint8_t> payload;
 					payload.push_back(0x00);
 					std::shared_ptr<BidCoSPacket> ok(new BidCoSPacket(packet->messageCounter(), 0x81, 0x02, central->getAddress(), _address, payload));
-					central->sendPacket(_physicalInterface, ok);
+					central->sendPacket(getPhysicalInterface(), ok);
 					central->enqueuePendingQueues(_address);
 				}
 				else
 				{
-					std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::DEFAULT));
+					std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::DEFAULT));
 					queue->noSending = true;
 					std::vector<uint8_t> payload;
 					std::shared_ptr<BidCoSPacket> configPacket(new BidCoSPacket(packet->messageCounter(), 0xA1, 0x12, central->getAddress(), _address, payload));
@@ -2294,7 +2294,7 @@ PVariable BidCoSPeer::activateLinkParamset(BaseLib::PRpcClientInfo clientInfo, i
 		std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(_messageCounter, controlByte, 0x3E, getCentral()->getAddress(), _address, payload));
 		setMessageCounter(_messageCounter + 1);
 
-		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::PEER));
+		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::PEER));
 		queue->noSending = true;
 		queue->push(packet);
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
@@ -2323,7 +2323,7 @@ PVariable BidCoSPeer::forceConfigUpdate(BaseLib::PRpcClientInfo clientInfo)
 {
 	try
 	{
-		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::CONFIG));
+		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::CONFIG));
 		queue->noSending = true;
 		std::vector<uint8_t> payload;
 		std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
@@ -2436,7 +2436,7 @@ PVariable BidCoSPeer::getDeviceInfo(BaseLib::PRpcClientInfo clientInfo, std::map
 		PVariable info(Peer::getDeviceInfo(clientInfo, fields));
 		if(info->errorStruct) return info;
 
-		if(fields.empty() || fields.find("INTERFACE") != fields.end()) info->structValue->insert(StructElement("INTERFACE", PVariable(new Variable(_physicalInterface->getID()))));
+		if(fields.empty() || fields.find("INTERFACE") != fields.end()) info->structValue->insert(StructElement("INTERFACE", PVariable(new Variable(getPhysicalInterface()->getID()))));
 
 		return info;
 	}
@@ -2566,7 +2566,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				parameter.setBinaryData(value);
 				if(parameter.databaseId > 0) saveParameter(parameter.databaseId, value);
 				else saveParameter(0, ParameterGroup::Type::Enum::config, channel, i->first, value);
-				if(peerInfoPacketsEnabled && i->first == "AES_ACTIVE" && !aesActivated) _physicalInterface->setAES(getPeerInfo(), channel);
+				if(peerInfoPacketsEnabled && i->first == "AES_ACTIVE" && !aesActivated) getPhysicalInterface()->setAES(getPeerInfo(), channel);
 				GD::out.printInfo("Info: Parameter " + i->first + " of peer " + std::to_string(_peerID) + " and channel " + std::to_string(channel) + " was set to 0x" + BaseLib::HelperFunctions::getHexString(value) + ".");
 				//Only send to device when parameter is of type config;
 				if(parameter.rpcParameter->physical->operationType != IPhysical::OperationType::Enum::config && parameter.rpcParameter->physical->operationType != IPhysical::OperationType::Enum::configString) continue;
@@ -2581,7 +2581,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				return PVariable(new Variable(VariableType::tVoid));
 			}
 
-			std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::CONFIG));
+			std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::CONFIG));
 			queue->noSending = true;
 			std::vector<uint8_t> payload;
 			std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
@@ -2749,7 +2749,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 
 			if(changedParameters.empty() || changedParameters.begin()->second.empty()) return PVariable(new Variable(VariableType::tVoid));
 
-			std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::CONFIG));
+			std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::CONFIG));
 			queue->noSending = true;
 			std::vector<uint8_t> payload;
 			std::shared_ptr<HomeMaticCentral> central = std::dynamic_pointer_cast<HomeMaticCentral>(getCentral());
@@ -2907,7 +2907,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				else payload.push_back(0x01);
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x94, 0x41, _address, central->getAddress(), payload));
 				central->messageCounter()->at(0)++;
-				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 1000, true, true);
+				central->sendPacketMultipleTimes(getPhysicalInterface(), packet, _address, 6, 1000, true, true);
 				return true;
 			}
 			else if(valueKey == "INSTALL_TEST")
@@ -2936,7 +2936,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				associatedPeer->saveVariable(11, associatedPeer->getTeamData());
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x94, 0x40, _address, central->getAddress(), payload));
 				central->messageCounter()->at(0)++;
-				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 600, true, false);
+				central->sendPacketMultipleTimes(getPhysicalInterface(), packet, _address, 6, 600, true, false);
 				return true;
 			}
 		}
@@ -2975,8 +2975,8 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				associatedPeer->saveVariable(11, associatedPeer->getTeamData());
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x14, 0x41, _address, central->getAddress(), payload));
 				central->messageCounter()->at(0)++;
-				_physicalInterface->appendSignature(packet);
-				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 700, false);
+                getPhysicalInterface()->appendSignature(packet);
+				central->sendPacketMultipleTimes(getPhysicalInterface(), packet, _address, 6, 700, false);
 				return true;
 			}
 			else if(valueKey == "INSTALL_TEST")
@@ -3012,8 +3012,8 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				associatedPeer->saveVariable(11, associatedPeer->getTeamData());
 				std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(central->messageCounter()->at(0), 0x14, 0x41, _address, central->getAddress(), payload));
 				central->messageCounter()->at(0)++;
-				_physicalInterface->appendSignature(packet);
-				central->sendPacketMultipleTimes(_physicalInterface, packet, _address, 6, 700, false);
+                getPhysicalInterface()->appendSignature(packet);
+				central->sendPacketMultipleTimes(getPhysicalInterface(), packet, _address, 6, 700, false);
 				return true;
 			}
 		}
@@ -3151,7 +3151,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		if(_bl->debugLevel > 4) GD::out.printDebug("Debug: " + valueKey + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string(channel) + " was set to " + BaseLib::HelperFunctions::getHexString(parameterData) + ".");
 
 		pendingBidCoSQueues->remove(BidCoSQueueType::PEER, valueKey, channel);
-		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(_physicalInterface, BidCoSQueueType::PEER));
+		std::shared_ptr<BidCoSQueue> queue(new BidCoSQueue(getPhysicalInterface(), BidCoSQueueType::PEER));
 		queue->noSending = true;
 		queue->parameterName = valueKey;
 		queue->channel = channel;

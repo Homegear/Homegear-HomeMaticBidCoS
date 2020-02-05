@@ -720,6 +720,7 @@ std::shared_ptr<IBidCoSInterface> HomeMaticCentral::getPhysicalInterface(int32_t
 		std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.get(peerAddress);
 		if(queue) return queue->getPhysicalInterface();
 		std::shared_ptr<BidCoSPeer> peer = getPeer(peerAddress);
+
 		return peer ? peer->getPhysicalInterface() : GD::interfaces->getDefaultInterface();
 	}
 	catch(const std::exception& ex)

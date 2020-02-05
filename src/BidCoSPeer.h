@@ -34,6 +34,7 @@
 #include "BidCoSDeviceTypes.h"
 #include "BidCoSPacket.h"
 #include "PhysicalInterfaces/IBidCoSInterface.h"
+#include "GD.h"
 
 #include <iomanip>
 #include <string>
@@ -121,7 +122,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
 		std::vector<uint8_t>& getTeamData() { return _team.data; }
 		int32_t getAESKeyIndex() { return _aesKeyIndex; }
 		void setAESKeyIndex(int32_t value);
-		std::string getPhysicalInterfaceID() { return _physicalInterfaceID; }
+		std::string getPhysicalInterfaceID() { return _physicalInterfaceID.empty() ? GD::interfaces->getDefaultInterface()->getID() : _physicalInterfaceID; }
 		void setPhysicalInterfaceID(std::string);
 		bool getValuePending() { return _valuePending; }
 		void setValuePending(bool value);
@@ -161,7 +162,7 @@ class BidCoSPeer : public BaseLib::Systems::Peer
         void addPeer(int32_t channel, std::shared_ptr<BaseLib::Systems::BasicPeer> peer);
         std::shared_ptr<BaseLib::Systems::BasicPeer> getVirtualPeer(int32_t channel);
         void removePeer(int32_t channel, int32_t address, int32_t remoteChannel);
-        std::shared_ptr<IBidCoSInterface> getPhysicalInterface() { return _physicalInterface; }
+        std::shared_ptr<IBidCoSInterface> getPhysicalInterface() { return _physicalInterface->getID().empty() ? GD::interfaces->getDefaultInterface() : _physicalInterface; }
         void addVariableToResetCallback(std::shared_ptr<CallbackFunctionParameter> parameters);
         void setRSSIDevice(uint8_t rssi);
         virtual bool pendingQueuesEmpty();

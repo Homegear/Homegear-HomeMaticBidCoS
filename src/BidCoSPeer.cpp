@@ -54,6 +54,16 @@ std::shared_ptr<BaseLib::Systems::ICentral> BidCoSPeer::getCentral()
 	return std::shared_ptr<HomeMaticCentral>();
 }
 
+std::shared_ptr<IBidCoSInterface> BidCoSPeer::getPhysicalInterface()
+{
+    return _physicalInterface ? _physicalInterface : GD::interfaces->getDefaultInterface();
+}
+
+std::string BidCoSPeer::getPhysicalInterfaceID()
+{
+    return _physicalInterfaceID.empty() ? GD::interfaces->getDefaultInterface()->getID() : _physicalInterfaceID;
+}
+
 void BidCoSPeer::setDefaultValue(BaseLib::Systems::RpcConfigurationParameter& parameter)
 {
 	try

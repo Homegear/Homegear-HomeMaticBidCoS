@@ -29,6 +29,7 @@
 
 #include "Interfaces.h"
 #include "GD.h"
+#include "HomeMaticCentral.h"
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 #include "PhysicalInterfaces/COC.h"
 #include "PhysicalInterfaces/Cul.h"
@@ -257,7 +258,13 @@ void Interfaces::createHgdcInterfaces(bool reconnected)
                     settings->responseDelay = 89;
                     device = std::make_shared<Hgdc>(settings);
                     _physicalInterfaces[settings->id] = device;
-                    if(settings->isDefault || !_defaultPhysicalInterface || _defaultPhysicalInterface->getID().empty()) _defaultPhysicalInterface = device;
+                    if(settings->isDefault || !_defaultPhysicalInterface || _defaultPhysicalInterface->getID().empty())
+                    {
+                        _defaultPhysicalInterface = device;
+                        auto central = GD::family->getCentral();
+                        std::shared_ptr<HomeMaticCentral> homematicCentral = std::dynamic_pointer_cast<HomeMaticCentral>(central);
+                        if(homematicCentral) homematicCentral->changeDefaultInterface();
+                    }
 
                     if(_central)
                     {
@@ -359,7 +366,13 @@ void Interfaces::hgdcModuleUpdateThread()
 
                     if(_physicalInterfaces.find(settings->id) != _physicalInterfaces.end()) GD::out.printError("Error: id used for two devices: " + settings->id);
                     _physicalInterfaces[settings->id] = device;
-                    if(settings->isDefault || !_defaultPhysicalInterface || _defaultPhysicalInterface->getID().empty()) _defaultPhysicalInterface = device;
+                    if(settings->isDefault || !_defaultPhysicalInterface || _defaultPhysicalInterface->getID().empty())
+                    {
+                        _defaultPhysicalInterface = device;
+                        auto central = GD::family->getCentral();
+                        std::shared_ptr<HomeMaticCentral> homematicCentral = std::dynamic_pointer_cast<HomeMaticCentral>(central);
+                        if(homematicCentral) homematicCentral->changeDefaultInterface();
+                    }
 
                     addedModules->push_back(device);
                 }

@@ -81,6 +81,7 @@ public:
 	void removePeerFromTeam(std::shared_ptr<BidCoSPeer> peer);
 	void resetTeam(std::shared_ptr<BidCoSPeer> peer, uint32_t channel);
 	std::string handleCliCommand(std::string command);
+	void changeDefaultInterface();
 	virtual void sendPacket(std::shared_ptr<IBidCoSInterface> physicalInterface, std::shared_ptr<BidCoSPacket> packet, bool stealthy = false);
     virtual void sendPacketMultipleTimes(std::shared_ptr<IBidCoSInterface> physicalInterface, std::shared_ptr<BidCoSPacket> packet, int32_t peerAddress, int32_t count, int32_t delay, bool incrementMessageCounter, bool useCentralMessageCounter = false, bool isThread = false);
 	virtual void enqueuePackets(int32_t deviceAddress, std::shared_ptr<BidCoSQueue> packets, bool pushPendingBidCoSQueues = false);
@@ -150,6 +151,8 @@ protected:
     std::mutex _sendPacketThreadMutex;
     std::thread _sendPacketThread;
     std::thread _resetThread;
+
+    std::atomic_bool _queueDefaultInterfaceChange{false};
 
 	void pairingModeTimer(int32_t duration, bool debugOutput = true);
 	std::atomic_bool _stopPairingModeThread;

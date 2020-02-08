@@ -550,6 +550,20 @@ void HomeMaticCentral::worker()
 		{
 			try
 			{
+			    if(_queueDefaultInterfaceChange)
+                {
+                    _queueDefaultInterfaceChange = false;
+                    auto defaultInterface = GD::interfaces->getDefaultInterface();
+                    auto defaultInterfaceID = defaultInterface->getID();
+                    if(defaultInterfaceID.empty()) return;
+                    GD::out.printInfo("Info: Changing default interface of all peers to " + defaultInterfaceID);
+                    auto peers = getPeers();
+                    for(auto& peer : peers)
+                    {
+                        peer->setInterface(nullptr, defaultInterfaceID);
+                    }
+                }
+
 				std::this_thread::sleep_for(sleepingTime);
 				if(_stopWorkerThread) return;
 				if(counter > 10000)
@@ -1552,6 +1566,18 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     return "Error executing command. See log file for more details.\n";
+}
+
+void HomeMaticCentral::changeDefaultInterface()
+{
+    try
+    {
+        _queueDefaultInterfaceChange = true;
+    }
+    catch(const std::exception& ex)
+    {
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
 }
 
 void HomeMaticCentral::updateFirmwares(std::vector<uint64_t> ids)
@@ -4444,4 +4470,5 @@ PVariable HomeMaticCentral::setInterface(BaseLib::PRpcClientInfo clientInfo, uin
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
+
 }

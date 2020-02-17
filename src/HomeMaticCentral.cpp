@@ -621,7 +621,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderId, std::shared_ptr<B
 		if(_disposing) return false;
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->getTimeReceived() + 5000) GD::out.printError("Error: Packet was processed more than 5 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
-		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->getTimeReceived()) << " HomeMatic BidCoS packet received (" << senderId << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
+		if(_bl->debugLevel >= 4) GD::out.printInfo("Info: " + BaseLib::HelperFunctions::getTimeString(bidCoSPacket->getTimeReceived()) + " Packet received (" + senderId + (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") + "): " + bidCoSPacket->hexString());
 		if(!bidCoSPacket) return false;
 
 		// {{{ Intercept packet

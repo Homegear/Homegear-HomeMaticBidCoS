@@ -90,7 +90,20 @@ TICC1100::~TICC1100()
 
 void TICC1100::setConfig()
 {
-	if(_settings->oscillatorFrequency == 26000000)
+    auto registersIterator = _settings->all.find("registers");
+    if(registersIterator != _settings->all.end())
+    {
+        auto elements = BaseLib::HelperFunctions::splitAll(registersIterator->second->stringValue, ',');
+        _config.reserve(elements.size());
+        size_t registerIndex = 0;
+        for(auto& element : elements)
+        {
+            BaseLib::HelperFunctions::trim(element);
+            _config.emplace_back(BaseLib::Math::getNumber(element, true));
+            GD::out.printInfo("Info: Register " + std::to_string(registerIndex) + " set to: 0x" + BaseLib::HelperFunctions::getHexString(_config.back(), 2) + ".");
+        }
+    }
+    else if(_settings->oscillatorFrequency == 26000000)
 	{
 		_config = //Read from HM-CC-VD
 		{

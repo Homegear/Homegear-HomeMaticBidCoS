@@ -56,7 +56,7 @@ set(SOURCE_FILES
         src/Interfaces.h
         src/PendingBidCoSQueues.cpp
         src/PendingBidCoSQueues.h
-        config.h src/PhysicalInterfaces/HomegearGateway.cpp src/PhysicalInterfaces/HomegearGateway.h)
+        src/PhysicalInterfaces/HomegearGateway.cpp src/PhysicalInterfaces/HomegearGateway.h)
 
 add_custom_target(homegear COMMAND ../../makeAll.sh SOURCES ${SOURCE_FILES})
 

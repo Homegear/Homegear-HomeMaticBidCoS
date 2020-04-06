@@ -681,8 +681,7 @@ void HM_CFG_LAN::listen()
 
 					if(_bl->debugLevel >= 6)
 					{
-						_out.printDebug("Debug: Packet received from HM-CFG-LAN. Raw data:");
-						_out.printBinary(data);
+						_out.printDebug("Debug: Packet received from HM-CFG-LAN. Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 					}
 
 					processData(data);

@@ -996,16 +996,17 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 		{
 			stringStream << "List of commands (shortcut in brackets):" << std::endl << std::endl;
 			stringStream << "For more information about the individual command type: COMMAND help" << std::endl << std::endl;
-			stringStream << "pairing on (pon)\tEnables pairing mode" << std::endl;
-			stringStream << "pairing off (pof)\tDisables pairing mode" << std::endl;
-			stringStream << "peers list (ls)\t\tList all peers" << std::endl;
-			stringStream << "peers add (pa)\t\tManually adds a peer (without pairing it! Only for testing)" << std::endl;
-			stringStream << "peers remove (prm)\tRemove a peer (without unpairing)" << std::endl;
-			stringStream << "peers reset (prs)\tUnpair a peer and reset it to factory defaults" << std::endl;
-			stringStream << "peers select (ps)\tSelect a peer" << std::endl;
-			stringStream << "peers setname (pn)\tName a peer" << std::endl;
-			stringStream << "peers unpair (pup)\tUnpair a peer" << std::endl;
-			stringStream << "peers update (pud)\tUpdates a peer to the newest firmware version" << std::endl;
+			stringStream << "pairing on (pon)   Enables pairing mode" << std::endl;
+			stringStream << "pairing off (pof)  Disables pairing mode" << std::endl;
+			stringStream << "peers list (ls)    List all peers" << std::endl;
+			stringStream << "peers add (pa)     Manually adds a peer (without pairing it! Only for testing)" << std::endl;
+			stringStream << "peers remove (prm) Remove a peer (without unpairing)" << std::endl;
+			stringStream << "peers reset (prs)  Unpair a peer and reset it to factory defaults" << std::endl;
+			stringStream << "peers select (ps)  Select a peer" << std::endl;
+			stringStream << "peers setname (pn) Name a peer" << std::endl;
+			stringStream << "peers unpair (pup) Unpair a peer" << std::endl;
+			stringStream << "peers update (pud) Updates a peer to the newest firmware version" << std::endl;
+			stringStream << "comm reopen (cr)   Reopen communication interface" << std::endl;
 			stringStream << "unselect (u)\t\tUnselect this device" << std::endl;
 			return stringStream.str();
 		}
@@ -1559,6 +1560,31 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
 		}
+        else if(BaseLib::HelperFunctions::checkCliCommand(command, "comm reopen", "cr", "", 1, arguments, showHelp))
+        {
+            if(showHelp)
+            {
+                stringStream << "Description: This closes and reopens a communication interface." << std::endl;
+                stringStream << "Usage: comm reopen [ID]" << std::endl << std::endl;
+                stringStream << "Parameters:" << std::endl;
+                stringStream << "  ID: The ID of the interface." << std::endl;
+                return stringStream.str();
+            }
+
+            auto moduleId = arguments.at(0);
+            auto interface = GD::interfaces->getInterface(moduleId);
+            if(!interface)
+            {
+                stringStream << "Unknown communication interface." << std::endl;
+                return stringStream.str();
+            }
+
+            interface->stopListening();
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            interface->startListening();
+            stringStream << "Interface successfully reopened." << std::endl;
+            return stringStream.str();
+        }
 		else return "Unknown command.\n";
 	}
 	catch(const std::exception& ex)

@@ -3734,7 +3734,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 				for(std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
 				{
 					std::vector<uint8_t> parameterData = i->second.getBinaryData();
-					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData)));
+					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData, i->second.invert(), false)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
 				sender->putParamset(clientInfo, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
@@ -3832,7 +3832,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 				for(std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
 				{
 					std::vector<uint8_t> parameterData = i->second.getBinaryData();
-					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData)));
+					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData, i->second.invert(), false)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
 				receiver->putParamset(clientInfo, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);
@@ -3877,7 +3877,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		}
 		else
 		{
-			return PVariable(new Variable(VariableType::tVoid));
+			return std::make_shared<Variable>(VariableType::tVoid);
 		}
 	}
 	catch(const std::exception& ex)

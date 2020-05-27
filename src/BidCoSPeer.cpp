@@ -69,7 +69,7 @@ void BidCoSPeer::setDefaultValue(BaseLib::Systems::RpcConfigurationParameter& pa
 	try
 	{
 		std::vector<uint8_t> parameterData;
-		parameter.rpcParameter->convertToPacket(parameter.rpcParameter->logical->getDefaultValue(), parameter.invert(), parameterData);
+		parameter.rpcParameter->convertToPacket(parameter.rpcParameter->logical->getDefaultValue(), parameter.mainRole(), parameterData);
 		parameter.setBinaryData(parameterData);
 	}
 	catch(const std::exception& ex)
@@ -99,7 +99,7 @@ void BidCoSPeer::initializeLinkConfig(int32_t channel, int32_t remoteAddress, in
 				parameter.rpcParameter = j->second;
 
 				std::vector<uint8_t> parameterData;
-				j->second->convertToPacket(j->second->logical->getDefaultValue(), parameter.invert(), parameterData);
+				j->second->convertToPacket(j->second->logical->getDefaultValue(), parameter.mainRole(), parameterData);
 				parameter.setBinaryData(parameterData);
 				linkConfig->emplace(j->second->id, parameter);
 				saveParameter(0, ParameterGroup::Type::link, channel, j->second->id, parameterData, remoteAddress, remoteChannel);
@@ -148,7 +148,7 @@ void BidCoSPeer::applyConfigFunction(int32_t channel, int32_t peerAddress, int32
 			BaseLib::Systems::RpcConfigurationParameter& parameter = linksCentral[channel][peerAddress][remoteChannel][j->first];
 			if(!parameter.rpcParameter) continue;
 			std::vector<uint8_t> parameterData;
-			parameter.rpcParameter->convertToPacket(j->second, parameter.invert(), parameterData);
+			parameter.rpcParameter->convertToPacket(j->second, parameter.mainRole(), parameterData);
 			parameter.setBinaryData(parameterData);
 			if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 			else saveParameter(0, ParameterGroup::Type::Enum::link, channel, parameter.rpcParameter->id, parameterData, peerAddress, remoteChannel);
@@ -309,7 +309,7 @@ void BidCoSPeer::worker()
 						if(parameter.databaseId > 0) saveParameter(parameter.databaseId, j->second->data);
 						else saveParameter(0, ParameterGroup::Type::Enum::variables, j->second->channel, j->second->key, j->second->data);
 						std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string> {j->second->key});
-						std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable> { valuesCentral.at(j->second->channel).at(j->second->key).rpcParameter->convertFromPacket(j->second->data, parameter.invert(), false) });
+						std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable> { valuesCentral.at(j->second->channel).at(j->second->key).rpcParameter->convertFromPacket(j->second->data, parameter.mainRole(), false) });
 						GD::out.printInfo("Info: Domino event: " + j->second->key + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string(j->second->channel) + " was reset.");
                         std::string eventSource = "device-" + std::to_string(_peerID);
                         std::string address(_serialNumber + ":" + std::to_string(j->second->channel));
@@ -1763,7 +1763,7 @@ void BidCoSPeer::handleDominoEvent(PParameter parameter, std::string& frameID, u
 			if(!delayParameter) continue;
 			auto& delayConfigurationParameter = valuesCentral[channel][(*j)->delayedAutoReset.first];
 			std::vector<uint8_t> parameterData = delayConfigurationParameter.getBinaryData();
-			int64_t delay = delayParameter->convertFromPacket(parameterData, delayConfigurationParameter.invert(), false)->integerValue;
+			int64_t delay = delayParameter->convertFromPacket(parameterData, delayConfigurationParameter.mainRole(), false)->integerValue;
 			if(delay < 0) continue; //0 is allowed. When 0 the parameter will be reset immediately
 			int64_t time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 			std::shared_ptr<VariableToReset> variable(new VariableToReset);
@@ -1836,7 +1836,7 @@ void BidCoSPeer::setRSSIDevice(uint8_t rssi)
 
 			std::shared_ptr<std::vector<std::string>> valueKeys(new std::vector<std::string>({std::string("RSSI_DEVICE")}));
 			std::shared_ptr<std::vector<PVariable>> rpcValues(new std::vector<PVariable>());
-			rpcValues->push_back(parameter.rpcParameter->convertFromPacket(parameterData, parameter.invert(), false));
+			rpcValues->push_back(parameter.rpcParameter->convertFromPacket(parameterData, parameter.mainRole(), false));
 
             std::string eventSource = "device-" + std::to_string(_peerID);
             std::string address = _serialNumber + ":0";
@@ -1968,7 +1968,7 @@ PVariable BidCoSPeer::getValueFromDevice(PParameter& parameter, int32_t channel,
 
 		auto& rpcConfigurationParameter = valuesCentral[channel][parameter->id];
 		std::vector<uint8_t> parameterData = rpcConfigurationParameter.getBinaryData();
-		return parameter->convertFromPacket(parameterData, rpcConfigurationParameter.invert(), true);
+		return parameter->convertFromPacket(parameterData, rpcConfigurationParameter.mainRole(), true);
 	}
 	catch(const std::exception& ex)
 	{
@@ -1996,7 +1996,7 @@ PParameterGroup BidCoSPeer::getParameterSet(int32_t channel, ParameterGroup::Typ
 			else
 			{
 				std::vector<uint8_t> parameterData = parameter.getBinaryData();
-				int32_t index = parameter.rpcParameter->logical->type == BaseLib::DeviceDescription::ILogical::Type::Enum::tBoolean ? (int32_t)parameter.rpcParameter->convertFromPacket(parameterData, parameter.invert(), false)->booleanValue : parameter.rpcParameter->convertFromPacket(parameterData, parameter.invert(), false)->integerValue;
+				int32_t index = parameter.rpcParameter->logical->type == BaseLib::DeviceDescription::ILogical::Type::Enum::tBoolean ? (int32_t)parameter.rpcParameter->convertFromPacket(parameterData, parameter.mainRole(), false)->booleanValue : parameter.rpcParameter->convertFromPacket(parameterData, parameter.mainRole(), false)->integerValue;
 				if(index > 0)
 				{
 					index--;
@@ -2139,7 +2139,7 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 						}
 
 						valueKeys[*j]->push_back(i->first);
-						rpcValues[*j]->push_back(parameter.rpcParameter->convertFromPacket(i->second.value, parameter.invert(), true));
+						rpcValues[*j]->push_back(parameter.rpcParameter->convertFromPacket(i->second.value, parameter.mainRole(), true));
 					}
 				}
 			}
@@ -2166,12 +2166,12 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 						{
 							BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[*i]["SENDERADDRESS"];
 							std::vector<uint8_t> parameterData;
-							rpcParameter->convertToPacket(senderPeer->getSerialNumber() + ":" + std::to_string(*i), parameter.invert(), parameterData);
+							rpcParameter->convertToPacket(senderPeer->getSerialNumber() + ":" + std::to_string(*i), parameter.mainRole(), parameterData);
 							parameter.setBinaryData(parameterData);
 							if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 							else saveParameter(0, ParameterGroup::Type::Enum::variables, *i, "SENDERADDRESS", parameterData);
 							valueKeys[*i]->push_back("SENDERADDRESS");
-							rpcValues[*i]->push_back(rpcParameter->convertFromPacket(parameterData, parameter.invert(), true));
+							rpcValues[*i]->push_back(rpcParameter->convertFromPacket(parameterData, parameter.mainRole(), true));
 						}
 
 						rpcParameter = parameterGroup->parameters.at("SENDERID");
@@ -2180,12 +2180,12 @@ void BidCoSPeer::packetReceived(std::shared_ptr<BidCoSPacket> packet)
 							BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[*i]["SENDERID"];
 							PVariable peerIdValue(new Variable((int32_t)senderPeer->getID()));
 							std::vector<uint8_t> parameterData;
-							rpcParameter->convertToPacket(peerIdValue, parameter.invert(), parameterData);
+							rpcParameter->convertToPacket(peerIdValue, parameter.mainRole(), parameterData);
 							parameter.setBinaryData(parameterData);
 							if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 							else saveParameter(0, ParameterGroup::Type::Enum::variables, *i, "SENDERID", parameterData);
 							valueKeys[*i]->push_back("SENDERID");
-							rpcValues[*i]->push_back(rpcParameter->convertFromPacket(parameterData, parameter.invert(), true));
+							rpcValues[*i]->push_back(rpcParameter->convertFromPacket(parameterData, parameter.mainRole(), true));
 						}
 					}
 				}
@@ -2539,7 +2539,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 					if(configIterator->second.find(i->first) == configIterator->second.end()) continue;
 					BaseLib::Systems::RpcConfigurationParameter& parameter = configIterator->second[i->first];
 					std::vector<uint8_t> parameterData = parameter.getBinaryData();
-					variables->structValue->insert(std::pair<std::string, PVariable>(i->first, i->second->convertFromPacket(parameterData, parameter.invert(), false)));
+					variables->structValue->insert(std::pair<std::string, PVariable>(i->first, i->second->convertFromPacket(parameterData, parameter.mainRole(), false)));
 				}
 			// }}}
 
@@ -2558,7 +2558,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 						aesActivated = true;
 					}
 				}
-				parameter.rpcParameter->convertToPacket(i->second, parameter.invert(), value);
+				parameter.rpcParameter->convertToPacket(i->second, parameter.mainRole(), value);
 				std::vector<uint8_t> shiftedValue = value;
 				parameter.rpcParameter->adjustBitPosition(shiftedValue);
 				int32_t intIndex = (int32_t)parameter.rpcParameter->physical->index;
@@ -2722,7 +2722,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 					if(configIterator->second[remotePeer->address][remotePeer->channel].find(i->first) == configIterator->second[remotePeer->address][remotePeer->channel].end()) continue;
 					BaseLib::Systems::RpcConfigurationParameter& parameter = configIterator->second[remotePeer->address][remotePeer->channel][i->first];
 					std::vector<uint8_t> parameterData = parameter.getBinaryData();
-					variables->structValue->insert(std::pair<std::string, PVariable>(i->first, i->second->convertFromPacket(parameterData, parameter.invert(), false)));
+					variables->structValue->insert(std::pair<std::string, PVariable>(i->first, i->second->convertFromPacket(parameterData, parameter.mainRole(), false)));
 				}
 			// }}}
 
@@ -2733,7 +2733,7 @@ PVariable BidCoSPeer::putParamset(BaseLib::PRpcClientInfo clientInfo, int32_t ch
 				if(configIterator->second[remotePeer->address][remotePeer->channel].find(i->first) == configIterator->second[remotePeer->address][remotePeer->channel].end()) continue;
 				BaseLib::Systems::RpcConfigurationParameter& parameter = configIterator->second[remotePeer->address][remotePeer->channel][i->first];
 				if(!parameter.rpcParameter) continue;
-				parameter.rpcParameter->convertToPacket(i->second, parameter.invert(), value);
+				parameter.rpcParameter->convertToPacket(i->second, parameter.mainRole(), value);
 				std::vector<uint8_t> shiftedValue = value;
 				parameter.rpcParameter->adjustBitPosition(shiftedValue);
 				int32_t intIndex = (int32_t)parameter.rpcParameter->physical->index;
@@ -2881,7 +2881,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				if(!rpcParameter) return false;
 				BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[channel][valueKey];
 				std::vector<uint8_t> parameterData;
-				rpcParameter->convertToPacket(value, parameter.invert(), parameterData);
+				rpcParameter->convertToPacket(value, parameter.mainRole(), parameterData);
 				parameter.setBinaryData(parameterData);
 				if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
@@ -2897,7 +2897,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				if(!rpcParameter) return false;
 				BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[channel][valueKey];
 				std::vector<uint8_t> parameterData;
-				rpcParameter->convertToPacket(value, parameter.invert(), parameterData);
+				rpcParameter->convertToPacket(value, parameter.mainRole(), parameterData);
 				parameter.setBinaryData(parameterData);
 				if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
@@ -2928,7 +2928,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				if(!rpcParameter) return false;
 				BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[channel][valueKey];
 				std::vector<uint8_t> parameterData;
-				rpcParameter->convertToPacket(value, parameter.invert(), parameterData);
+				rpcParameter->convertToPacket(value, parameter.mainRole(), parameterData);
 				parameter.setBinaryData(parameterData);
 				if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
@@ -2960,7 +2960,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				if(!rpcParameter) return false;
 				BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[channel][valueKey];
 				std::vector<uint8_t> parameterData;
-				rpcParameter->convertToPacket(value, parameter.invert(), parameterData);
+				rpcParameter->convertToPacket(value, parameter.mainRole(), parameterData);
 				parameter.setBinaryData(parameterData);
 				if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
@@ -2997,7 +2997,7 @@ bool BidCoSPeer::setHomegearValue(uint32_t channel, std::string valueKey, PVaria
 				if(!rpcParameter) return false;
 				BaseLib::Systems::RpcConfigurationParameter& parameter = valuesCentral[channel][valueKey];
 				std::vector<uint8_t> parameterData;
-				rpcParameter->convertToPacket(value, parameter.invert(), parameterData);
+				rpcParameter->convertToPacket(value, parameter.mainRole(), parameterData);
 				parameter.setBinaryData(parameterData);
 				if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 				else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
@@ -3106,11 +3106,11 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		if(rpcParameter->physical->operationType == IPhysical::OperationType::Enum::store)
 		{
 			std::vector<uint8_t> parameterData;
-			rpcParameter->convertToPacket(value, parameter.invert(), parameterData);
+			rpcParameter->convertToPacket(value, parameter.mainRole(), parameterData);
 			parameter.setBinaryData(parameterData);
 			if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 			else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
-			value = rpcParameter->convertFromPacket(parameterData, parameter.invert(), false);
+			value = rpcParameter->convertFromPacket(parameterData, parameter.mainRole(), false);
 			valueKeys->push_back(valueKey);
 			values->push_back(value);
 			std::string address(_serialNumber + ":" + std::to_string(channel));
@@ -3132,7 +3132,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 			PVariable toggleValue;
 			if(toggleParam.rpcParameter->logical->type == ILogical::Type::Enum::tBoolean)
 			{
-				toggleValue = toggleParam.rpcParameter->convertFromPacket(parameterData, toggleParam.invert(), false);
+				toggleValue = toggleParam.rpcParameter->convertFromPacket(parameterData, toggleParam.mainRole(), false);
 				toggleValue->booleanValue = !toggleValue->booleanValue;
 			}
 			else if(toggleParam.rpcParameter->logical->type == ILogical::Type::Enum::tInteger ||
@@ -3142,7 +3142,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 				std::vector<uint8_t> temp({0});
 				if(currentToggleValue != toggleCast->on) temp.at(0) = toggleCast->on;
 				else temp.at(0) = toggleCast->off;
-				toggleValue = toggleParam.rpcParameter->convertFromPacket(temp, toggleParam.invert(), false);
+				toggleValue = toggleParam.rpcParameter->convertFromPacket(temp, toggleParam.mainRole(), false);
 			}
 			else return Variable::createError(-6, "Toggle parameter has to be of type boolean, float or integer.");
 			return setValue(clientInfo, channel, toggleCast->parameter, toggleValue, wait);
@@ -3153,11 +3153,11 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 		if(packetIterator == _rpcDevice->packetsById.end()) return Variable::createError(-6, "No frame was found for parameter " + valueKey);
 		PPacket frame = packetIterator->second;
 		std::vector<uint8_t> parameterData;
-		rpcParameter->convertToPacket(value, parameter.invert(), parameterData);
+		rpcParameter->convertToPacket(value, parameter.mainRole(), parameterData);
 		parameter.setBinaryData(parameterData);
 		if(parameter.databaseId > 0) saveParameter(parameter.databaseId, parameterData);
 		else saveParameter(0, ParameterGroup::Type::Enum::variables, channel, valueKey, parameterData);
-		value = rpcParameter->convertFromPacket(parameterData, parameter.invert(), false);
+		value = rpcParameter->convertFromPacket(parameterData, parameter.mainRole(), false);
 		valueKeys->push_back(valueKey);
 		values->push_back(value);
 		if(_bl->debugLevel > 4) GD::out.printDebug("Debug: " + valueKey + " of peer " + std::to_string(_peerID) + " with serial number " + _serialNumber + ":" + std::to_string(channel) + " was set to " + BaseLib::HelperFunctions::getHexString(parameterData) + ".");
@@ -3276,7 +3276,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 				std::shared_ptr<CallbackFunctionParameter> parameters(new CallbackFunctionParameter());
 				parameters->integers.push_back(channel);
 				parameters->integers.push_back(0); //false = off
-				parameters->integers.push_back(std::lround(additionalParameter->rpcParameter->convertFromPacket(parameterData, additionalParameter->invert(), false)->floatValue * 1000));
+				parameters->integers.push_back(std::lround(additionalParameter->rpcParameter->convertFromPacket(parameterData, additionalParameter->mainRole(), false)->floatValue * 1000));
 				parameters->strings.push_back(rpcParameter->physical->groupId);
 				queue->callbackParameter = parameters;
 				queue->queueEmptyCallback = std::bind(&BidCoSPeer::addVariableToResetCallback, this, std::placeholders::_1);
@@ -3305,7 +3305,7 @@ PVariable BidCoSPeer::setValue(BaseLib::PRpcClientInfo clientInfo, uint32_t chan
 				PVariable logicalDefaultValue = valuesCentral.at(channel).at(*j).rpcParameter->logical->getDefaultValue();
 				std::vector<uint8_t> defaultValue;
                 BaseLib::Systems::RpcConfigurationParameter& tempParam = valuesCentral.at(channel).at(*j);
-                tempParam.rpcParameter->convertToPacket(logicalDefaultValue, tempParam.invert(), defaultValue);
+                tempParam.rpcParameter->convertToPacket(logicalDefaultValue, tempParam.mainRole(), defaultValue);
 				if(!tempParam.equals(defaultValue))
 				{
 					tempParam.setBinaryData(defaultValue);

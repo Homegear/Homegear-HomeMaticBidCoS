@@ -2388,6 +2388,8 @@ PVariable BidCoSPeer::forceConfigUpdate(BaseLib::PRpcClientInfo clientInfo)
 		}
 
 		central->enqueuePendingQueues(_address);
+
+		return std::make_shared<BaseLib::Variable>();
 	}
 	catch(const std::exception& ex)
 	{

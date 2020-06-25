@@ -33,8 +33,8 @@
 #define BIDCOS_FAMILY_ID 0
 #define BIDCOS_FAMILY_NAME "HomeMatic BidCoS"
 
-#include "PhysicalInterfaces/IBidCoSInterface.h"
 #include "BidCoS.h"
+#include "Interfaces.h"
 
 namespace BidCoS
 {
@@ -47,8 +47,7 @@ public:
 	static BaseLib::SharedObjects* bl;
 	static BidCoS* family;
 	static std::shared_ptr<Systems::FamilySettings> settings;
-	static std::map<std::string, std::shared_ptr<IBidCoSInterface>> physicalInterfaces;
-	static std::shared_ptr<IBidCoSInterface> defaultPhysicalInterface;
+    static std::shared_ptr<Interfaces> interfaces;
 	static BaseLib::Output out;
 private:
 	GD();

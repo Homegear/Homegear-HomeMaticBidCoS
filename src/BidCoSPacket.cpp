@@ -122,7 +122,7 @@ BidCoSPacket::BidCoSPacket(std::string& packet, int64_t timeReceived)
     import(packet, packet.front() == 'A');
 }
 
-BidCoSPacket::BidCoSPacket(std::vector<uint8_t>& packet, bool rssiByte, int64_t timeReceived)
+BidCoSPacket::BidCoSPacket(const std::vector<uint8_t>& packet, bool rssiByte, int64_t timeReceived)
 {
 	_timeReceived = timeReceived;
 	import(packet, rssiByte);
@@ -144,7 +144,7 @@ BidCoSPacket::~BidCoSPacket()
 {
 }
 
-void BidCoSPacket::import(std::vector<uint8_t>& packet, bool rssiByte)
+void BidCoSPacket::import(const std::vector<uint8_t>& packet, bool rssiByte)
 {
 	try
 	{

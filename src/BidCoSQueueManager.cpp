@@ -35,7 +35,7 @@ namespace BidCoS
 {
 BidCoSQueueData::BidCoSQueueData(std::shared_ptr<IBidCoSInterface> physicalInterface)
 {
-	if(!physicalInterface) physicalInterface = GD::defaultPhysicalInterface;
+	if(!physicalInterface) physicalInterface = GD::interfaces->getDefaultInterface();
 	queue = std::shared_ptr<BidCoSQueue>(new BidCoSQueue(physicalInterface));
 	lastAction.reset(new int64_t);
 	*lastAction = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
@@ -138,7 +138,7 @@ std::shared_ptr<BidCoSQueue> BidCoSQueueManager::createQueue(std::shared_ptr<IBi
 	try
 	{
 		if(_disposing) return std::shared_ptr<BidCoSQueue>();
-		if(!physicalInterface) physicalInterface = GD::defaultPhysicalInterface;
+		if(!physicalInterface) physicalInterface = GD::interfaces->getDefaultInterface();
 		_queueMutex.lock();
 		if(_stopWorkerThread)
 		{

@@ -47,6 +47,7 @@ public:
 	virtual ~BidCoS();
 	virtual void dispose();
 
+    virtual bool hasPhysicalInterface() { return true; }
 	virtual PVariable getPairingInfo();
 protected:
 	virtual void createCentral();

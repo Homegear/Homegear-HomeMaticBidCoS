@@ -177,7 +177,7 @@ std::vector<std::shared_ptr<IBidCoSInterface>> Interfaces::getInterfaces()
     {
         std::lock_guard<std::mutex> interfaceGuard(_physicalInterfacesMutex);
         interfaces.reserve(_physicalInterfaces.size());
-        for(auto interfaceBase : _physicalInterfaces)
+        for(const auto& interfaceBase : _physicalInterfaces)
         {
             std::shared_ptr<IBidCoSInterface> interface(std::dynamic_pointer_cast<IBidCoSInterface>(interfaceBase.second));
             if(!interface) continue;

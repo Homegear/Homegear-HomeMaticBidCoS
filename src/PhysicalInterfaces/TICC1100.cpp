@@ -542,13 +542,13 @@ void TICC1100::readwrite(std::vector<uint8_t>& data)
 		_transfer.tx_buf = (uint64_t)&data[0];
 		_transfer.rx_buf = (uint64_t)&data[0];
 		_transfer.len = (uint32_t)data.size();
-		if(_bl->debugLevel >= 6) _out.printDebug("Debug: Sending: " + _bl->hf.getHexString(data));
+		if(_bl->debugLevel >= 6) _out.printDebug("Debug: Sending: " + BaseLib::HelperFunctions::getHexString(data));
 		if(!ioctl(_fileDescriptor->descriptor, SPI_IOC_MESSAGE(1), &_transfer))
 		{
 			_out.printError("Couldn't write to device " + _settings->device + ": " + std::string(strerror(errno)));
 			return;
 		}
-		if(_bl->debugLevel >= 6) _out.printDebug("Debug: Received: " + _bl->hf.getHexString(data));
+		if(_bl->debugLevel >= 6) _out.printDebug("Debug: Received: " + BaseLib::HelperFunctions::getHexString(data));
 	}
 	catch(const std::exception& ex)
     {

@@ -41,8 +41,6 @@
 #include "PhysicalInterfaces/HomegearGateway.h"
 #include "PhysicalInterfaces/Hgdc.h"
 
-#include "../config.h"
-
 namespace BidCoS
 {
 

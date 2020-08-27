@@ -15,6 +15,8 @@ set(SOURCE_FILES
         src/PhysicalInterfaces/Cul.h
         src/PhysicalInterfaces/Cunx.cpp
         src/PhysicalInterfaces/Cunx.h
+        src/PhysicalInterfaces/Hgdc.cpp
+        src/PhysicalInterfaces/Hgdc.h
         src/PhysicalInterfaces/HM-CFG-LAN.cpp
         src/PhysicalInterfaces/HM-CFG-LAN.h
         src/PhysicalInterfaces/HM-LGW.cpp
@@ -54,7 +56,7 @@ set(SOURCE_FILES
         src/Interfaces.h
         src/PendingBidCoSQueues.cpp
         src/PendingBidCoSQueues.h
-        config.h src/PhysicalInterfaces/HomegearGateway.cpp src/PhysicalInterfaces/HomegearGateway.h)
+        src/PhysicalInterfaces/HomegearGateway.cpp src/PhysicalInterfaces/HomegearGateway.h)
 
 add_custom_target(homegear COMMAND ../../makeAll.sh SOURCES ${SOURCE_FILES})
 

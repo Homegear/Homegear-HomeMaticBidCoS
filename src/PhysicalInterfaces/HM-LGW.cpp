@@ -1673,8 +1673,7 @@ void HM_LGW::listen()
 
 				if(_bl->debugLevel >= 6)
 				{
-					_out.printDebug("Debug: Packet received on port " + _settings->port + ". Raw data:");
-					_out.printBinary(data);
+					_out.printDebug("Debug: Packet received on port " + _settings->port + ". Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 				}
 
 				if(data.empty()) continue;
@@ -1768,8 +1767,7 @@ void HM_LGW::listenKeepAlive()
 
 				if(_bl->debugLevel >= 6)
 				{
-					_out.printDebug("Debug: Packet received on port " + _settings->portKeepAlive + ". Raw data:");
-					_out.printBinary(data);
+					_out.printDebug("Debug: Packet received on port " + _settings->portKeepAlive + ". Raw data: " + BaseLib::HelperFunctions::getHexString(data));
 				}
 
 				processDataKeepAlive(data);

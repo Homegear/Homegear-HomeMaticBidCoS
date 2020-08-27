@@ -86,11 +86,7 @@ void HomeMaticCentral::dispose(bool wait)
 		_peersMutex.unlock();
 
 		GD::out.printDebug("Removing device " + std::to_string(_deviceId) + " from physical device's event queue...");
-		for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
-		{
-			//Just to make sure cycle through all physical devices. If event handler is not removed => segfault
-			i->second->removeEventHandler(_physicalInterfaceEventhandlers[i->first]);
-		}
+		GD::interfaces->removeEventHandlers();
 	}
     catch(const std::exception& ex)
     {
@@ -148,10 +144,7 @@ void HomeMaticCentral::init()
 
 		setUpBidCoSMessages();
 
-		for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
-		{
-			_physicalInterfaceEventhandlers[i->first] = i->second->addEventHandler((BaseLib::Systems::IPhysicalInterface::IPhysicalInterfaceEventSink*)this);
-		}
+        GD::interfaces->addEventHandlers((BaseLib::Systems::IPhysicalInterface::IPhysicalInterfaceEventSink*)this);
 
 		_bl->threadManager.start(_workerThread, true, _bl->settings.workerThreadPriority(), _bl->settings.workerThreadPolicy(), &HomeMaticCentral::worker, this);
 	}
@@ -557,6 +550,20 @@ void HomeMaticCentral::worker()
 		{
 			try
 			{
+			    if(_queueDefaultInterfaceChange)
+                {
+                    _queueDefaultInterfaceChange = false;
+                    auto defaultInterface = GD::interfaces->getDefaultInterface();
+                    auto defaultInterfaceID = defaultInterface->getID();
+                    if(defaultInterfaceID.empty()) return;
+                    GD::out.printInfo("Info: Changing default interface of all peers to " + defaultInterfaceID);
+                    auto peers = getPeers();
+                    for(auto& peer : peers)
+                    {
+                        peer->setInterface(nullptr, defaultInterfaceID);
+                    }
+                }
+
 				std::this_thread::sleep_for(sleepingTime);
 				if(_stopWorkerThread) return;
 				if(counter > 10000)
@@ -589,6 +596,7 @@ void HomeMaticCentral::worker()
 				_peersMutex.unlock();
 				std::shared_ptr<BidCoSPeer> peer(getPeer(lastPeer));
 				if(peer && !peer->deleting) peer->worker();
+                GD::interfaces->worker();
 				counter++;
 			}
 			catch(const std::exception& ex)
@@ -613,7 +621,7 @@ bool HomeMaticCentral::onPacketReceived(std::string& senderId, std::shared_ptr<B
 		if(_disposing) return false;
 		std::shared_ptr<BidCoSPacket> bidCoSPacket(std::dynamic_pointer_cast<BidCoSPacket>(packet));
 		if(BaseLib::HelperFunctions::getTime() > bidCoSPacket->getTimeReceived() + 5000) GD::out.printError("Error: Packet was processed more than 5 seconds after reception. If your CPU and network load is low, please report this to the Homegear developers.");
-		if(_bl->debugLevel >= 4) std::cout << BaseLib::HelperFunctions::getTimeString(bidCoSPacket->getTimeReceived()) << " HomeMatic BidCoS packet received (" << senderId << (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") << "): " << bidCoSPacket->hexString() << std::endl;
+		if(_bl->debugLevel >= 4) GD::out.printInfo("Info: " + BaseLib::HelperFunctions::getTimeString(bidCoSPacket->getTimeReceived()) + " Packet received (" + senderId + (bidCoSPacket->rssiDevice() ? std::string(", RSSI: -") + std::to_string((int32_t)(bidCoSPacket->rssiDevice())) + " dBm" : "") + "): " + bidCoSPacket->hexString());
 		if(!bidCoSPacket) return false;
 
 		// {{{ Intercept packet
@@ -726,13 +734,14 @@ std::shared_ptr<IBidCoSInterface> HomeMaticCentral::getPhysicalInterface(int32_t
 		std::shared_ptr<BidCoSQueue> queue = _bidCoSQueueManager.get(peerAddress);
 		if(queue) return queue->getPhysicalInterface();
 		std::shared_ptr<BidCoSPeer> peer = getPeer(peerAddress);
-		return peer ? peer->getPhysicalInterface() : GD::defaultPhysicalInterface;
+
+		return peer ? peer->getPhysicalInterface() : GD::interfaces->getDefaultInterface();
 	}
 	catch(const std::exception& ex)
     {
     	GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
-    return GD::defaultPhysicalInterface;
+    return GD::interfaces->getDefaultInterface();
 }
 
 std::shared_ptr<BidCoSQueue> HomeMaticCentral::enqueuePendingQueues(int32_t deviceAddress, bool wait, bool* result)
@@ -973,30 +982,31 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 		{
 			std::vector<uint8_t> payload{2, 0};
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA2, 0x58, 0x39A07F, 0x1DA07F, payload));
-			GD::defaultPhysicalInterface->sendPacket(packet);
+            GD::interfaces->getDefaultInterface()->sendPacket(packet);
 			return "ok\n";
 		}
 		else if(BaseLib::HelperFunctions::checkCliCommand(command, "test2", "ts2", "", 0, arguments, showHelp))
 		{
 			std::vector<uint8_t> payload{ 0x80, 0x03, 0x02, 0x0A, 0x12, 0x81, 0x13, 0x85, 0x0A, 0x12, 0x80, 0x13, 0x85, 0x0A, 0x12, 0x0A, 0x0A };
 			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(getMessageCounter(), 0xA2, 0x58, _address, 0x4BD22A, payload));
-			GD::defaultPhysicalInterface->sendPacket(packet);
+            GD::interfaces->getDefaultInterface()->sendPacket(packet);
 			return "ok\n";
 		}
 		else if(BaseLib::HelperFunctions::checkCliCommand(command, "help", "h", "", 0, arguments, showHelp))
 		{
 			stringStream << "List of commands (shortcut in brackets):" << std::endl << std::endl;
 			stringStream << "For more information about the individual command type: COMMAND help" << std::endl << std::endl;
-			stringStream << "pairing on (pon)\tEnables pairing mode" << std::endl;
-			stringStream << "pairing off (pof)\tDisables pairing mode" << std::endl;
-			stringStream << "peers list (ls)\t\tList all peers" << std::endl;
-			stringStream << "peers add (pa)\t\tManually adds a peer (without pairing it! Only for testing)" << std::endl;
-			stringStream << "peers remove (prm)\tRemove a peer (without unpairing)" << std::endl;
-			stringStream << "peers reset (prs)\tUnpair a peer and reset it to factory defaults" << std::endl;
-			stringStream << "peers select (ps)\tSelect a peer" << std::endl;
-			stringStream << "peers setname (pn)\tName a peer" << std::endl;
-			stringStream << "peers unpair (pup)\tUnpair a peer" << std::endl;
-			stringStream << "peers update (pud)\tUpdates a peer to the newest firmware version" << std::endl;
+			stringStream << "pairing on (pon)   Enables pairing mode" << std::endl;
+			stringStream << "pairing off (pof)  Disables pairing mode" << std::endl;
+			stringStream << "peers list (ls)    List all peers" << std::endl;
+			stringStream << "peers add (pa)     Manually adds a peer (without pairing it! Only for testing)" << std::endl;
+			stringStream << "peers remove (prm) Remove a peer (without unpairing)" << std::endl;
+			stringStream << "peers reset (prs)  Unpair a peer and reset it to factory defaults" << std::endl;
+			stringStream << "peers select (ps)  Select a peer" << std::endl;
+			stringStream << "peers setname (pn) Name a peer" << std::endl;
+			stringStream << "peers unpair (pup) Unpair a peer" << std::endl;
+			stringStream << "peers update (pud) Updates a peer to the newest firmware version" << std::endl;
+			stringStream << "comm reopen (cr)   Reopen communication interface" << std::endl;
 			stringStream << "unselect (u)\t\tUnselect this device" << std::endl;
 			return stringStream.str();
 		}
@@ -1457,16 +1467,19 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 					else if(filterType == "address")
 					{
 						int32_t address = BaseLib::Math::getNumber(filterValue, true);
-						if(i->second->getAddress() != address) continue;
+						std::string addressHex = BaseLib::HelperFunctions::getHexString(i->second->getAddress(), 6);
+						if((i->second->getAddress() != address) && ((signed)BaseLib::HelperFunctions::toLower(addressHex).find(filterValue) == (signed)std::string::npos)) continue;
 					}
 					else if(filterType == "serial")
 					{
-						if(i->second->getSerialNumber() != filterValue) continue;
+						std::string serial = i->second->getSerialNumber();
+						if((signed)BaseLib::HelperFunctions::toLower(serial).find(filterValue) == (signed)std::string::npos) continue;
 					}
 					else if(filterType == "type")
 					{
 						int32_t deviceType = BaseLib::Math::getNumber(filterValue, true);
-						if((int32_t)i->second->getDeviceType() != deviceType) continue;
+						std::string deviceTypeHex = BaseLib::HelperFunctions::getHexString(i->second->getDeviceType(), 4);
+						if(((int32_t)i->second->getDeviceType() != deviceType) && ((signed)BaseLib::HelperFunctions::toLower(deviceTypeHex).find(filterValue) == (signed)std::string::npos)) continue;
 					}
 					else if(filterType == "configpending")
 					{
@@ -1547,6 +1560,31 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
 				GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
 			}
 		}
+        else if(BaseLib::HelperFunctions::checkCliCommand(command, "comm reopen", "cr", "", 1, arguments, showHelp))
+        {
+            if(showHelp)
+            {
+                stringStream << "Description: This closes and reopens a communication interface." << std::endl;
+                stringStream << "Usage: comm reopen [ID]" << std::endl << std::endl;
+                stringStream << "Parameters:" << std::endl;
+                stringStream << "  ID: The ID of the interface." << std::endl;
+                return stringStream.str();
+            }
+
+            auto moduleId = arguments.at(0);
+            auto interface = GD::interfaces->getInterface(moduleId);
+            if(!interface)
+            {
+                stringStream << "Unknown communication interface." << std::endl;
+                return stringStream.str();
+            }
+
+            interface->stopListening();
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            interface->startListening();
+            stringStream << "Interface successfully reopened." << std::endl;
+            return stringStream.str();
+        }
 		else return "Unknown command.\n";
 	}
 	catch(const std::exception& ex)
@@ -1554,6 +1592,18 @@ std::string HomeMaticCentral::handleCliCommand(std::string command)
         GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
     }
     return "Error executing command. See log file for more details.\n";
+}
+
+void HomeMaticCentral::changeDefaultInterface()
+{
+    try
+    {
+        _queueDefaultInterfaceChange = true;
+    }
+    catch(const std::exception& ex)
+    {
+        GD::out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+    }
 }
 
 void HomeMaticCentral::updateFirmwares(std::vector<uint64_t> ids)
@@ -1594,19 +1644,20 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 		physicalInterface = peer->getPhysicalInterface();
 		if(!physicalInterface->firmwareUpdatesSupported())
 		{
-			if(GD::defaultPhysicalInterface->firmwareUpdatesSupported())
+			if(GD::interfaces->getDefaultInterface()->firmwareUpdatesSupported())
 			{
-				GD::out.printInfo("Info: Using the default physical interface " + GD::defaultPhysicalInterface->getID() + " because the peer's interface doesn't support firmware updates.");
-				physicalInterface = GD::defaultPhysicalInterface;
+				GD::out.printInfo("Info: Using the default physical interface " + GD::interfaces->getDefaultInterface()->getID() + " because the peer's interface doesn't support firmware updates.");
+				physicalInterface = GD::interfaces->getDefaultInterface();
 			}
 			else
 			{
-				for(std::map<std::string, std::shared_ptr<IBidCoSInterface>>::iterator i = GD::physicalInterfaces.begin(); i != GD::physicalInterfaces.end(); ++i)
+			    auto interfaces = GD::interfaces->getInterfaces();
+				for(auto& interface : interfaces)
 				{
-					if(i->second->firmwareUpdatesSupported())
+					if(interface->firmwareUpdatesSupported())
 					{
-						GD::out.printInfo("Info: Using physical interface " + i->second->getID() + " because the peer's interface doesn't support firmware updates.");
-						physicalInterface = i->second;
+						GD::out.printInfo("Info: Using physical interface " + interface->getID() + " because the peer's interface doesn't support firmware updates.");
+						physicalInterface = interface;
 						break;
 					}
 				}
@@ -3528,7 +3579,7 @@ PVariable HomeMaticCentral::addDevice(BaseLib::PRpcClientInfo clientInfo, std::s
             {
                 std::lock_guard<std::mutex> sendPacketThreadGuard(_sendPacketThreadMutex);
                 _bl->threadManager.join(_sendPacketThread);
-                _bl->threadManager.start(_sendPacketThread, false, &HomeMaticCentral::sendPacket, this, GD::defaultPhysicalInterface, packet, false);
+                _bl->threadManager.start(_sendPacketThread, false, &HomeMaticCentral::sendPacket, this, GD::interfaces->getDefaultInterface(), packet, false);
             }
 
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));
@@ -3683,7 +3734,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 				for(std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
 				{
 					std::vector<uint8_t> parameterData = i->second.getBinaryData();
-					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData)));
+					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData, i->second.mainRole(), false)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
 				sender->putParamset(clientInfo, senderChannelIndex, ParameterGroup::Type::Enum::link, receiverID, receiverChannelIndex, paramset, true);
@@ -3781,7 +3832,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 				for(std::unordered_map<std::string, BaseLib::Systems::RpcConfigurationParameter>::iterator i = linkConfig->begin(); i != linkConfig->end(); ++i)
 				{
 					std::vector<uint8_t> parameterData = i->second.getBinaryData();
-					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData)));
+					paramset->structValue->insert(StructElement(i->first, i->second.rpcParameter->convertFromPacket(parameterData, i->second.mainRole(), false)));
 				}
 				//putParamset pushes the packets on pendingQueues, but does not send immediately
 				receiver->putParamset(clientInfo, receiverChannelIndex, ParameterGroup::Type::Enum::link, senderID, senderChannelIndex, paramset, true);
@@ -3826,7 +3877,7 @@ PVariable HomeMaticCentral::addLink(BaseLib::PRpcClientInfo clientInfo, uint64_t
 		}
 		else
 		{
-			return PVariable(new Variable(VariableType::tVoid));
+			return std::make_shared<Variable>(VariableType::tVoid);
 		}
 	}
 	catch(const std::exception& ex)
@@ -4445,4 +4496,5 @@ PVariable HomeMaticCentral::setInterface(BaseLib::PRpcClientInfo clientInfo, uin
     }
     return Variable::createError(-32500, "Unknown application error.");
 }
+
 }

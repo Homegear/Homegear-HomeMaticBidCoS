@@ -914,6 +914,9 @@ void TICC1100::mainThread()
 
 					closeGPIO(1);
 					initDevice();
+					closeGPIO(1);
+					std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+					openGPIO(1, true);
 					_stopped = false;
 					continue;
 				}

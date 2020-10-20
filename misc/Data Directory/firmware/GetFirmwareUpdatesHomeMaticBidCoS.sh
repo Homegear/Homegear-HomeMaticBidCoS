@@ -4,16 +4,16 @@ FIRMWAREDIR=/tmp/HomegearTemp
 
 rm -f $SCRIPTDIR/0000.*
 
-wget -P $FIRMWAREDIR https://www.eq-3.de/Downloads/Software/Firmware/hm-ou-cfm-tw_update_V1_2_160418.tgz
+wget -P $FIRMWAREDIR https://www.eq-3.de/Downloads/Software/Firmware/hm-ou-cfm-tw_update_V1_3_160620.tgz
 if [ $? -eq 0 ]; then
-	tar -zxf $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_2_160418.tgz -C $FIRMWAREDIR
+	tar -zxf $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_3_160620.tgz -C $FIRMWAREDIR
 	[ $? -ne 0 ] && exit 1
-	mv $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_2_160418.eq3 $SCRIPTDIR/0000.000000FA.fw
+	mv $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_3_160620.eq3 $SCRIPTDIR/0000.000000FA.fw
 	[ $? -ne 0 ] && exit 1
-	rm $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_2_160418.tgz
+	rm $FIRMWAREDIR/hm-ou-cfm-tw_update_V1_3_160620.tgz
 	rm $FIRMWAREDIR/changelog.txt
 	rm $FIRMWAREDIR/info
-	echo "12" > $SCRIPTDIR/0000.000000FA.version
+	echo "13" > $SCRIPTDIR/0000.000000FA.version
 	[ $? -ne 0 ] && exit 1
 fi
 

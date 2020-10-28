@@ -31,231 +31,186 @@
 #include "../BidCoSPacket.h"
 #include "../GD.h"
 
-namespace BidCoS
-{
+namespace BidCoS {
 
-COC::COC(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings)
-{
-	_out.init(GD::bl);
-	_out.setPrefix(GD::out.getPrefix() + "COC \"" + settings->id + "\": ");
+COC::COC(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings) : IBidCoSInterface(settings) {
+  _out.init(GD::bl);
+  _out.setPrefix(GD::out.getPrefix() + "COC \"" + settings->id + "\": ");
 
-	stackPrefix = "";
-	for(uint32_t i = 1; i < settings->stackPosition; i++)
-	{
-		stackPrefix.push_back('*');
-	}
+  stackPrefix = "";
+  for (uint32_t i = 1; i < settings->stackPosition; i++) {
+    stackPrefix.push_back('*');
+  }
 
-	_aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, _rfKey, _oldRfKey, _currentRfKeyIndex));
+  _aesHandshake.reset(new AesHandshake(_bl, _out, _myAddress, _rfKey, _oldRfKey, _currentRfKeyIndex));
 }
 
-COC::~COC()
-{
-	try
-	{
-		if(_socket)
-		{
-			_socket->removeEventHandler(_eventHandlerSelf);
-			_socket->closeDevice();
-			_socket.reset();
-		}
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+COC::~COC() {
+  try {
+    if (_socket) {
+      _socket->removeEventHandler(_eventHandlerSelf);
+      _socket->closeDevice();
+      _socket.reset();
     }
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
 }
 
-void COC::forceSendPacket(std::shared_ptr<BidCoSPacket> packet)
-{
-	try
-	{
-        std::lock_guard<std::mutex> sendGuard(_forceSendPacketMutex);
-		if(!_socket)
-		{
-			_out.printError("Error: Couldn't write to COC device, because the device descriptor is not valid: " + _settings->device);
-			return;
-		}
-		std::string packetString = packet->hexString();
-		if(_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
-		writeToDevice(stackPrefix + "As" + packetString + "\n" + (_updateMode ? "" : stackPrefix + "Ar\n"));
-        if(packet->controlByte() & 0x10) std::this_thread::sleep_for(std::chrono::milliseconds(380));
-        else std::this_thread::sleep_for(std::chrono::milliseconds(20));
-		_lastPacketSent = BaseLib::HelperFunctions::getTime();
-	}
-	catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+void COC::forceSendPacket(std::shared_ptr<BidCoSPacket> packet) {
+  try {
+    std::lock_guard<std::mutex> sendGuard(_forceSendPacketMutex);
+    if (!_socket) {
+      _out.printError("Error: Couldn't write to COC device, because the device descriptor is not valid: " + _settings->device);
+      return;
     }
-}
-
-void COC::enableUpdateMode()
-{
-	try
-	{
-		_updateMode = true;
-		writeToDevice(stackPrefix + "AR\n");
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-}
-
-void COC::disableUpdateMode()
-{
-	try
-	{
-		stopListening();
-		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-		startListening();
-		_updateMode = false;
-	}
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
-}
-
-void COC::writeToDevice(std::string data)
-{
-    try
-    {
-        if(!_socket)
-		{
-			_out.printError("Error: Couldn't write to COC device, because the device descriptor is not valid: " + _settings->device);
-			return;
-		}
-        _socket->writeLine(data);
-    }
-    catch(const std::exception& ex)
-    {
-    	_out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
+    std::string packetString = packet->hexString();
+    if (_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
+    writeToDevice(stackPrefix + "As" + packetString + "\n" + (_updateMode ? "" : stackPrefix + "Ar\n"));
+    if (packet->controlByte() & 0x10) std::this_thread::sleep_for(std::chrono::milliseconds(380));
+    else std::this_thread::sleep_for(std::chrono::milliseconds(20));
     _lastPacketSent = BaseLib::HelperFunctions::getTime();
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
 }
 
-void COC::startListening()
-{
-	try
-	{
-		stopListening();
-		if(!_aesHandshake) return; //AES is not initialized
-
-		if(!GD::family->getCentral())
-		{
-			_stopCallbackThread = true;
-			_out.printError("Error: Could not get central address. Stopping listening.");
-			return;
-		}
-		_myAddress = GD::family->getCentral()->getAddress();
-		_aesHandshake->setMyAddress(_myAddress);
-
-		IBidCoSInterface::startListening();
-		_socket = GD::bl->serialDeviceManager.get(_settings->device);
-		if(!_socket) _socket = GD::bl->serialDeviceManager.create(_settings->device, 38400, O_RDWR | O_NOCTTY | O_NDELAY, true, 45);
-		if(!_socket) return;
-		_eventHandlerSelf = _socket->addEventHandler(this);
-		_socket->openDevice(false, false);
-		if(gpioDefined(2))
-		{
-			openGPIO(2, false);
-			if(!getGPIO(2)) setGPIO(2, true);
-			closeGPIO(2);
-		}
-		if(gpioDefined(1))
-		{
-			openGPIO(1, false);
-			if(!getGPIO(1))
-			{
-				setGPIO(1, false);
-				std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-				setGPIO(1, true);
-				std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-			}
-			else std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-			closeGPIO(1);
-		}
-		writeToDevice(stackPrefix + "X21\n" + stackPrefix + "Ar\n");
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	}
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
+void COC::enableUpdateMode() {
+  try {
+    _updateMode = true;
+    writeToDevice(stackPrefix + "AR\n");
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
 }
 
-void COC::stopListening()
-{
-	try
-	{
-		IBidCoSInterface::stopListening();
-		if(!_socket) return;
-		_socket->removeEventHandler(_eventHandlerSelf);
-		_socket->closeDevice();
-		_socket.reset();
-	}
-	catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
+void COC::disableUpdateMode() {
+  try {
+    stopListening();
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    startListening();
+    _updateMode = false;
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
 }
 
-void COC::lineReceived(const std::string& data)
-{
-    try
-    {
-    	std::string packetHex;
-		if(stackPrefix.empty())
-		{
-			if(data.size() > 0 && data.at(0) == '*') return;
-			packetHex = data;
-		}
-		else
-		{
-			if(data.size() + 1 <= stackPrefix.size()) return;
-			if(data.substr(0, stackPrefix.size()) != stackPrefix || data.at(stackPrefix.size()) == '*') return;
-			else packetHex = data.substr(stackPrefix.size());
-		}
-		if(packetHex.size() > 21) //21 is minimal packet length (=10 Byte + COC "A" + "\n")
-		{
-			std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
-			processReceivedPacket(packet);
-		}
-		else if(!packetHex.empty())
-		{
-			if(packetHex.compare(0, 4, "LOVF") == 0) _out.printWarning("Warning: COC with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
-			else if(packetHex == "A") return;
-			else  _out.printInfo("Info: Ignoring too small packet: " + packetHex);
-		}
+void COC::writeToDevice(std::string data) {
+  try {
+    if (!_socket) {
+      _out.printError("Error: Couldn't write to COC device, because the device descriptor is not valid: " + _settings->device);
+      return;
     }
-    catch(const std::exception& ex)
-    {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
-    }
+    _socket->writeLine(data);
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
+  _lastPacketSent = BaseLib::HelperFunctions::getTime();
 }
 
-void COC::setup(int32_t userID, int32_t groupID, bool setPermissions)
-{
-    try
-	{
-		if(setPermissions) setDevicePermission(userID, groupID);
-		if(gpioDefined(1))
-		{
-			exportGPIO(1);
-			if(setPermissions) setGPIOPermission(1, userID, groupID, false);
-			setGPIODirection(1, GPIODirection::OUT);
-		}
-		if(gpioDefined(2))
-		{
-			exportGPIO(2);
-			if(setPermissions) setGPIOPermission(2, userID, groupID, false);
-			setGPIODirection(2, GPIODirection::OUT);
-		}
+void COC::startListening() {
+  try {
+    stopListening();
+    if (!_aesHandshake) return; //AES is not initialized
+
+    if (!GD::family->getCentral()) {
+      _stopCallbackThread = true;
+      _out.printError("Error: Could not get central address. Stopping listening.");
+      return;
     }
-    catch(const std::exception& ex)
+    _myAddress = GD::family->getCentral()->getAddress();
+    _aesHandshake->setMyAddress(_myAddress);
+
+    IBidCoSInterface::startListening();
+    _socket = GD::bl->serialDeviceManager.get(_settings->device);
+    if (!_socket) _socket = GD::bl->serialDeviceManager.create(_settings->device, 38400, O_RDWR | O_NOCTTY | O_NDELAY, true, 45);
+    if (!_socket) return;
+    _eventHandlerSelf = _socket->addEventHandler(this);
+    _socket->openDevice(false, false);
+    if (gpioDefined(2)) {
+      openGPIO(2, false);
+      if (!getGPIO(2)) setGPIO(2, true);
+      closeGPIO(2);
+    }
+    if (gpioDefined(1)) {
+      openGPIO(1, false);
+      if (!getGPIO(1)) {
+        setGPIO(1, false);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        setGPIO(1, true);
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+      } else std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+      closeGPIO(1);
+    }
+    writeToDevice(stackPrefix + "X21\n" + stackPrefix + "Ar\n");
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
+}
+
+void COC::stopListening() {
+  try {
+    IBidCoSInterface::stopListening();
+    if (!_socket) return;
+    _socket->removeEventHandler(_eventHandlerSelf);
+    _socket->closeDevice();
+    _socket.reset();
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
+}
+
+void COC::lineReceived(const std::string &data) {
+  try {
+    std::string packetHex;
+    if (stackPrefix.empty()) {
+      if (data.size() > 0 && data.at(0) == '*') return;
+      packetHex = data;
+    } else {
+      if (data.size() + 1 <= stackPrefix.size()) return;
+      if (data.substr(0, stackPrefix.size()) != stackPrefix || data.at(stackPrefix.size()) == '*') return;
+      else packetHex = data.substr(stackPrefix.size());
+    }
+    if (packetHex.size() > 21) //21 is minimal packet length (=10 Byte + COC "A" + "\n")
     {
-        _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+      std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));
+      processReceivedPacket(packet);
+    } else if (!packetHex.empty()) {
+      if (packetHex.compare(0, 4, "LOVF") == 0) _out.printWarning("Warning: COC with id " + _settings->id + " reached 1% limit. You need to wait, before sending is allowed again.");
+      else if (packetHex == "A") return;
+      else _out.printInfo("Info: Ignoring too small packet: " + packetHex);
     }
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
+}
+
+void COC::setup(int32_t userID, int32_t groupID, bool setPermissions) {
+  try {
+    if (setPermissions) setDevicePermission(userID, groupID);
+    if (gpioDefined(1)) {
+      exportGPIO(1);
+      if (setPermissions) setGPIOPermission(1, userID, groupID, false);
+      setGPIODirection(1, GPIODirection::OUT);
+    }
+    if (gpioDefined(2)) {
+      exportGPIO(2);
+      if (setPermissions) setGPIOPermission(2, userID, groupID, false);
+      setGPIODirection(2, GPIODirection::OUT);
+    }
+  }
+  catch (const std::exception &ex) {
+    _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
+  }
 }
 
 }

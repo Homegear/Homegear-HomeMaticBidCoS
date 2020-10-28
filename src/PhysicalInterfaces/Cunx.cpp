@@ -38,6 +38,11 @@ Cunx::Cunx(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings
   _out.init(GD::bl);
   _out.setPrefix(GD::out.getPrefix() + "CUNX \"" + settings->id + "\": ");
 
+  stackPrefix = "";
+  for (uint32_t i = 1; i < settings->stackPosition; i++) {
+    stackPrefix.push_back('*');
+  }
+
   _socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
 
   _hostname = settings->host;
@@ -67,7 +72,7 @@ void Cunx::forceSendPacket(std::shared_ptr<BidCoSPacket> packet) {
     std::lock_guard<std::mutex> sendGuard(_forceSendPacketMutex);
     std::string packetString = packet->hexString();
     if (_bl->debugLevel >= 4) _out.printInfo("Info: Sending (" + _settings->id + "): " + packetString);
-    send("As" + packet->hexString() + "\n" + (_updateMode ? "" : "Ar\n"));
+    send(stackPrefix + "As" + packet->hexString() + "\n" + (_updateMode ? "" : stackPrefix + "Ar\n"));
     if (packet->controlByte() & 0x10) std::this_thread::sleep_for(std::chrono::milliseconds(380));
     else std::this_thread::sleep_for(std::chrono::milliseconds(20));
     _lastPacketSent = BaseLib::HelperFunctions::getTime();
@@ -80,7 +85,7 @@ void Cunx::forceSendPacket(std::shared_ptr<BidCoSPacket> packet) {
 void Cunx::enableUpdateMode() {
   try {
     _updateMode = true;
-    send("AR\n");
+    send(stackPrefix + "AR\n");
   }
   catch (const std::exception &ex) {
     _out.printEx(__FILE__, __LINE__, __PRETTY_FUNCTION__, ex.what());
@@ -154,7 +159,7 @@ void Cunx::reconnect() {
     _hostname = _settings->host;
     _ipAddress = _socket->getIpAddress();
     _stopped = false;
-    send("X21\nAr\n");
+    send(stackPrefix + "X21\n" + stackPrefix + "Ar\n");
     _out.printInfo("Connected to CUNX device with hostname " + _settings->host + " on port " + _settings->port + ".");
   }
   catch (const std::exception &ex) {
@@ -165,7 +170,7 @@ void Cunx::reconnect() {
 void Cunx::stopListening() {
   try {
     IBidCoSInterface::stopListening();
-    if (_socket->connected()) send("Ax\nX00\n");
+    if (_socket->connected()) send(stackPrefix + "Ax\n" + stackPrefix + "X00\n");
     _stopCallbackThread = true;
     GD::bl->threadManager.join(_listenThread);
     _stopCallbackThread = false;
@@ -245,6 +250,13 @@ void Cunx::processData(std::vector<uint8_t> &data) {
     std::istringstream stringStream(packets);
     std::string packetHex;
     while (std::getline(stringStream, packetHex)) {
+      if (stackPrefix.empty()) {
+        if (packetHex.size() > 0 && packetHex.at(0) == '*') return;
+      } else {
+        if (packetHex.size() + 1 <= stackPrefix.size()) return;
+        if (packetHex.substr(0, stackPrefix.size()) != stackPrefix || packetHex.at(stackPrefix.size()) == '*') return;
+        else packetHex = packetHex.substr(stackPrefix.size());
+      }
       if (packetHex.size() > 21) //21 is minimal packet length (=10 Byte + CUNX "A" + "\n")
       {
         std::shared_ptr<BidCoSPacket> packet(new BidCoSPacket(packetHex, BaseLib::HelperFunctions::getTime()));

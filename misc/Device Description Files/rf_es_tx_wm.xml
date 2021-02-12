@@ -1111,15 +1111,20 @@
 					<writeable>false</writeable>
 					<control>POWERMETER_IEC2.IEC_ENERGY_COUNTER</control>
 					<unit>kWh</unit>
+					<casts>
+                                                <decimalIntegerScale>
+                                                        <factor>10000.000000</factor>
+                                                </decimalIntegerScale>
+                                        </casts>
 				</properties>
 				<logicalDecimal>
 					<minimumValue>0.000000</minimumValue>
 					<maximumValue>109951162.777500</maximumValue>
 				</logicalDecimal>
-				<physicalString groupId="IEC_ENERGY_COUNTER">
+				<physicalInteger groupId="IEC_ENERGY_COUNTER">
 					<size>5.0</size>
 					<operationType>command</operationType>
-				</physicalString>
+				</physicalInteger>
 				<packets>
 					<packet id="IEC_POWER_EVENT_CYCLIC">
 						<type>event</type>

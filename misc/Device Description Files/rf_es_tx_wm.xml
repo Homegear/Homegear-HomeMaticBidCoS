@@ -1087,10 +1087,6 @@
 						</decimalIntegerScale>
 					</casts>
 				</properties>
-				<logicalDecimal>
-					<minimumValue>0.000000</minimumValue>
-					<maximumValue>42949672.950000</maximumValue>
-				</logicalDecimal>
 				<physicalInteger groupId="IEC_POWER">
 					<size>4.0</size>
 					<operationType>command</operationType>

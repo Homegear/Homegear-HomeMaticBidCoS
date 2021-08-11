@@ -1507,7 +1507,7 @@ void Hm_Mod_Rpi_Pcb::processPacket(std::vector<uint8_t>& packet)
 			if(packetString == "DualCoPro_App")
 			{
 				_out.printError("Error: HM-MOD-RPI-PCB has wrong firmware. Please install a firmware without HomeMatic IP support.");
-				_bl->globalServiceMessages.set(BIDCOS_FAMILY_ID, _settings->id, 0, _settings->id, BaseLib::HelperFunctions::getTimeSeconds(), "l10n.homematicbidcos.serviceMessage.hmModRpiPcbDualFirmware", std::list<std::string>{ _settings->id }, PVariable(), 1);
+				_bl->globalServiceMessages.set(BIDCOS_FAMILY_ID, _settings->id, 0, _settings->id, BaseLib::ServiceMessagePriority::kError, BaseLib::HelperFunctions::getTimeSeconds(), "l10n.homematicbidcos.serviceMessage.hmModRpiPcbDualFirmware", std::list<std::string>{ _settings->id }, PVariable(), 1);
 			}
 		}
 

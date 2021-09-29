@@ -32,33 +32,31 @@
 
 #include "IBidCoSInterface.h"
 
-namespace BidCoS
-{
+namespace BidCoS {
 
-class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerialReaderWriterEventSink
-{
-    public:
-		COC(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
-        virtual ~COC();
-        void startListening();
-        void stopListening();
-        virtual void setup(int32_t userID, int32_t groupID, bool setPermissions);
-        virtual void enableUpdateMode();
-        virtual void disableUpdateMode();
-        bool isOpen() { return _socket && _socket->isOpen(); }
-    protected:
-        // {{{ Event handling
-        BaseLib::PEventHandler _eventHandlerSelf;
-        virtual void lineReceived(const std::string& data);
-        // }}}
+class COC : public IBidCoSInterface, public BaseLib::SerialReaderWriter::ISerialReaderWriterEventSink {
+ public:
+  COC(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
+  virtual ~COC();
+  void startListening();
+  void stopListening();
+  virtual void setup(int32_t userID, int32_t groupID, bool setPermissions);
+  virtual void enableUpdateMode();
+  virtual void disableUpdateMode();
+  bool isOpen() { return _socket && _socket->isOpen(); }
+ protected:
+  // {{{ Event handling
+  BaseLib::PEventHandler _eventHandlerSelf;
+  virtual void lineReceived(const std::string &data);
+  // }}}
 
-        std::shared_ptr<BaseLib::SerialReaderWriter> _socket;
-        std::string stackPrefix;
-    std::mutex _forceSendPacketMutex;
+  std::shared_ptr<BaseLib::SerialReaderWriter> _socket;
+  std::string stackPrefix;
+  std::mutex _forceSendPacketMutex;
 
-        void writeToDevice(std::string data);
-        void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);
-    private:
+  void writeToDevice(std::string data);
+  void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);
+ private:
 };
 
 }

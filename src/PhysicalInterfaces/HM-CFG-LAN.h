@@ -50,75 +50,74 @@
 
 #include <gcrypt.h>
 
-namespace BidCoS
-{
+namespace BidCoS {
 
-class HM_CFG_LAN  : public IBidCoSInterface
-{
-    public:
-        HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
-        virtual ~HM_CFG_LAN();
-        void startListening();
-        void stopListening();
-        virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
-        virtual bool isOpen() { return _initComplete && _socket->connected(); }
-        virtual bool firmwareUpdatesSupported() { return false; }
+class HM_CFG_LAN : public IBidCoSInterface {
+ public:
+  HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
+  virtual ~HM_CFG_LAN();
+  void startListening();
+  void stopListening();
+  virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
+  virtual bool isOpen() { return _initComplete && _socket->connected(); }
+  virtual bool firmwareUpdatesSupported() { return false; }
 
-        virtual void addPeer(PeerInfo peerInfo);
-        virtual void addPeers(std::vector<PeerInfo>& peerInfos);
-        virtual void setWakeUp(PeerInfo peerInfo) { addPeer(peerInfo); }
-        virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
-        virtual void removePeer(int32_t address);
-        virtual void sendPeers();
-        virtual std::string getPeerInfoPacket(PeerInfo& peerInfo);
-    protected:
-        std::string _port;
-        std::unique_ptr<BaseLib::TcpSocket> _socket;
-        std::mutex _sendMutex;
-        int64_t _initStarted = 0;
-        std::list<std::vector<char>> _initCommandQueue;
-        int32_t _lastKeepAlive = 0;
-        int32_t _lastKeepAliveResponse = 0;
-        int32_t _missedKeepAliveResponses = 0;
-        int32_t _lastTimePacket = 0;
-        std::vector<char> _keepAlivePacket = { 'K', '\r', '\n' };
-        int64_t _startUpTime = 0;
-        std::mutex _reconnectMutex;
-        std::thread _reconnectThread;
-        std::mutex _listenMutex;
-        std::atomic_bool _reconnecting;
+  virtual void addPeer(PeerInfo peerInfo);
+  virtual void addPeers(std::vector<PeerInfo> &peerInfos);
+  virtual void setWakeUp(PeerInfo peerInfo) { addPeer(peerInfo); }
+  virtual void setAES(PeerInfo peerInfo, int32_t channel) { addPeer(peerInfo); }
+  virtual void removePeer(int32_t address);
+  virtual void sendPeers();
+  virtual std::string getPeerInfoPacket(PeerInfo &peerInfo);
+  std::string getIpAddress() override;
+ protected:
+  std::string _port;
+  std::unique_ptr<BaseLib::TcpSocket> _socket;
+  std::mutex _sendMutex;
+  int64_t _initStarted = 0;
+  std::list<std::vector<char>> _initCommandQueue;
+  int32_t _lastKeepAlive = 0;
+  int32_t _lastKeepAliveResponse = 0;
+  int32_t _missedKeepAliveResponses = 0;
+  int32_t _lastTimePacket = 0;
+  std::vector<char> _keepAlivePacket = {'K', '\r', '\n'};
+  int64_t _startUpTime = 0;
+  std::mutex _reconnectMutex;
+  std::thread _reconnectThread;
+  std::mutex _listenMutex;
+  std::atomic_bool _reconnecting;
 
-        //AES stuff
-        bool _aesInitialized = false;
-        bool _aesExchangeComplete = false;
-        bool _useAES = false;
-        std::vector<uint8_t> _key;
-		std::vector<uint8_t> _remoteIV;
-		std::vector<uint8_t> _myIV;
-        gcry_cipher_hd_t _encryptHandle = nullptr;
-        gcry_cipher_hd_t _decryptHandle = nullptr;
+  //AES stuff
+  bool _aesInitialized = false;
+  bool _aesExchangeComplete = false;
+  bool _useAES = false;
+  std::vector<uint8_t> _key;
+  std::vector<uint8_t> _remoteIV;
+  std::vector<uint8_t> _myIV;
+  gcry_cipher_hd_t _encryptHandle = nullptr;
+  gcry_cipher_hd_t _decryptHandle = nullptr;
 
-        std::vector<char> encrypt(std::vector<char>& data);
-        std::vector<uint8_t> decrypt(std::vector<uint8_t>& data);
-        bool aesKeyExchange(std::vector<uint8_t>& data);
-        bool aesInit();
-        void aesCleanup();
-        //End AES stuff
+  std::vector<char> encrypt(std::vector<char> &data);
+  std::vector<uint8_t> decrypt(std::vector<uint8_t> &data);
+  bool aesKeyExchange(std::vector<uint8_t> &data);
+  bool aesInit();
+  void aesCleanup();
+  //End AES stuff
 
-        void reconnect();
-        void reconnectThread();
-        void createInitCommandQueue();
-        void processData(std::vector<uint8_t>& data);
-        void processInit(std::string& packet);
-        void parsePacket(std::string& packet);
-        void send(std::string hexString, bool raw = false);
-        void send(std::vector<char>& data, bool raw);
-        void sendKeepAlive();
-        void sendTimePacket();
-        void listen();
-        void getFileDescriptor(bool& timedout);
-        std::shared_ptr<BaseLib::FileDescriptor> getConnection(std::string& hostname, const std::string& port, std::string& ipAddress);
-    private:
+  void reconnect();
+  void reconnectThread();
+  void createInitCommandQueue();
+  void processData(std::vector<uint8_t> &data);
+  void processInit(std::string &packet);
+  void parsePacket(std::string &packet);
+  void send(std::string hexString, bool raw = false);
+  void send(std::vector<char> &data, bool raw);
+  void sendKeepAlive();
+  void sendTimePacket();
+  void listen();
+  void getFileDescriptor(bool &timedout);
+  std::shared_ptr<BaseLib::FileDescriptor> getConnection(std::string &hostname, const std::string &port, std::string &ipAddress);
+ private:
 };
 
 }

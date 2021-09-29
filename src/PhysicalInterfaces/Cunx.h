@@ -32,30 +32,30 @@
 
 #include "IBidCoSInterface.h"
 
-namespace BidCoS
-{
+namespace BidCoS {
 
-class Cunx  : public IBidCoSInterface
-{
-    public:
-		Cunx(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
-        virtual ~Cunx();
-        void startListening();
-        void stopListening();
-        void enableUpdateMode();
-        void disableUpdateMode();
-        virtual bool isOpen() { return _socket->connected(); }
-    protected:
-        std::string _port;
-        std::unique_ptr<BaseLib::TcpSocket> _socket;
-    std::mutex _forceSendPacketMutex;
+class Cunx : public IBidCoSInterface {
+ public:
+  Cunx(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> settings);
+  virtual ~Cunx();
+  void startListening();
+  void stopListening();
+  void enableUpdateMode();
+  void disableUpdateMode();
+  virtual bool isOpen() { return _socket->connected(); }
+  std::string getIpAddress() override;
+ protected:
+  std::string _port;
+  std::unique_ptr<BaseLib::TcpSocket> _socket;
+  std::mutex _forceSendPacketMutex;
+  std::string stackPrefix;
 
-        void reconnect();
-        void processData(std::vector<uint8_t>& data);
-        void send(std::string data);
-        std::string readFromDevice();
-        void listen();
-        void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);
+  void reconnect();
+  void processData(std::vector<uint8_t> &data);
+  void send(std::string data);
+  std::string readFromDevice();
+  void listen();
+  void forceSendPacket(std::shared_ptr<BidCoSPacket> packet);
 };
 
 }

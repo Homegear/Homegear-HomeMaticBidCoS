@@ -1066,7 +1066,7 @@ void Hm_Mod_Rpi_Pcb::startListening() {
     else GD::bl->threadManager.start(_listenThread, true, &Hm_Mod_Rpi_Pcb::listen, this);
     if (_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &Hm_Mod_Rpi_Pcb::doInit, this);
     else GD::bl->threadManager.start(_initThread, true, &Hm_Mod_Rpi_Pcb::doInit, this);
-    startQueue(0, 0, SCHED_OTHER);
+    ITimedQueue::startQueue(0, 0, SCHED_OTHER);
     IPhysicalInterface::startListening();
   }
   catch (const std::exception &ex) {
@@ -1097,7 +1097,7 @@ void Hm_Mod_Rpi_Pcb::reconnect() {
 
 void Hm_Mod_Rpi_Pcb::stopListening() {
   try {
-    stopQueue(0);
+    ITimedQueue::stopQueue(0);
     _stopCallbackThread = true;
     GD::bl->threadManager.join(_initThread);
     GD::bl->threadManager.join(_listenThread);

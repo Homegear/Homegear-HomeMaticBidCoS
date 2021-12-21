@@ -1081,7 +1081,7 @@ void HM_LGW::startListening() {
     else GD::bl->threadManager.start(_listenThreadKeepAlive, true, &HM_LGW::listenKeepAlive, this);
     if (_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
     else GD::bl->threadManager.start(_initThread, true, &HM_LGW::doInit, this);
-    startQueue(0, 0, SCHED_OTHER);
+    ITimedQueue::startQueue(0, 0, SCHED_OTHER);
     IPhysicalInterface::startListening();
   }
   catch (const std::exception &ex) {
@@ -1121,7 +1121,7 @@ void HM_LGW::reconnect() {
 
 void HM_LGW::stopListening() {
   try {
-    stopQueue(0);
+    ITimedQueue::stopQueue(0);
     _stopCallbackThread = true;
     GD::bl->threadManager.join(_initThread);
     GD::bl->threadManager.join(_listenThread);

@@ -167,7 +167,7 @@ void HM_LGW::addPeer(PeerInfo peerInfo) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, AddPeerQueueEntryType::add, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {
@@ -506,7 +506,7 @@ void HM_LGW::setAES(PeerInfo peerInfo, int32_t channel) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, channel, AddPeerQueueEntryType::aes, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {
@@ -529,7 +529,7 @@ void HM_LGW::setWakeUp(PeerInfo peerInfo) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, AddPeerQueueEntryType::wakeUp, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {
@@ -549,7 +549,7 @@ void HM_LGW::removePeer(int32_t address) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(address, AddPeerQueueEntryType::remove, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {

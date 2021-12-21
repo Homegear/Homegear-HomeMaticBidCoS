@@ -270,7 +270,7 @@ void IBidCoSInterface::queuePacket(std::shared_ptr<BidCoSPacket> packet, int64_t
 		}
 		std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new QueueEntry(sendingTime, packet));
 		int64_t id;
-		if(!enqueue(0, entry, id)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
+		if(!ITimedQueue::enqueue(0, entry, id)) _out.printError("Error: Too many packets are queued to be processed. Your packet processing is too slow. Dropping packet.");
 
 		// {{{ Add packet to queue id map
 			std::lock_guard<std::mutex> idGuard(_queueIdsMutex);

@@ -167,7 +167,7 @@ void HM_LGW::addPeer(PeerInfo peerInfo) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, AddPeerQueueEntryType::add, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {
@@ -506,7 +506,7 @@ void HM_LGW::setAES(PeerInfo peerInfo, int32_t channel) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, channel, AddPeerQueueEntryType::aes, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {
@@ -529,7 +529,7 @@ void HM_LGW::setWakeUp(PeerInfo peerInfo) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(peerInfo, AddPeerQueueEntryType::wakeUp, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {
@@ -549,7 +549,7 @@ void HM_LGW::removePeer(int32_t address) {
     if (_initComplete) {
       int64_t id;
       std::shared_ptr<BaseLib::ITimedQueueEntry> entry(new AddPeerQueueEntry(address, AddPeerQueueEntryType::remove, BaseLib::HelperFunctions::getTime()));
-      enqueue(0, entry, id);
+      ITimedQueue::enqueue(0, entry, id);
     }
   }
   catch (const std::exception &ex) {
@@ -1081,7 +1081,7 @@ void HM_LGW::startListening() {
     else GD::bl->threadManager.start(_listenThreadKeepAlive, true, &HM_LGW::listenKeepAlive, this);
     if (_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
     else GD::bl->threadManager.start(_initThread, true, &HM_LGW::doInit, this);
-    startQueue(0, 0, SCHED_OTHER);
+    ITimedQueue::startQueue(0, 0, SCHED_OTHER);
     IPhysicalInterface::startListening();
   }
   catch (const std::exception &ex) {
@@ -1121,7 +1121,7 @@ void HM_LGW::reconnect() {
 
 void HM_LGW::stopListening() {
   try {
-    stopQueue(0);
+    ITimedQueue::stopQueue(0);
     _stopCallbackThread = true;
     GD::bl->threadManager.join(_initThread);
     GD::bl->threadManager.join(_listenThread);

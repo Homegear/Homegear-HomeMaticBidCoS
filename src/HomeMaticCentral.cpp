@@ -1857,6 +1857,7 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 			packet = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(0x43, 0x20, 0xCB, 0, peer->getAddress(), payload, true));
 			physicalInterface->sendPacket(packet);
 			_sentPackets.set(packet->destinationAddress(), packet);
+			time = BaseLib::HelperFunctions::getTime();
 
 			requestReceived = false;
 			waitIndex = 0;
@@ -1867,6 +1868,23 @@ void HomeMaticCentral::updateFirmware(uint64_t id)
 				{
 					requestReceived = true;
 					break;
+				} else if(receivedPacket && receivedPacket->getTimeReceived() > time && receivedPacket->payload().size() > 1 && receivedPacket->payload().at(0) == 0 && receivedPacket->destinationAddress() == 0 && receivedPacket->messageType() == 0x10)
+				{
+					std::string serialNumber((char*)&receivedPacket->payload().at(1), receivedPacket->payload().size() - 1);
+					if(serialNumber == peer->getSerialNumber())
+					{
+						GD::out.printInfo("Info: Another update request received from peer " + std::to_string(peer->getID()) + ".");
+						packet = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(0x43, 0x20, 0xCB, 0, peer->getAddress(), payload, true));
+						physicalInterface->sendPacket(packet);
+						_sentPackets.set(packet->destinationAddress(), packet);
+					}
+					else GD::out.printWarning("Warning: Another update request received, but serial number does not match. Serial number in update packet: " + serialNumber + ". Expected serial number: " + peer->getSerialNumber());
+				}
+				if(waitIndex == 50) {
+					GD::out.printWarning("Warning: Re-sending update message to peer " + std::to_string(peer->getID()) + ".");
+					packet = std::shared_ptr<BidCoSPacket>(new BidCoSPacket(0x43, 0x20, 0xCB, 0, peer->getAddress(), payload, true));
+					physicalInterface->sendPacket(packet);
+					_sentPackets.set(packet->destinationAddress(), packet);
 				}
 				std::this_thread::sleep_for(std::chrono::milliseconds(50));
 				waitIndex++;

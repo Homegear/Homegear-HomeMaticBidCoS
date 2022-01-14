@@ -94,7 +94,7 @@ void Cunx::enableUpdateMode() {
 
 void Cunx::disableUpdateMode() {
   try {
-    send("Ar\n");
+    send(stackPrefix + "Ar\n");
     _updateMode = false;
   }
   catch (const std::exception &ex) {

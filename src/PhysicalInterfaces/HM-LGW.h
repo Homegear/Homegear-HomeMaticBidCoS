@@ -61,7 +61,7 @@ class HM_LGW : public IBidCoSInterface {
   void startListening();
   void stopListening();
   virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
-  virtual bool isOpen() { return _initComplete && _socket->connected(); }
+  virtual bool isOpen() { return _initComplete && _socket->Connected(); }
   std::string getIpAddress() override;
 
   virtual void addPeer(PeerInfo peerInfo);

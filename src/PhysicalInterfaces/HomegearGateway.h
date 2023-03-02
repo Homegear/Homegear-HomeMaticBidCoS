@@ -49,7 +49,7 @@ public:
 
     virtual bool isOpen() { return !_stopped; }
 protected:
-    std::unique_ptr<BaseLib::TcpSocket> _tcpSocket;
+    std::unique_ptr<C1Net::TcpSocket> _tcpSocket;
     std::unique_ptr<BaseLib::Rpc::BinaryRpc> _binaryRpc;
     std::unique_ptr<BaseLib::Rpc::RpcEncoder> _rpcEncoder;
     std::unique_ptr<BaseLib::Rpc::RpcDecoder> _rpcDecoder;

@@ -36,8 +36,12 @@ HM_LGW::HM_LGW(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettings> sett
   _out.setPrefix(_out.getPrefix() + "HM-LGW \"" + settings->id + "\": ");
 
   _initCompleteKeepAlive = false;
-  _socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
-  _socketKeepAlive = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
+
+  C1Net::TcpSocketInfo tcp_socket_info;
+  auto dummy_socket = std::make_shared<C1Net::Socket>(-1);
+
+  _socket = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, dummy_socket);
+  _socketKeepAlive = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, dummy_socket);
 
   if (!settings) {
     _out.printCritical("Critical: Error initializing HM-LGW. Settings pointer is empty.");
@@ -63,7 +67,7 @@ HM_LGW::~HM_LGW() {
 }
 
 std::string HM_LGW::getIpAddress() {
-  return _socket ? _socket->getIpAddress() : "";
+  return _socket ? _socket->GetIpAddress() : "";
 }
 
 void HM_LGW::enableUpdateMode() {
@@ -707,7 +711,7 @@ void HM_LGW::send(const std::vector<char> &data, bool raw) {
     std::vector<char> encryptedData;
     if (!raw) encryptedData = _settings->lanKey.empty() ? data : encrypt(data);
     _sendMutex.lock();
-    if (!_socket->connected() || _stopped) {
+    if (!_socket->Connected() || _stopped) {
       _out.printWarning("Warning: !!!Not!!! sending (Port " + _settings->port + "): " + _bl->hf.getHexString(data));
       _sendMutex.unlock();
       return;
@@ -715,11 +719,11 @@ void HM_LGW::send(const std::vector<char> &data, bool raw) {
     if (_bl->debugLevel >= 5) {
       _out.printDebug("Debug: Sending (Port " + _settings->port + "): " + _bl->hf.getHexString(data));
     }
-    (!raw) ? _socket->proofwrite(encryptedData) : _socket->proofwrite(data);
+    (!raw) ? _socket->Send((uint8_t *)encryptedData.data(), encryptedData.size()) : _socket->Send((uint8_t *)data.data(), data.size());
     _sendMutex.unlock();
     return;
   }
-  catch (const BaseLib::SocketOperationException &ex) {
+  catch (const C1Net::Exception &ex) {
     _out.printError(ex.what());
   }
   catch (const std::exception &ex) {
@@ -735,7 +739,7 @@ void HM_LGW::sendKeepAlive(std::vector<char> &data, bool raw) {
     std::vector<char> encryptedData;
     if (!raw) encryptedData = _settings->lanKey.empty() ? data : encryptKeepAlive(data);
     _sendMutexKeepAlive.lock();
-    if (!_socketKeepAlive->connected() || _stopped) {
+    if (!_socketKeepAlive->Connected() || _stopped) {
       _out.printWarning("Warning: !!!Not!!! sending (Port " + _settings->portKeepAlive + "): " + std::string(&data.at(0), data.size() - 2));
       _sendMutexKeepAlive.unlock();
       return;
@@ -743,11 +747,11 @@ void HM_LGW::sendKeepAlive(std::vector<char> &data, bool raw) {
     if (_bl->debugLevel >= 5) {
       _out.printDebug(std::string("Debug: Sending (Port " + _settings->portKeepAlive + "): ") + std::string(&data.at(0), data.size() - 2));
     }
-    (!raw) ? _socketKeepAlive->proofwrite(encryptedData) : _socketKeepAlive->proofwrite(data);
+    (!raw) ? _socketKeepAlive->Send((uint8_t *)encryptedData.data(), encryptedData.size()) : _socketKeepAlive->Send((uint8_t *)data.data(), data.size());
     _sendMutexKeepAlive.unlock();
     return;
   }
-  catch (const BaseLib::SocketOperationException &ex) {
+  catch (const C1Net::Exception &ex) {
     _out.printError(ex.what());
   }
   catch (const std::exception &ex) {
@@ -1069,10 +1073,26 @@ void HM_LGW::startListening() {
       _aesExchangeComplete = true;
       _aesExchangeKeepAliveComplete = true;
     } else if (!aesInit()) return;
-    _socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
-    _socket->setReadTimeout(1000000);
-    _socketKeepAlive = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->portKeepAlive, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
-    _socketKeepAlive->setReadTimeout(1000000);
+
+    C1Net::TcpSocketInfo tcp_socket_info;
+    C1Net::TcpSocketHostInfo tcp_socket_host_info{
+        .host = _settings->host,
+        .port = (uint16_t)BaseLib::Math::getUnsignedNumber(_settings->port),
+        .tls = _settings->ssl,
+        .verify_certificate = _settings->verifyCertificate,
+        .ca_file = _settings->caFile
+    };
+
+    C1Net::TcpSocketHostInfo tcp_socket_host_info_keep_alive{
+        .host = _settings->host,
+        .port = (uint16_t)BaseLib::Math::getUnsignedNumber(_settings->portKeepAlive),
+        .tls = _settings->ssl,
+        .verify_certificate = _settings->verifyCertificate,
+        .ca_file = _settings->caFile
+    };
+
+    _socket = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, tcp_socket_host_info);
+    _socketKeepAlive = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, tcp_socket_host_info_keep_alive);
     _out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
     _stopped = false;
     if (_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::listen, this);
@@ -1091,8 +1111,8 @@ void HM_LGW::startListening() {
 
 void HM_LGW::reconnect() {
   try {
-    _socket->close();
-    _socketKeepAlive->close();
+    _socket->Shutdown();
+    _socketKeepAlive->Shutdown();
     GD::bl->threadManager.join(_initThread);
     aesInit();
     _requestsMutex.lock();
@@ -1105,10 +1125,10 @@ void HM_LGW::reconnect() {
     _missedKeepAliveResponses2 = 0;
     _firstPacket = true;
     _out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
-    _socket->open();
-    _socketKeepAlive->open();
+    _socket->Open();
+    _socketKeepAlive->Open();
     _hostname = _settings->host;
-    _ipAddress = _socket->getIpAddress();
+    _ipAddress = _socket->GetIpAddress();
     _out.printInfo("Connected to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + ".");
     _stopped = false;
     if (_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_initThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::doInit, this);
@@ -1127,8 +1147,8 @@ void HM_LGW::stopListening() {
     GD::bl->threadManager.join(_listenThread);
     GD::bl->threadManager.join(_listenThreadKeepAlive);
     _stopCallbackThread = false;
-    _socket->close();
-    _socketKeepAlive->close();
+    _socket->Shutdown();
+    _socketKeepAlive->Shutdown();
     aesCleanup();
     _stopped = true;
     _sendMutex.unlock(); //In case it is deadlocked - shouldn't happen of course
@@ -1392,6 +1412,7 @@ void HM_LGW::listen() {
     uint32_t receivedBytes = 0;
     int32_t bufferMax = 2048;
     std::vector<char> buffer(bufferMax);
+    bool more_data = false;
     _lastTimePacket = BaseLib::HelperFunctions::getTimeSeconds();
     _lastKeepAlive1 = BaseLib::HelperFunctions::getTimeSeconds();
     _lastKeepAliveResponse1 = _lastKeepAlive1;
@@ -1410,9 +1431,9 @@ void HM_LGW::listen() {
           do {
             if (BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
             else sendKeepAlivePacket1();
-            receivedBytes = _socket->proofread(&buffer[0], bufferMax);
+            receivedBytes = _socket->Read((uint8_t *)buffer.data(), buffer.size(), more_data);
             if (receivedBytes > 0) {
-              data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
+              data.insert(data.end(), buffer.begin(), buffer.begin() + receivedBytes);
               if (data.size() > 100000) {
                 _out.printError("Could not read from HM-LGW: Too much data.");
                 break;
@@ -1420,19 +1441,19 @@ void HM_LGW::listen() {
             }
           } while (receivedBytes == (unsigned)bufferMax);
         }
-        catch (const BaseLib::SocketTimeOutException &ex) {
+        catch (const C1Net::TimeoutException &ex) {
           if (data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
           {
             continue;
           }
         }
-        catch (const BaseLib::SocketClosedException &ex) {
+        catch (const C1Net::ClosedException &ex) {
           _stopped = true;
           _out.printWarning("Warning: " + std::string(ex.what()));
           std::this_thread::sleep_for(std::chrono::milliseconds(10000));
           continue;
         }
-        catch (const BaseLib::SocketOperationException &ex) {
+        catch (const C1Net::Exception &ex) {
           _stopped = true;
           _out.printError("Error: " + std::string(ex.what()));
           std::this_thread::sleep_for(std::chrono::milliseconds(10000));
@@ -1474,6 +1495,7 @@ void HM_LGW::listenKeepAlive() {
     uint32_t receivedBytes = 0;
     int32_t bufferMax = 2048;
     std::vector<char> buffer(bufferMax);
+    bool more_data = false;
     _lastKeepAlive2 = BaseLib::HelperFunctions::getTimeSeconds();
     _lastKeepAliveResponse2 = _lastKeepAlive2;
 
@@ -1487,9 +1509,9 @@ void HM_LGW::listenKeepAlive() {
         std::vector<uint8_t> data;
         try {
           do {
-            receivedBytes = _socketKeepAlive->proofread(&buffer[0], bufferMax);
+            receivedBytes = _socketKeepAlive->Read((uint8_t *)buffer.data(), buffer.size(), more_data);
             if (receivedBytes > 0) {
-              data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
+              data.insert(data.end(), buffer.begin(), buffer.begin() + receivedBytes);
               if (data.size() > 1000000) {
                 _out.printError("Could not read from HM-LGW: Too much data.");
                 break;
@@ -1497,18 +1519,18 @@ void HM_LGW::listenKeepAlive() {
             }
           } while (receivedBytes == (unsigned)bufferMax);
         }
-        catch (const BaseLib::SocketTimeOutException &ex) {
+        catch (const C1Net::TimeoutException &ex) {
           if (data.empty()) {
-            if (_socketKeepAlive->connected()) sendKeepAlivePacket2();
+            if (_socketKeepAlive->Connected()) sendKeepAlivePacket2();
             continue;
           }
         }
-        catch (const BaseLib::SocketClosedException &ex) {
+        catch (const C1Net::ClosedException &ex) {
           _stopped = true;
           _out.printWarning("Warning: " + std::string(ex.what()));
           continue;
         }
-        catch (const BaseLib::SocketOperationException &ex) {
+        catch (const C1Net::Exception &ex) {
           _stopped = true;
           _out.printError("Error: " + std::string(ex.what()));
           continue;

@@ -46,7 +46,7 @@ class Cunx : public IBidCoSInterface {
   std::string getIpAddress() override;
  protected:
   std::string _port;
-  std::unique_ptr<BaseLib::TcpSocket> _socket;
+  std::unique_ptr<C1Net::TcpSocket> _socket;
   std::mutex _forceSendPacketMutex;
   std::string stackPrefix;
 

@@ -59,7 +59,7 @@ class HM_CFG_LAN : public IBidCoSInterface {
   void startListening();
   void stopListening();
   virtual void sendPacket(std::shared_ptr<BaseLib::Systems::Packet> packet);
-  virtual bool isOpen() { return _initComplete && _socket->connected(); }
+  virtual bool isOpen() { return _initComplete && _socket->Connected(); }
   virtual bool firmwareUpdatesSupported() { return false; }
 
   virtual void addPeer(PeerInfo peerInfo);
@@ -72,7 +72,7 @@ class HM_CFG_LAN : public IBidCoSInterface {
   std::string getIpAddress() override;
  protected:
   std::string _port;
-  std::unique_ptr<BaseLib::TcpSocket> _socket;
+  std::unique_ptr<C1Net::TcpSocket> _socket;
   std::mutex _sendMutex;
   int64_t _initStarted = 0;
   std::list<std::vector<char>> _initCommandQueue;

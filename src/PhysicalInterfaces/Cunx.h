@@ -42,11 +42,11 @@ class Cunx : public IBidCoSInterface {
   void stopListening();
   void enableUpdateMode();
   void disableUpdateMode();
-  virtual bool isOpen() { return _socket->connected(); }
+  virtual bool isOpen() { return _socket->Connected(); }
   std::string getIpAddress() override;
  protected:
   std::string _port;
-  std::unique_ptr<BaseLib::TcpSocket> _socket;
+  std::unique_ptr<C1Net::TcpSocket> _socket;
   std::mutex _forceSendPacketMutex;
   std::string stackPrefix;
 

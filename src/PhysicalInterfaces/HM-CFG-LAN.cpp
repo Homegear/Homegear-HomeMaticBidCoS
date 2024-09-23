@@ -36,7 +36,9 @@ HM_CFG_LAN::HM_CFG_LAN(std::shared_ptr<BaseLib::Systems::PhysicalInterfaceSettin
   _out.init(GD::bl);
   _out.setPrefix(GD::out.getPrefix() + "LAN-Konfigurationsadapter \"" + settings->id + "\": ");
 
-  _socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl));
+  C1Net::TcpSocketInfo tcp_socket_info;
+  auto dummy_socket = std::make_shared<C1Net::Socket>(-1);
+  _socket = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, dummy_socket);
 
   if (!settings) {
     _out.printCritical("Critical: Error initializing HM-CFG-LAN. Settings pointer is empty.");
@@ -68,7 +70,7 @@ HM_CFG_LAN::~HM_CFG_LAN() {
 }
 
 std::string HM_CFG_LAN::getIpAddress() {
-  return _socket ? _socket->getIpAddress() : "";
+  return _socket ? _socket->GetIpAddress() : "";
 }
 
 std::string HM_CFG_LAN::getPeerInfoPacket(PeerInfo &peerInfo) {
@@ -227,16 +229,16 @@ void HM_CFG_LAN::send(std::vector<char> &data, bool raw) {
     std::lock_guard<std::mutex> sendGuard(_sendMutex);
     std::vector<char> encryptedData;
     if (_useAES && !raw) encryptedData = encrypt(data);
-    if (!_socket->connected() || _stopped) {
+    if (!_socket->Connected() || _stopped) {
       _out.printWarning(std::string("Warning: !!!Not!!! sending") + ((_useAES && !raw) ? " (encrypted)" : "") + ": " + std::string(&data.at(0), data.size() - 2));
       return;
     }
     if (_bl->debugLevel >= 5) {
       _out.printInfo(std::string("Debug: Sending") + ((_useAES && !raw) ? " (encrypted)" : "") + ": " + std::string(&data.at(0), data.size() - 2));
     }
-    (_useAES && !raw) ? _socket->proofwrite(encryptedData) : _socket->proofwrite(data);
+    (_useAES && !raw) ? _socket->Send((uint8_t *)encryptedData.data(), encryptedData.size()) : _socket->Send((uint8_t *)data.data(), data.size());
   }
-  catch (const BaseLib::SocketOperationException &ex) {
+  catch (const C1Net::Exception &ex) {
     _out.printError(ex.what());
   }
   catch (const std::exception &ex) {
@@ -252,9 +254,20 @@ void HM_CFG_LAN::startListening() {
       return;
     }
     if (_useAES) aesInit();
-    _socket = std::unique_ptr<BaseLib::TcpSocket>(new BaseLib::TcpSocket(_bl, _settings->host, _settings->port, _settings->ssl, _settings->caFile, _settings->verifyCertificate));
-    _socket->setReadTimeout(5000000);
-    _socket->setWriteTimeout(5000000);
+
+    C1Net::TcpSocketInfo tcp_socket_info;
+    tcp_socket_info.read_timeout = 5000;
+    tcp_socket_info.write_timeout = 5000;
+
+    C1Net::TcpSocketHostInfo tcp_socket_host_info{
+      .host = _settings->host,
+      .port = (uint16_t)BaseLib::Math::getUnsignedNumber(_settings->port),
+      .tls = _settings->ssl,
+      .verify_certificate = _settings->verifyCertificate,
+      .ca_file = _settings->caFile
+    };
+
+    _socket = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, tcp_socket_host_info);
     _out.printDebug("Debug: Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
     //_socket->open();
     //_out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");
@@ -274,7 +287,7 @@ void HM_CFG_LAN::reconnectThread() {
     _missedKeepAliveResponses = 0;
     std::lock_guard<std::mutex> sendGuard(_sendMutex);
     std::lock_guard<std::mutex> listenGuard(_listenMutex);
-    _socket->close();
+    _socket->Shutdown();
     if (_useAES) aesCleanup();
 
     if (_rfKey.empty()) {
@@ -285,9 +298,9 @@ void HM_CFG_LAN::reconnectThread() {
     if (_useAES) aesInit();
     createInitCommandQueue();
     _out.printDebug("Debug: Connecting to HM-CFG-LAN with hostname " + _settings->host + " on port " + _settings->port + "...");
-    _socket->open();
+    _socket->Open();
     _hostname = _settings->host;
-    _ipAddress = _socket->getIpAddress();
+    _ipAddress = _socket->GetIpAddress();
     _out.printInfo("Connected to HM-CFG-LAN device with Hostname " + _settings->host + " on port " + _settings->port + ".");
     _stopped = false;
   }
@@ -320,7 +333,7 @@ void HM_CFG_LAN::stopListening() {
     _stopCallbackThread = true;
     GD::bl->threadManager.join(_listenThread);
     _stopCallbackThread = false;
-    _socket->close();
+    _socket->Shutdown();
     if (_useAES) aesCleanup();
     _sendMutex.unlock(); //In case it is deadlocked - shouldn't happen of course
     IPhysicalInterface::stopListening();
@@ -517,6 +530,7 @@ void HM_CFG_LAN::listen() {
     uint32_t receivedBytes = 0;
     int32_t bufferMax = 2048;
     std::vector<char> buffer(bufferMax);
+    bool more_data = false;
     _lastKeepAlive = BaseLib::HelperFunctions::getTimeSeconds();
     _lastKeepAliveResponse = _lastKeepAlive;
 
@@ -539,9 +553,9 @@ void HM_CFG_LAN::listen() {
           std::vector<uint8_t> data;
           try {
             do {
-              receivedBytes = _socket->proofread(&buffer[0], bufferMax);
+              receivedBytes = _socket->Read((uint8_t *)buffer.data(), buffer.size(), more_data);
               if (receivedBytes > 0) {
-                data.insert(data.end(), &buffer.at(0), &buffer.at(0) + receivedBytes);
+                data.insert(data.end(), buffer.begin(), buffer.begin() + receivedBytes);
                 if (data.size() > 1000000) {
                   _out.printError("Could not read from HM-CFG-LAN: Too much data.");
                   break;
@@ -549,23 +563,23 @@ void HM_CFG_LAN::listen() {
               }
             } while (receivedBytes == (unsigned)bufferMax);
           }
-          catch (const BaseLib::SocketTimeOutException &ex) {
+          catch (const C1Net::TimeoutException &ex) {
             if (data.empty()) //When receivedBytes is exactly 2048 bytes long, proofread will be called again, time out and the packet is received with a delay of 5 seconds. It doesn't matter as packets this big are only received at start up.
             {
-              if (_socket->connected()) {
+              if (_socket->Connected()) {
                 if (BaseLib::HelperFunctions::getTimeSeconds() - _lastTimePacket > 1800) sendTimePacket();
                 sendKeepAlive();
               }
               continue;
             }
           }
-          catch (const BaseLib::SocketClosedException &ex) {
+          catch (const C1Net::ClosedException &ex) {
             _stopped = true;
             _out.printWarning("Warning: " + std::string(ex.what()));
             std::this_thread::sleep_for(std::chrono::milliseconds(10000));
             continue;
           }
-          catch (const BaseLib::SocketOperationException &ex) {
+          catch (const C1Net::Exception &ex) {
             _stopped = true;
             _out.printError("Error: " + std::string(ex.what()));
             std::this_thread::sleep_for(std::chrono::milliseconds(10000));

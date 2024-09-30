@@ -8,7 +8,7 @@ Homepage: https://homegear.eu
 
 Package: homegear-homematicbidcos
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libhomegear-base (= <BASELIBVER>), homegear (= <BASELIBVER>), libgcrypt20, libgnutlsxx28, libgpg-error0 (>= 1.10), jq (>=1.5), bash (>=4.0)
+Depends: ${shlibs:Depends}, ${misc:Depends}, homegear (= <BASELIBVER>), jq (>=1.5), bash (>=4.0)
 Description: HomeMatic BidCoS module for Homegear
  Homegear is a program to interface your home automation software 
  with your smart home devices.

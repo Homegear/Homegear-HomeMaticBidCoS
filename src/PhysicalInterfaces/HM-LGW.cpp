@@ -1075,6 +1075,8 @@ void HM_LGW::startListening() {
     } else if (!aesInit()) return;
 
     C1Net::TcpSocketInfo tcp_socket_info;
+    C1Net::TcpSocketInfo tcp_socket_info_keep_alive;
+    tcp_socket_info_keep_alive.read_timeout = 5000;
     C1Net::TcpSocketHostInfo tcp_socket_host_info{
         .host = _settings->host,
         .port = (uint16_t)BaseLib::Math::getUnsignedNumber(_settings->port),
@@ -1092,7 +1094,7 @@ void HM_LGW::startListening() {
     };
 
     _socket = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, tcp_socket_host_info);
-    _socketKeepAlive = std::make_unique<C1Net::TcpSocket>(tcp_socket_info, tcp_socket_host_info_keep_alive);
+    _socketKeepAlive = std::make_unique<C1Net::TcpSocket>(tcp_socket_info_keep_alive, tcp_socket_host_info_keep_alive);
     _out.printDebug("Connecting to HM-LGW with hostname " + _settings->host + " on port " + _settings->port + "...");
     _stopped = false;
     if (_settings->listenThreadPriority > -1) GD::bl->threadManager.start(_listenThread, true, _settings->listenThreadPriority, _settings->listenThreadPolicy, &HM_LGW::listen, this);

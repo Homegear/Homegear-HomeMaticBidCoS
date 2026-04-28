@@ -30,6 +30,8 @@
 #ifndef IBIDCOSINTERFACE_H_
 #define IBIDCOSINTERFACE_H_
 
+#include <cstdint>
+
 #include "AesHandshake.h"
 #include <homegear-base/BaseLib.h>
 

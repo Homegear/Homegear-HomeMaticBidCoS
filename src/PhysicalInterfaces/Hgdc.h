@@ -3,6 +3,8 @@
 #ifndef HOMEGEAR_BIDCOS_HGDC_H
 #define HOMEGEAR_BIDCOS_HGDC_H
 
+#include <cstdint>
+
 #include "../BidCoSPacket.h"
 #include "IBidCoSInterface.h"
 #include <homegear-base/BaseLib.h>

@@ -30,6 +30,8 @@
 #ifndef BIDCOSPACKET_H
 #define BIDCOSPACKET_H
 
+#include <cstdint>
+
 #include <homegear-base/BaseLib.h>
 
 #include <iostream>

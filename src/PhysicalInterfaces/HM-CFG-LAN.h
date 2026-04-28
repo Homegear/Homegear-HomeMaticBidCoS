@@ -30,6 +30,8 @@
 #ifndef HM_CFG_LAN_H
 #define HM_CFG_LAN_H
 
+#include <cstdint>
+
 #include "../BidCoSPacket.h"
 #include "IBidCoSInterface.h"
 

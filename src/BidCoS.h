@@ -30,6 +30,8 @@
 #ifndef BIDCOS_H_
 #define BIDCOS_H_
 
+#include <cstdint>
+
 #include <homegear-base/BaseLib.h>
 
 using namespace BaseLib;

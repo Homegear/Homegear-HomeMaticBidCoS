@@ -30,6 +30,8 @@
 #ifndef INTERFACES_H_
 #define INTERFACES_H_
 
+#include <cstdint>
+
 #include "PhysicalInterfaces/IBidCoSInterface.h"
 
 #include <homegear-base/BaseLib.h>

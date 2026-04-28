@@ -30,6 +30,8 @@
 #ifndef BIDCOSQUEUEMANAGER_H_
 #define BIDCOSQUEUEMANAGER_H_
 
+#include <cstdint>
+
 #include <homegear-base/BaseLib.h>
 #include "BidCoSQueue.h"
 #include "BidCoSPeer.h"

@@ -30,6 +30,8 @@
 #ifndef HM_MOD_RPI_PCB_H
 #define HM_MOD_RPI_PCB_H
 
+#include <cstdint>
+
 #include "../BidCoSPacket.h"
 #include "IBidCoSInterface.h"
 #include "Crc16.h"

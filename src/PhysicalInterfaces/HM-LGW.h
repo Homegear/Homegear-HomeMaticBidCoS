@@ -30,6 +30,8 @@
 #ifndef HM_LGW_H
 #define HM_LGW_H
 
+#include <cstdint>
+
 #include "../BidCoSPacket.h"
 #include "IBidCoSInterface.h"
 #include "Crc16.h"

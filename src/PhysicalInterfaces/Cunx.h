@@ -30,6 +30,8 @@
 #ifndef CUNO_H
 #define CUNO_H
 
+#include <cstdint>
+
 #include "IBidCoSInterface.h"
 
 namespace BidCoS {

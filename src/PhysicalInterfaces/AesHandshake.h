@@ -30,6 +30,8 @@
 #ifndef AESHANDSHAKE_H
 #define AESHANDSHAKE_H
 
+#include <cstdint>
+
 #include <homegear-base/BaseLib.h>
 
 #include <gcrypt.h>

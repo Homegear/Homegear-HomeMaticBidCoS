@@ -30,6 +30,8 @@
 #ifndef COC_H
 #define COC_H
 
+#include <cstdint>
+
 #include "IBidCoSInterface.h"
 
 namespace BidCoS {

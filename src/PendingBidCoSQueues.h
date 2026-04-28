@@ -30,6 +30,8 @@
 #ifndef PENDINGBIDCOSQUEUES_H_
 #define PENDINGBIDCOSQUEUES_H_
 
+#include <cstdint>
+
 #include "BidCoSQueue.h"
 #include "BidCoSPeer.h"
 #include "BidCoSMessage.h"

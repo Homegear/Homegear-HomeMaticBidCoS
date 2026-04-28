@@ -30,6 +30,8 @@
 #ifndef BIDCOSMESSAGES_H
 #define BIDCOSMESSAGES_H
 
+#include <cstdint>
+
 #include "BidCoSMessage.h"
 
 #include <iostream>

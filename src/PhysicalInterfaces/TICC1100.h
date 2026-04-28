@@ -30,6 +30,8 @@
 #ifndef TICC1100_H_
 #define TICC1100_H_
 
+#include <cstdint>
+
 #include "../../config.h"
 
 #ifdef SPIINTERFACES

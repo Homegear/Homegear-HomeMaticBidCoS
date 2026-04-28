@@ -30,6 +30,8 @@
 #ifndef HMCCTC_H
 #define HMCCTC_H
 
+#include <cstdint>
+
 #include "../BidCoSPeer.h"
 
 namespace BidCoS
